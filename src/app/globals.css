@@ -1,0 +1,173 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+:root {
+    /* Neutrals */
+    --canvas: #fffaf0;
+    --surface: #ffffff;
+    --ink: #2c2a26;
+    --ink-2: #6f6a5e;
+    --ink-3: #8a8578;
+    --ink-4: #a39d8c;
+    --ink-green: #76836f;
+    --border: #e2ddd0;
+    --border-2: #efe8d9;
+    --border-3: #f0eadc;
+    --track: #d8d2c4;
+
+    /* Brand */
+    --green: #3f7d4e;
+    --green-deep: #2f5f3b;
+    --green-deep-2: #284f33;
+    --saffron: #f4c98a;
+
+    /* Status */
+    --status-green-bg: #e7f1e9;
+    --status-green-fg: #3f7d4e;
+    --status-amber-bg: #fbeedd;
+    --status-amber-fg: #bd6f1f;
+    --status-red-bg: #fbe9e5;
+    --status-red-fg: #c4452f;
+    --warning-bg: #fdf3ef;
+    --warning-border: #f3d6cd;
+    --warning-fg: #c4452f;
+
+    /* Shape */
+    --radius-sm: 8px;
+    --radius-md: 13px;
+    --radius-lg: 18px;
+
+    /* Shadow */
+    --shadow-card: 0 3px 10px -8px rgba(0, 0, 0, .2);
+    --shadow-button: 0 8px 18px -8px rgba(63, 125, 78, .8);
+    --shadow-sheet: 0 12px 28px -10px rgba(0, 0, 0, .5);
+
+    /* Typography */
+    --text-display: 32px;
+    --text-title: 27px;
+    --text-heading: 17px;
+    --text-body: 15px;
+    --text-label: 13px;
+    --text-caption: 12px;
+    --font-weight-display: 800;
+    --font-weight-title: 800;
+    --font-weight-heading: 700;
+    --font-weight-body: 400;
+    --font-weight-label: 600;
+    --font-weight-caption: 400;
+
+    /* shadcn/ui bridge - remapped onto our tokens, not shadcn's own palette */
+    --background: var(--canvas);
+    --foreground: var(--ink);
+    --primary: var(--green);
+    --primary-foreground: var(--surface);
+    --secondary: var(--surface);
+    --secondary-foreground: var(--ink);
+    --muted: var(--border-3);
+    --muted-foreground: var(--ink-3);
+    --accent: var(--border-3);
+    --accent-foreground: var(--ink);
+    --destructive: var(--status-red-fg);
+    --input: var(--border);
+    --ring: var(--green);
+    --radius: var(--radius-md);
+}
+
+@theme inline {
+    --color-canvas: var(--canvas);
+    --color-surface: var(--surface);
+    --color-ink: var(--ink);
+    --color-ink-2: var(--ink-2);
+    --color-ink-3: var(--ink-3);
+    --color-ink-4: var(--ink-4);
+    --color-ink-green: var(--ink-green);
+    --color-border: var(--border);
+    --color-border-2: var(--border-2);
+    --color-border-3: var(--border-3);
+    --color-track: var(--track);
+
+    --color-green: var(--green);
+    --color-green-deep: var(--green-deep);
+    --color-green-deep-2: var(--green-deep-2);
+    --color-saffron: var(--saffron);
+
+    --color-status-green-bg: var(--status-green-bg);
+    --color-status-green-fg: var(--status-green-fg);
+    --color-status-amber-bg: var(--status-amber-bg);
+    --color-status-amber-fg: var(--status-amber-fg);
+    --color-status-red-bg: var(--status-red-bg);
+    --color-status-red-fg: var(--status-red-fg);
+    --color-warning-bg: var(--warning-bg);
+    --color-warning-border: var(--warning-border);
+    --color-warning-fg: var(--warning-fg);
+
+    --radius-sm: var(--radius-sm);
+    --radius-md: var(--radius-md);
+    --radius-lg: var(--radius-lg);
+
+    --shadow-card: var(--shadow-card);
+    --shadow-button: var(--shadow-button);
+    --shadow-sheet: var(--shadow-sheet);
+
+    --text-display: var(--text-display);
+    --text-title: var(--text-title);
+    --text-heading: var(--text-heading);
+    --text-body: var(--text-body);
+    --text-label: var(--text-label);
+    --text-caption: var(--text-caption);
+
+    --font-display: var(--font-assistant);
+    --font-body: var(--font-heebo);
+
+    /* shadcn/ui bridge tokens */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+}
+
+@layer base {
+    * {
+        box-sizing: border-box;
+    }
+
+    html, body {
+        margin: 0;
+        height: 100%;
+    }
+
+    html {
+        direction: rtl;
+    }
+
+    body {
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: var(--font-body), sans-serif;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--track);
+        border-radius: 8px;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

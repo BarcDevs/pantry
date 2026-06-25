@@ -1,0 +1,20 @@
+const commonTexts = {
+    appName: 'PANTRY',
+    save: 'שמירה',
+    cancel: 'ביטול',
+    delete: 'מחיקה',
+    edit: 'עריכה',
+    close: 'סגירה',
+    confirm: 'אישור',
+    skip: 'דילוג',
+    selectAll: 'בחירת הכל',
+    deselectAll: 'ביטול הכל',
+    navHome: 'מזווה',
+    navGenerate: 'יצירת מתכון',
+    navLibrary: 'המתכונים שלי',
+    navHistory: 'היסטוריית בישול',
+    navAdd: 'הוספת מצרכים',
+    navSettings: 'הגדרות חשבון',
+}
+
+export default commonTexts
