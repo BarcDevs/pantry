@@ -14,7 +14,7 @@ const commonTexts = {
     navLibrary: 'המתכונים שלי',
     navHistory: 'היסטוריית בישול',
     navAdd: 'הוספת מצרכים',
-    navSettings: 'הגדרות חשבון',
+    navSettings: 'הגדרות חשבון'
 }
 
 export default commonTexts

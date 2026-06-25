@@ -21,6 +21,8 @@ export type WrapperProps = {
     children: ReactNode
 }
 
-export type OptimisticActionMap<T extends Record<string, object>> = {
+export type OptimisticActionMap<
+    T extends Record<string, object>
+> = {
     [K in keyof T]: { type: K } & T[K]
 }[keyof T]

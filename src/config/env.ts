@@ -16,12 +16,12 @@ const requireVar = (name: string, value: string | undefined) => {
 const env: Env = {
     clerkPublishableKey: requireVar(
         'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
-        process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+        process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
     ),
     clerkSecretKey: requireVar('CLERK_SECRET_KEY', process.env.CLERK_SECRET_KEY),
     clerkWebhookSecret: requireVar('CLERK_WEBHOOK_SECRET', process.env.CLERK_WEBHOOK_SECRET),
     mongodbUri: requireVar('MONGODB_URI', process.env.MONGODB_URI),
-    geminiApiKey: requireVar('GEMINI_API_KEY', process.env.GEMINI_API_KEY),
+    geminiApiKey: requireVar('GEMINI_API_KEY', process.env.GEMINI_API_KEY)
 }
 
 export default env

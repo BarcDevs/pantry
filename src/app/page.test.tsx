@@ -3,7 +3,7 @@ import Home from './page'
 
 describe('Home', () => {
     it('renders the Pantry placeholder', () => {
-        render(<Home />)
+        render(<Home/>)
         expect(screen.getByText('Pantry')).toBeInTheDocument()
     })
 })
