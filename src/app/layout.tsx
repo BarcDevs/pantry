@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react'
 import type { Metadata, Viewport } from 'next'
+import type { LayoutProps } from '@/types'
 import { Assistant, Heebo } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
@@ -28,7 +28,7 @@ export const viewport: Viewport = {
     themeColor: '#3f7d4e',
 }
 
-const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
+const RootLayout = ({ children }: Readonly<LayoutProps>) => (
     <ClerkProvider>
         <html lang="he" dir="rtl" className={cn(heebo.variable, assistant.variable, 'h-full antialiased')}>
             <body className="min-h-full flex flex-col">
