@@ -62,6 +62,8 @@ SOLID principles | Industry standards | Type-safe forms
 **Never:** Direct fetch/axios | Inline exports | Commented code | `window.location` for navigation
 **Never:** Multiple components per file | NEXT_PUBLIC_ prefix | Server directives
 
+IMPORTANT: Next.js 16 renamed `middleware` → `proxy`. dont suggest `middleware` in new code nor in code reviews.
+
 ## Git & Commits
 
 **Read `GIT_RULES.md` before committing or when instructed to commit.** Do not skip it.
