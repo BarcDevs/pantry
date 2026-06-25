@@ -16,7 +16,7 @@ import {
     viewport
 } from '@/config/layout'
 
-import './globals.css'
+import '@/styles/globals.css'
 
 export { metadata, viewport }
 
