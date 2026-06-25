@@ -6,15 +6,18 @@ export default defineConfig({
     retries: 0,
     use: {
         baseURL: 'http://localhost:3000',
-        trace: 'on-first-retry',
+        trace: 'on-first-retry'
     },
     webServer: {
         command: 'npm run dev',
         url: 'http://localhost:3000',
         reuseExistingServer: true,
-        timeout: 60000,
+        timeout: 60000
     },
     projects: [
-        { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    ],
+        {
+            name: 'chromium',
+            use: { ...devices['Desktop Chrome'] }
+        }
+    ]
 })

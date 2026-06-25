@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Assistant, Heebo } from 'next/font/google'
+
 import appConfig from './app'
 
 export const heebo = Heebo({
