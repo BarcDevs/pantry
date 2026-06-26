@@ -27,7 +27,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-Phase 0 scaffold complete (Next.js 16.2.9, Tailwind v4 CSS-only config, Clerk, Mongoose, Vercel AI SDK, Jest, Playwright). Phases 1-3 (pantry CRUD, recipes, receipts) per `C:\Users\66bar\.claude\plans\gentle-watching-giraffe.md`.
+Phase 0 scaffold complete (Next.js 16.2.9, Tailwind v4 CSS-only config, Clerk, Mongoose, Vercel AI SDK, Jest, Playwright). Phases 1-3 (pantry CRUD, recipes, receipts) per `docs/plans/gentle-watching-giraffe.md`.
 
 Commands:
 - `npm run dev` — dev server
