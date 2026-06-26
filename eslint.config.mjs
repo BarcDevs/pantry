@@ -35,7 +35,13 @@ const config = [
             '**/*.yml',
             '**/*.yaml',
             '.heap-diagnostics',
-            'sentry.*.config.ts'
+            'sentry.*.config.ts',
+            'dist',
+            'dist-ssr',
+            'graphify-out',
+            '.vercel',
+            '.claude',
+            '.codex'
         ]
     },
 
