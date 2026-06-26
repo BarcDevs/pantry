@@ -13,6 +13,9 @@ const config: Config = {
         '<rootDir>/.next/',
         '<rootDir>/node_modules/',
         '<rootDir>/e2e/'
+    ],
+    transformIgnorePatterns: [
+        'node_modules/(?!(bson|mongodb)/)'
     ]
 }
 
