@@ -1,9 +1,13 @@
 import { SignUp } from '@clerk/nextjs'
 
+import { AuthLayout } from '@/components/auth/auth-layout'
+
+import { routes } from '@/constants/routes'
+
 const SignUpPage = () => (
-    <div className={'flex flex-1 items-center justify-center'}>
-        <SignUp/>
-    </div>
+    <AuthLayout>
+        <SignUp fallbackRedirectUrl={routes.pantry}/>
+    </AuthLayout>
 )
 
 export default SignUpPage

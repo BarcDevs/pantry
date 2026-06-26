@@ -1,7 +1,10 @@
 import type { LayoutProps } from '@/types'
 
-const AppLayout = ({ children }: LayoutProps) => (
-    <>{children}</>
-)
+import { ensureUser } from '@/actions/users/ensure-user'
+
+const AppLayout = async ({ children }: LayoutProps) => {
+    await ensureUser()
+    return <>{children}</>
+}
 
 export default AppLayout

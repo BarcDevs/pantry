@@ -1,9 +1,13 @@
 import { SignIn } from '@clerk/nextjs'
 
+import { AuthLayout } from '@/components/auth/auth-layout'
+
+import { routes } from '@/constants/routes'
+
 const SignInPage = () => (
-    <div className={'flex flex-1 items-center justify-center'}>
-        <SignIn/>
-    </div>
+    <AuthLayout>
+        <SignIn fallbackRedirectUrl={routes.pantry}/>
+    </AuthLayout>
 )
 
 export default SignInPage

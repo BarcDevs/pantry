@@ -16,7 +16,10 @@ const config: Config = {
     ],
     transformIgnorePatterns: [
         'node_modules/(?!(bson|mongodb)/)'
-    ]
+    ],
+    moduleNameMapper: {
+        '^@/(.*)$': '<rootDir>/src/$1'
+    }
 }
 
 export default createJestConfig(config)
