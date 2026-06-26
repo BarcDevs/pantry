@@ -6,9 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "lint:check": "eslint",
-    "lint:fix": "eslint --fix",
+    "lint": "node scripts/lint.js",
+    "lint:check": "node scripts/lint.js",
+    "lint:fix": "node scripts/lint.js --fix",
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:e2e": "playwright test"

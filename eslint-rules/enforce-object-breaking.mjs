@@ -66,8 +66,8 @@ export default {
                 const endLine = lastParam.loc.end.line
 
                 if ( startLine === endLine && exceedsLimit(startLine) ) {
-                    const paramSpan =
-                        lastParam.loc.end.column
+                    const paramSpan
+                        = lastParam.loc.end.column
                         - firstParam.loc.start.column
                     if ( paramSpan >= 30 ) {
                         context.report({
@@ -88,8 +88,8 @@ export default {
                 const endLine = lastParam.loc.end.line
 
                 if ( startLine === endLine && exceedsLimit(startLine) ) {
-                    const paramSpan =
-                        lastParam.loc.end.column
+                    const paramSpan
+                        = lastParam.loc.end.column
                         - firstParam.loc.start.column
                     if ( paramSpan >= 30 ) {
                         context.report({

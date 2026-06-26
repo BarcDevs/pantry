@@ -2,7 +2,7 @@ import { SignUp } from '@clerk/nextjs'
 
 const SignUpPage = () => (
     <div className={'flex flex-1 items-center justify-center'}>
-        <SignUp />
+        <SignUp/>
     </div>
 )
 

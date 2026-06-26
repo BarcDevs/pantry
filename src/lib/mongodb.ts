@@ -10,7 +10,8 @@ const globalWithMongoose = globalThis as MongooseGlobal
 
 const connectToDatabase = () => {
     if (!globalWithMongoose.mongooseConnection) {
-        globalWithMongoose.mongooseConnection = mongoose.connect(env.mongodbUri).catch((err) => {
+        globalWithMongoose.mongooseConnection
+            = mongoose.connect(env.mongodbUri).catch((err) => {
             globalWithMongoose.mongooseConnection = undefined
             return Promise.reject(err)
         })

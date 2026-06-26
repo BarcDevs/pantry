@@ -10,8 +10,8 @@ import { FlatCompat } from '@eslint/eslintrc'
 import eslintPluginTypescript from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
 import js from '@eslint/js'
-import enforceObjectBreaking from './eslint-rules/enforce-object-breaking.js'
-import enforceFunctionCallBreaking from './eslint-rules/enforce-function-call-breaking.js'
+import enforceObjectBreaking from './eslint-rules/enforce-object-breaking.mjs'
+import enforceFunctionCallBreaking from './eslint-rules/enforce-function-call-breaking.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -89,6 +89,7 @@ const config = [
             'react/no-unescaped-entities': 'off',
             'react/prop-types': 'off',
             'react/self-closing-comp': 'warn',
+            'react/jsx-tag-spacing': ['warn', { beforeSelfClosing: 'never' }],
             'react/display-name': 'off',
             'prefer-arrow-callback': 'warn',
             'func-style': ['warn', 'expression'],
@@ -102,7 +103,7 @@ const config = [
             'operator-linebreak': [
                 'warn',
                 'before',
-                { overrides: { '=': 'after' } }
+                { overrides: { '=': 'before' } }
             ],
             'simple-import-sort/imports': [
                 'warn',
