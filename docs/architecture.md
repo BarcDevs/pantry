@@ -31,6 +31,8 @@ Distilled from `docs/pantry-prd.md`. Read that file for full acceptance criteria
 - **AI calls go through the Vercel AI SDK** (`ai` + `@ai-sdk/google`) via a factory in `src/lib/ai/factory.ts`, not the raw `@google/generative-ai` SDK — keeps provider swapping to one file.
 - **PWA implemented without `next-pwa`.** `next-pwa` is a webpack-only plugin and Next.js 16 defaults to Turbopack, which it doesn't support. Used instead: `public/manifest.json` + a hand-written `public/sw.js` (cache-first shell) registered from a small client component (`src/components/shell/service-worker-register.tsx`). Same installable-PWA outcome, no incompatible dependency.
 - **`users` gets `onboarding_completed_at: Date | null`**, not in the PRD's field list, so the app knows not to re-show the skippable 3-step onboarding on later logins.
+- **Landing page added (Phase 1).** `src/app/(public)/` is a public route group (no Clerk auth gate) with its own standalone layout. It is a marketing/entry surface — not part of the authenticated app shell. Clerk middleware explicitly lists `/(public)(.*)` as public.
+- **Premium feature flag**: `NEXT_PUBLIC_SHOW_PREMIUM=true` enables premium-tier copy on the landing page (FAQ answer, plan comparison). Default `false`. The paywall, plan management, and generation-count enforcement are not built in this MVP — only the server-side `generation_count` field on `user.model.ts` is in scope, ready for when the flag is turned on and the paywall UI is built. This is the second documented `NEXT_PUBLIC_` exception alongside `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`; read only via `src/config/env.ts`.
 
 ## Enums (must stay identical between TS and DB)
 
