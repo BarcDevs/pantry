@@ -17,6 +17,10 @@ export type ContextProps = {
     children?: ReactNode
 }
 
+export type IconProps = {
+    size?: number
+}
+
 export type WrapperProps = {
     children: ReactNode
 }

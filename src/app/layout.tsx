@@ -2,7 +2,7 @@ import { heIL } from '@clerk/localizations'
 import { ClerkProvider } from '@clerk/nextjs'
 import { shadcn } from '@clerk/ui/themes'
 
-import type { LayoutProps } from '@/types'
+import type { LayoutProps } from '@/types/react'
 
 import { AuthHeader } from '@/components/shell/auth-header'
 import { ServiceWorkerRegister }

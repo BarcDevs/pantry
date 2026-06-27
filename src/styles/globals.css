@@ -42,6 +42,11 @@
     --gradient-brand: linear-gradient(165deg, var(--green), var(--green-deep) 60%, var(--green-deep-2));
     --radius-icon: 15px;
 
+    /* Shell */
+    --size-nav-fab: 50px;
+    --size-nav-fab-lift: 24px;
+    --size-sidebar: 248px;
+
     /* Shadow */
     --shadow-card: 0 3px 10px -8px rgba(0, 0, 0, .2);
     --shadow-button: 0 8px 18px -8px rgba(63, 125, 78, .8);
@@ -54,6 +59,7 @@
     --text-body: 15px;
     --text-label: 13px;
     --text-caption: 12px;
+    --text-nav-label: 10px;
     --font-weight-display: 800;
     --font-weight-title: 800;
     --font-weight-heading: 700;
@@ -120,6 +126,10 @@
     --leading-tagline: 1.18;
     --leading-sub: 1.55;
 
+    --spacing-nav-fab: var(--size-nav-fab);
+    --spacing-nav-fab-lift: var(--size-nav-fab-lift);
+    --spacing-sidebar: var(--size-sidebar);
+
     --shadow-card: var(--shadow-card);
     --shadow-button: var(--shadow-button);
     --shadow-sheet: var(--shadow-sheet);
@@ -130,6 +140,7 @@
     --text-body: var(--text-body);
     --text-label: var(--text-label);
     --text-caption: var(--text-caption);
+    --text-nav-label: var(--text-nav-label);
 
     --font-display: var(--font-assistant);
     --font-body: var(--font-heebo);

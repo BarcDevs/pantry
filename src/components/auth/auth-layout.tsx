@@ -1,4 +1,4 @@
-import type { LayoutProps } from '@/types'
+import type { LayoutProps } from '@/types/react'
 
 import { AuthBrandPanel } from './auth-brand-panel'
 

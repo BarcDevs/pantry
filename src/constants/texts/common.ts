@@ -1,4 +1,4 @@
-const commonTexts = {
+export const commonTexts = {
     appName: 'PANTRY',
     save: 'שמירה',
     cancel: 'ביטול',
@@ -14,7 +14,8 @@ const commonTexts = {
     navLibrary: 'המתכונים שלי',
     navHistory: 'היסטוריית בישול',
     navAdd: 'הוספת מצרכים',
-    navSettings: 'הגדרות חשבון'
+    navSettings: 'הגדרות חשבון',
+    navLibraryMobile: 'מתכונים',
+    navAddMobile: 'הוספה',
+    navProfileMobile: 'פרופיל'
 }
-
-export default commonTexts
