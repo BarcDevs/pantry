@@ -73,6 +73,20 @@ IMPORTANT: Next.js 16 renamed `middleware` → `proxy`. dont suggest `middleware
 **Read `GIT_RULES.md` before committing or when instructed to commit.** Do not skip it.
 Full rules there. Key constraint: never invoke `/commit` skill on small fixes, formatting, or docs changes — use plain `git commit` for those.
 
+## Browser Verification
+
+Use `playwright-cli` (installed as dev dep) for all browser verification tasks — more token-efficient than chrome extension tools.
+
+```bash
+npx playwright-cli open http://localhost:3000
+npx playwright-cli snapshot          # see page state
+npx playwright-cli click e5          # interact via refs
+npx playwright-cli console           # check for errors
+npx playwright-cli close
+```
+
+Prefer `snapshot` over `screenshot` — returns element refs for interaction, not pixels. Use `console` after interactions to catch JS errors.
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
