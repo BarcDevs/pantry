@@ -78,7 +78,7 @@ Full rules there. Key constraint: never invoke `/commit` skill on small fixes, f
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
 
 Rules:
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- For codebase questions and research (exploring structure, understanding relationships, finding files before implementing), first run graphify when graphify-out/graph.json exists. Python path is in `graphify-out/.graphify_python`. Invoke via Bash tool: `$(<graphify-out/.graphify_python) -m graphify query "<question>"`. Use `path "<A>" "<B>"` for relationships and `explain "<concept>"` for focused concepts. Returns a scoped subgraph, much smaller than GRAPH_REPORT.md or raw grep.
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+- After modifying code, run `$(<graphify-out/.graphify_python) -m graphify update .` to keep the graph current (AST-only, no API cost).
