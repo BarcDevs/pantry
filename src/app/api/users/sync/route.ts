@@ -6,6 +6,8 @@ import type { ClerkEvent } from '@/types/user'
 
 import connectDB from '@/lib/mongodb'
 
+import { HttpStatusCodes } from '@/constants/httpStatusCodes'
+
 import env from '@/config/env'
 
 import { UserModel } from '@/models/user.model'
@@ -17,7 +19,9 @@ export const POST = async (req: Request): Promise<Response> => {
     const svixSignature = headersList.get('svix-signature')
 
     if (!svixId || !svixTimestamp || !svixSignature) {
-        return new Response('Missing svix headers', { status: 400 })
+        return new Response('Missing svix headers', {
+            status: HttpStatusCodes.BAD_REQUEST
+        })
     }
 
     const payload = await req.text()
@@ -32,7 +36,7 @@ export const POST = async (req: Request): Promise<Response> => {
         }) as ClerkEvent
     } catch {
         return new Response('Invalid signature', {
-            status: 401
+            status: HttpStatusCodes.UNAUTHORIZED
         })
     }
 
@@ -66,5 +70,5 @@ export const POST = async (req: Request): Promise<Response> => {
         await UserModel.deleteOne({ clerkId: id })
     }
 
-    return new Response('OK', { status: 200 })
+    return new Response('OK', { status: HttpStatusCodes.OK })
 }

@@ -27,6 +27,8 @@ jest.mock('@/config/env', () => ({
 
 import { headers } from 'next/headers'
 
+import { HttpStatusCodes } from '@/constants/httpStatusCodes'
+
 import { UserModel } from '@/models/user.model'
 
 import { POST } from '../route'
@@ -69,7 +71,7 @@ describe('POST /api/users/sync', () => {
             makeHeadersMap({ 'svix-id': null }) as never
         )
         const res = await POST(makeRequest({}))
-        expect(res.status).toBe(400)
+        expect(res.status).toBe(HttpStatusCodes.BAD_REQUEST)
     })
 
     it('returns 401 when signature is invalid', async () => {
@@ -80,7 +82,7 @@ describe('POST /api/users/sync', () => {
             throw new Error('Invalid')
         })
         const res = await POST(makeRequest({}))
-        expect(res.status).toBe(401)
+        expect(res.status).toBe(HttpStatusCodes.UNAUTHORIZED)
     })
 
     it('upserts user on user.created', async () => {
@@ -102,7 +104,7 @@ describe('POST /api/users/sync', () => {
         mockFindOneAndUpdate.mockResolvedValue({})
 
         const res = await POST(makeRequest(event))
-        expect(res.status).toBe(200)
+        expect(res.status).toBe(HttpStatusCodes.OK)
         expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
             { clerkId: 'clerk_789' },
             { $set: {
@@ -152,7 +154,7 @@ describe('POST /api/users/sync', () => {
         mockDeleteOne.mockResolvedValue({})
 
         const res = await POST(makeRequest(event))
-        expect(res.status).toBe(200)
+        expect(res.status).toBe(HttpStatusCodes.OK)
         expect(mockDeleteOne).toHaveBeenCalledWith(
             { clerkId: 'clerk_del' }
         )

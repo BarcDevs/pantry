@@ -39,6 +39,7 @@
 - Use reusable components from shadcn/ui
 - No hardcoded values — use constants or config
 - Time values: Always use `src/constants/time` (minuteInMs, hourInMs, etc.) instead of hardcoding milliseconds
+- HTTP status codes: Always use `HttpStatusCodes` from `@/constants/httpStatusCodes` — never raw numbers (200, 404, etc.)
 - No backwards-compatibility shims for removed code
 - Don't use redundant braces or parentheses
 - Avoid single statement followed by return — inline: `if (x) return fn()` not `if (x) { fn(); return }`
