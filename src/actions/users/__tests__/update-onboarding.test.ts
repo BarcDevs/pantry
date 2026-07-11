@@ -35,7 +35,10 @@ describe('updateOnboarding', () => {
     it('sets onboardingCompletedAt even when all steps skipped', async () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
         mockFindOneAndUpdate.mockReturnValue({
-            lean: jest.fn().mockResolvedValue({ clerkId: 'user_123' })
+            lean: jest.fn().mockResolvedValue({
+                _id: { toString: () => 'obj_1' },
+                clerkId: 'user_123'
+            })
         })
 
         await updateOnboarding({})
@@ -52,7 +55,7 @@ describe('updateOnboarding', () => {
     it('persists filled-in step values along with completion timestamp', async () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
         mockFindOneAndUpdate.mockReturnValue({
-            lean: jest.fn().mockResolvedValue({ clerkId: 'user_123' })
+            lean: jest.fn().mockResolvedValue({ _id: { toString: () => 'obj_1' }, clerkId: 'user_123' })
         })
 
         await updateOnboarding({

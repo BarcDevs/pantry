@@ -42,6 +42,7 @@ describe('ensureUser', () => {
 
     it('returns existing user without hitting Clerk API', async () => {
         const user = {
+            _id: { toString: () => 'obj_123' },
             clerkId: 'user_123',
             email: 'a@b.com',
             displayName: 'Test'
@@ -53,7 +54,12 @@ describe('ensureUser', () => {
             lean: jest.fn().mockResolvedValue(user)
         })
 
-        expect(await ensureUser()).toEqual(user)
+        expect(await ensureUser()).toEqual({
+            _id: 'obj_123',
+            clerkId: 'user_123',
+            email: 'a@b.com',
+            displayName: 'Test'
+        })
         expect(mockClerkClient).not.toHaveBeenCalled()
     })
 
@@ -74,6 +80,7 @@ describe('ensureUser', () => {
             }
         } as never)
         const created = {
+            _id: { toString: () => 'obj_456' },
             clerkId: 'user_456',
             email: 'new@example.com',
             displayName: 'Noa Levi'
@@ -83,7 +90,12 @@ describe('ensureUser', () => {
             toObject: jest.fn().mockReturnValue(created)
         })
 
-        expect(await ensureUser()).toEqual(created)
+        expect(await ensureUser()).toEqual({
+            _id: 'obj_456',
+            clerkId: 'user_456',
+            email: 'new@example.com',
+            displayName: 'Noa Levi'
+        })
         expect(mockCreate).toHaveBeenCalledWith(
             expect.objectContaining({
                 clerkId: 'user_456',

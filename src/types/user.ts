@@ -1,3 +1,4 @@
+import type { MongoDbObject } from '@/types'
 import type { Difficulty } from '@/types/enums'
 
 export type ClerkUserData = {
@@ -26,6 +27,8 @@ export type UserDoc = {
     dietaryPreferences: string[]
     onboardingCompletedAt: Date | null
 }
+
+export type User = UserDoc & MongoDbObject
 
 export type OnboardingInput = {
     cookingLevel?: Difficulty

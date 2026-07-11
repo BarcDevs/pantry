@@ -11,3 +11,7 @@ export type Language = {
 }
 
 export type Theme = 'light' | 'dark'
+
+export type MongoDbObject = {
+    _id: string
+}

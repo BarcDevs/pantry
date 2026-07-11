@@ -1,10 +1,10 @@
-import type { PantryItemDoc } from '@/types/pantry-item'
+import type { PantryItem } from '@/types/pantry-item'
 
 import { PantryItemCard } from '@/components/pantry/pantry-item-card'
 
 type PantryGridProps = {
-    items: PantryItemDoc[]
-    onEditItem: (item: PantryItemDoc) => void
+    items: PantryItem[]
+    onEditItem: (item: PantryItem) => void
 }
 
 export const PantryGrid = ({
@@ -14,7 +14,7 @@ export const PantryGrid = ({
     <div className={'grid grid-cols-2 gap-3 md:grid-cols-3'}>
         {items.map((item) => (
             <PantryItemCard
-                key={item.id}
+                key={item._id}
                 item={item}
                 onEdit={() => onEditItem(item)}
             />

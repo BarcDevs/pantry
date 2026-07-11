@@ -1,3 +1,4 @@
+import type { MongoDbObject } from '@/types'
 import type {
     FoodType,
     ItemSource,
@@ -21,7 +22,6 @@ export type StorageSuggestion = {
 }
 
 export type PantryItemDoc = {
-    id: string
     userId: string
     name: string
     emoji?: string
@@ -34,3 +34,5 @@ export type PantryItemDoc = {
     source: ItemSource
     storageSuggestion: StorageSuggestion | null
 }
+
+export type PantryItem = PantryItemDoc & MongoDbObject

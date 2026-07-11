@@ -1,4 +1,4 @@
-import type { PantryItemDoc } from '@/types/pantry-item'
+import type { PantryItem } from '@/types/pantry-item'
 
 import { PantryExpiryChip } from '@/components/pantry/pantry-expiry-chip'
 import { Button } from '@/components/shared/Button'
@@ -8,7 +8,7 @@ import { getExpiryStatus } from '@/lib/pantry/expiry-status'
 import { pantryTexts } from '@/constants/texts/pantry'
 
 type PantryItemCardProps = {
-    item: PantryItemDoc
+    item: PantryItem
     onEdit: () => void
 }
 
