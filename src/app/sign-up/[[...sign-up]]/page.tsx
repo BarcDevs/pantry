@@ -6,7 +6,7 @@ import { routes } from '@/constants/routes'
 
 const SignUpPage = () => (
     <AuthLayout>
-        <SignUp fallbackRedirectUrl={routes.pantry}/>
+        <SignUp fallbackRedirectUrl={routes.onboarding}/>
     </AuthLayout>
 )
 

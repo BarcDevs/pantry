@@ -26,3 +26,9 @@ export type UserDoc = {
     dietaryPreferences: string[]
     onboardingCompletedAt: Date | null
 }
+
+export type OnboardingInput = {
+    cookingLevel?: Difficulty
+    householdSize?: number
+    dietaryPreferences?: string[]
+}

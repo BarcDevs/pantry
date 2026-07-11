@@ -37,6 +37,8 @@
 - One function/component per file
 - Extract reusable logic
 - Use reusable components from shadcn/ui
+- Buttons: always import from `@/components/shared/Button` (wraps shadcn's with `cursor-pointer`, shadow, press-scale) — never `@/components/ui/button` directly, never a raw `<button>`
+- Every clickable element (including non-Button custom elements: chips, cards, option rows) must have `cursor-pointer` in its className
 - No hardcoded values — use constants or config
 - Time values: Always use `src/constants/time` (minuteInMs, hourInMs, etc.) instead of hardcoding milliseconds
 - HTTP status codes: Always use `HttpStatusCodes` from `@/constants/httpStatusCodes` — never raw numbers (200, 404, etc.)

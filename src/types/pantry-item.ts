@@ -21,6 +21,7 @@ export type StorageSuggestion = {
 }
 
 export type PantryItemDoc = {
+    id: string
     userId: string
     name: string
     emoji?: string
