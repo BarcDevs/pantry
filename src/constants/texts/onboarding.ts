@@ -1,24 +1,44 @@
 export const onboardingTexts = {
-    title: 'ברוכים הבאים',
     skip: 'דילוג',
+    skipAll: 'דלגו על הכל',
+    back: 'חזרה',
     next: 'הבא',
     finish: 'סיום',
-    stepCookingLevelTitle: 'מה רמת הבישול שלכם?',
-    stepDietaryPreferencesTitle: 'העדפות תזונה',
-    stepHouseholdSizeTitle: 'כמה אנשים במשק הבית?',
-    householdSizeLabel: 'מספר נפשות',
+    stepLabels: ['רמת בישול', 'העדפות תזונה', 'גודל משק בית'],
+    stepCookingLevelTitle: 'מה רמת הבישול שלכם? 🍳',
+    stepCookingLevelSubtitle: 'נתאים את מורכבות המתכונים שנציע לרמה שנוחה לכם.',
+    stepDietaryPreferencesTitle: 'העדפות תזונה 🥗',
+    stepDietaryPreferencesSubtitle: 'בחרו כל מה שרלוונטי — נסנן מתכונים בהתאם. אפשר לדלג ולעדכן בהמשך.',
+    stepHouseholdSizeTitle: 'לכמה אנשים בדרך כלל? 🍽️',
+    stepHouseholdSizeSubtitle: 'נשתמש בזה כדי לכוון כמויות ומנות במתכונים שנציע.',
+    householdSizeSingular: 'נפש אחת',
+    householdSizePlural: 'נפשות',
+    dietaryCountPrefix: 'נבחרו',
+    dietaryCountEmpty: 'ללא העדפות מיוחדות',
     saveError: 'שמירת ההעדפות נכשלה, נסו שוב',
     cookingLevels: {
-        easy: 'מתחיל/ה',
-        medium: 'בינוני/ת',
-        hard: 'מתקדם/ת'
+        easy: {
+            emoji: '🌱',
+            title: 'מתחיל/ה',
+            desc: 'מתכונים פשוטים עם מעט מרכיבים ושלבים'
+        },
+        medium: {
+            emoji: '🍳',
+            title: 'בינוני/ת',
+            desc: 'נוח במטבח, אשמח לגוון ולהתנסות'
+        },
+        hard: {
+            emoji: '👨‍🍳',
+            title: 'מתקדם/ת',
+            desc: 'טכניקות מתקדמות ומתכונים מורכבים'
+        }
     },
     dietaryOptions: {
-        vegetarian: 'צמחוני',
-        vegan: 'טבעוני',
-        glutenFree: 'ללא גלוטן',
-        dairyFree: 'ללא חלב',
-        kosher: 'כשר',
-        lowCarb: 'דל פחמימות'
+        vegetarian: { emoji: '🥦', label: 'צמחוני' },
+        vegan: { emoji: '🌱', label: 'טבעוני' },
+        glutenFree: { emoji: '🌾', label: 'ללא גלוטן' },
+        dairyFree: { emoji: '🥛', label: 'ללא חלב' },
+        kosher: { emoji: '✡️', label: 'כשר' },
+        lowCarb: { emoji: '🥩', label: 'דל פחמימות' }
     }
 } as const

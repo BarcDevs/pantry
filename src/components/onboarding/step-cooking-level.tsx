@@ -2,9 +2,8 @@ import type { Difficulty } from '@/types/enums'
 import { DIFFICULTIES } from '@/types/enums'
 import type { SetState } from '@/types/react'
 
-import { Button } from '@/components/shared/Button'
-
-import { cn } from '@/lib/utils'
+import { CookingLevelOption } from '@/components/onboarding/cooking-level-option'
+import { OnboardingStepHeader } from '@/components/onboarding/onboarding-step-header'
 
 import { onboardingTexts } from '@/constants/texts/onboarding'
 
@@ -17,25 +16,19 @@ export const StepCookingLevel = ({
     value,
     onChange
 }: StepCookingLevelProps) => (
-    <div className={'flex flex-col gap-3'}>
-        <h2 className={'text-heading font-bold text-ink'}>
-            {onboardingTexts.stepCookingLevelTitle}
-        </h2>
-        <div className={'flex flex-col gap-2'}>
+    <div className={'flex flex-col gap-2'}>
+        <OnboardingStepHeader
+            title={onboardingTexts.stepCookingLevelTitle}
+            subtitle={onboardingTexts.stepCookingLevelSubtitle}
+        />
+        <div className={'flex flex-col gap-3'}>
             {DIFFICULTIES.map((level) => (
-                <Button
+                <CookingLevelOption
                     key={level}
-                    variant={'ghost'}
-                    onClick={() => onChange(level)}
-                    className={cn(
-                        'h-auto justify-start rounded-lg border px-4 py-3 text-start text-body font-normal transition-colors',
-                        value === level
-                            ? 'border-green bg-green/10 text-ink-green'
-                            : 'border-border text-ink-2'
-                    )}
-                >
-                    {onboardingTexts.cookingLevels[level]}
-                </Button>
+                    level={level}
+                    isSelected={value === level}
+                    onSelect={() => onChange(level)}
+                />
             ))}
         </div>
     </div>
