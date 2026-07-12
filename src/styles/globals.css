@@ -78,6 +78,8 @@
     --muted-foreground: var(--ink-3);
     --accent: var(--border-3);
     --accent-foreground: var(--ink);
+    --popover: var(--surface);
+    --popover-foreground: var(--ink);
     --destructive: var(--status-red-fg);
     --input: var(--border);
     --ring: var(--green);
@@ -156,6 +158,8 @@
     --color-muted-foreground: var(--muted-foreground);
     --color-accent: var(--accent);
     --color-accent-foreground: var(--accent-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
     --color-destructive: var(--destructive);
     --color-input: var(--input);
     --color-ring: var(--ring);

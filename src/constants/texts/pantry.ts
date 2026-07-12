@@ -23,5 +23,44 @@ export const pantryTexts = {
     expiredLabel: 'פג תוקף',
     daysLeftLabel: 'ימים',
     noExpiryLabel: 'ללא תאריך',
-    noResults: 'לא נמצאו מוצרים תואמים'
+    noResults: 'לא נמצאו מוצרים תואמים',
+    foodTypeLabels: {
+        vegetables: 'ירקות',
+        fruits: 'פירות',
+        dairy: 'מוצרי חלב',
+        meat: 'בשר',
+        fish: 'דגים',
+        canned: 'שימורים',
+        grains: 'דגנים',
+        snacks: 'חטיפים',
+        beverages: 'משקאות',
+        condiments: 'תבלינים ורטבים',
+        other: 'אחר'
+    },
+    addForm: {
+        title: 'הוספת מוצר',
+        nameLabel: 'שם המוצר',
+        namePlaceholder: 'לדוגמה: עגבניות',
+        storageLabel: 'מיקום אחסון',
+        typeLabel: 'סוג מוצר',
+        quantityLabel: 'כמות',
+        unitLabel: 'יחידת מידה',
+        expiryLabel: 'תאריך תפוגה (אופציונלי)',
+        notesLabel: 'הערות (אופציונלי)',
+        submit: 'הוספה למזווה',
+        submitting: 'מוסיף...',
+        suggestionLoading: 'בודק המלצת אחסון...',
+        suggestionMatchTitle: 'מיקום האחסון מתאים',
+        suggestionMismatchTitle: 'יש המלצה טובה יותר',
+        currentOptionLabel: 'הבחירה שלך',
+        recommendedOptionLabel: 'מומלץ',
+        selectRecommended: 'בחירה',
+        saveError: 'שמירת המוצר נכשלה, נסו שוב'
+    },
+    duplicateDialog: {
+        title: 'המוצר כבר קיים במזווה',
+        description: 'כבר יש לכם מוצר בשם זה. תרצו למזג את הכמויות או לשמור כפריט נפרד?',
+        merge: 'מיזוג כמויות',
+        keepSeparate: 'שמירה כפריט נפרד'
+    }
 } as const

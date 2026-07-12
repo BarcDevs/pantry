@@ -36,3 +36,24 @@ export type PantryItemDoc = {
 }
 
 export type PantryItem = PantryItemDoc & MongoDbObject
+
+export type AddPantryItemInput = {
+    name: string
+    storage: StorageLocation
+    type: FoodType
+    quantity: number
+    unit: Unit
+    expiryDate?: Date
+    notes?: string
+    storageSuggestion?: StorageSuggestion | null
+    mergeWithId?: string
+    forceSeparate?: boolean
+}
+
+export type AddPantryItemOutcome =
+    | { status: 'created', item: PantryItem }
+    | {
+        status: 'duplicate'
+        existing: PantryItem
+        incoming: AddPantryItemInput
+    }

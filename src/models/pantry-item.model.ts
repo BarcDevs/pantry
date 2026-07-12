@@ -45,7 +45,7 @@ const pantryItemSchema = new mongoose.Schema<PantryItemDoc>(
             enum: FOOD_TYPES,
             required: true
         },
-        quantity: { type: Number, required: true },
+        quantity: { type: Number, required: true, min: 0 },
         unit: {
             type: String,
             enum: UNITS,

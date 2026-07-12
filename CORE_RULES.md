@@ -19,6 +19,7 @@
 - Never break line around single imports - if import is too long, break before the `from` keyword
 - Don't make line-breaking too strict
 - Always provide informative and self-explanatory filenames and variable names
+- Components with 5+ related props (e.g. a form's field values, or their change handlers): group into a single object prop (e.g. `values`, `handlers`) instead of listing each field individually. Use `group.field` directly at the usage site — don't destructure the group back into individual local names
 
 ## Language & Format
 - Quotes: Single quotes (') for all strings, imports, JSX props, backtick allowed for template strings
@@ -37,6 +38,7 @@
 - One function/component per file
 - Extract reusable logic
 - Use reusable components from shadcn/ui
+- Before building new UI: check shadcn/ui first, then `src/components/shared/` — see `src/components/shared/SHARED_COMPONENTS.md` for what's already there (`Button`, `FormInputField`, `FormSelectField`) and when to extract a new one
 - Buttons: always import from `@/components/shared/Button` (wraps shadcn's with `cursor-pointer`, shadow, press-scale) — never `@/components/ui/button` directly, never a raw `<button>`
 - Every clickable element (including non-Button custom elements: chips, cards, option rows) must have `cursor-pointer` in its className
 - No hardcoded values — use constants or config
