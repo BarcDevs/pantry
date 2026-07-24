@@ -18,11 +18,10 @@ export const PantryEmptyState = () => (
                 {pantryTexts.emptySub}
             </div>
         </div>
-        <Button
-            nativeButton={false}
-            render={<Link href={routes.add}/>}
-        >
-            {pantryTexts.addItem}
+        <Button asChild>
+            <Link href={routes.add}>
+                {pantryTexts.addItem}
+            </Link>
         </Button>
     </div>
 )
