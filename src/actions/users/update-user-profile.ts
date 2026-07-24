@@ -1,8 +1,10 @@
 'use server'
 
+import { z } from 'zod'
+
 import { auth } from '@clerk/nextjs/server'
 
-import type { OnboardingInput, User } from '@/types/user'
+import type { User, UserProfileInput } from '@/types/user'
 
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
@@ -10,24 +12,26 @@ import { userProfileFieldsSchema } from '@/lib/schemas/user-profile'
 
 import { UserModel } from '@/models/user.model'
 
-const onboardingInputSchema = userProfileFieldsSchema
+const updateUserProfileSchema = userProfileFieldsSchema.extend({
+    displayName: z.string().trim().min(1).max(100).optional()
+})
 
-export const updateOnboarding = async (
-    input: OnboardingInput
-): Promise<User | null> => {
+export const updateUserProfile = async (
+    input: UserProfileInput
+): Promise<User> => {
     const { userId: clerkId } = await auth()
     if (!clerkId) throw new Error('Unauthenticated')
 
-    const parsedInput = onboardingInputSchema.parse(input)
+    const parsedInput = updateUserProfileSchema.parse(input)
 
     await connectDB()
 
     const updated = await UserModel.findOneAndUpdate(
         { clerkId },
-        { ...parsedInput, onboardingCompletedAt: new Date() },
+        parsedInput,
         { returnDocument: 'after', runValidators: true }
     ).lean()
 
-    if (!updated) return null
+    if (!updated) throw new Error('User not found')
     return toPlainDoc<User>(updated)
 }

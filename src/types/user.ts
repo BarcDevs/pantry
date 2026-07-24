@@ -35,3 +35,7 @@ export type OnboardingInput = {
     householdSize?: number
     dietaryPreferences?: string[]
 }
+
+export type UserProfileInput = OnboardingInput & {
+    displayName?: string
+}
