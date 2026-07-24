@@ -1,12 +1,9 @@
-import { SignIn } from '@clerk/nextjs'
-
 import { AuthLayout } from '@/components/auth/auth-layout'
-
-import { routes } from '@/constants/routes'
+import { SignInForm } from '@/components/auth/sign-in-form'
 
 const SignInPage = () => (
     <AuthLayout>
-        <SignIn fallbackRedirectUrl={routes.pantry}/>
+        <SignInForm/>
     </AuthLayout>
 )
 

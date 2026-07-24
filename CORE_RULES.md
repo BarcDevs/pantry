@@ -48,6 +48,7 @@
 - Don't use redundant braces or parentheses
 - Avoid single statement followed by return — inline: `if (x) return fn()` not `if (x) { fn(); return }`
 - Avoid unnecessary `| null`, `| undefined` types for optional types unless explicitly required
+- Forms: the `<Form>/<form>` element (fields, labels, submit button) always lives in its own `*-fields.tsx` component taking `{form, isSubmitting, onSubmit}` props. The parent `*-form.tsx` component only handles layout/heading/step-switching around it — never inlines the `<form>` itself
 
 ## JSX Logic
 - Never use IIFEs in JSX — compute values in variables before `return`

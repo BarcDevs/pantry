@@ -1,6 +1,5 @@
 import { heIL } from '@clerk/localizations'
 import { ClerkProvider } from '@clerk/nextjs'
-import { shadcn } from '@clerk/ui/themes'
 
 import type { LayoutProps } from '@/types/react'
 
@@ -10,6 +9,7 @@ import { ServiceWorkerRegister }
 
 import { cn } from '@/lib/utils'
 
+import { clerkAppearance } from '@/config/clerk'
 import {
     assistant,
     heebo,
@@ -24,7 +24,10 @@ export { metadata, viewport }
 const RootLayout = ({
     children
 }: Readonly<LayoutProps>) => (
-    <ClerkProvider localization={heIL} appearance={{ theme: shadcn }}>
+    <ClerkProvider
+        localization={heIL}
+        appearance={clerkAppearance}
+    >
         <html
             lang={'he'}
             dir={'rtl'}

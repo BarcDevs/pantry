@@ -1,12 +1,9 @@
-import { SignUp } from '@clerk/nextjs'
-
 import { AuthLayout } from '@/components/auth/auth-layout'
-
-import { routes } from '@/constants/routes'
+import { SignUpForm } from '@/components/auth/sign-up-form'
 
 const SignUpPage = () => (
     <AuthLayout>
-        <SignUp fallbackRedirectUrl={routes.onboarding}/>
+        <SignUpForm/>
     </AuthLayout>
 )
 

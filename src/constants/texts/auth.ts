@@ -21,5 +21,20 @@ export const authTexts = {
     passwordHint: 'לפחות 8 תווים, אות אחת גדולה ומספר',
     termsPrefix: 'אני מאשר/ת את',
     termsLink: 'תנאי השימוש',
-    termsSuffix: 'ומדיניות הפרטיות'
+    termsSuffix: 'ומדיניות הפרטיות',
+    signInError: 'אימייל או סיסמה שגויים',
+    signUpError: 'משהו השתבש, נסו שוב',
+    verifyTitle: 'אימות אימייל 📩',
+    verifySub: 'שלחנו קוד בן 6 ספרות לכתובת שלכם',
+    verifyCodeLabel: 'קוד אימות',
+    verifySubmit: 'אימות',
+    verifyError: 'קוד שגוי, נסו שוב',
+    forgotTitle: 'איפוס סיסמה 🔑',
+    forgotSub: 'נשלח לכם קוד לאיפוס הסיסמה',
+    forgotRequestSubmit: 'שליחת קוד',
+    resetCodeLabel: 'קוד איפוס',
+    newPassword: 'סיסמה חדשה',
+    forgotResetSubmit: 'איפוס סיסמה',
+    forgotError: 'משהו השתבש, נסו שוב',
+    backToSignIn: 'חזרה להתחברות'
 } as const
