@@ -2,39 +2,72 @@
 
 import { useMemo, useState } from 'react'
 
-import type { StorageLocation } from '@/types/enums'
-import type { PantryItem } from '@/types/pantry-item'
+import { useRouter } from 'next/navigation'
 
-import { PantryEmptyState } from '@/components/pantry/pantry-empty-state'
-import { PantryFilterChips } from '@/components/pantry/pantry-filter-chips'
-import { PantryGrid } from '@/components/pantry/pantry-grid'
-import { PantrySearchInput } from '@/components/pantry/pantry-search-input'
-import { PantryStatCards } from '@/components/pantry/pantry-stat-cards'
+import type { StorageLocation }
+    from '@/types/enums'
+import type { PantryItem }
+    from '@/types/pantry-item'
 
-import { getExpiryStatus } from '@/lib/pantry/expiry-status'
+import { EditItemSheet }
+    from '@/components/pantry/edit/edit-item-sheet'
+import { PantryEmptyState }
+    from '@/components/pantry/pantry-empty-state'
+import { PantryFilterChips }
+    from '@/components/pantry/pantry-filter-chips'
+import { PantryGrid }
+    from '@/components/pantry/pantry-grid'
+import { PantrySearchInput }
+    from '@/components/pantry/pantry-search-input'
+import { PantryStatCards }
+    from '@/components/pantry/pantry-stat-cards'
 
-import { pantryTexts } from '@/constants/texts/pantry'
+import { getExpiryStatus }
+    from '@/lib/pantry/expiry-status'
+
+import { pantryTexts }
+    from '@/constants/texts/pantry'
 
 type PantryViewProps = {
     items: PantryItem[]
 }
 
-export const PantryView = ({ items }: PantryViewProps) => {
+export const PantryView = (
+    { items }: PantryViewProps
+) => {
+    const router = useRouter()
     const [query, setQuery] = useState('')
-    const [filter, setFilter] = useState<StorageLocation | 'all'>('all')
+    const [filter, setFilter] = useState<
+        StorageLocation | 'all'
+    >('all')
+    const [editingItem, setEditingItem] = useState<
+        PantryItem | null
+    >(null)
 
     const expiringSoonCount = useMemo(
         () => items.filter((item) => {
-            const status = getExpiryStatus(item.expiryDate)
-            return status.tone === 'red' || status.tone === 'amber'
+            const status = getExpiryStatus(
+                item.expiryDate
+            )
+            return status.tone === 'red'
+                || status.tone === 'amber'
         }).length,
         [items]
     )
 
-    const filteredItems = useMemo(() => items
-        .filter((item) => filter === 'all' || item.storage === filter)
-        .filter((item) => item.name
-            .includes(query.trim())), [items, filter, query])
+    const filteredItems = useMemo(
+        () => items
+            .filter(
+                (item) => filter === 'all'
+                    || item.storage === filter
+            )
+            .filter(
+                (item) => item.name.includes(
+                    query.trim()
+                )
+            ),
+        [items, filter, query]
+    )
 
     if (items.length === 0) return <PantryEmptyState/>
 
@@ -61,10 +94,25 @@ export const PantryView = ({ items }: PantryViewProps) => {
                 : (
                     <PantryGrid
                         items={filteredItems}
-                        // TODO(step-7): open edit sheet on item tap
-                        onEditItem={() => {}}
+                        onEditItem={setEditingItem}
                     />
                 )}
+            {editingItem && (
+                <EditItemSheet
+                    item={editingItem}
+                    onClose={() => (
+                        setEditingItem(null)
+                    )}
+                    onSaved={() => {
+                        setEditingItem(null)
+                        router.refresh()
+                    }}
+                    onDeleted={() => {
+                        setEditingItem(null)
+                        router.refresh()
+                    }}
+                />
+            )}
         </div>
     )
 }

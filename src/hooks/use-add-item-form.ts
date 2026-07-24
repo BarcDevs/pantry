@@ -10,7 +10,8 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { zodResolver }
+    from '@hookform/resolvers/zod'
 
 import {
     FOOD_TYPES,
@@ -26,20 +27,28 @@ import type {
     StorageSuggestion
 } from '@/types/pantry-item'
 
-import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import { useDebouncedValue }
+    from '@/hooks/use-debounced-value'
 
-import { routes } from '@/constants/routes'
-import { pantryTexts } from '@/constants/texts/pantry'
+import { routes }
+    from '@/constants/routes'
+import { pantryTexts }
+    from '@/constants/texts/pantry'
 
-import { addPantryItems } from '@/actions/pantry/add-pantry-items'
-import { suggestStorage } from '@/actions/pantry/suggest-storage'
+import { addPantryItems }
+    from '@/actions/pantry/add-pantry-items'
+import { suggestStorage }
+    from '@/actions/pantry/suggest-storage'
 
-type DuplicateOutcome = Extract<AddPantryItemOutcome, { status: 'duplicate' }>
+type DuplicateOutcome = Extract<
+    AddPantryItemOutcome,
+    { status: 'duplicate' }
+>
 
 const nameDebounceMs = 500
 const minNameLengthForSuggestion = 2
 
-const addItemFormSchema = z.object({
+export const addItemFormSchema = z.object({
     name: z.string().trim().min(1).max(100),
     storage: z.enum(STORAGE_LOCATIONS),
     type: z.enum(FOOD_TYPES),
@@ -49,7 +58,9 @@ const addItemFormSchema = z.object({
     notes: z.string().max(500)
 })
 
-export type AddItemFormValues = z.infer<typeof addItemFormSchema>
+export type AddItemFormValues = z.infer<
+    typeof addItemFormSchema
+>
 
 export const useAddItemForm = () => {
     const router = useRouter()
@@ -67,25 +78,46 @@ export const useAddItemForm = () => {
         }
     })
 
-    const [suggestion, setSuggestion] = useState<StorageSuggestion | null>(null)
-    const [isSuggesting, startSuggesting] = useTransition()
-    const [isSubmitting, startSubmitting] = useTransition()
-    const [duplicate, setDuplicate] = useState<DuplicateOutcome | null>(null)
+    const [suggestion, setSuggestion] = useState<
+        StorageSuggestion | null
+    >(null)
+    const [isSuggesting, startSuggesting] = (
+        useTransition()
+    )
+    const [isSubmitting, startSubmitting] = (
+        useTransition()
+    )
+    const [duplicate, setDuplicate] = useState<
+        DuplicateOutcome | null
+    >(null)
 
     const name = form.watch('name')
-    const debouncedName = useDebouncedValue(name.trim(), nameDebounceMs)
+    const debouncedName = useDebouncedValue(
+        name.trim(),
+        nameDebounceMs
+    )
 
     useEffect(() => {
-        if (debouncedName.length < minNameLengthForSuggestion) return
+        if (debouncedName.length < (
+            minNameLengthForSuggestion
+        )) {
+            return
+        }
 
         let cancelled = false
         startSuggesting(async () => {
             try {
-                const result = await suggestStorage(debouncedName)
-                if (!cancelled) setSuggestion(result)
+                const result = await suggestStorage(
+                    debouncedName
+                )
+                if (!cancelled) {
+                    setSuggestion(result)
+                }
             } catch (error) {
                 console.error(error)
-                if (!cancelled) setSuggestion(null)
+                if (!cancelled) {
+                    setSuggestion(null)
+                }
             }
         })
 
@@ -93,7 +125,9 @@ export const useAddItemForm = () => {
     }, [debouncedName])
 
     useEffect(() => {
-        if (name.trim().length < minNameLengthForSuggestion) setSuggestion(null)
+        if (name.trim().length < minNameLengthForSuggestion) {
+            setSuggestion(null)
+        }
     }, [name])
 
     const buildInput = (
@@ -105,16 +139,23 @@ export const useAddItemForm = () => {
         type: values.type,
         quantity: values.quantity,
         unit: values.unit,
-        expiryDate: values.expiryDate ? new Date(values.expiryDate) : undefined,
+        expiryDate: values.expiryDate
+            ? new Date(values.expiryDate)
+            : undefined,
         notes: values.notes.trim() || undefined,
         storageSuggestion: suggestion,
         ...overrides
     })
 
-    const submit = (values: AddItemFormValues, overrides?: Partial<AddPantryItemInput>) => {
+    const submit = (
+        values: AddItemFormValues,
+        overrides?: Partial<AddPantryItemInput>
+    ) => {
         startSubmitting(async () => {
             try {
-                const [outcome] = await addPantryItems([buildInput(values, overrides)])
+                const [outcome] = await addPantryItems(
+                    [buildInput(values, overrides)]
+                )
                 if (outcome.status === 'duplicate') {
                     setDuplicate(outcome)
                     return
@@ -123,9 +164,13 @@ export const useAddItemForm = () => {
             } catch (error) {
                 console.error(error)
                 form.setError('root', {
-                    message: pantryTexts.addForm.saveError
+                    message: (
+                        pantryTexts.addForm.saveError
+                    )
                 })
-                toast.error(pantryTexts.addForm.saveError)
+                toast.error(
+                    pantryTexts.addForm.saveError
+                )
             }
         })
     }
@@ -134,16 +179,16 @@ export const useAddItemForm = () => {
         if (!duplicate) return
         const mergeWithId = duplicate.existing._id
         setDuplicate(null)
-        form.handleSubmit((values) => submit(values, {
-            mergeWithId
-        }))()
+        form.handleSubmit((values) => (
+            submit(values, { mergeWithId })
+        ))()
     }
 
     const handleKeepSeparate = () => {
         setDuplicate(null)
-        form.handleSubmit((values) => submit(values, {
-            forceSeparate: true
-        }))()
+        form.handleSubmit((values) => (
+            submit(values, { forceSeparate: true })
+        ))()
     }
 
     return {
@@ -157,7 +202,12 @@ export const useAddItemForm = () => {
         handleMerge,
         handleKeepSeparate,
         applySuggestedStorage: () => {
-            if (suggestion) form.setValue('storage', suggestion.suggestedStorage)
+            if (suggestion) {
+                form.setValue(
+                    'storage',
+                    suggestion.suggestedStorage
+                )
+            }
         }
     }
 }

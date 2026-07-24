@@ -62,5 +62,22 @@ export const pantryTexts = {
         description: 'כבר יש לכם מוצר בשם זה. תרצו למזג את הכמויות או לשמור כפריט נפרד?',
         merge: 'מיזוג כמויות',
         keepSeparate: 'שמירה כפריט נפרד'
+    },
+    editForm: {
+        title: 'עריכת מוצר',
+        submit: 'שמירת שינויים',
+        submitting: 'שומר...',
+        suggestButton: 'קבלת המלצת אחסון',
+        suggesting: 'בודק המלצת אחסון...',
+        saveError: 'שמירת השינויים נכשלה, נסו שוב',
+        deleteButton: 'מחיקת מוצר',
+        deleting: 'מוחק...',
+        deleteError: 'מחיקת המוצר נכשלה, נסו שוב'
+    },
+    deleteDialog: {
+        title: 'מחיקת מוצר',
+        description: 'הפעולה תמחק את המוצר מהמזווה לצמיתות. לא ניתן לבטל.',
+        cancel: 'ביטול',
+        confirm: 'מחיקה'
     }
 } as const

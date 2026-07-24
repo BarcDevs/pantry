@@ -50,6 +50,17 @@ export type AddPantryItemInput = {
     forceSeparate?: boolean
 }
 
+export type UpdatePantryItemInput = Partial<{
+    name: string
+    storage: StorageLocation
+    type: FoodType
+    quantity: number
+    unit: Unit
+    expiryDate: Date
+    notes: string
+    storageSuggestion: StorageSuggestion | null
+}>
+
 export type AddPantryItemOutcome =
     | { status: 'created', item: PantryItem }
     | {
