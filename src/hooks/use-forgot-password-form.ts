@@ -7,15 +7,15 @@ import { useForm } from 'react-hook-form'
 import { useSignIn } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { routes } from '@/constants/routes'
+import { authTexts } from '@/constants/texts/auth'
+
 import {
     requestFormSchema,
     type RequestFormValues,
     resetFormSchema,
     type ResetFormValues
-} from '@/lib/schemas/forgot-password-form'
-
-import { routes } from '@/constants/routes'
-import { authTexts } from '@/constants/texts/auth'
+} from '@/schemas/forgot-password-form'
 
 export const useForgotPasswordForm = () => {
     const router = useRouter()

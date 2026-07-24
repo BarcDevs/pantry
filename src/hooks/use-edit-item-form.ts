@@ -11,11 +11,6 @@ import type {
     StorageSuggestion
 } from '@/types/pantry-item'
 
-import {
-    addItemFormSchema,
-    type AddItemFormValues
-} from '@/lib/schemas/add-item-form'
-
 import { pantryTexts }
     from '@/constants/texts/pantry'
 
@@ -25,6 +20,10 @@ import { suggestStorage }
     from '@/actions/pantry/suggest-storage'
 import { updatePantryItem }
     from '@/actions/pantry/update-pantry-item'
+import {
+    addItemFormSchema,
+    type AddItemFormValues
+} from '@/schemas/add-item-form'
 
 const minNameLengthForSuggestion = 2
 

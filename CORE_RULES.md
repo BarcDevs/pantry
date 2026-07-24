@@ -49,7 +49,7 @@
 - Avoid single statement followed by return — inline: `if (x) return fn()` not `if (x) { fn(); return }`
 - Avoid unnecessary `| null`, `| undefined` types for optional types unless explicitly required
 - Forms: the `<Form>/<form>` element (fields, labels, submit button) always lives in its own `*-fields.tsx` component taking `{form, isSubmitting, onSubmit}` props. The parent `*-form.tsx` component only handles layout/heading/step-switching around it — never inlines the `<form>` itself
-- Client-form zod schemas (react-hook-form resolvers) always live in `src/lib/schemas/*.ts`, never inline in the hook file — the hook imports the schema and its inferred `*Values` type. Server-action input-validation schemas are exempt (stay local to the action, private/unexported)
+- Client-form zod schemas (react-hook-form resolvers) always live in `src/schemas/*.ts`, never inline in the hook file — the hook imports the schema and its inferred `*Values` type. Server-action input-validation schemas are exempt (stay local to the action, private/unexported)
 
 ## JSX Logic
 - Never use IIFEs in JSX — compute values in variables before `return`

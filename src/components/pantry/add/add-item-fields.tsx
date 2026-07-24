@@ -10,10 +10,11 @@ import { FormInputField } from '@/components/shared/form/FormInputField'
 import { FormSelectField } from '@/components/shared/form/FormSelectField'
 import { Input } from '@/components/ui/input'
 
-import type { AddItemFormValues } from '@/lib/schemas/add-item-form'
 import { toSelectOptions } from '@/lib/select-options'
 
 import { pantryTexts } from '@/constants/texts/pantry'
+
+import type { AddItemFormValues } from '@/schemas/add-item-form'
 
 type AddItemFieldsProps = {
     control: Control<AddItemFormValues>

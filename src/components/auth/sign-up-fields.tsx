@@ -9,9 +9,9 @@ import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import type { SignUpFormValues } from '@/lib/schemas/sign-up-form'
-
 import { authTexts } from '@/constants/texts/auth'
+
+import type { SignUpFormValues } from '@/schemas/sign-up-form'
 
 type SignUpFieldsProps = {
     form: UseFormReturn<SignUpFormValues>

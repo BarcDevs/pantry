@@ -26,11 +26,6 @@ import type {
 import { useDebouncedValue }
     from '@/hooks/use-debounced-value'
 
-import {
-    addItemFormSchema,
-    type AddItemFormValues
-} from '@/lib/schemas/add-item-form'
-
 import { routes }
     from '@/constants/routes'
 import { pantryTexts }
@@ -40,6 +35,10 @@ import { addPantryItems }
     from '@/actions/pantry/add-pantry-items'
 import { suggestStorage }
     from '@/actions/pantry/suggest-storage'
+import {
+    addItemFormSchema,
+    type AddItemFormValues
+} from '@/schemas/add-item-form'
 
 type DuplicateOutcome = Extract<
     AddPantryItemOutcome,

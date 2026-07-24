@@ -8,11 +8,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import type { User } from '@/types/user'
 
-import { userProfileFieldsSchema } from '@/lib/schemas/user-profile'
-
 import { settingsTexts } from '@/constants/texts/settings'
 
 import { updateUserProfile } from '@/actions/users/update-user-profile'
+import { userProfileFieldsSchema } from '@/schemas/user-profile'
 
 const settingsFormSchema = userProfileFieldsSchema.extend({
     displayName: z.string().trim().min(1).max(100)

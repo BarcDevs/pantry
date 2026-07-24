@@ -11,10 +11,10 @@ import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import type { SignInFormValues } from '@/lib/schemas/sign-in-form'
-
 import { routes } from '@/constants/routes'
 import { authTexts } from '@/constants/texts/auth'
+
+import type { SignInFormValues } from '@/schemas/sign-in-form'
 
 type SignInFieldsProps = {
     form: UseFormReturn<SignInFormValues>

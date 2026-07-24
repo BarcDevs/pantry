@@ -9,9 +9,9 @@ import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import type { ResetFormValues } from '@/lib/schemas/forgot-password-form'
-
 import { authTexts } from '@/constants/texts/auth'
+
+import type { ResetFormValues } from '@/schemas/forgot-password-form'
 
 type ForgotPasswordResetFieldsProps = {
     form: UseFormReturn<ResetFormValues>

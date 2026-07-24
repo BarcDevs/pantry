@@ -7,13 +7,13 @@ import { useForm } from 'react-hook-form'
 import { useSignIn } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { routes } from '@/constants/routes'
+import { authTexts } from '@/constants/texts/auth'
+
 import {
     signInFormSchema,
     type SignInFormValues
-} from '@/lib/schemas/sign-in-form'
-
-import { routes } from '@/constants/routes'
-import { authTexts } from '@/constants/texts/auth'
+} from '@/schemas/sign-in-form'
 
 export const useSignInForm = () => {
     const router = useRouter()

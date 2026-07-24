@@ -9,15 +9,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import type { SetState } from '@/types/react'
 
-import {
-    onboardingFormSchema,
-    OnboardingFormValues
-} from '@/lib/schemas/onboarding-form'
-
 import { routes } from '@/constants/routes'
 import { onboardingTexts } from '@/constants/texts/onboarding'
 
 import { updateOnboarding } from '@/actions/users/update-onboarding'
+import {
+    onboardingFormSchema,
+    OnboardingFormValues
+} from '@/schemas/onboarding-form'
 
 const STEP_COUNT = onboardingTexts.stepLabels.length
 

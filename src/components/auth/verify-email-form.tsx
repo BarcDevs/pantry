@@ -5,9 +5,9 @@ import type { UseFormReturn } from 'react-hook-form'
 import { AuthHeading } from '@/components/auth/auth-heading'
 import { VerifyEmailFields } from '@/components/auth/verify-email-fields'
 
-import type { VerifyFormValues } from '@/lib/schemas/sign-up-form'
-
 import { authTexts } from '@/constants/texts/auth'
+
+import type { VerifyFormValues } from '@/schemas/sign-up-form'
 
 type VerifyEmailFormProps = {
     form: UseFormReturn<VerifyFormValues>

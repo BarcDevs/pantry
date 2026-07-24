@@ -8,9 +8,9 @@ import type { User, UserProfileInput } from '@/types/user'
 
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
-import { userProfileFieldsSchema } from '@/lib/schemas/user-profile'
 
 import { UserModel } from '@/models/user.model'
+import { userProfileFieldsSchema } from '@/schemas/user-profile'
 
 const updateUserProfileSchema = userProfileFieldsSchema.extend({
     displayName: z.string().trim().min(1).max(100).optional()
