@@ -1,13 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-
-import { useRouter } from 'next/navigation'
-
-import { toast } from 'sonner'
-
-import type { Difficulty } from '@/types/enums'
-
 import { OnboardingFooter } from '@/components/onboarding/onboarding-footer'
 import { OnboardingHeader } from '@/components/onboarding/onboarding-header'
 import { OnboardingProgress } from '@/components/onboarding/onboarding-progress'
@@ -15,56 +7,31 @@ import { StepCookingLevel } from '@/components/onboarding/step-cooking-level'
 import { StepDietaryPreferences } from '@/components/onboarding/step-dietary-preferences'
 import { StepHouseholdSize } from '@/components/onboarding/step-household-size'
 
-import { routes } from '@/constants/routes'
-import { onboardingTexts } from '@/constants/texts/onboarding'
+import { useOnboardingWizard } from '@/hooks/use-onboarding-wizard'
 
-import { updateOnboarding } from '@/actions/users/update-onboarding'
+import { onboardingTexts } from '@/constants/texts/onboarding'
 
 const STEP_COUNT = onboardingTexts.stepLabels.length
 
 export const OnboardingWizard = () => {
-    const router = useRouter()
-    const [step, setStep] = useState(0)
-    const [
+    const {
+        step,
+        isLastStep,
+        isSubmitting,
+        advance,
+        goBack,
+        skipAll,
         cookingLevel,
-        setCookingLevel
-    ] = useState<Difficulty | undefined>()
-    const [
+        setCookingLevel,
         dietaryPreferences,
-        setDietaryPreferences
-    ] = useState<string[]>([])
-    const [
+        setDietaryPreferences,
         householdSize,
         setHouseholdSize
-    ] = useState<number | undefined>()
-
-    const isLastStep = step === STEP_COUNT - 1
-
-    const finish = async () => {
-        try {
-            await updateOnboarding({
-                cookingLevel,
-                dietaryPreferences,
-                householdSize
-            })
-            router.push(routes.pantry)
-        } catch {
-            toast.error(onboardingTexts.saveError)
-        }
-    }
-
-    const advance = () => (
-        isLastStep
-            ? finish()
-            : setStep(step + 1)
-    )
-    const goBack = () => (
-        setStep(Math.max(0, step - 1))
-    )
+    } = useOnboardingWizard()
 
     return (
         <div className={'flex min-h-screen flex-col bg-canvas'}>
-            <OnboardingHeader onSkipAll={finish}/>
+            <OnboardingHeader onSkipAll={skipAll}/>
             <OnboardingProgress
                 step={step}
                 stepCount={STEP_COUNT}
@@ -93,6 +60,7 @@ export const OnboardingWizard = () => {
             <OnboardingFooter
                 isLastStep={isLastStep}
                 showBack={step > 0}
+                disabled={isSubmitting}
                 onBack={goBack}
                 onSkip={advance}
                 onNext={advance}

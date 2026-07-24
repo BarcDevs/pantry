@@ -5,6 +5,7 @@ import { onboardingTexts } from '@/constants/texts/onboarding'
 type OnboardingFooterProps = {
     isLastStep: boolean
     showBack: boolean
+    disabled?: boolean
     onBack: () => void
     onSkip: () => void
     onNext: () => void
@@ -13,6 +14,7 @@ type OnboardingFooterProps = {
 export const OnboardingFooter = ({
     isLastStep,
     showBack,
+    disabled = false,
     onBack,
     onSkip,
     onNext
@@ -21,6 +23,7 @@ export const OnboardingFooter = ({
         {showBack && (
             <Button
                 variant={'outline'}
+                disabled={disabled}
                 onClick={onBack}
             >
                 {onboardingTexts.back}
@@ -28,11 +31,13 @@ export const OnboardingFooter = ({
         )}
         <Button
             variant={'ghost'}
+            disabled={disabled}
             onClick={onSkip}
         >
             {onboardingTexts.skip}
         </Button>
         <Button
+            disabled={disabled}
             onClick={onNext}
             className={'flex-1'}
         >
