@@ -95,6 +95,7 @@ const config = [
             'react/no-unescaped-entities': 'off',
             'react/prop-types': 'off',
             'react/self-closing-comp': 'warn',
+            'react/jsx-max-props-per-line': ['warn', { maximum: 1, when: 'always' }],
             'react/jsx-tag-spacing': ['warn', { beforeSelfClosing: 'never' }],
             'react/display-name': 'off',
             'prefer-arrow-callback': 'warn',
