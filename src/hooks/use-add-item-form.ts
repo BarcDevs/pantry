@@ -6,7 +6,7 @@ import {
 
 import { useRouter } from 'next/navigation'
 
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -91,7 +91,10 @@ export const useAddItemForm = () => {
         DuplicateOutcome | null
     >(null)
 
-    const name = form.watch('name')
+    const name = useWatch({
+        control: form.control,
+        name: 'name'
+    })
     const debouncedName = useDebouncedValue(
         name.trim(),
         nameDebounceMs
@@ -124,11 +127,9 @@ export const useAddItemForm = () => {
         return () => { cancelled = true }
     }, [debouncedName])
 
-    useEffect(() => {
-        if (name.trim().length < minNameLengthForSuggestion) {
-            setSuggestion(null)
-        }
-    }, [name])
+    const effectiveSuggestion = (
+        name.trim().length < minNameLengthForSuggestion
+    ) ? null : suggestion
 
     const buildInput = (
         values: AddItemFormValues,
@@ -143,7 +144,7 @@ export const useAddItemForm = () => {
             ? new Date(values.expiryDate)
             : undefined,
         notes: values.notes.trim() || undefined,
-        storageSuggestion: suggestion,
+        storageSuggestion: effectiveSuggestion,
         ...overrides
     })
 
@@ -193,19 +194,21 @@ export const useAddItemForm = () => {
 
     return {
         form,
-        suggestion,
+        suggestion: effectiveSuggestion,
         isSuggesting,
         isSubmitting,
         duplicate,
         setDuplicate,
-        handleSubmit: form.handleSubmit((values) => submit(values)),
+        handleSubmit: form.handleSubmit(
+            (values) => submit(values)
+        ),
         handleMerge,
         handleKeepSeparate,
         applySuggestedStorage: () => {
-            if (suggestion) {
+            if (effectiveSuggestion) {
                 form.setValue(
                     'storage',
-                    suggestion.suggestedStorage
+                    effectiveSuggestion.suggestedStorage
                 )
             }
         }

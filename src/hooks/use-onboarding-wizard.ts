@@ -2,7 +2,7 @@ import { useState, useTransition } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -11,7 +11,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { DIFFICULTIES } from '@/types/enums'
 import type { SetState } from '@/types/react'
 
-import { MAX_HOUSEHOLD_SIZE, MIN_HOUSEHOLD_SIZE } from '@/constants/onboarding'
+import {
+    MAX_HOUSEHOLD_SIZE,
+    MIN_HOUSEHOLD_SIZE
+} from '@/constants/onboarding'
 import { routes } from '@/constants/routes'
 import { onboardingTexts } from '@/constants/texts/onboarding'
 
@@ -26,7 +29,16 @@ const onboardingFormSchema = z.object({
         .min(MIN_HOUSEHOLD_SIZE).max(MAX_HOUSEHOLD_SIZE).optional()
 })
 
-export type OnboardingFormValues = z.infer<typeof onboardingFormSchema>
+export type OnboardingFormValues
+    = z.infer<typeof onboardingFormSchema>
+
+const OnboardingField = {
+    cookingLevel: 'cookingLevel',
+    dietaryPreferences: 'dietaryPreferences',
+    householdSize: 'householdSize'
+} as const satisfies {
+    [K in keyof OnboardingFormValues]: K
+}
 
 export const useOnboardingWizard = () => {
     const router = useRouter()
@@ -66,18 +78,48 @@ export const useOnboardingWizard = () => {
     )
     const skipAll = () => finish(form.getValues())
 
-    const cookingLevel = form.watch('cookingLevel')
-    const dietaryPreferences = form.watch('dietaryPreferences')
-    const householdSize = form.watch('householdSize')
+    const cookingLevel = useWatch({
+        control: form.control,
+        name: OnboardingField.cookingLevel
+    })
+    const dietaryPreferences = useWatch({
+        control: form.control,
+        name: OnboardingField.dietaryPreferences
+    })
+    const householdSize = useWatch({
+        control: form.control,
+        name: OnboardingField.householdSize
+    })
 
-    const setCookingLevel: SetState<OnboardingFormValues['cookingLevel']> = (action) => {
-        form.setValue('cookingLevel', action instanceof Function ? action(cookingLevel) : action)
+    const setCookingLevel: SetState<
+        OnboardingFormValues['cookingLevel']
+    > = (action) => {
+        form.setValue(
+            OnboardingField.cookingLevel,
+            action instanceof Function
+                ? action(cookingLevel)
+                : action
+        )
     }
-    const setDietaryPreferences: SetState<OnboardingFormValues['dietaryPreferences']> = (action) => {
-        form.setValue('dietaryPreferences', action instanceof Function ? action(dietaryPreferences) : action)
+    const setDietaryPreferences: SetState<
+        OnboardingFormValues['dietaryPreferences']
+    > = (action) => {
+        form.setValue(
+            OnboardingField.dietaryPreferences,
+            action instanceof Function
+                ? action(dietaryPreferences)
+                : action
+        )
     }
-    const setHouseholdSize: SetState<OnboardingFormValues['householdSize']> = (action) => {
-        form.setValue('householdSize', action instanceof Function ? action(householdSize) : action)
+    const setHouseholdSize: SetState<
+        OnboardingFormValues['householdSize']
+    > = (action) => {
+        form.setValue(
+            OnboardingField.householdSize,
+            action instanceof Function
+                ? action(householdSize)
+                : action
+        )
     }
 
     return {
