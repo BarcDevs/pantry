@@ -4,33 +4,22 @@ import { useRouter } from 'next/navigation'
 
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { DIFFICULTIES } from '@/types/enums'
 import type { SetState } from '@/types/react'
 
 import {
-    MAX_HOUSEHOLD_SIZE,
-    MIN_HOUSEHOLD_SIZE
-} from '@/constants/onboarding'
+    onboardingFormSchema,
+    OnboardingFormValues
+} from '@/lib/schemas/onboarding-form'
+
 import { routes } from '@/constants/routes'
 import { onboardingTexts } from '@/constants/texts/onboarding'
 
 import { updateOnboarding } from '@/actions/users/update-onboarding'
 
 const STEP_COUNT = onboardingTexts.stepLabels.length
-
-const onboardingFormSchema = z.object({
-    cookingLevel: z.enum(DIFFICULTIES).optional(),
-    dietaryPreferences: z.array(z.string()).max(10),
-    householdSize: z.number().int()
-        .min(MIN_HOUSEHOLD_SIZE).max(MAX_HOUSEHOLD_SIZE).optional()
-})
-
-export type OnboardingFormValues
-    = z.infer<typeof onboardingFormSchema>
 
 const OnboardingField = {
     cookingLevel: 'cookingLevel',
@@ -101,6 +90,7 @@ export const useOnboardingWizard = () => {
                 : action
         )
     }
+
     const setDietaryPreferences: SetState<
         OnboardingFormValues['dietaryPreferences']
     > = (action) => {

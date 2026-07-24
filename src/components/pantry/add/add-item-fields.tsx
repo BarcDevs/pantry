@@ -10,8 +10,7 @@ import { FormInputField } from '@/components/shared/form/FormInputField'
 import { FormSelectField } from '@/components/shared/form/FormSelectField'
 import { Input } from '@/components/ui/input'
 
-import type { AddItemFormValues } from '@/hooks/use-add-item-form'
-
+import type { AddItemFormValues } from '@/lib/schemas/add-item-form'
 import { toSelectOptions } from '@/lib/select-options'
 
 import { pantryTexts } from '@/constants/texts/pantry'

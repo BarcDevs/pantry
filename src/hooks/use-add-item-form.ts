@@ -8,18 +8,14 @@ import { useRouter } from 'next/navigation'
 
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod'
 
 import { zodResolver }
     from '@hookform/resolvers/zod'
 
 import {
-    FOOD_TYPES,
     FoodType,
-    STORAGE_LOCATIONS,
     StorageLocation,
-    Unit,
-    UNITS
+    Unit
 } from '@/types/enums'
 import type {
     AddPantryItemInput,
@@ -29,6 +25,11 @@ import type {
 
 import { useDebouncedValue }
     from '@/hooks/use-debounced-value'
+
+import {
+    addItemFormSchema,
+    type AddItemFormValues
+} from '@/lib/schemas/add-item-form'
 
 import { routes }
     from '@/constants/routes'
@@ -47,20 +48,6 @@ type DuplicateOutcome = Extract<
 
 const nameDebounceMs = 500
 const minNameLengthForSuggestion = 2
-
-export const addItemFormSchema = z.object({
-    name: z.string().trim().min(1).max(100),
-    storage: z.enum(STORAGE_LOCATIONS),
-    type: z.enum(FOOD_TYPES),
-    quantity: z.number().positive(),
-    unit: z.enum(UNITS),
-    expiryDate: z.string(),
-    notes: z.string().max(500)
-})
-
-export type AddItemFormValues = z.infer<
-    typeof addItemFormSchema
->
 
 export const useAddItemForm = () => {
     const router = useRouter()

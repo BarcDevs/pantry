@@ -14,7 +14,7 @@ import type {
 import {
     addItemFormSchema,
     type AddItemFormValues
-} from '@/hooks/use-add-item-form'
+} from '@/lib/schemas/add-item-form'
 
 import { pantryTexts }
     from '@/constants/texts/pantry'
