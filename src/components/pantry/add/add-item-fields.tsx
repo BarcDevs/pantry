@@ -12,26 +12,17 @@ import { Input } from '@/components/ui/input'
 
 import type { AddItemFormValues } from '@/hooks/use-add-item-form'
 
+import { toSelectOptions } from '@/lib/select-options'
+
 import { pantryTexts } from '@/constants/texts/pantry'
 
 type AddItemFieldsProps = {
     control: Control<AddItemFormValues>
 }
 
-const storageOptions = STORAGE_LOCATIONS.map((location) => ({
-    value: location,
-    label: pantryTexts.storageLabels[location]
-}))
-
-const typeOptions = FOOD_TYPES.map((foodType) => ({
-    value: foodType,
-    label: pantryTexts.foodTypeLabels[foodType]
-}))
-
-const unitOptions = UNITS.map((unit) => ({
-    value: unit,
-    label: pantryTexts.unitLabels[unit]
-}))
+const storageOptions = toSelectOptions(STORAGE_LOCATIONS, pantryTexts.storageLabels)
+const typeOptions = toSelectOptions(FOOD_TYPES, pantryTexts.foodTypeLabels)
+const unitOptions = toSelectOptions(UNITS, pantryTexts.unitLabels)
 
 export const AddItemFields = ({ control }: AddItemFieldsProps) => (
     <div className={'flex flex-col gap-4'}>
