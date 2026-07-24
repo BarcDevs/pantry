@@ -52,6 +52,7 @@
 ## JSX Logic
 - Never use IIFEs in JSX — compute values in variables before `return`
 - Closing `)` of a multi-line callback stays inline with the next chained method: `.map(...).find(Boolean)` not `.map(...)\n.find(Boolean)`
+- Never leave a lone `)` and lone `: (` (or `? (`) on adjacent lines by themselves — stack them on one line: `) : (` not `)\n: (`
 
 ## Code Formatting
 - Line length: Target 40-50 characters maximum for code lines (strings can be longer if necessary). Break lines that exceed this threshold
