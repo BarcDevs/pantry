@@ -6,17 +6,19 @@ import {
 
 import { useRouter } from 'next/navigation'
 
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { z } from 'zod'
 
-import type {
-    FoodType as FoodTypeValue,
-    StorageLocation as StorageLocationValue,
-    Unit as UnitValue
-} from '@/types/enums'
+import { zodResolver } from '@hookform/resolvers/zod'
+
 import {
+    FOOD_TYPES,
     FoodType,
+    STORAGE_LOCATIONS,
     StorageLocation,
-    Unit
+    Unit,
+    UNITS
 } from '@/types/enums'
 import type {
     AddPantryItemInput,
@@ -37,22 +39,40 @@ type DuplicateOutcome = Extract<AddPantryItemOutcome, { status: 'duplicate' }>
 const nameDebounceMs = 500
 const minNameLengthForSuggestion = 2
 
+const addItemFormSchema = z.object({
+    name: z.string().trim().min(1).max(100),
+    storage: z.enum(STORAGE_LOCATIONS),
+    type: z.enum(FOOD_TYPES),
+    quantity: z.number().positive(),
+    unit: z.enum(UNITS),
+    expiryDate: z.string(),
+    notes: z.string().max(500)
+})
+
+export type AddItemFormValues = z.infer<typeof addItemFormSchema>
+
 export const useAddItemForm = () => {
     const router = useRouter()
 
-    const [name, setName] = useState('')
-    const [storage, setStorage] = useState<StorageLocationValue>(StorageLocation.Fridge)
-    const [type, setType] = useState<FoodTypeValue>(FoodType.Other)
-    const [quantity, setQuantity] = useState(1)
-    const [unit, setUnit] = useState<UnitValue>(Unit.Units)
-    const [expiryDate, setExpiryDate] = useState('')
-    const [notes, setNotes] = useState('')
+    const form = useForm<AddItemFormValues>({
+        resolver: zodResolver(addItemFormSchema),
+        defaultValues: {
+            name: '',
+            storage: StorageLocation.Fridge,
+            type: FoodType.Other,
+            quantity: 1,
+            unit: Unit.Units,
+            expiryDate: '',
+            notes: ''
+        }
+    })
 
     const [suggestion, setSuggestion] = useState<StorageSuggestion | null>(null)
     const [isSuggesting, startSuggesting] = useTransition()
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSubmitting, startSubmitting] = useTransition()
     const [duplicate, setDuplicate] = useState<DuplicateOutcome | null>(null)
 
+    const name = form.watch('name')
     const debouncedName = useDebouncedValue(name.trim(), nameDebounceMs)
 
     useEffect(() => {
@@ -72,80 +92,72 @@ export const useAddItemForm = () => {
         return () => { cancelled = true }
     }, [debouncedName])
 
-    const handleNameChange = (value: string) => {
-        setName(value)
-        if (value.trim().length < minNameLengthForSuggestion) setSuggestion(null)
-    }
+    useEffect(() => {
+        if (name.trim().length < minNameLengthForSuggestion) setSuggestion(null)
+    }, [name])
 
-    const buildInput = (overrides?: Partial<AddPantryItemInput>): AddPantryItemInput => ({
-        name: name.trim(),
-        storage,
-        type,
-        quantity,
-        unit,
-        expiryDate: expiryDate ? new Date(expiryDate) : undefined,
-        notes: notes.trim() || undefined,
+    const buildInput = (
+        values: AddItemFormValues,
+        overrides?: Partial<AddPantryItemInput>
+    ): AddPantryItemInput => ({
+        name: values.name.trim(),
+        storage: values.storage,
+        type: values.type,
+        quantity: values.quantity,
+        unit: values.unit,
+        expiryDate: values.expiryDate ? new Date(values.expiryDate) : undefined,
+        notes: values.notes.trim() || undefined,
         storageSuggestion: suggestion,
         ...overrides
     })
 
-    const submit = async (overrides?: Partial<AddPantryItemInput>) => {
-        setIsSubmitting(true)
-        try {
-            const [outcome] = await addPantryItems([buildInput(overrides)])
-            if (outcome.status === 'duplicate') {
-                setDuplicate(outcome)
-                return
+    const submit = (values: AddItemFormValues, overrides?: Partial<AddPantryItemInput>) => {
+        startSubmitting(async () => {
+            try {
+                const [outcome] = await addPantryItems([buildInput(values, overrides)])
+                if (outcome.status === 'duplicate') {
+                    setDuplicate(outcome)
+                    return
+                }
+                router.push(routes.pantry)
+            } catch (error) {
+                console.error(error)
+                form.setError('root', {
+                    message: pantryTexts.addForm.saveError
+                })
+                toast.error(pantryTexts.addForm.saveError)
             }
-            router.push(routes.pantry)
-        } catch (error) {
-            console.error(error)
-            toast.error(pantryTexts.addForm.saveError)
-        } finally {
-            setIsSubmitting(false)
-        }
+        })
     }
 
     const handleMerge = () => {
         if (!duplicate) return
+        const mergeWithId = duplicate.existing._id
         setDuplicate(null)
-        void submit({ mergeWithId: duplicate.existing._id })
+        form.handleSubmit((values) => submit(values, {
+            mergeWithId
+        }))()
     }
 
     const handleKeepSeparate = () => {
         setDuplicate(null)
-        void submit({ forceSeparate: true })
+        form.handleSubmit((values) => submit(values, {
+            forceSeparate: true
+        }))()
     }
 
     return {
-        values: {
-            name,
-            storage,
-            type,
-            quantity,
-            unit,
-            expiryDate,
-            notes
-        },
-        handlers: {
-            setName: handleNameChange,
-            setStorage,
-            setType,
-            setQuantity,
-            setUnit,
-            setExpiryDate,
-            setNotes
-        },
+        form,
         suggestion,
         isSuggesting,
         isSubmitting,
         duplicate,
         setDuplicate,
-        handleSubmit: () => void submit(),
+        handleSubmit: form.handleSubmit((values) => submit(values)),
         handleMerge,
         handleKeepSeparate,
         applySuggestedStorage: () => {
-            if (suggestion) setStorage(suggestion.suggestedStorage)
+            if (suggestion) form.setValue('storage', suggestion.suggestedStorage)
         }
     }
 }

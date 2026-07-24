@@ -12,24 +12,55 @@ Always import this instead of `@/components/ui/button` directly, and never a raw
 <Button variant={'outline'} onClick={...}>{label}</Button>
 ```
 
-## `FormInputField`
+## `EmptyState`
 
-Label + shadcn `Input`, associated via `htmlFor`/`id`. Accepts every native `Input` prop (`type`, `placeholder`, `required`, `min`, `step`, ...) via `ComponentProps<typeof Input>` — pass them straight through, no need to re-declare them.
+Centered icon + message for empty lists/collections. `message` accepts a string or a custom `ReactNode`.
 
 ```tsx
-<FormInputField
-    id={'item-name'}
-    label={pantryTexts.addForm.nameLabel}
-    value={values.name}
-    onChange={(e) => handlers.setName(e.target.value)}
-    placeholder={pantryTexts.addForm.namePlaceholder}
-    required
+<EmptyState
+    icon={<PackageIcon size={32}/>}
+    message={pantryTexts.emptyTitle}
 />
 ```
 
-## `FormSelectField`
+## `ConfirmationDialog`
 
-Label + shadcn `Select`, associated via `htmlFor`/`id`. Generic over the option value type (`<T extends string>`) so callers get a typed `onChange`, not a raw string. Handles the `SelectValue` render-prop internally — **always use this instead of a raw `Select`**, since `Select.Value` does not automatically show the matched item's label (see "Known gotchas" below).
+Destructive-action confirmation modal (delete, remove, etc.) built on shadcn `Dialog`. `onConfirmAction` is awaited before the dialog closes, so pass an async action; `isLoading` disables the confirm button while it runs.
+
+```tsx
+<ConfirmationDialog
+    open={open}
+    onOpenChangeAction={setOpen}
+    title={'Delete item?'}
+    description={'This cannot be undone.'}
+    label={'Delete'}
+    cancelLabel={'Cancel'}
+    onConfirmAction={handleDelete}
+/>
+```
+
+## `form/` — React Hook Form field components
+
+All form fields are RHF-based: they take `control`/`name` (not `value`/`onChange`) and wire into `FormField`/`FormItem`/`FormMessage` from `@/components/ui/form` for built-in label association and validation-error display. Build the form with `useForm` (+ `zodResolver`) and pass `form.control` down — see `useAddItemForm`/`AddItemFields` for the reference pattern.
+
+### `form/FormInputField`
+
+Label + validation message wrapper around any input-like control. Takes a `render(field)` prop so it works with plain `Input`, custom widgets, etc. — spread `field` (`value`/`onChange`/`onBlur`/`ref`/`name`) onto the rendered control.
+
+```tsx
+<FormInputField
+    control={form.control}
+    name={'name'}
+    label={pantryTexts.addForm.nameLabel}
+    render={(field) => (
+        <Input {...field} placeholder={pantryTexts.addForm.namePlaceholder}/>
+    )}
+/>
+```
+
+### `form/FormSelectField`
+
+Label + shadcn `Select`, RHF-wired via `control`/`name`. Generic over the option value type so options stay typed.
 
 ```tsx
 const storageOptions = STORAGE_LOCATIONS.map((location) => ({
@@ -38,12 +69,19 @@ const storageOptions = STORAGE_LOCATIONS.map((location) => ({
 }))
 
 <FormSelectField
-    id={'item-storage'}
+    control={form.control}
+    name={'storage'}
     label={pantryTexts.addForm.storageLabel}
-    value={values.storage}
     options={storageOptions}
-    onChange={handlers.setStorage}
 />
+```
+
+### `form/FormError`
+
+Renders a form-level (`errors.root.message`) error string, e.g. for a failed server-action submit surfaced back into RHF via `form.setError('root', { message })`. Renders nothing if there's no root error.
+
+```tsx
+<FormError errors={form.formState.errors}/>
 ```
 
 ## When to add a new shared component
@@ -52,7 +90,8 @@ Extract here when the same Label+Input/Select-style boilerplate (or similar shad
 
 Don't extract prematurely — a one-off `<Input>` with no label (e.g. `pantry-search-input.tsx`'s icon-prefixed search box) is a different UI pattern, not a `FormInputField` candidate.
 
-## Known gotchas (apply to any future shared component built on Base UI primitives)
+## Known gotchas
 
-- **`Select.Value` does not inherit the matched `SelectItem`'s children.** It renders the raw value unless given a `children` render-prop: `<SelectValue>{(value) => label}</SelectValue>`. `FormSelectField` already handles this — don't reintroduce a bare `<SelectValue/>` elsewhere.
+- **`ui/*` components are real, unmodified shadcn CLI output (Radix-based, `style: "new-york"` in `components.json`) — always add new ones via `npx shadcn add <name>`, never hand-write them.** This project ran on a mislabeled `"base-nova"` style backed by `@base-ui/react` for a while, which meant every `shadcn add` silently reverted `ui/*` files to an incompatible primitive set. That's fixed — the whole `ui/` folder is now Radix, so the CLI is safe to use for future additions.
+- Polymorphic rendering (button-as-link, etc.) uses Radix's `asChild`, not a `render`/`nativeButton` prop pair: `<Button asChild><Link href={...}>{label}</Link></Button>`.
 - **`bg-popover`/`text-popover-foreground` require `--popover`/`--popover-foreground` to be defined in `globals.css`.** They are mapped there (bridge tokens, same pattern as `--background`, `--primary`, etc.) — if a new shadcn primitive references a token that isn't in that bridge list, it silently renders transparent/uncolored instead of erroring.
