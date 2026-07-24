@@ -15,7 +15,7 @@ export const PantrySearchInput = ({
     value,
     onChange
 }: PantrySearchInputProps) => (
-    <div className={'mb-3.5 flex items-center gap-2 rounded-xl border border-border bg-surface px-3.5'}>
+    <div className={'mb-3.5 flex items-center gap-2 rounded-md border border-border bg-surface px-3.5'}>
         <SearchIcon
             size={18}
             className={'text-ink-3'}

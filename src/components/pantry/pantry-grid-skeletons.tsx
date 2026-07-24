@@ -5,7 +5,7 @@ export const PantryGridSkeletons = () => (
         {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
             <div
                 key={index}
-                className={'h-28 animate-pulse rounded-2xl border border-border bg-surface'}
+                className={'h-28 animate-pulse rounded-lg border border-border bg-surface'}
             />
         ))}
     </div>

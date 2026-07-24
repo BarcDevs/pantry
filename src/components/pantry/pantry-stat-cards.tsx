@@ -10,7 +10,7 @@ export const PantryStatCards = ({
     expiringSoonCount
 }: PantryStatCardsProps) => (
     <div className={'mb-4 grid grid-cols-2 gap-3'}>
-        <div className={'rounded-2xl border border-border bg-surface p-4'}>
+        <div className={'rounded-lg border border-border bg-surface p-4'}>
             <div className={'font-display text-title font-weight-title'}>
                 {itemCount}
             </div>
@@ -18,7 +18,7 @@ export const PantryStatCards = ({
                 {pantryTexts.statItemsInStock}
             </div>
         </div>
-        <div className={'rounded-2xl border border-border bg-surface p-4'}>
+        <div className={'rounded-lg border border-border bg-surface p-4'}>
             <div className={'font-display text-title font-weight-title text-status-red-fg'}>
                 {expiringSoonCount}
             </div>

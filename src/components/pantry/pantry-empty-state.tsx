@@ -6,7 +6,7 @@ import { routes } from '@/constants/routes'
 import { pantryTexts } from '@/constants/texts/pantry'
 
 export const PantryEmptyState = () => (
-    <div className={'flex flex-col items-center gap-4 rounded-2xl border border-border bg-surface py-16 text-center'}>
+    <div className={'flex flex-col items-center gap-4 rounded-lg border border-border bg-surface py-16 text-center'}>
         <span className={'text-4xl'}>
             {'🧺'}
         </span>
