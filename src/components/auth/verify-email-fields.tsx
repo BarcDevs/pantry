@@ -8,7 +8,7 @@ import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import type { VerifyFormValues } from '@/hooks/use-sign-up-form'
+import type { VerifyFormValues } from '@/lib/schemas/sign-up-form'
 
 import { authTexts } from '@/constants/texts/auth'
 

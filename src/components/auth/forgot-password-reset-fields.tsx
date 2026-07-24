@@ -9,7 +9,7 @@ import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import type { ResetFormValues } from '@/hooks/use-forgot-password-form'
+import type { ResetFormValues } from '@/lib/schemas/forgot-password-form'
 
 import { authTexts } from '@/constants/texts/auth'
 

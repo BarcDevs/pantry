@@ -8,7 +8,7 @@ import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import type { RequestFormValues } from '@/hooks/use-forgot-password-form'
+import type { RequestFormValues } from '@/lib/schemas/forgot-password-form'
 
 import { authTexts } from '@/constants/texts/auth'
 

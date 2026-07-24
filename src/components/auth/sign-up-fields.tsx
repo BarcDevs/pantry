@@ -9,7 +9,7 @@ import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import type { SignUpFormValues } from '@/hooks/use-sign-up-form'
+import type { SignUpFormValues } from '@/lib/schemas/sign-up-form'
 
 import { authTexts } from '@/constants/texts/auth'
 

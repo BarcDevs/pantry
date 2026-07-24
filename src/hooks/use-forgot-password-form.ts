@@ -3,25 +3,19 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 import { useSignIn } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import {
+    requestFormSchema,
+    type RequestFormValues,
+    resetFormSchema,
+    type ResetFormValues
+} from '@/lib/schemas/forgot-password-form'
+
 import { routes } from '@/constants/routes'
 import { authTexts } from '@/constants/texts/auth'
-
-const requestFormSchema = z.object({
-    email: z.string().trim().email()
-})
-
-const resetFormSchema = z.object({
-    code: z.string().trim().min(6).max(6),
-    password: z.string().min(8)
-})
-
-export type RequestFormValues = z.infer<typeof requestFormSchema>
-export type ResetFormValues = z.infer<typeof resetFormSchema>
 
 export const useForgotPasswordForm = () => {
     const router = useRouter()

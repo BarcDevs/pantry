@@ -3,26 +3,19 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 import { useSignUp } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import {
+    signUpFormSchema,
+    type SignUpFormValues,
+    verifyFormSchema,
+    type VerifyFormValues
+} from '@/lib/schemas/sign-up-form'
+
 import { routes } from '@/constants/routes'
 import { authTexts } from '@/constants/texts/auth'
-
-const signUpFormSchema = z.object({
-    fullName: z.string().trim().min(1).max(100),
-    email: z.string().trim().email(),
-    password: z.string().min(8)
-})
-
-const verifyFormSchema = z.object({
-    code: z.string().trim().min(6).max(6)
-})
-
-export type SignUpFormValues = z.infer<typeof signUpFormSchema>
-export type VerifyFormValues = z.infer<typeof verifyFormSchema>
 
 export const useSignUpForm = () => {
     const router = useRouter()
