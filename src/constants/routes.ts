@@ -7,6 +7,7 @@ export const routes = {
     pantry: '/pantry',
     add: '/add',
     generate: '/generate',
+    generateResult: '/generate/result',
     library: '/library',
     history: '/history',
     settings: '/settings',
