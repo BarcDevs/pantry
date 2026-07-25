@@ -8,7 +8,7 @@ export const routes = {
     add: '/add',
     generate: '/generate',
     generateResult: '/generate/result',
-    library: '/library',
+    recipes: '/recipes',
     recipeCook: (id: string) => `/recipes/${id}/cook`,
     history: '/history',
     settings: '/settings',

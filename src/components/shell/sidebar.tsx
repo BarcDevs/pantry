@@ -47,10 +47,10 @@ export const Sidebar = () => {
                     disabled
                 />
                 <NavItem
-                    href={routes.library}
+                    href={routes.recipes}
                     label={commonTexts.navLibrary}
                     icon={<LibraryIcon/>}
-                    active={pathname.startsWith(routes.library)}
+                    active={pathname.startsWith(routes.recipes)}
                     disabled
                 />
                 <NavItem

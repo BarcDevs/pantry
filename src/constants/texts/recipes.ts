@@ -71,5 +71,17 @@ export const recipesTexts = {
         startCooking: 'התחל לבשל ←',
         favoriteOn: 'הסר ממועדפים',
         favoriteOff: 'הוסף למועדפים'
+    },
+    library: {
+        title: 'המתכונים שלי',
+        search: 'חיפוש מתכון...',
+        filterAll: 'הכל',
+        filterCooked: 'בושלו',
+        filterFavorites: 'מועדפים',
+        emptyTitle: 'הספרייה ריקה',
+        emptySub: 'צרו מתכון חדש כדי להתחיל',
+        noResults: 'לא נמצאו מתכונים תואמים',
+        generateCta: 'יצירת מתכון',
+        favoriteToggleError: 'עדכון המועדפים נכשל'
     }
 } as const

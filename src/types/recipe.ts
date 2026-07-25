@@ -59,6 +59,8 @@ export type RecipeDoc = {
 
 export type Recipe = RecipeDoc & MongoDbObject
 
+export type RecipeLibraryFilter = 'all' | 'cooked' | 'favorites'
+
 export type RefineRecipeInput = {
     recipe: RecipeDoc
     instruction: string

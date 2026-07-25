@@ -25,10 +25,10 @@ export const BottomNav = () => {
                 active={pathname === routes.pantry}
             />
             <NavButton
-                href={routes.library}
+                href={routes.recipes}
                 label={commonTexts.navLibraryMobile}
                 icon={<LibraryIcon size={23}/>}
-                active={pathname.startsWith(routes.library)}
+                active={pathname.startsWith(routes.recipes)}
             />
             <Link
                 href={routes.generate}
