@@ -1,9 +1,12 @@
+import appConfig from '@/config/app'
+
 type Env = {
     clerkPublishableKey: string
     clerkSecretKey: string
     clerkWebhookSecret: string
     mongodbUri: string
     geminiApiKey: string
+    geminiModelId: string
 }
 
 const requireVar = (name: string, value: string | undefined) => {
@@ -21,7 +24,8 @@ const env: Env = {
     clerkSecretKey: requireVar('CLERK_SECRET_KEY', process.env.CLERK_SECRET_KEY),
     clerkWebhookSecret: requireVar('CLERK_WEBHOOK_SECRET', process.env.CLERK_WEBHOOK_SECRET),
     mongodbUri: requireVar('MONGODB_URI', process.env.MONGODB_URI),
-    geminiApiKey: requireVar('GEMINI_API_KEY', process.env.GEMINI_API_KEY)
+    geminiApiKey: requireVar('GEMINI_API_KEY', process.env.GEMINI_API_KEY),
+    geminiModelId: process.env.GEMINI_MODEL_ID ?? appConfig.defaultAiModelId
 }
 
 export default env
