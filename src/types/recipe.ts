@@ -64,6 +64,15 @@ export type RefineRecipeInput = {
     instruction: string
 }
 
+export type UpdateRecipeInput = Partial<{
+    title: string
+    isFavorite: boolean
+    tags: string[]
+    ingredients: RecipeIngredient[]
+    steps: RecipeStep[]
+    imageUrl: string
+}>
+
 export type GenerateRecipeInput = {
     mealCount: number
     maxTime: number
