@@ -9,6 +9,7 @@ export const routes = {
     generate: '/generate',
     generateResult: '/generate/result',
     library: '/library',
+    recipeCook: (id: string) => `/recipes/${id}/cook`,
     history: '/history',
     settings: '/settings',
     onboarding: '/onboarding'

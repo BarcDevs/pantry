@@ -46,5 +46,30 @@ export const recipesTexts = {
         selectAll: 'בחירת הכל',
         clearAll: 'ניקוי בחירה',
         done: 'סיום'
+    },
+    result: {
+        servingsLabel: 'מנות',
+        stepsLabel: 'שלבים',
+        pantryMatchLabel: 'מהמלאי',
+        ingredientsTitle: 'מצרכים',
+        stepsTitle: 'תקציר ההכנה',
+        imageFieldTitle: 'תמונת המתכון',
+        imageFieldOptional: '· אופציונלי',
+        imageFieldDescription: 'אין תמונה אוטומטית למתכון זה. אפשר להדביק כתובת תמונה.',
+        imageUrlPlaceholder: 'https://example.com/dish.jpg',
+        applyImage: 'החל תמונה',
+        removeImage: 'הסר תמונה',
+        refineLabel: 'רוצים לשנות משהו?',
+        refinePlaceholder: 'לדוגמה: הוסיפו חריפות, הפכו לצמחוני',
+        refineSubmit: 'עדכון מתכון',
+        refining: 'מעדכן...',
+        refineError: 'עדכון המתכון נכשל, נסו שוב',
+        save: 'שמירה לספרייה',
+        saved: 'נשמר',
+        saving: 'שומר...',
+        saveError: 'שמירת המתכון נכשלה, נסו שוב',
+        startCooking: 'התחל לבשל ←',
+        favoriteOn: 'הסר ממועדפים',
+        favoriteOff: 'הוסף למועדפים'
     }
 } as const
