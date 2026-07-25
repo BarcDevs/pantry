@@ -46,6 +46,30 @@ export const ItemSource = {
 export type ItemSource = typeof ItemSource[keyof typeof ItemSource]
 export const ITEM_SOURCES = Object.values(ItemSource)
 
+export const MealType = {
+    Breakfast: 'breakfast',
+    Lunch: 'lunch',
+    Dinner: 'dinner',
+    Snack: 'snack'
+} as const
+export type MealType = typeof MealType[keyof typeof MealType]
+export const MEAL_TYPES = Object.values(MealType)
+
+export const RecipeScope = {
+    PantryOnly: 'pantry-only',
+    PantryFirst: 'pantry-first',
+    Open: 'open'
+} as const
+export type RecipeScope = typeof RecipeScope[keyof typeof RecipeScope]
+export const RECIPE_SCOPES = Object.values(RecipeScope)
+
+export const MatchStrictness = {
+    Strict: 'strict',
+    Flexible: 'flexible'
+} as const
+export type MatchStrictness = typeof MatchStrictness[keyof typeof MatchStrictness]
+export const MATCH_STRICTNESSES = Object.values(MatchStrictness)
+
 export const Unit = {
     Kg: 'kg',
     G: 'g',
