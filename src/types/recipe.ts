@@ -59,6 +59,11 @@ export type RecipeDoc = {
 
 export type Recipe = RecipeDoc & MongoDbObject
 
+export type RefineRecipeInput = {
+    recipe: RecipeDoc
+    instruction: string
+}
+
 export type GenerateRecipeInput = {
     mealCount: number
     maxTime: number
