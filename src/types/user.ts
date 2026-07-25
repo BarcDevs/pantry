@@ -39,3 +39,9 @@ export type OnboardingInput = {
 export type UserProfileInput = OnboardingInput & {
     displayName?: string
 }
+
+export type RecipePromptUserContext = {
+    cookingLevel?: Difficulty
+    householdSize?: number
+    dietaryPreferences?: string[]
+}

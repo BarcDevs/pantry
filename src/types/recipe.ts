@@ -4,13 +4,14 @@ import type {
     MatchStrictness,
     MealType,
     RecipeScope,
-    RecipeSource
+    RecipeSource,
+    Unit
 } from '@/types/enums'
 
 export type RecipeIngredient = {
     name: string
     quantity: number
-    unit: string
+    unit: Unit
     inPantry: boolean
 }
 
@@ -57,3 +58,14 @@ export type RecipeDoc = {
 }
 
 export type Recipe = RecipeDoc & MongoDbObject
+
+export type GenerateRecipeInput = {
+    mealCount: number
+    maxTime: number
+    mealType: MealType
+    scope: RecipeScope
+    selectedItemIds?: string[]
+    allowAiGeneration: boolean
+    matchStrictness: MatchStrictness
+    customInstructions?: string
+}
