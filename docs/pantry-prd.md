@@ -35,6 +35,8 @@
 | Households | ✏️ Schema-ready but UI-invisible | user_id directly on pantry_items for MVP; household abstraction added when sharing is needed |
 | Pantry item form | 🆕 AI storage + expiry suggestion | As user types item name, AI suggests storage location and per-storage expiry estimates with reasons — single call returns all three storage options to avoid repeat round-trips. Suggestion is persisted on the item record; Edit mode reuses it instantly on storage change, with on-demand re-suggest if none exists. Present on both mobile and desktop Add/Edit Item screens. |
 | Pantry item form | 🆕 Match vs. mismatch suggestion UI | Suggestion panel behaves differently depending on whether the current storage selection matches the AI's recommendation. Match: confirmation only, no action needed. Mismatch: shows a "Select" button to apply the better location, with both the current and recommended option's reasons displayed side by side so the user understands the trade-off before deciding. |
+| Pantry item form | 🆕 Product name autocomplete | Name field is a Combobox filtering against a static list of ~150-200 common Hebrew food items (no AI, no network call, works offline). Substring match after 1 character, up to 8 suggestions. Selecting a suggestion triggers the existing debounced storage suggestion call. Free text accepted when no match. |
+| Pantry item form | 🆕 Auto-fill food type from AI suggestion | `suggested_type: FoodType` added to the `StorageSuggestion` response (same single AI call, zero extra latency). Auto-fills the food type selector alongside the existing storage/expiry hints. Does not override a field the user has already set manually. Persisted in `pantry_items.storage_suggestion` subdocument. |
 | Recipe generation config | 🆕 Selectable pantry subset | User can choose which pantry items to include for a given recipe generation via checklist (all selected by default, with Select All / Deselect All toggle) instead of always using the entire pantry |
 | Recipe generation config | 🆕 Unified time field | Single `max_time` field replaces separate prep_time/cook_time inputs on the generation config screen — simpler MVP UX |
 | Recipe generation config | 🆕 Meal count field | New `meal_count` (servings) input added to generation config |
@@ -98,7 +100,9 @@
 
       - AC-1.7Duplicate name detection on add: if normalized name matches existing item, user is prompted to merge quantities or save as separate item
 
-      - AC-1.8As the user types an item name, the system suggests a recommended storage location and per-storage expiry estimates (debounced AI call). Suggestions appear as hint text below the storage and expiry fields — they do not auto-fill the form.
+      - AC-1.7bThe product name field is a Combobox (autocomplete) that filters against a static list of ~150-200 common Hebrew food items (`src/constants/pantry-items.ts`). Matching is case-insensitive substring, triggered after 1 character, showing up to 8 suggestions. Selecting a suggestion fills the name field and triggers the existing debounced storage suggestion call (AC-1.8). If no match exists, the user types freely — no blocking. No AI or network call involved; works offline.
+
+      - AC-1.8As the user types an item name, the system suggests a recommended storage location, food type, and per-storage expiry estimates (debounced AI call). The response includes `suggested_storage`, `suggested_type: FoodType`, `reason`, and `expiry_by_storage` — all from a single `generateObject` call. The `suggested_type` auto-fills the food type selector; `suggested_storage` and expiry appear as hint text below their respective fields. None of these auto-fill values override a field the user has already manually set.
 
       - AC-1.9The suggestion response includes an expiry estimate AND a short reason for each storage option (fridge / freezer / pantry), since shelf life varies significantly by location for the same item.
 
@@ -362,6 +366,7 @@ type Unit = 'kg' | 'g' | 'L' | 'ml' | 'units'
 // can reuse it instantly on storage change, without a repeat AI call.
 interface StorageSuggestion {
   suggested_storage: StorageLocation
+  suggested_type: FoodType      // auto-fills the food type selector; does not override manual selection
   reason: string
   expiry_by_storage: {
     fridge: { date: string; reason: string }
@@ -420,6 +425,7 @@ pantry_items
   expiry_date     date              — Nullable. No alert if null.
   notes           text              — Nullable. Free-text user notes.
   source          item_source       — 'manual' | 'receipt_scan' | 'receipt_url'
+  storage_suggestion jsonb          — Nullable. Persisted AI suggestion: { suggested_storage, suggested_type, reason, expiry_by_storage }. Set at creation if AI suggestion was used; enables instant food-type auto-fill and expiry updates on storage change in Edit mode without a new AI call.
   created_at      timestamptz
   updated_at      timestamptz
 ```
@@ -467,7 +473,7 @@ recipes
 |---|---|---|
 | GET | /api/pantry | Returns all pantry items for the authenticated user, sorted by expiry_date ascending. Supports ?expiring_within_days=N filter. |
 | POST | /api/pantry/items | Adds one or more items. Accepts array. Performs normalized name duplicate check — returns merge prompt data if conflict exists. |
-| POST | /api/pantry/suggest | Accepts item name (debounced from input). Returns `{ suggested_storage, reason, expiry_by_storage: { fridge: {date, reason}, freezer: {date, reason}, pantry: {date, reason} } }` in a single AI call — avoids repeat calls when user changes storage selection. |
+| POST | /api/pantry/suggest | Accepts item name (debounced from input). Returns `{ suggested_storage, suggested_type, reason, expiry_by_storage: { fridge: {date, reason}, freezer: {date, reason}, pantry: {date, reason} } }` in a single AI call — avoids repeat calls when user changes storage selection. |
 | PATCH | /api/pantry/items/:id | Updates a single item (any field). Also used for post-cooking deduction (quantity update). |
 | DELETE | /api/pantry/items/:id | Removes a single pantry item. |
 | POST | /api/pantry/scan-receipt | Accepts base64 receipt image. Sends to Gemini Flash Vision server-side. Returns extracted [{name, quantity, unit}] for client review. Image not persisted. |
