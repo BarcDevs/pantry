@@ -11,6 +11,7 @@ export const routes = {
     recipes: '/recipes',
     recipeCook: (id: string) => `/recipes/${id}/cook`,
     recipeDeduct: (id: string) => `/recipes/${id}/deduct`,
+    recipeRate: (id: string) => `/recipes/${id}/rate`,
     history: '/history',
     settings: '/settings',
     onboarding: '/onboarding'

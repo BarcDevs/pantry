@@ -90,5 +90,17 @@ export const recipesTexts = {
         previous: 'הקודם',
         next: 'הבא',
         finish: 'סיום'
+    },
+    deduct: {
+        title: 'בתיאבון!',
+        description: 'כמה השתמשתם מכל מצרך? עדכנו את הכמויות ונעדכן את המזווה בהתאם.',
+        remainingLabel: 'נשארו',
+        zeroWarning: 'נגמר במזווה — מה לעשות?',
+        keepAtZero: 'השאר ברשימה (0)',
+        deleteFromPantry: 'מחק מהמזווה',
+        confirm: 'אישור ועדכון המזווה',
+        skip: 'דלג — השאר את המזווה ללא שינוי',
+        deductError: 'עדכון המזווה נכשל, נסו שוב',
+        chooseRequired: 'יש לבחור השאר או מחק עבור פריטים שנגמרו'
     }
 } as const

@@ -61,6 +61,22 @@ export type UpdatePantryItemInput = Partial<{
     storageSuggestion: StorageSuggestion | null
 }>
 
+export type DeductRow = {
+    pantryItemId: string
+    name: string
+    emoji?: string
+    unit: Unit
+    pantryQty: number
+    used: number
+    choice: 'keep' | 'delete' | null
+}
+
+export type DeductPantryItemEdit = {
+    id: string
+    newQuantity: number
+    remove?: boolean
+}
+
 export type AddPantryItemOutcome =
     | { status: 'created', item: PantryItem }
     | {
