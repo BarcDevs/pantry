@@ -16,6 +16,8 @@ import { commonTexts } from '@/constants/texts/common'
 export const BottomNav = () => {
     const pathname = usePathname()
 
+    if (pathname.endsWith('/cook')) return null
+
     return (
         <nav className={'flex md:hidden justify-around items-center bg-surface border-t border-border-2 px-3 pb-3.5 pt-2.5 shrink-0 sticky bottom-0 z-30'}>
             <NavButton

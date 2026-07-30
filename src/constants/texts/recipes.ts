@@ -83,5 +83,12 @@ export const recipesTexts = {
         noResults: 'לא נמצאו מתכונים תואמים',
         generateCta: 'יצירת מתכון',
         favoriteToggleError: 'עדכון המועדפים נכשל'
+    },
+    cook: {
+        stepLabel: 'שלב',
+        doneCooking: 'סיום בישול',
+        previous: 'הקודם',
+        next: 'הבא',
+        finish: 'סיום'
     }
 } as const

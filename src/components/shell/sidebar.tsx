@@ -23,6 +23,8 @@ export const Sidebar = () => {
     const displayName = user?.fullName ?? user?.emailAddresses[0]?.emailAddress ?? ''
     const initial = displayName.charAt(0).toUpperCase() || '?'
 
+    if (pathname.endsWith('/cook')) return null
+
     return (
         <aside className={'hidden md:flex w-sidebar shrink-0 flex-col bg-surface border-e border-border-2 sticky top-0 h-screen self-start px-4 py-6'}>
             <div className={'flex items-center gap-2.5 px-2 pb-6'}>
