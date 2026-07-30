@@ -102,5 +102,22 @@ export const recipesTexts = {
         skip: 'דלג — השאר את המזווה ללא שינוי',
         deductError: 'עדכון המזווה נכשל, נסו שוב',
         chooseRequired: 'יש לבחור השאר או מחק עבור פריטים שנגמרו'
+    },
+    rate: {
+        title: 'איך יצא?',
+        descriptionPrefix: 'דרגו את',
+        descriptionSuffix: '— נשמור אותו בהיסטוריית הבישול שלכם.',
+        ratingLabels: [
+            'דרגו כדי לשמור',
+            'לא יצא טוב',
+            'סביר',
+            'טוב',
+            'טעים מאוד',
+            'מושלם!'
+        ],
+        autoSaveNote: 'המתכון נשמר אוטומטית למתכונים שלי',
+        finishWithRating: 'סיום ושמירה בהיסטוריה',
+        finishWithoutRating: 'שמור להיסטוריה בלי דירוג',
+        rateError: 'שמירת הדירוג נכשלה, נסו שוב'
     }
 } as const
