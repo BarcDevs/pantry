@@ -18,6 +18,13 @@ export const clerkAppearance = {
         socialButtonsBlockButton: 'border border-border font-semibold',
         formFieldInput: 'border border-border',
         footerActionLink: 'text-green font-semibold',
-        badge: 'bg-green/10 text-green border-green/20'
+        badge: 'bg-green/10 text-green border-green/20',
+        userButtonPopoverCard: 'shadow-lg border border-border',
+        userButtonPopoverMain: 'bg-surface',
+        userButtonPopoverActionButton: 'text-ink! hover:bg-border-3',
+        userButtonPopoverActionButtonText: 'text-ink! font-medium',
+        userButtonPopoverActionButtonIcon: 'text-ink-3!',
+        userPreviewMainIdentifier: 'text-ink! font-semibold',
+        userPreviewSecondaryIdentifier: 'text-ink-3!'
     }
 }
