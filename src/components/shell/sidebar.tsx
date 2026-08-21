@@ -13,17 +13,20 @@ import { PantryIcon } from '@/components/icons/pantry-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
 import { NavItem } from '@/components/shell/nav-item'
 
+import { useIsChromeHidden } from '@/hooks/use-is-chrome-hidden'
+
 import { routes } from '@/constants/routes'
 import { commonTexts } from '@/constants/texts/common'
 
 export const Sidebar = () => {
     const pathname = usePathname()
     const { user } = useUser()
+    const isChromeHidden = useIsChromeHidden()
 
     const displayName = user?.fullName ?? user?.emailAddresses[0]?.emailAddress ?? ''
     const initial = displayName.charAt(0).toUpperCase() || '?'
 
-    if (pathname.endsWith('/cook')) return null
+    if (isChromeHidden) return null
 
     return (
         <aside className={'hidden md:flex w-sidebar shrink-0 flex-col bg-surface border-e border-border-2 sticky top-0 h-screen self-start px-4 py-6'}>

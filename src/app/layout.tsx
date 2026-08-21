@@ -3,7 +3,6 @@ import { ClerkProvider } from '@clerk/nextjs'
 
 import type { LayoutProps } from '@/types/react'
 
-import { AuthHeader } from '@/components/shell/auth-header'
 import { ServiceWorkerRegister }
     from '@/components/shell/service-worker-register'
 
@@ -38,7 +37,6 @@ const RootLayout = ({
             )}
         >
             <body className={'min-h-full flex flex-col'}>
-                <AuthHeader/>
                 {children}
                 <ServiceWorkerRegister/>
             </body>
