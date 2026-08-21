@@ -56,6 +56,7 @@ export const SelectableOption = ({
     onSelect
 }: SelectableOptionProps) => (
     <Button
+        type={'button'}
         variant={'ghost'}
         aria-pressed={isSelected}
         onClick={onSelect}

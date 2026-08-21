@@ -7,6 +7,7 @@ import type { Recipe } from '@/types/recipe'
 import { Button } from '@/components/shared/Button'
 
 import { routes } from '@/constants/routes'
+import { recipesTexts } from '@/constants/texts/recipes'
 
 type RecipeCardProps = {
     recipe: Recipe
@@ -36,11 +37,16 @@ export const RecipeCard = ({
                 </span>
                 <Button
                     variant={'ghost'}
+                    aria-label={
+                        recipe.isFavorite
+                            ? recipesTexts.result.favoriteOn
+                            : recipesTexts.result.favoriteOff
+                    }
                     onClick={(e) => {
                         e.preventDefault()
                         onToggleFavorite()
                     }}
-                    className={'flex size-8 items-center justify-center rounded-full bg-surface/90 p-0'}
+                    className={'flex size-8 cursor-pointer items-center justify-center rounded-full bg-surface/90 p-0'}
                 >
                     <HeartIcon
                         size={17}

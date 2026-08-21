@@ -4,9 +4,11 @@ import { z } from 'zod'
 
 import {
     DIFFICULTIES,
+    Difficulty,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
     RECIPE_SCOPES,
+    Unit,
     UNITS
 } from '@/types/enums'
 import type {
@@ -107,7 +109,27 @@ export const generateRecipe = async (
         dietaryPreferences: user?.dietaryPreferences ?? []
     })
 
-    const generated = await generateStructured(prompt, aiRecipeSchema)
+    const generated = await generateStructured(prompt, aiRecipeSchema, () => ({
+        title: 'שקשוקה למבחן',
+        difficulty: Difficulty.Easy,
+        emoji: '🍳',
+        ingredients: pantryItemNames.slice(0, 3).map((name) => ({
+            name,
+            quantity: 1,
+            unit: Unit.Units,
+            inPantry: true
+        })),
+        steps: [
+            {
+                order: 1,
+                description: 'מחממים מחבת'
+            },
+            {
+                order: 2,
+                description: 'מוסיפים את כל המצרכים ומבשלים'
+            }
+        ]
+    }))
 
     return {
         userId,

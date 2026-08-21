@@ -55,7 +55,14 @@ export const refineRecipe = async (
     const prompt = buildPrompt(recipe, instruction)
     const refined = await generateStructured(
         prompt,
-        refinedRecipeSchema
+        refinedRecipeSchema,
+        () => ({
+            title: `${recipe.title} (מעודכן)`,
+            difficulty: recipe.difficulty,
+            emoji: recipe.emoji ?? '🍳',
+            ingredients: recipe.ingredients,
+            steps: recipe.steps
+        })
     )
 
     return {

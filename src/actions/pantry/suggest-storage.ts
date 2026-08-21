@@ -37,8 +37,22 @@ export const suggestStorage = async (
         תאריכי התפוגה חייבים להיות תאריכים עתידיים ריאליים ביחס להיום, בפורמט YYYY-MM-DD.
     `
 
+    const mockEntry = {
+        date: '2099-01-01',
+        reason: 'בדיקה'
+    }
+
     return generateStructured(
         prompt,
-        storageSuggestionSchema
+        storageSuggestionSchema,
+        () => ({
+            suggestedStorage: 'pantry',
+            reason: 'בדיקה',
+            expiryByStorage: {
+                fridge: mockEntry,
+                freezer: mockEntry,
+                pantry: mockEntry
+            }
+        })
     )
 }

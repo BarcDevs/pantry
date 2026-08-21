@@ -7,6 +7,7 @@ type Env = {
     mongodbUri: string
     geminiApiKey: string
     geminiModelId: string
+    e2eMockAi: boolean
 }
 
 const requireVar = (name: string, value: string | undefined) => {
@@ -25,7 +26,8 @@ const env: Env = {
     clerkWebhookSecret: requireVar('CLERK_WEBHOOK_SECRET', process.env.CLERK_WEBHOOK_SECRET),
     mongodbUri: requireVar('MONGODB_URI', process.env.MONGODB_URI),
     geminiApiKey: requireVar('GEMINI_API_KEY', process.env.GEMINI_API_KEY),
-    geminiModelId: process.env.GEMINI_MODEL_ID ?? appConfig.defaultAiModelId
+    geminiModelId: process.env.GEMINI_MODEL_ID ?? appConfig.defaultAiModelId,
+    e2eMockAi: process.env.E2E_MOCK_AI === 'true' && process.env.NODE_ENV !== 'production'
 }
 
 export default env

@@ -13,7 +13,8 @@ export default defineConfig({
         command: 'npm run dev',
         url: 'http://localhost:3000',
         reuseExistingServer: true,
-        timeout: 60000
+        timeout: 60000,
+        env: { E2E_MOCK_AI: 'true' }
     },
     projects: [
         {

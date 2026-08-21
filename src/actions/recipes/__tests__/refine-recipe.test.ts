@@ -86,7 +86,8 @@ describe('refineRecipe', () => {
 
         expect(mockGenerateStructured).toHaveBeenCalledWith(
             expect.stringContaining('תוסיף חריפות'),
-            expect.anything()
+            expect.anything(),
+            expect.any(Function)
         )
         const [prompt] = mockGenerateStructured.mock.calls[0]
         expect(prompt).toContain('פסטה עגבניות')
