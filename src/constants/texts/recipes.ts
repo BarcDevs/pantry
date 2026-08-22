@@ -1,6 +1,7 @@
 export const recipesTexts = {
     generate: {
         title: 'יצירת מתכון',
+        subtitle: 'בחרו אילו פריטים מהמזווה ייכנסו ליצירה הזו, וכוונו את ההעדפות.',
         mealCountLabel: 'מספר מנות',
         mealCountUnit: 'מנות',
         maxTimeLabel: 'זמן הכנה מקסימלי',
@@ -29,6 +30,19 @@ export const recipesTexts = {
             strict: 'מדויק',
             flexible: 'גמיש'
         },
+        sourceGroupTitle: 'מקור המתכון',
+        sourceGroupDescription: 'קבעו מאיפה יגיע המתכון וכמה מדויקת ההתאמה למלאי.',
+        allowAiGenerationHint: {
+            true: 'אם אין מתכון מתאים ברשת, ה-AI ייצור מתכון חדש שמותאם למזווה.',
+            false: 'יוצגו רק מתכונים ממקורות ברשת. אם אין התאמה — נציג "לא נמצא מתכון".'
+        },
+        matchStrictnessHint: {
+            strict: 'המתכון יתבסס כמעט רק על המצרכים שכבר נמצאים במלאי.',
+            flexible: 'מותר חוסר של מצרכים בודדים, כל עוד בסיס המתכון קיים במזווה.'
+        },
+        dietaryPreferencesLabel: 'העדפות תזונה',
+        dietaryPreferencesEdit: 'עריכה',
+        dietaryPreferencesNone: 'ללא העדפות',
         customInstructionsLabel: 'הוראות מיוחדות (אופציונלי)',
         customInstructionsPlaceholder: 'לדוגמה: ללא גלוטן, בלי בצל',
         pantrySelectionTitle: 'פריטים מהמזווה',

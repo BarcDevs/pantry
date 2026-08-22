@@ -2,18 +2,28 @@
 
 import { ExpiredItemsGate } from '@/components/recipes/generate/expired-items-gate'
 import { GenerateConfigFields } from '@/components/recipes/generate/generate-config-fields'
+import { GenerateDietarySummary } from '@/components/recipes/generate/generate-dietary-summary'
+import { GenerateSourceGroup } from '@/components/recipes/generate/generate-source-group'
 import { PantrySelectSheet } from '@/components/recipes/generate/pantry-select-sheet'
 import { PantrySelectionSummary } from '@/components/recipes/generate/pantry-selection-summary'
 import { SparsePantryWarning } from '@/components/recipes/generate/sparse-pantry-warning'
 import { Button } from '@/components/shared/Button'
 import { FormError } from '@/components/shared/form/FormError'
+import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Form } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 
 import { useGenerateRecipeForm } from '@/hooks/use-generate-recipe-form'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
-export const GenerateConfigForm = () => {
+type GenerateConfigFormProps = {
+    dietaryPreferences: string[]
+}
+
+export const GenerateConfigForm = ({
+    dietaryPreferences
+}: GenerateConfigFormProps) => {
     const {
         form,
         pantryItems,
@@ -52,6 +62,23 @@ export const GenerateConfigForm = () => {
                         onContinueAnyway={acknowledgeExpired}
                     />
                 )}
+                <GenerateSourceGroup control={form.control}/>
+                <GenerateDietarySummary dietaryPreferences={dietaryPreferences}/>
+                <FormInputField
+                    control={form.control}
+                    name={'customInstructions'}
+                    label={texts.customInstructionsLabel}
+                    render={(field) => (
+                        <Input
+                            name={field.name}
+                            onBlur={field.onBlur}
+                            ref={field.ref}
+                            value={field.value as string}
+                            onChange={field.onChange}
+                            placeholder={texts.customInstructionsPlaceholder}
+                        />
+                    )}
+                />
                 <FormError errors={form.formState.errors}/>
                 <Button
                     type={'submit'}

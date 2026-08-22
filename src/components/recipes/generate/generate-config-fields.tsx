@@ -1,17 +1,10 @@
 import type { Control } from 'react-hook-form'
 
-import {
-    MATCH_STRICTNESSES,
-    MEAL_TYPES,
-    RECIPE_SCOPES
-} from '@/types/enums'
+import { MEAL_TYPES } from '@/types/enums'
 
 import { GenerateChipField } from '@/components/recipes/generate/generate-chip-field'
 import { GenerateCountStepperField } from '@/components/recipes/generate/generate-count-stepper-field'
 import { GenerateTimePresetField } from '@/components/recipes/generate/generate-time-preset-field'
-import { GenerateToggleField } from '@/components/recipes/generate/generate-toggle-field'
-import { FormInputField } from '@/components/shared/form/FormInputField'
-import { Input } from '@/components/ui/input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -46,42 +39,6 @@ export const GenerateConfigFields = ({
             label={texts.mealTypeLabel}
             values={MEAL_TYPES}
             optionLabels={texts.mealTypeOptions}
-        />
-        <GenerateChipField
-            control={control}
-            name={'scope'}
-            label={texts.scopeLabel}
-            values={RECIPE_SCOPES}
-            optionLabels={texts.scopeOptions}
-        />
-        <GenerateToggleField
-            control={control}
-            name={'allowAiGeneration'}
-            label={texts.allowAiGenerationLabel}
-            trueLabel={texts.allowAiGenerationOptions.true}
-            falseLabel={texts.allowAiGenerationOptions.false}
-        />
-        <GenerateChipField
-            control={control}
-            name={'matchStrictness'}
-            label={texts.matchStrictnessLabel}
-            values={MATCH_STRICTNESSES}
-            optionLabels={texts.matchStrictnessOptions}
-        />
-        <FormInputField
-            control={control}
-            name={'customInstructions'}
-            label={texts.customInstructionsLabel}
-            render={(field) => (
-                <Input
-                    name={field.name}
-                    onBlur={field.onBlur}
-                    ref={field.ref}
-                    value={field.value as string}
-                    onChange={field.onChange}
-                    placeholder={texts.customInstructionsPlaceholder}
-                />
-            )}
         />
     </div>
 )
