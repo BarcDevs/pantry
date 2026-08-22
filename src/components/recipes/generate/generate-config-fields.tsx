@@ -7,6 +7,8 @@ import {
 } from '@/types/enums'
 
 import { GenerateChipField } from '@/components/recipes/generate/generate-chip-field'
+import { GenerateCountStepperField } from '@/components/recipes/generate/generate-count-stepper-field'
+import { GenerateTimePresetField } from '@/components/recipes/generate/generate-time-preset-field'
 import { GenerateToggleField } from '@/components/recipes/generate/generate-toggle-field'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Input } from '@/components/ui/input'
@@ -25,37 +27,18 @@ export const GenerateConfigFields = ({
     control
 }: GenerateConfigFieldsProps) => (
     <div className={'flex flex-col gap-4'}>
-        <FormInputField
+        <GenerateCountStepperField
             control={control}
             name={'mealCount'}
             label={texts.mealCountLabel}
-            render={(field) => (
-                <Input
-                    name={field.name}
-                    onBlur={field.onBlur}
-                    ref={field.ref}
-                    type={'number'}
-                    min={1}
-                    value={field.value as number}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                />
-            )}
+            unitLabel={texts.mealCountUnit}
         />
-        <FormInputField
+        <GenerateTimePresetField
             control={control}
             name={'maxTime'}
             label={texts.maxTimeLabel}
-            render={(field) => (
-                <Input
-                    name={field.name}
-                    onBlur={field.onBlur}
-                    ref={field.ref}
-                    type={'number'}
-                    min={1}
-                    value={field.value as number}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                />
-            )}
+            presetSuffix={texts.maxTimePresetSuffix}
+            customLabel={texts.maxTimeCustomLabel}
         />
         <GenerateChipField
             control={control}

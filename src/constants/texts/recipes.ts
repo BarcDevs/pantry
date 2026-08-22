@@ -2,7 +2,10 @@ export const recipesTexts = {
     generate: {
         title: 'יצירת מתכון',
         mealCountLabel: 'מספר מנות',
+        mealCountUnit: 'מנות',
         maxTimeLabel: 'זמן הכנה מקסימלי',
+        maxTimePresetSuffix: 'דק\'',
+        maxTimeCustomLabel: 'מותאם',
         mealTypeLabel: 'סוג ארוחה',
         mealTypeOptions: {
             breakfast: 'בוקר',
