@@ -12,7 +12,7 @@ export const CookingProgressBar = ({
     return (
         <div className={'mb-9 h-1.5 overflow-hidden rounded-full bg-surface/14'}>
             <div
-                className={'h-full rounded-full bg-saffron transition-[width] duration-300'}
+                className={'h-full rounded-full bg-ember transition-[width] duration-300'}
                 style={{ width: `${percent}%` }}
             />
         </div>

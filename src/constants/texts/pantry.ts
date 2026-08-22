@@ -4,7 +4,7 @@ export const pantryTexts = {
     emptyTitle: 'המזווה ריק',
     emptySub: 'הוסיפו מוצרים כדי להתחיל',
     addItem: 'הוספת מוצר',
-    generateRecipe: 'יצירת מתכון',
+    generateRecipe: '✦ יצירת מתכון',
     greeting: (name: string) => `היי ${name},`,
     statItemsInStock: 'פריטים במלאי',
     statExpiringSoon: 'מתקלקלים בקרוב',

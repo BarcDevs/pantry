@@ -15,7 +15,7 @@ export const DeductRowStepper = ({
     onMinus,
     onPlus
 }: DeductRowStepperProps) => (
-    <div className={'flex shrink-0 items-center overflow-hidden rounded-lg border border-border bg-surface-2'}>
+    <div className={'flex shrink-0 items-center overflow-hidden rounded-lg border border-border bg-canvas'}>
         <Button
             variant={'ghost'}
             size={'icon-lg'}

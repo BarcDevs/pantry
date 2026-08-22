@@ -20,7 +20,7 @@ export const useRecipeLibrary = (initialRecipes: Recipe[]) => {
     const filteredRecipes = useMemo(
         () => recipes
             .filter((recipe) => {
-                if (filter === 'cooked') return recipe.history.length > 0
+                if (filter === 'can-cook') return recipe.ingredients.every((ingredient) => ingredient.inPantry)
                 if (filter === 'favorites') return recipe.isFavorite
                 return true
             })

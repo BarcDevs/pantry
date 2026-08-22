@@ -17,7 +17,7 @@ export const DeductRowsList = ({
     onKeep,
     onDelete
 }: DeductRowsListProps) => (
-    <div className={'mb-5 rounded-xl border border-border-3 bg-surface px-4.5'}>
+    <div className={'mb-5 rounded-xl border border-border-2 bg-surface px-4.5 py-1.5'}>
         {rows.map((row) => (
             <DeductRow
                 key={row.pantryItemId}

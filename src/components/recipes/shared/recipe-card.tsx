@@ -20,7 +20,7 @@ export const RecipeCard = ({
 }: RecipeCardProps) => (
     <Link
         href={routes.recipeDetail(recipe._id)}
-        className={'block overflow-hidden rounded-lg border border-border bg-surface text-start shadow-sm'}
+        className={'block overflow-hidden rounded-lg border border-border-2 bg-surface text-start shadow-sm'}
     >
         <div
             className={'relative h-30 bg-[image:var(--gradient-brand)] bg-cover bg-center'}
@@ -50,8 +50,7 @@ export const RecipeCard = ({
                 >
                     <HeartIcon
                         size={17}
-                        fill={recipe.isFavorite ? '#e0533d' : 'none'}
-                        stroke={recipe.isFavorite ? '#e0533d' : '#8a8578'}
+                        className={recipe.isFavorite ? 'fill-status-red-fg stroke-status-red-fg' : 'fill-none stroke-ink-3'}
                     />
                 </Button>
             </div>
@@ -75,6 +74,11 @@ export const RecipeCard = ({
             <div className={'mt-0.75 text-caption text-ink-3'}>
                 {`${recipe.ingredients.length} מצרכים · ${recipe.mealCount} מנות`}
             </div>
+            {recipe.tags[0] && (
+                <span className={'mt-2.5 inline-block rounded-full bg-border-3 px-2.5 py-1 text-caption font-bold text-ink-2'}>
+                    {recipe.tags[0]}
+                </span>
+            )}
         </div>
     </Link>
 )

@@ -17,7 +17,7 @@ export const PantryHeader = ({
         <div className={'flex flex-col gap-2'}>
             <Button
                 asChild
-                className={'w-fit bg-saffron text-ink hover:bg-saffron/90'}
+                className={'w-fit bg-ember text-surface shadow-none hover:bg-ember/90'}
             >
                 <Link href={routes.generate}>
                     {pantryTexts.generateRecipe}

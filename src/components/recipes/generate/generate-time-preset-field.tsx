@@ -15,9 +15,9 @@ import {
 import { Input } from '@/components/ui/input'
 
 const TIME_PRESETS = [
-    60,
+    15,
     30,
-    15
+    60
 ] as const
 
 type GenerateTimePresetFieldProps<T extends FieldValues> = {

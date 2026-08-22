@@ -2,7 +2,7 @@ import { recipesTexts } from '@/constants/texts/recipes'
 
 export const DeductHeader = () => (
     <div className={'mb-6.5 text-center'}>
-        <div className={'mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-green/10 text-heading'}>
+        <div className={'mx-auto mb-4 flex size-18 items-center justify-center rounded-full bg-status-green-bg text-[34px]'}>
             {'🍽️'}
         </div>
         <div className={'font-display text-heading font-extrabold'}>

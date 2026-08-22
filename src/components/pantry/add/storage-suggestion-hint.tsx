@@ -24,7 +24,7 @@ export const StorageSuggestionHint = ({
 
     if (isMatch) {
         return (
-            <div className={'flex items-start gap-2 rounded-lg border border-green/30 bg-green/10 p-3 text-label'}>
+            <div className={'flex items-start gap-2 rounded-lg border border-soft-green-border bg-soft-green-bg p-3 text-label'}>
                 <CheckIcon
                     size={16}
                     className={'mt-0.5 shrink-0 text-green'}

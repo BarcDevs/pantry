@@ -21,6 +21,7 @@
     --green-deep: #2f5f3b;
     --green-deep-2: #284f33;
     --saffron: #f4c98a;
+    --ember: #e08a3c;
 
     /* Status */
     --status-green-bg: #e7f1e9;
@@ -32,6 +33,8 @@
     --warning-bg: #fdf3ef;
     --warning-border: #f3d6cd;
     --warning-fg: #c4452f;
+    --soft-green-bg: #f1f7f1;
+    --soft-green-border: #d8e8d9;
 
     /* Shape */
     --radius-sm: 8px;
@@ -103,6 +106,7 @@
     --color-green-deep: var(--green-deep);
     --color-green-deep-2: var(--green-deep-2);
     --color-saffron: var(--saffron);
+    --color-ember: var(--ember);
 
     --color-status-green-bg: var(--status-green-bg);
     --color-status-green-fg: var(--status-green-fg);
@@ -113,6 +117,8 @@
     --color-warning-bg: var(--warning-bg);
     --color-warning-border: var(--warning-border);
     --color-warning-fg: var(--warning-fg);
+    --color-soft-green-bg: var(--soft-green-bg);
+    --color-soft-green-border: var(--soft-green-border);
 
     --radius-sm: var(--radius-sm);
     --radius-md: var(--radius-md);

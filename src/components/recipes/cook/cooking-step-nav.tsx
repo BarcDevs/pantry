@@ -26,7 +26,7 @@ export const CookingStepNav = ({
         </Button>
         <Button
             onClick={onNext}
-            className={'flex-[2] bg-saffron text-ink'}
+            className={'flex-[2] bg-ember text-surface'}
         >
             {isLastStep ? recipesTexts.cook.finish : recipesTexts.cook.next}
         </Button>

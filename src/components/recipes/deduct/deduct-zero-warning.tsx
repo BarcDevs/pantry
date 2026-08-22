@@ -17,8 +17,8 @@ export const DeductZeroWarning = ({
     onKeep,
     onDelete
 }: DeductZeroWarningProps) => (
-    <div className={'mt-2.75 rounded-lg border border-status-red-fg/20 bg-status-red-bg p-2.75'}>
-        <div className={'mb-2.25 flex items-center gap-1.5 text-caption font-bold text-status-red-fg'}>
+    <div className={'mt-2.75 rounded-lg border border-warning-border bg-warning-bg p-2.75'}>
+        <div className={'mb-2.25 flex items-center gap-1.5 text-caption font-bold text-warning-fg'}>
             <TriangleAlertIcon size={14}/>
             {recipesTexts.deduct.zeroWarning}
         </div>

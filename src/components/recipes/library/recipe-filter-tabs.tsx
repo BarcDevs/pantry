@@ -17,7 +17,7 @@ const tabs: Array<{
     label: string
 }> = [
     { key: 'all', label: recipesTexts.library.filterAll },
-    { key: 'cooked', label: recipesTexts.library.filterCooked },
+    { key: 'can-cook', label: recipesTexts.library.filterCanCook },
     { key: 'favorites', label: recipesTexts.library.filterFavorites }
 ]
 

@@ -98,9 +98,10 @@ export const recipesTexts = {
     },
     library: {
         title: 'המתכונים שלי',
+        subtitle: (count: number) => `${count} מתכונים שמורים · מסוננים לפי המלאי הזמין שלכם`,
         search: 'חיפוש מתכון...',
         filterAll: 'הכל',
-        filterCooked: 'בושלו',
+        filterCanCook: 'ניתן לבשל עכשיו',
         filterFavorites: 'מועדפים',
         emptyTitle: 'הספרייה ריקה',
         emptySub: 'צרו מתכון חדש כדי להתחיל',

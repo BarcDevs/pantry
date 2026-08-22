@@ -19,7 +19,7 @@ export const PantryItemCard = ({
     <Button
         variant={'ghost'}
         onClick={onEdit}
-        className={'block h-auto w-full rounded-lg border border-border bg-surface p-4 text-start font-normal shadow-card'}
+        className={'block h-auto w-full rounded-lg border border-border-2 bg-surface p-4 text-start font-normal shadow-card'}
     >
         <div className={'flex items-start justify-between'}>
             <span className={'text-2xl'}>

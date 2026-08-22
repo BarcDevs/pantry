@@ -29,6 +29,9 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
 
     return (
         <div>
+            <p className={'mb-5.5 text-body text-ink-3'}>
+                {recipesTexts.library.subtitle(recipes.length)}
+            </p>
             <RecipeSearchInput
                 value={query}
                 onChange={setQuery}

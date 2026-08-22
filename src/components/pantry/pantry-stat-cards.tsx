@@ -12,15 +12,15 @@ export const PantryStatCards = ({
     savedRecipesCount
 }: PantryStatCardsProps) => (
     <div className={'mb-4 grid grid-cols-3 gap-3'}>
-        <div className={'rounded-lg border border-border bg-surface p-4'}>
+        <div className={'rounded-lg border border-border-2 bg-surface p-4'}>
             <div className={'font-display text-title font-weight-title'}>
-                {savedRecipesCount}
+                {itemCount}
             </div>
             <div className={'text-label text-ink-3'}>
-                {pantryTexts.statSavedRecipes}
+                {pantryTexts.statItemsInStock}
             </div>
         </div>
-        <div className={'rounded-lg border border-border bg-surface p-4'}>
+        <div className={'rounded-lg border border-warning-border bg-surface p-4'}>
             <div className={'font-display text-title font-weight-title text-status-red-fg'}>
                 {expiringSoonCount}
             </div>
@@ -28,12 +28,12 @@ export const PantryStatCards = ({
                 {pantryTexts.statExpiringSoon}
             </div>
         </div>
-        <div className={'rounded-lg border border-border bg-surface p-4'}>
+        <div className={'rounded-lg border border-border-2 bg-surface p-4'}>
             <div className={'font-display text-title font-weight-title'}>
-                {itemCount}
+                {savedRecipesCount}
             </div>
             <div className={'text-label text-ink-3'}>
-                {pantryTexts.statItemsInStock}
+                {pantryTexts.statSavedRecipes}
             </div>
         </div>
     </div>
