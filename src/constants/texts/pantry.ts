@@ -5,8 +5,10 @@ export const pantryTexts = {
     emptySub: 'הוסיפו מוצרים כדי להתחיל',
     addItem: 'הוספת מוצר',
     generateRecipe: 'יצירת מתכון',
+    greeting: (name: string) => `היי ${name},`,
     statItemsInStock: 'פריטים במלאי',
     statExpiringSoon: 'מתקלקלים בקרוב',
+    statSavedRecipes: 'מתכונים שמורים',
     filterAll: 'הכל',
     storageLabels: {
         fridge: 'מקרר',

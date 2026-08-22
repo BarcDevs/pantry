@@ -17,6 +17,8 @@ import { PantryFilterChips }
     from '@/components/pantry/pantry-filter-chips'
 import { PantryGrid }
     from '@/components/pantry/pantry-grid'
+import { PantryHeader }
+    from '@/components/pantry/pantry-header'
 import { PantrySearchInput }
     from '@/components/pantry/pantry-search-input'
 import { PantryStatCards }
@@ -30,11 +32,15 @@ import { pantryTexts }
 
 type PantryViewProps = {
     items: PantryItem[]
+    savedRecipesCount: number
+    displayName: string
 }
 
-export const PantryView = (
-    { items }: PantryViewProps
-) => {
+export const PantryView = ({
+    items,
+    savedRecipesCount,
+    displayName
+}: PantryViewProps) => {
     const router = useRouter()
     const [query, setQuery] = useState('')
     const [filter, setFilter] = useState<
@@ -69,13 +75,22 @@ export const PantryView = (
         [items, filter, query]
     )
 
-    if (items.length === 0) return <PantryEmptyState/>
+    if (items.length === 0) {
+        return (
+            <div>
+                <PantryHeader displayName={displayName}/>
+                <PantryEmptyState/>
+            </div>
+        )
+    }
 
     return (
         <div>
+            <PantryHeader displayName={displayName}/>
             <PantryStatCards
                 itemCount={items.length}
                 expiringSoonCount={expiringSoonCount}
+                savedRecipesCount={savedRecipesCount}
             />
             <PantrySearchInput
                 value={query}
