@@ -27,8 +27,9 @@ import { PantryItemModel }
 
 const addPantryItemSchema = z.object({
     name: z.string().trim().min(1).max(100),
+    emoji: z.string().max(8).optional(),
     storage: z.enum(STORAGE_LOCATIONS),
-    type: z.enum(FOOD_TYPES),
+    type: z.enum(FOOD_TYPES).nullable(),
     quantity: z.number().positive(),
     unit: z.enum(UNITS),
     expiryDate: z.date().optional(),
@@ -107,6 +108,7 @@ export const addPantryItems = async (
             {
                 userId,
                 name: entry.name,
+                emoji: entry.emoji,
                 storage: entry.storage,
                 type: entry.type,
                 quantity: entry.quantity,

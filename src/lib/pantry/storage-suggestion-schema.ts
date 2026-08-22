@@ -1,18 +1,24 @@
 import { z } from 'zod'
 
-import { STORAGE_LOCATIONS } from '@/types/enums'
+import {
+    FOOD_TYPES,
+    STORAGE_LOCATIONS
+} from '@/types/enums'
 
 const expiryEntrySchema = z.object({
     date: z.string(),
     reason: z.string()
 })
 
-export const storageSuggestionSchema = z.object({
+export const storageSuggestionShape = z.object({
     suggestedStorage: z.enum(STORAGE_LOCATIONS),
+    suggestedType: z.enum(FOOD_TYPES).nullish(),
     reason: z.string(),
     expiryByStorage: z.object({
         fridge: expiryEntrySchema,
         freezer: expiryEntrySchema,
         pantry: expiryEntrySchema
     })
-}).nullish()
+})
+
+export const storageSuggestionSchema = storageSuggestionShape.nullish()

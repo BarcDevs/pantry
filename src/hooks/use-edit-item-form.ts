@@ -1,6 +1,6 @@
 import { useState, useTransition } from 'react'
 
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { zodResolver }
@@ -10,6 +10,12 @@ import type {
     PantryItem,
     StorageSuggestion
 } from '@/types/pantry-item'
+
+import { useResetOnChange }
+    from '@/hooks/use-reset-on-change'
+
+import { applySuggestedExpiry }
+    from '@/lib/pantry/apply-suggested-expiry'
 
 import { pantryTexts }
     from '@/constants/texts/pantry'
@@ -40,6 +46,7 @@ const toFormValues = (
     item: PantryItem
 ): AddItemFormValues => ({
     name: item.name,
+    emoji: item.emoji ?? '🥬',
     storage: item.storage,
     type: item.type,
     quantity: item.quantity,
@@ -78,14 +85,24 @@ export const useEditItemForm = ({
     const [isDeleting, startDeleting] = useTransition()
     const [confirmDelete, setConfirmDelete] = useState(false)
 
+    const name = useWatch({
+        control: form.control,
+        name: 'name'
+    })
+
+    useResetOnChange(name, () => setSuggestion(null))
+
     const requestSuggestion = () => {
-        const name = form.getValues('name').trim()
-        if (name.length < minNameLengthForSuggestion) return
+        const trimmedName = name.trim()
+        if (trimmedName.length < minNameLengthForSuggestion) return
 
         startSuggesting(async () => {
             try {
-                const result = await suggestStorage(name)
+                const result = await suggestStorage(trimmedName)
                 setSuggestion(result)
+                if (result.suggestedType && !form.getValues('type')) {
+                    form.setValue('type', result.suggestedType)
+                }
             } catch (error) {
                 console.error(error)
             }
@@ -97,6 +114,7 @@ export const useEditItemForm = ({
             try {
                 await updatePantryItem(item._id, {
                     name: values.name.trim(),
+                    emoji: values.emoji,
                     storage: values.storage,
                     type: values.type,
                     quantity: values.quantity,
@@ -149,6 +167,9 @@ export const useEditItemForm = ({
                     suggestion.suggestedStorage
                 )
             }
-        }
+        },
+        applySuggestedExpiry: () => (
+            applySuggestedExpiry(form, suggestion)
+        )
     }
 }

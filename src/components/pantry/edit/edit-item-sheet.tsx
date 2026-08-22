@@ -5,6 +5,8 @@ import type { PantryItem }
 
 import { AddItemFields }
     from '@/components/pantry/add/add-item-fields'
+import { PantryTypeRow }
+    from '@/components/pantry/add/pantry-type-row'
 import { StorageSuggestionHint }
     from '@/components/pantry/add/storage-suggestion-hint'
 import { DeleteItemDialog }
@@ -51,7 +53,8 @@ export const EditItemSheet = ({
         requestSuggestion,
         handleSubmit,
         handleDelete,
-        applySuggestedStorage
+        applySuggestedStorage,
+        applySuggestedExpiry
     } = useEditItemForm({
         item,
         onSaved,
@@ -59,6 +62,7 @@ export const EditItemSheet = ({
     })
 
     const currentStorage = form.watch('storage')
+    const currentType = form.watch('type')
 
     return (
         <Sheet
@@ -99,6 +103,7 @@ export const EditItemSheet = ({
                         </Button>
                         {suggestion && (
                             <StorageSuggestionHint
+                                isLoading={false}
                                 suggestion={
                                     suggestion
                                 }
@@ -108,8 +113,15 @@ export const EditItemSheet = ({
                                 onSelectRecommended={
                                     applySuggestedStorage
                                 }
+                                onApplyExpiry={
+                                    applySuggestedExpiry
+                                }
                             />
                         )}
+                        <PantryTypeRow
+                            value={currentType}
+                            onChange={(type) => form.setValue('type', type)}
+                        />
                         <FormError
                             errors={
                                 form.formState.errors

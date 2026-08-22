@@ -1,4 +1,4 @@
-import { CheckIcon } from 'lucide-react'
+import { CheckIcon, SparklesIcon } from 'lucide-react'
 
 import type { StorageLocation } from '@/types/enums'
 import type { StorageSuggestion } from '@/types/pantry-item'
@@ -6,62 +6,120 @@ import type { StorageSuggestion } from '@/types/pantry-item'
 import { Button } from '@/components/shared/Button'
 
 import { pantryTexts } from '@/constants/texts/pantry'
+import { dayInMs } from '@/constants/time'
+
+const daysUntil = (dateStr: string): number => {
+    const diff = new Date(dateStr).getTime() - Date.now()
+    return Math.max(0, Math.round(diff / dayInMs))
+}
 
 type StorageSuggestionHintProps = {
-    suggestion: StorageSuggestion
+    isLoading: boolean
+    suggestion: StorageSuggestion | null
     currentStorage: StorageLocation
     onSelectRecommended: () => void
+    onApplyExpiry: () => void
 }
 
 export const StorageSuggestionHint = ({
+    isLoading,
     suggestion,
     currentStorage,
-    onSelectRecommended
+    onSelectRecommended,
+    onApplyExpiry
 }: StorageSuggestionHintProps) => {
-    const isMatch = currentStorage === suggestion.suggestedStorage
-    const current = suggestion.expiryByStorage[currentStorage]
-    const recommended = suggestion.expiryByStorage[suggestion.suggestedStorage]
-
-    if (isMatch) {
-        return (
-            <div className={'flex items-start gap-2 rounded-lg border border-soft-green-border bg-soft-green-bg p-3 text-label'}>
-                <CheckIcon
-                    size={16}
-                    className={'mt-0.5 shrink-0 text-green'}
-                />
-                <div>
-                    <div className={'font-weight-label text-green'}>
-                        {pantryTexts.addForm.suggestionMatchTitle}
-                    </div>
-                    <div className={'mt-0.5 text-ink-3'}>
-                        {current.reason}
-                    </div>
-                </div>
-            </div>
-        )
-    }
+    const isMatch = suggestion
+        ? currentStorage === suggestion.suggestedStorage
+        : false
+    const current = suggestion?.expiryByStorage[currentStorage]
+    const recommended = suggestion
+        ? suggestion.expiryByStorage[suggestion.suggestedStorage]
+        : undefined
 
     return (
-        <div className={'flex flex-col gap-2.5 rounded-lg border border-border-2 bg-canvas p-3 text-label'}>
-            <div className={'font-weight-label text-ink'}>
-                {pantryTexts.addForm.suggestionMismatchTitle}
+        <div className={'rounded-lg border border-soft-green-border bg-soft-green-bg p-3.5'}>
+            <div className={'flex items-center gap-1.75'}>
+                <SparklesIcon
+                    size={14}
+                    className={'text-green'}
+                />
+                <span className={'font-bold text-caption text-green'}>
+                    {pantryTexts.addForm.suggestionTitle}
+                </span>
+                {isLoading && (
+                    <span className={'size-3.25 animate-spin rounded-full border-2 border-soft-green-border border-t-green'}/>
+                )}
             </div>
-            <div className={'flex flex-col gap-1.5'}>
-                <div className={'text-ink-3'}>
-                    {`${pantryTexts.addForm.currentOptionLabel} (${pantryTexts.storageLabels[currentStorage]}): ${current.reason}`}
+            {suggestion && current && (
+                <div className={'mt-2 flex flex-col gap-2.5'}>
+                    {isMatch ? (
+                        <div className={'flex items-start gap-2.25 pb-2.5'}>
+                            <CheckIcon
+                                size={13}
+                                className={'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-green text-surface'}
+                            />
+                            <div className={'min-w-0'}>
+                                <div className={'font-bold text-label text-ink'}>
+                                    {pantryTexts.addForm.suggestionMatchTitle(pantryTexts.storageLabels[suggestion.suggestedStorage])}
+                                </div>
+                                <div className={'mt-0.5 text-caption text-ink-green'}>
+                                    {recommended?.reason}
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={'flex flex-col gap-2.25 pb-2.5'}>
+                            <div className={'flex items-center justify-between gap-2.5'}>
+                                <span className={'font-bold text-label text-ink'}>
+                                    {pantryTexts.addForm.suggestionMismatchTitle(pantryTexts.storageLabels[suggestion.suggestedStorage])}
+                                </span>
+                                <Button
+                                    type={'button'}
+                                    variant={'outline'}
+                                    onClick={onSelectRecommended}
+                                    className={'h-auto shrink-0 border-soft-green-border px-3.5 py-2 text-caption'}
+                                >
+                                    {pantryTexts.addForm.selectRecommended}
+                                </Button>
+                            </div>
+                            <div className={'rounded-md border border-warning-border bg-warning-bg p-2.25'}>
+                                <div className={'font-bold text-caption text-warning-fg'}>
+                                    {pantryTexts.addForm.currentOptionLabel(pantryTexts.storageLabels[currentStorage])}
+                                </div>
+                                <div className={'mt-0.5 text-caption text-ink-3'}>
+                                    {current.reason}
+                                </div>
+                            </div>
+                            <div className={'rounded-md border border-soft-green-border bg-surface p-2.25'}>
+                                <div className={'font-bold text-caption text-green'}>
+                                    {pantryTexts.addForm.recommendedOptionLabel(pantryTexts.storageLabels[suggestion.suggestedStorage])}
+                                </div>
+                                <div className={'mt-0.5 text-caption text-ink-green'}>
+                                    {recommended?.reason}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div className={'h-px bg-soft-green-border'}/>
+                    <div className={'flex items-center justify-between gap-2.5 pt-1'}>
+                        <div className={'min-w-0'}>
+                            <div className={'font-bold text-label text-ink'}>
+                                {pantryTexts.addForm.expiryEstimateTitle(pantryTexts.storageLabels[currentStorage], daysUntil(current.date))}
+                            </div>
+                            <div className={'mt-0.5 text-caption text-ink-green'}>
+                                {current.reason}
+                            </div>
+                        </div>
+                        <Button
+                            type={'button'}
+                            onClick={onApplyExpiry}
+                            className={'h-auto shrink-0 px-3.5 py-2 text-caption'}
+                        >
+                            {pantryTexts.addForm.applyExpiry}
+                        </Button>
+                    </div>
                 </div>
-                <div className={'text-ink-3'}>
-                    {`${pantryTexts.addForm.recommendedOptionLabel} (${pantryTexts.storageLabels[suggestion.suggestedStorage]}): ${recommended.reason}`}
-                </div>
-            </div>
-            <Button
-                type={'button'}
-                variant={'outline'}
-                onClick={onSelectRecommended}
-                className={'h-auto w-fit px-3 py-1.5 text-label'}
-            >
-                {pantryTexts.addForm.selectRecommended}
-            </Button>
+            )}
         </div>
     )
 }

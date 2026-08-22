@@ -22,8 +22,9 @@ import { PantryItemModel } from '@/models/pantry-item.model'
 
 const updatePantryItemSchema = z.object({
     name: z.string().trim().min(1).max(100).optional(),
+    emoji: z.string().max(8).optional(),
     storage: z.enum(STORAGE_LOCATIONS).optional(),
-    type: z.enum(FOOD_TYPES).optional(),
+    type: z.enum(FOOD_TYPES).nullable().optional(),
     quantity: z.number().positive().optional(),
     unit: z.enum(UNITS).optional(),
     expiryDate: z.date().optional(),

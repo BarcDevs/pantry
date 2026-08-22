@@ -20,6 +20,11 @@ const expiryEntrySchema = {
 const storageSuggestionSchema = new mongoose.Schema<StorageSuggestion>(
     {
         suggestedStorage: { type: String, required: true },
+        suggestedType: {
+            type: String,
+            enum: FOOD_TYPES,
+            default: null
+        },
         reason: { type: String, required: true },
         expiryByStorage: {
             fridge: expiryEntrySchema,
@@ -43,7 +48,7 @@ const pantryItemSchema = new mongoose.Schema<PantryItemDoc>(
         type: {
             type: String,
             enum: FOOD_TYPES,
-            required: true
+            default: null
         },
         quantity: { type: Number, required: true, min: 0 },
         unit: {

@@ -13,7 +13,6 @@ import { zodResolver }
     from '@hookform/resolvers/zod'
 
 import {
-    FoodType,
     StorageLocation,
     Unit
 } from '@/types/enums'
@@ -25,6 +24,11 @@ import type {
 
 import { useDebouncedValue }
     from '@/hooks/use-debounced-value'
+import { useResetOnChange }
+    from '@/hooks/use-reset-on-change'
+
+import { applySuggestedExpiry }
+    from '@/lib/pantry/apply-suggested-expiry'
 
 import { routes }
     from '@/constants/routes'
@@ -55,8 +59,9 @@ export const useAddItemForm = () => {
         resolver: zodResolver(addItemFormSchema),
         defaultValues: {
             name: '',
+            emoji: '🥬',
             storage: StorageLocation.Fridge,
-            type: FoodType.Other,
+            type: null,
             quantity: 1,
             unit: Unit.Units,
             expiryDate: '',
@@ -67,14 +72,14 @@ export const useAddItemForm = () => {
     const [suggestion, setSuggestion] = useState<
         StorageSuggestion | null
     >(null)
-    const [isSuggesting, startSuggesting] = (
-        useTransition()
-    )
-    const [isSubmitting, startSubmitting] = (
-        useTransition()
-    )
+    const [isSuggesting, startSuggesting] = useTransition()
+    const [isSubmitting, startSubmitting] = useTransition()
     const [duplicate, setDuplicate] = useState<
         DuplicateOutcome | null
+    >(null)
+    const [isTypePickerOpen, setIsTypePickerOpen] = useState(false)
+    const [pendingValues, setPendingValues] = useState<
+        AddItemFormValues | null
     >(null)
 
     const name = useWatch({
@@ -85,6 +90,8 @@ export const useAddItemForm = () => {
         name.trim(),
         nameDebounceMs
     )
+
+    useResetOnChange(name, () => setSuggestion(null))
 
     useEffect(() => {
         if (debouncedName.length < (
@@ -99,8 +106,16 @@ export const useAddItemForm = () => {
                 const result = await suggestStorage(
                     debouncedName
                 )
-                if (!cancelled) {
-                    setSuggestion(result)
+                if (cancelled) return
+                setSuggestion(result)
+                if (
+                    result.suggestedType
+                    && !form.getValues('type')
+                ) {
+                    form.setValue(
+                        'type',
+                        result.suggestedType
+                    )
                 }
             } catch (error) {
                 console.error(error)
@@ -111,17 +126,24 @@ export const useAddItemForm = () => {
         })
 
         return () => { cancelled = true }
-    }, [debouncedName])
+    }, [debouncedName, form])
 
-    const effectiveSuggestion = (
-        name.trim().length < minNameLengthForSuggestion
-    ) ? null : suggestion
+    const isNameLongEnough = (
+        name.trim().length >= minNameLengthForSuggestion
+    )
+    const isPendingSuggestion = isNameLongEnough && (
+        isSuggesting || debouncedName !== name.trim()
+    )
+    const effectiveSuggestion = isNameLongEnough
+        ? suggestion
+        : null
 
     const buildInput = (
         values: AddItemFormValues,
         overrides?: Partial<AddPantryItemInput>
     ): AddPantryItemInput => ({
         name: values.name.trim(),
+        emoji: values.emoji,
         storage: values.storage,
         type: values.type,
         quantity: values.quantity,
@@ -181,13 +203,20 @@ export const useAddItemForm = () => {
     return {
         form,
         suggestion: effectiveSuggestion,
-        isSuggesting,
+        isSuggesting: isPendingSuggestion,
         isSubmitting,
         duplicate,
         setDuplicate,
-        handleSubmit: form.handleSubmit(
-            (values) => submit(values)
-        ),
+        isTypePickerOpen,
+        setIsTypePickerOpen,
+        handleSubmit: form.handleSubmit((values) => {
+            if (!values.type) {
+                setPendingValues(values)
+                setIsTypePickerOpen(true)
+                return
+            }
+            submit(values)
+        }),
         handleMerge,
         handleKeepSeparate,
         applySuggestedStorage: () => {
@@ -197,6 +226,22 @@ export const useAddItemForm = () => {
                     effectiveSuggestion.suggestedStorage
                 )
             }
+        },
+        applySuggestedExpiry: () => (
+            applySuggestedExpiry(form, effectiveSuggestion)
+        ),
+        // Submits the values snapshotted when the type picker opened, not live form state —
+        // the picker is modal, so nothing else can change while it's open.
+        selectPendingType: (
+            type: NonNullable<AddItemFormValues['type']>
+        ) => {
+            form.setValue('type', type)
+            setIsTypePickerOpen(false)
+            if (pendingValues) submit({ ...pendingValues, type })
+        },
+        skipPendingType: () => {
+            setIsTypePickerOpen(false)
+            if (pendingValues) submit(pendingValues)
         }
     }
 }

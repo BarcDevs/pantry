@@ -1,11 +1,11 @@
 import type { Control } from 'react-hook-form'
 
 import {
-    FOOD_TYPES,
     STORAGE_LOCATIONS,
     UNITS
 } from '@/types/enums'
 
+import { EmojiPickerField } from '@/components/pantry/add/emoji-picker-field'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { FormSelectField } from '@/components/shared/form/FormSelectField'
 import { Input } from '@/components/ui/input'
@@ -21,7 +21,6 @@ type AddItemFieldsProps = {
 }
 
 const storageOptions = toSelectOptions(STORAGE_LOCATIONS, pantryTexts.storageLabels)
-const typeOptions = toSelectOptions(FOOD_TYPES, pantryTexts.foodTypeLabels)
 const unitOptions = toSelectOptions(UNITS, pantryTexts.unitLabels)
 
 export const AddItemFields = ({ control }: AddItemFieldsProps) => (
@@ -37,20 +36,10 @@ export const AddItemFields = ({ control }: AddItemFieldsProps) => (
                 />
             )}
         />
-        <div className={'grid grid-cols-2 gap-3'}>
-            <FormSelectField
-                control={control}
-                name={'storage'}
-                label={pantryTexts.addForm.storageLabel}
-                options={storageOptions}
-            />
-            <FormSelectField
-                control={control}
-                name={'type'}
-                label={pantryTexts.addForm.typeLabel}
-                options={typeOptions}
-            />
-        </div>
+        <EmojiPickerField
+            control={control}
+            name={'emoji'}
+        />
         <div className={'grid grid-cols-2 gap-3'}>
             <FormInputField
                 control={control}
@@ -73,17 +62,25 @@ export const AddItemFields = ({ control }: AddItemFieldsProps) => (
                 options={unitOptions}
             />
         </div>
-        <FormInputField
-            control={control}
-            name={'expiryDate'}
-            label={pantryTexts.addForm.expiryLabel}
-            render={(field) => (
-                <Input
-                    {...field}
-                    type={'date'}
-                />
-            )}
-        />
+        <div className={'grid grid-cols-2 gap-3'}>
+            <FormSelectField
+                control={control}
+                name={'storage'}
+                label={pantryTexts.addForm.storageLabel}
+                options={storageOptions}
+            />
+            <FormInputField
+                control={control}
+                name={'expiryDate'}
+                label={pantryTexts.addForm.expiryLabel}
+                render={(field) => (
+                    <Input
+                        {...field}
+                        type={'date'}
+                    />
+                )}
+            />
+        </div>
         <FormInputField
             control={control}
             name={'notes'}

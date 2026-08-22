@@ -13,6 +13,7 @@ export type ExpiryEntry = {
 
 export type StorageSuggestion = {
     suggestedStorage: StorageLocation
+    suggestedType?: FoodType | null
     reason: string
     expiryByStorage: {
         fridge: ExpiryEntry
@@ -26,7 +27,7 @@ export type PantryItemDoc = {
     name: string
     emoji?: string
     storage: StorageLocation
-    type: FoodType
+    type: FoodType | null
     quantity: number
     unit: Unit
     expiryDate?: Date
@@ -39,8 +40,9 @@ export type PantryItem = PantryItemDoc & MongoDbObject
 
 export type AddPantryItemInput = {
     name: string
+    emoji?: string
     storage: StorageLocation
-    type: FoodType
+    type: FoodType | null
     quantity: number
     unit: Unit
     expiryDate?: Date
@@ -52,8 +54,9 @@ export type AddPantryItemInput = {
 
 export type UpdatePantryItemInput = Partial<{
     name: string
+    emoji: string
     storage: StorageLocation
-    type: FoodType
+    type: FoodType | null
     quantity: number
     unit: Unit
     expiryDate: Date

@@ -42,21 +42,39 @@ export const pantryTexts = {
     addForm: {
         title: 'הוספת מוצר',
         nameLabel: 'שם המוצר',
-        namePlaceholder: 'לדוגמה: עגבניות',
-        storageLabel: 'מיקום אחסון',
+        namePlaceholder: 'לדוגמה: קישואים',
+        emojiLabel: 'סמל',
+        storageLabel: 'מיקום',
         typeLabel: 'סוג מוצר',
         quantityLabel: 'כמות',
-        unitLabel: 'יחידת מידה',
-        expiryLabel: 'תאריך תפוגה (אופציונלי)',
+        unitLabel: 'יחידה',
+        expiryLabel: 'תאריך תפוגה',
         notesLabel: 'הערות (אופציונלי)',
         submit: 'הוספה למזווה',
         submitting: 'מוסיף...',
-        suggestionLoading: 'בודק המלצת אחסון...',
-        suggestionMatchTitle: 'מיקום האחסון מתאים',
-        suggestionMismatchTitle: 'יש המלצה טובה יותר',
-        currentOptionLabel: 'הבחירה שלך',
-        recommendedOptionLabel: 'מומלץ',
-        selectRecommended: 'בחירה',
+        suggestionTitle: 'הצעת אחסון ותפוגה חכמה',
+        suggestionMatchTitle: (location: string) => (
+            `הבחירה שלך מומלצת לאחסון: ${location}`
+        ),
+        suggestionMismatchTitle: (location: string) => (
+            `מומלץ לאחסון: ${location}`
+        ),
+        currentOptionLabel: (location: string) => (
+            `הבחירה הנוכחית · ${location}`
+        ),
+        recommendedOptionLabel: (location: string) => (
+            `ההמלצה · ${location}`
+        ),
+        selectRecommended: 'בחר',
+        expiryEstimateTitle: (location: string, days: number) => (
+            `תפוגה ב${location}: ~${days} ימים`
+        ),
+        applyExpiry: 'קבע תאריך',
+        typeRowLabel: 'סוג מוצר',
+        typeRowChange: 'שנה',
+        typeRowAdd: 'הוסף סוג מוצר +',
+        typePickerTitle: 'מה סוג המוצר?',
+        typePickerSkip: 'דלג',
         saveError: 'שמירת המוצר נכשלה, נסו שוב'
     },
     duplicateDialog: {

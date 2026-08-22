@@ -2,26 +2,11 @@
 
 import { z } from 'zod'
 
-import { STORAGE_LOCATIONS } from '@/types/enums'
 import type { StorageSuggestion } from '@/types/pantry-item'
 
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
-
-const expiryEntrySchema = z.object({
-    date: z.string(),
-    reason: z.string()
-})
-
-const storageSuggestionSchema = z.object({
-    suggestedStorage: z.enum(STORAGE_LOCATIONS),
-    reason: z.string(),
-    expiryByStorage: z.object({
-        fridge: expiryEntrySchema,
-        freezer: expiryEntrySchema,
-        pantry: expiryEntrySchema
-    })
-})
+import { storageSuggestionShape } from '@/lib/pantry/storage-suggestion-schema'
 
 export const suggestStorage = async (
     name: string
@@ -35,6 +20,7 @@ export const suggestStorage = async (
         ותן תאריך תפוגה משוער וסיבה קצרה עבור כל אחד משלושת מיקומי האחסון בנפרד.
         כל סיבה צריכה להיות משמעותית בפני עצמה (למשל "שומר על טריות ומרקם" ולא רק "X ימים").
         תאריכי התפוגה חייבים להיות תאריכים עתידיים ריאליים ביחס להיום, בפורמט YYYY-MM-DD.
+        אם ניתן לזהות בביטחון את סוג המוצר (ירקות / פירות / מוצרי חלב / בשר / דגים / שימורים / דגנים / חטיפים / משקאות / תבלינים ורטבים / אחר), ציין אותו כ-suggestedType. אם אין ביטחון, השאר את suggestedType כ-null.
     `
 
     const mockEntry = {
@@ -44,9 +30,10 @@ export const suggestStorage = async (
 
     return generateStructured(
         prompt,
-        storageSuggestionSchema,
+        storageSuggestionShape,
         () => ({
             suggestedStorage: 'pantry',
+            suggestedType: null,
             reason: 'בדיקה',
             expiryByStorage: {
                 fridge: mockEntry,

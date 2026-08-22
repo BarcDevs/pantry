@@ -18,21 +18,24 @@ import {
 
 import { cn } from '@/lib/utils'
 
-type FormInputFieldProps<T extends FieldValues> = {
+type FormInputFieldProps<T extends FieldValues, N extends Path<T>> = {
     control: Control<T>
-    name: Path<T>
+    name: N
     label: string
     labelClassName?: ClassName
-    render: (field: ControllerRenderProps<T, Path<T>>) => ReactNode
+    render: (field: ControllerRenderProps<T, N>) => ReactNode
 }
 
-export const FormInputField = <T extends FieldValues>({
+export const FormInputField = <
+    T extends FieldValues,
+    N extends Path<T>
+>({
     control,
     name,
     label,
     labelClassName,
     render
-}: FormInputFieldProps<T>) => (
+}: FormInputFieldProps<T, N>) => (
     <FormField
         control={control}
         name={name}
