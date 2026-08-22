@@ -56,10 +56,10 @@ export const recipesTexts = {
         pantryLoadError: 'טעינת המזווה נכשלה'
     },
     pantrySheet: {
-        title: 'בחירת פריטים מהמזווה',
-        selectAll: 'בחירת הכל',
-        clearAll: 'ניקוי בחירה',
-        done: 'סיום'
+        title: 'מצרכים מהמזווה',
+        subtitle: (selected: number, total: number) => `סמנו אילו פריטים ה-AI יוכל להשתמש בהם ביצירה הזו · ${selected} מתוך ${total} נבחרו`,
+        toggleAll: (allSelected: boolean) => (allSelected ? 'בטל בחירה' : 'בחר הכל'),
+        confirm: 'אישור'
     },
     result: {
         servingsLabel: 'מנות',

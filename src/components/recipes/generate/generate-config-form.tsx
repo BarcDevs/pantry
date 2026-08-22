@@ -30,6 +30,7 @@ export const GenerateConfigForm = ({
         isLoadingPantry,
         selectedItemIds,
         toggleItem,
+        toggleAllItems,
         isPantrySheetOpen,
         setIsPantrySheetOpen,
         isSparsePantry,
@@ -95,6 +96,7 @@ export const GenerateConfigForm = ({
                     items={pantryItems}
                     selectedItemIds={selectedItemIds}
                     onToggleItem={toggleItem}
+                    onToggleAll={toggleAllItems}
                 />
             </form>
         </Form>

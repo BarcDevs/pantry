@@ -101,6 +101,14 @@ export const useGenerateRecipeForm = () => {
         ))
     }
 
+    const toggleAllItems = () => {
+        setSelectedItemIds((current) => (
+            current.length === pantryItems.length
+                ? []
+                : pantryItems.map((item) => item._id)
+        ))
+    }
+
     const removeExpiredFromSelection = () => {
         const expiredIds = expiredSelectedItems.map(
             (item) => item._id
@@ -137,6 +145,7 @@ export const useGenerateRecipeForm = () => {
         isLoadingPantry,
         selectedItemIds,
         toggleItem,
+        toggleAllItems,
         isPantrySheetOpen,
         setIsPantrySheetOpen,
         isSparsePantry,

@@ -5,11 +5,11 @@ import type { PantryItem } from '@/types/pantry-item'
 import { PantrySelectRow } from '@/components/recipes/generate/pantry-select-row'
 import { Button } from '@/components/shared/Button'
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle
-} from '@/components/ui/sheet'
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle
+} from '@/components/ui/dialog'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -19,6 +19,7 @@ type PantrySelectSheetProps = {
     items: PantryItem[]
     selectedItemIds: string[]
     onToggleItem: (itemId: string) => void
+    onToggleAll: () => void
 }
 
 export const PantrySelectSheet = ({
@@ -26,34 +27,53 @@ export const PantrySelectSheet = ({
     onOpenChange,
     items,
     selectedItemIds,
-    onToggleItem
-}: PantrySelectSheetProps) => (
-    <Sheet
-        open={open}
-        onOpenChange={onOpenChange}
-    >
-        <SheetContent side={'bottom'}>
-            <SheetHeader>
-                <SheetTitle>
-                    {recipesTexts.pantrySheet.title}
-                </SheetTitle>
-            </SheetHeader>
-            <div className={'flex max-h-[60vh] flex-col gap-2 overflow-y-auto px-4'}>
-                {items.map((item) => (
-                    <PantrySelectRow
-                        key={item._id}
-                        item={item}
-                        isSelected={selectedItemIds.includes(item._id)}
-                        onToggle={() => onToggleItem(item._id)}
-                    />
-                ))}
-            </div>
-            <Button
-                onClick={() => onOpenChange(false)}
-                className={'m-4'}
-            >
-                {recipesTexts.pantrySheet.done}
-            </Button>
-        </SheetContent>
-    </Sheet>
-)
+    onToggleItem,
+    onToggleAll
+}: PantrySelectSheetProps) => {
+    const texts = recipesTexts.pantrySheet
+    const allSelected = items.length > 0 && selectedItemIds.length === items.length
+
+    return (
+        <Dialog
+            open={open}
+            onOpenChange={onOpenChange}
+        >
+            <DialogContent className={'flex max-h-[90vh] flex-col gap-0 rounded-2xl bg-canvas p-5.5'}>
+                <DialogHeader>
+                    <DialogTitle className={'font-display text-heading font-bold text-ink'}>
+                        {texts.title}
+                    </DialogTitle>
+                </DialogHeader>
+                <div className={'mb-4 flex items-center justify-between gap-2.5'}>
+                    <span className={'text-caption text-ink-3'}>
+                        {texts.subtitle(selectedItemIds.length, items.length)}
+                    </span>
+                    <Button
+                        type={'button'}
+                        variant={'ghost'}
+                        onClick={onToggleAll}
+                        className={'h-auto shrink-0 p-0 font-bold text-caption text-green'}
+                    >
+                        {texts.toggleAll(allSelected)}
+                    </Button>
+                </div>
+                <div className={'flex flex-1 flex-col gap-2.25 overflow-y-auto'}>
+                    {items.map((item) => (
+                        <PantrySelectRow
+                            key={item._id}
+                            item={item}
+                            isSelected={selectedItemIds.includes(item._id)}
+                            onToggle={() => onToggleItem(item._id)}
+                        />
+                    ))}
+                </div>
+                <Button
+                    onClick={() => onOpenChange(false)}
+                    className={'mt-4.5'}
+                >
+                    {texts.confirm}
+                </Button>
+            </DialogContent>
+        </Dialog>
+    )
+}

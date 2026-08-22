@@ -1,6 +1,12 @@
+import { CheckIcon } from 'lucide-react'
+
 import type { PantryItem } from '@/types/pantry-item'
 
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/shared/Button'
+
+import { cn } from '@/lib/utils'
+
+import { pantryTexts } from '@/constants/texts/pantry'
 
 type PantrySelectRowProps = {
     item: PantryItem
@@ -13,13 +19,39 @@ export const PantrySelectRow = ({
     isSelected,
     onToggle
 }: PantrySelectRowProps) => (
-    <label className={'flex items-center gap-3 rounded-lg border border-border px-3 py-2.5'}>
-        <Checkbox
-            checked={isSelected}
-            onCheckedChange={onToggle}
-        />
-        <span className={'text-body text-ink'}>
-            {item.name}
+    <Button
+        variant={'ghost'}
+        onClick={onToggle}
+        className={cn(
+            'h-auto w-full items-center justify-start gap-3 rounded-lg border p-3 text-start font-normal',
+            isSelected
+                ? 'border-soft-green-border bg-soft-green-bg'
+                : 'border-border-2 bg-surface'
+        )}
+    >
+        <span
+            className={cn(
+                'flex size-6 shrink-0 items-center justify-center rounded-sm border-1.5',
+                isSelected ? 'border-green bg-green' : 'border-track bg-surface'
+            )}
+        >
+            {isSelected && (
+                <CheckIcon
+                    size={14}
+                    className={'text-surface'}
+                />
+            )}
         </span>
-    </label>
+        <span className={'text-body'}>
+            {item.emoji ?? '🥫'}
+        </span>
+        <span className={'flex min-w-0 flex-col'}>
+            <span className={'truncate font-bold text-body text-ink'}>
+                {item.name}
+            </span>
+            <span className={'truncate text-caption text-ink-3'}>
+                {`${item.quantity} ${pantryTexts.unitLabels[item.unit]} · ${pantryTexts.storageLabels[item.storage]}`}
+            </span>
+        </span>
+    </Button>
 )
