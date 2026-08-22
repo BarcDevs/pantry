@@ -20,7 +20,7 @@
 - Conventional commits: `feat`, `fix`, `docs`, `style`, `rfc`, `test`, `chore`. Breaking changes: `feat!:`
 - Think on what the current commit job is before deciding if it either `feat`, `rfc`, `fix`, etc and REPORT BACK your reasoning - Don't just mechanically label as `feat` for everything.
 - *IMPORTANT:* refactor job - always name `rfc` instead of `refactor`!
-- If you're not sure, read `"C:\Users\66bar\OneDrive\documents\Programming\conventional-commits-cheatsheet.md"` for more info
+- If you're not sure, read [["../.resources/conventional-commits-cheatsheet.md]]` for more info
 - Atomic commits — one change or fix per commit
 - If staged changes span multiple unrelated logical units, plan the commit chunks (which files → which commit, in order) BEFORE invoking /commit, not during — /commit scans staged files once and expects a chunk plan, not per-chunk re-scans
 - Claude's plans must never be committed
