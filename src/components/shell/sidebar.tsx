@@ -49,14 +49,12 @@ export const Sidebar = () => {
                     label={commonTexts.navGenerate}
                     icon={<GenerateIcon/>}
                     active={pathname.startsWith(routes.generate)}
-                    disabled
                 />
                 <NavItem
                     href={routes.recipes}
                     label={commonTexts.navLibrary}
                     icon={<LibraryIcon/>}
                     active={pathname.startsWith(routes.recipes)}
-                    disabled
                 />
                 <NavItem
                     href={routes.history}
