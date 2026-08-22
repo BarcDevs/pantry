@@ -13,21 +13,36 @@ jest.mock('@/models/user.model', () => ({
         findOneAndUpdate: jest.fn()
     }
 }))
+jest.mock('@/actions/users/ensure-user', () => ({
+    ensureUser: jest.fn()
+}))
 
 import { auth } from '@clerk/nextjs/server'
 
+import { ensureUser } from '@/actions/users/ensure-user'
 import { UserModel } from '@/models/user.model'
 
 import { updateOnboarding } from '../update-onboarding'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockFindOneAndUpdate = UserModel.findOneAndUpdate as jest.Mock
+const mockEnsureUser = ensureUser as jest.Mock
 
 describe('updateOnboarding', () => {
-    beforeEach(() => jest.clearAllMocks())
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockEnsureUser.mockResolvedValue({ clerkId: 'user_123' })
+    })
 
     it('throws when unauthenticated', async () => {
         mockAuth.mockResolvedValue({ userId: null } as never)
+        await expect(updateOnboarding({})).rejects.toThrow()
+        expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
+    })
+
+    it('throws when the user record cannot be ensured', async () => {
+        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockEnsureUser.mockResolvedValue(null)
         await expect(updateOnboarding({})).rejects.toThrow()
         expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
     })
