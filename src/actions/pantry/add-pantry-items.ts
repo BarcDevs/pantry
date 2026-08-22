@@ -51,10 +51,11 @@ export const addPantryItems = async (
 
     const rawItems = await PantryItemModel
         .find({ userId })
+        .select('_id name')
         .lean()
-    const knownItems: PantryItem[] = rawItems.map((doc) => (
-        toPlainDoc<PantryItem>(doc)
-    ))
+    const knownItems: Array<{ _id: string, name: string }> = rawItems.map(
+        (doc) => ({ _id: String(doc._id), name: doc.name })
+    )
 
     const outcomes: AddPantryItemOutcome[] = []
 
@@ -84,21 +85,28 @@ export const addPantryItems = async (
             const knownIndex = knownItems.findIndex(
                 (known) => known._id === item._id
             )
-            if (knownIndex !== -1) knownItems[knownIndex] = item
+            if (knownIndex !== -1) {
+                knownItems[knownIndex] = { _id: item._id, name: item.name }
+            }
             continue
         }
 
-        const duplicate = entry.forceSeparate
+        const duplicateMatch = entry.forceSeparate
             ? undefined
             : knownItems.find((known) => (
                 normalizeName(known.name)
                     === normalizeName(entry.name)
             ))
 
-        if (duplicate) {
+        if (duplicateMatch) {
+            const existing = await PantryItemModel
+                .findOne({ _id: duplicateMatch._id, userId })
+                .lean()
+            if (!existing) throw new Error('Item not found')
+
             outcomes.push({
                 status: 'duplicate',
-                existing: duplicate,
+                existing: toPlainDoc<PantryItem>(existing),
                 incoming: entry
             })
             continue
@@ -123,7 +131,7 @@ export const addPantryItems = async (
 
         const item = toPlainDoc<PantryItem>(created.toObject())
         outcomes.push({ status: 'created', item })
-        knownItems.push(item)
+        knownItems.push({ _id: item._id, name: item.name })
     }
 
     return outcomes

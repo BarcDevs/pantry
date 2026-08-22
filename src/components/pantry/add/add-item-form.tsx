@@ -41,8 +41,11 @@ export const AddItemForm = () => {
         <Form {...form}>
             <form
                 onSubmit={handleSubmit}
-                className={'flex flex-col gap-4'}
+                className={'flex flex-col gap-4 rounded-lg border border-border-2 bg-surface p-5'}
             >
+                <span className={'font-bold text-body text-ink'}>
+                    {pantryTexts.addForm.manualEntryTitle}
+                </span>
                 <AddItemFields control={form.control}/>
                 {showSuggestionPanel && (
                     <StorageSuggestionHint

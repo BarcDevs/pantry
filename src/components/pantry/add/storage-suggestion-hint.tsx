@@ -113,7 +113,7 @@ export const StorageSuggestionHint = ({
                         <Button
                             type={'button'}
                             onClick={onApplyExpiry}
-                            className={'h-auto shrink-0 px-3.5 py-2 text-caption'}
+                            className={'h-auto shrink-0 bg-green px-3.5 py-2 text-caption text-surface hover:bg-green/90'}
                         >
                             {pantryTexts.addForm.applyExpiry}
                         </Button>

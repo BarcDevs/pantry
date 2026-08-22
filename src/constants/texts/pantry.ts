@@ -41,6 +41,7 @@ export const pantryTexts = {
     },
     addForm: {
         title: 'הוספת מוצר',
+        manualEntryTitle: 'הוספה ידנית',
         nameLabel: 'שם המוצר',
         namePlaceholder: 'לדוגמה: קישואים',
         emojiLabel: 'סמל',

@@ -11,6 +11,7 @@ jest.mock('@/lib/mongodb', () => ({
 jest.mock('@/models/pantry-item.model', () => ({
     PantryItemModel: {
         find: jest.fn(),
+        findOne: jest.fn(),
         create: jest.fn(),
         findOneAndUpdate: jest.fn()
     }
@@ -26,8 +27,15 @@ import { addPantryItems } from '../add-pantry-items'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockFind = PantryItemModel.find as jest.Mock
+const mockFindOne = PantryItemModel.findOne as jest.Mock
 const mockCreate = PantryItemModel.create as jest.Mock
 const mockFindOneAndUpdate = PantryItemModel.findOneAndUpdate as jest.Mock
+
+const mockFindResult = (items: unknown[]) => ({
+    select: jest.fn().mockReturnValue({
+        lean: jest.fn().mockResolvedValue(items)
+    })
+})
 
 const baseInput: AddPantryItemInput = {
     name: 'עגבניות',
@@ -48,7 +56,7 @@ describe('addPantryItems', () => {
 
     it('creates a new item when no duplicate exists', async () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
-        mockFind.mockReturnValue({ lean: jest.fn().mockResolvedValue([]) })
+        mockFind.mockReturnValue(mockFindResult([]))
         mockCreate.mockResolvedValue({
             toObject: () => ({
                 _id: { toString: () => 'obj_1' },
@@ -70,14 +78,15 @@ describe('addPantryItems', () => {
 
     it('returns a duplicate outcome instead of creating when normalized name matches', async () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
-        mockFind.mockReturnValue({
-            lean: jest.fn().mockResolvedValue([
-                {
-                    _id: { toString: () => 'existing_1' },
-                    name: ' עגבניות ',
-                    userId: 'user_123'
-                }
-            ])
+        mockFind.mockReturnValue(mockFindResult([
+            { _id: 'existing_1', name: ' עגבניות ' }
+        ]))
+        mockFindOne.mockReturnValue({
+            lean: jest.fn().mockResolvedValue({
+                _id: { toString: () => 'existing_1' },
+                name: ' עגבניות ',
+                userId: 'user_123'
+            })
         })
 
         const result = await addPantryItems([baseInput])
@@ -92,15 +101,9 @@ describe('addPantryItems', () => {
 
     it('creates as a separate item when forceSeparate is set despite a name match', async () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
-        mockFind.mockReturnValue({
-            lean: jest.fn().mockResolvedValue([
-                {
-                    _id: { toString: () => 'existing_1' },
-                    name: 'עגבניות',
-                    userId: 'user_123'
-                }
-            ])
-        })
+        mockFind.mockReturnValue(mockFindResult([
+            { _id: 'existing_1', name: 'עגבניות' }
+        ]))
         mockCreate.mockResolvedValue({
             toObject: () => ({
                 _id: { toString: () => 'obj_2' },
@@ -119,7 +122,7 @@ describe('addPantryItems', () => {
 
     it('merges quantity into an existing item when mergeWithId is set', async () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
-        mockFind.mockReturnValue({ lean: jest.fn().mockResolvedValue([]) })
+        mockFind.mockReturnValue(mockFindResult([]))
         mockFindOneAndUpdate.mockReturnValue({
             lean: jest.fn().mockResolvedValue({
                 _id: { toString: () => 'existing_1' },
@@ -145,9 +148,16 @@ describe('addPantryItems', () => {
 
     it('detects a duplicate against an item created earlier in the same batch', async () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
-        mockFind.mockReturnValue({ lean: jest.fn().mockResolvedValue([]) })
+        mockFind.mockReturnValue(mockFindResult([]))
         mockCreate.mockResolvedValue({
             toObject: () => ({
+                _id: { toString: () => 'obj_1' },
+                ...baseInput,
+                userId: 'user_123'
+            })
+        })
+        mockFindOne.mockReturnValue({
+            lean: jest.fn().mockResolvedValue({
                 _id: { toString: () => 'obj_1' },
                 ...baseInput,
                 userId: 'user_123'

@@ -9,6 +9,7 @@ import { EmojiPickerField } from '@/components/pantry/add/emoji-picker-field'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { FormSelectField } from '@/components/shared/form/FormSelectField'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 import { toSelectOptions } from '@/lib/select-options'
 
@@ -32,6 +33,7 @@ export const AddItemFields = ({ control }: AddItemFieldsProps) => (
             render={(field) => (
                 <Input
                     {...field}
+                    dir={'rtl'}
                     placeholder={pantryTexts.addForm.namePlaceholder}
                 />
             )}
@@ -85,7 +87,13 @@ export const AddItemFields = ({ control }: AddItemFieldsProps) => (
             control={control}
             name={'notes'}
             label={pantryTexts.addForm.notesLabel}
-            render={(field) => <Input {...field}/>}
+            render={(field) => (
+                <Textarea
+                    {...field}
+                    dir={'rtl'}
+                    rows={3}
+                />
+            )}
         />
     </div>
 )
