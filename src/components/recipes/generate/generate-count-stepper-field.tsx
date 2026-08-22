@@ -32,34 +32,34 @@ export const GenerateCountStepperField = <T extends FieldValues>({
         control={control}
         name={name}
         render={({ field }) => (
-            <FormItem className={'flex flex-row items-center justify-between rounded-lg border border-border-2 bg-surface p-4'}>
-                <Button
-                    type={'button'}
-                    variant={'ghost'}
-                    size={'icon'}
-                    className={'rounded-full border border-border-2'}
-                    disabled={(field.value as number) <= min}
-                    onClick={() => field.onChange((field.value as number) - 1)}
-                >
-                    <MinusIcon/>
-                </Button>
-                <div className={'flex flex-col items-center gap-1'}>
-                    <span className={'font-display text-title font-bold text-ink'}>
-                        {field.value as number}
-                    </span>
-                    <span className={'text-caption text-ink-3'}>
-                        {unitLabel}
-                    </span>
-                </div>
-                <div className={'flex flex-col items-end gap-2'}>
-                    <FormLabel>
-                        {label}
-                    </FormLabel>
+            <FormItem className={'rounded-lg border border-border-2 bg-surface p-4'}>
+                <FormLabel>
+                    {label}
+                </FormLabel>
+                <div className={'flex items-center justify-between'}>
                     <Button
                         type={'button'}
                         variant={'ghost'}
                         size={'icon'}
-                        className={'rounded-full border border-border-2 bg-green text-surface'}
+                        className={'rounded-full border border-border bg-canvas'}
+                        disabled={(field.value as number) <= min}
+                        onClick={() => field.onChange((field.value as number) - 1)}
+                    >
+                        <MinusIcon/>
+                    </Button>
+                    <div className={'flex flex-col items-center gap-1'}>
+                        <span className={'font-display text-title font-bold text-ink'}>
+                            {field.value as number}
+                        </span>
+                        <span className={'text-caption text-ink-3'}>
+                            {unitLabel}
+                        </span>
+                    </div>
+                    <Button
+                        type={'button'}
+                        variant={'ghost'}
+                        size={'icon'}
+                        className={'rounded-full bg-green text-surface'}
                         onClick={() => field.onChange((field.value as number) + 1)}
                     >
                         <PlusIcon/>

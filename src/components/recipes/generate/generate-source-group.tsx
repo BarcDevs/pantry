@@ -6,7 +6,7 @@ import {
 } from '@/types/enums'
 
 import { GenerateChipField } from '@/components/recipes/generate/generate-chip-field'
-import { GenerateToggleField } from '@/components/recipes/generate/generate-toggle-field'
+import { Toggle } from '@/components/shared/Toggle'
 import { FormField } from '@/components/ui/form'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -38,27 +38,32 @@ export const GenerateSourceGroup = ({
             values={RECIPE_SCOPES}
             optionLabels={texts.scopeOptions}
         />
-        <div className={'border-t border-border pt-4'}>
-            <GenerateToggleField
-                control={control}
-                name={'allowAiGeneration'}
-                label={texts.allowAiGenerationLabel}
-                trueLabel={texts.allowAiGenerationOptions.true}
-                falseLabel={texts.allowAiGenerationOptions.false}
-            />
+        <div className={'border-t border-border-3 pt-4'}>
             <FormField
                 control={control}
                 name={'allowAiGeneration'}
                 render={({ field }) => (
-                    <p className={'mt-2 text-caption text-ink-3'}>
-                        {field.value
-                            ? texts.allowAiGenerationHint.true
-                            : texts.allowAiGenerationHint.false}
-                    </p>
+                    <>
+                        <div className={'flex items-center justify-between gap-3'}>
+                            <span className={'font-semibold text-body text-ink'}>
+                                {texts.allowAiGenerationLabel}
+                            </span>
+                            <Toggle
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                aria-label={texts.allowAiGenerationLabel}
+                            />
+                        </div>
+                        <p className={'mt-1.5 text-caption text-ink-3'}>
+                            {field.value
+                                ? texts.allowAiGenerationHint.true
+                                : texts.allowAiGenerationHint.false}
+                        </p>
+                    </>
                 )}
             />
         </div>
-        <div className={'border-t border-border pt-4'}>
+        <div className={'border-t border-border-3 pt-4'}>
             <GenerateChipField
                 control={control}
                 name={'matchStrictness'}

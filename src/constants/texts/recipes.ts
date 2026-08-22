@@ -2,30 +2,26 @@ export const recipesTexts = {
     generate: {
         title: 'יצירת מתכון',
         subtitle: 'בחרו אילו פריטים מהמזווה ייכנסו ליצירה הזו, וכוונו את ההעדפות.',
-        mealCountLabel: 'מספר מנות',
-        mealCountUnit: 'מנות',
+        mealCountLabel: 'כמות סועדים',
+        mealCountUnit: 'סועדים',
         maxTimeLabel: 'זמן הכנה מקסימלי',
-        maxTimePresetSuffix: 'דק\'',
+        maxTimePresetSuffix: 'דק׳',
         maxTimeCustomLabel: 'מותאם',
-        mealTypeLabel: 'סוג ארוחה',
+        mealTypeLabel: 'סוג הארוחה',
         mealTypeOptions: {
             breakfast: 'בוקר',
             lunch: 'צהריים',
             dinner: 'ערב',
             snack: 'נשנוש'
         },
-        scopeLabel: 'התאמה למזווה',
+        scopeLabel: 'היקף המצרכים',
         scopeOptions: {
-            'pantry-only': 'רק מהמזווה',
-            'pantry-first': 'בעיקר מהמזווה',
+            'pantry-only': 'מהמזווה בלבד',
+            'pantry-first': 'קודם מהמזווה',
             open: 'פתוח'
         },
-        allowAiGenerationLabel: 'השלמת מרכיבים חסרים',
-        allowAiGenerationOptions: {
-            true: 'מותר',
-            false: 'רק ממה שיש'
-        },
-        matchStrictnessLabel: 'רמת דיוק התאמה',
+        allowAiGenerationLabel: 'יצירת מתכון ב-AI',
+        matchStrictnessLabel: 'רמת התאמה למלאי',
         matchStrictnessOptions: {
             strict: 'מדויק',
             flexible: 'גמיש'
@@ -45,9 +41,10 @@ export const recipesTexts = {
         dietaryPreferencesNone: 'ללא העדפות',
         customInstructionsLabel: 'הוראות מיוחדות (אופציונלי)',
         customInstructionsPlaceholder: 'לדוגמה: ללא גלוטן, בלי בצל',
-        pantrySelectionTitle: 'פריטים מהמזווה',
-        pantrySelectionCount: 'נבחרו',
-        pantrySelectionEdit: 'עריכת בחירה',
+        pantrySelectionTitle: 'מצרכים מהמזווה',
+        pantrySelectionAll: (count: number) => `כל הפריטים (${count})`,
+        pantrySelectionPartial: (selected: number, total: number) => `${selected} מתוך ${total} נבחרו`,
+        pantrySelectionEdit: 'בחירה',
         sparsePantryWarning: 'פחות מ-5 פריטים נבחרו — המתכון עלול להיות פחות מגוון',
         expiredGateTitle: 'חלק מהפריטים שנבחרו פגי תוקף',
         expiredGateDescription: 'הסירו אותם מהבחירה או המשיכו בכל זאת',

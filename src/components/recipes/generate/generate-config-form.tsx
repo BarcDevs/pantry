@@ -42,6 +42,7 @@ export const GenerateConfigForm = ({
     } = useGenerateRecipeForm()
 
     const texts = recipesTexts.generate
+    const scope = form.watch('scope')
 
     return (
         <Form {...form}>
@@ -52,9 +53,10 @@ export const GenerateConfigForm = ({
                 <GenerateConfigFields control={form.control}/>
                 <PantrySelectionSummary
                     selectedCount={selectedItemIds.length}
+                    totalCount={pantryItems.length}
                     onEdit={() => setIsPantrySheetOpen(true)}
                 />
-                {isSparsePantry && <SparsePantryWarning/>}
+                {isSparsePantry && scope !== 'open' && <SparsePantryWarning/>}
                 {isExpiredGateOpen && (
                     <ExpiredItemsGate
                         expiredItems={expiredSelectedItems}
