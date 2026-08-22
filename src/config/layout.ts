@@ -35,7 +35,11 @@ export const assistant = Assistant({
 export const metadata: Metadata = {
     title: appConfig.name,
     description: appConfig.description,
-    manifest: '/manifest.json'
+    manifest: '/manifest.json',
+    icons: {
+        icon: '/favicon.svg',
+        apple: '/apple-touch-icon.png'
+    }
 }
 
 export const viewport: Viewport = {
