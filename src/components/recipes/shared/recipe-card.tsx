@@ -19,7 +19,7 @@ export const RecipeCard = ({
     onToggleFavorite
 }: RecipeCardProps) => (
     <Link
-        href={routes.recipeCook(recipe._id)}
+        href={routes.recipeDetail(recipe._id)}
         className={'block overflow-hidden rounded-lg border border-border bg-surface text-start shadow-sm'}
     >
         <div

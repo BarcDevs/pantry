@@ -89,6 +89,16 @@ export const recipesTexts = {
         favoriteOn: 'הסר ממועדפים',
         favoriteOff: 'הוסף למועדפים'
     },
+    detail: {
+        ratingTitle: 'דירוג המתכון',
+        ratingWithHistory: (cookCount: number) => `ממוצע מתוך ${cookCount} בישולים`,
+        ratingNoHistory: 'עדיין לא בושל — אין דירוג',
+        tagsLabel: 'תגיות',
+        tagsPlaceholder: 'הוספת תגית...',
+        tagsUpdateError: 'עדכון התגיות נכשל',
+        favoriteUpdateError: 'עדכון המועדפים נכשל',
+        startCooking: 'התחל לבשל ←'
+    },
     library: {
         title: 'המתכונים שלי',
         search: 'חיפוש מתכון...',

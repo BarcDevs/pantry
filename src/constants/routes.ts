@@ -9,6 +9,7 @@ export const routes = {
     generate: '/generate',
     generateResult: '/generate/result',
     recipes: '/recipes',
+    recipeDetail: (id: string) => `/recipes/${id}`,
     recipeCook: (id: string) => `/recipes/${id}/cook`,
     recipeDeduct: (id: string) => `/recipes/${id}/deduct`,
     recipeRate: (id: string) => `/recipes/${id}/rate`,

@@ -2,9 +2,8 @@
 
 import type { RecipeDoc } from '@/types/recipe'
 
+import { RecipeFavoriteButton } from '@/components/recipes/shared/recipe-favorite-button'
 import { Button } from '@/components/shared/Button'
-
-import { cn } from '@/lib/utils'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -30,23 +29,22 @@ export const RecipeResultActions = ({
     return (
         <div className={'mt-4.5 flex flex-col gap-2.75'}>
             <div className={'flex gap-2.75'}>
-                <Button
-                    variant={'outline'}
-                    onClick={onToggleFavorite}
-                    className={cn(
-                        'flex-1',
-                        recipe.isFavorite && 'border-green bg-green/10 text-ink-green'
-                    )}
-                >
-                    {recipe.isFavorite ? texts.favoriteOn : texts.favoriteOff}
-                </Button>
+                <RecipeFavoriteButton
+                    recipe={recipe}
+                    onToggle={onToggleFavorite}
+                    className={'flex-1'}
+                />
                 <Button
                     variant={'outline'}
                     onClick={onSave}
                     disabled={isSaving || isSaved}
                     className={'flex-1'}
                 >
-                    {isSaved ? texts.saved : (isSaving ? texts.saving : texts.save)}
+                    {isSaved
+                        ? texts.saved
+                        : isSaving
+                            ? texts.saving
+                            : texts.save}
                 </Button>
             </div>
             <Button
