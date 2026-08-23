@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react'
 
+import '@/lib/zod-locale'
+
 export const ServiceWorkerRegister = () => {
     useEffect(() => {
         if (!('serviceWorker' in navigator)) return

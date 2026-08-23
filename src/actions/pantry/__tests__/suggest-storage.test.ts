@@ -46,7 +46,8 @@ describe('suggestStorage', () => {
         expect(mockGenerateStructured).toHaveBeenCalledWith(
             expect.stringContaining('עגבניות'),
             expect.anything(),
-            expect.any(Function)
+            expect.any(Function),
+            0
         )
     })
 })

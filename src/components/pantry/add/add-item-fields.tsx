@@ -1,4 +1,5 @@
 import type { Control } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 import {
     STORAGE_LOCATIONS,
@@ -6,6 +7,8 @@ import {
 } from '@/types/enums'
 
 import { EmojiPickerField } from '@/components/pantry/add/emoji-picker-field'
+import { ExpiryDateField } from '@/components/pantry/add/expiry-date-field'
+import { QuantityField } from '@/components/pantry/add/quantity-field'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { FormSelectField } from '@/components/shared/form/FormSelectField'
 import { Input } from '@/components/ui/input'
@@ -24,76 +27,65 @@ type AddItemFieldsProps = {
 const storageOptions = toSelectOptions(STORAGE_LOCATIONS, pantryTexts.storageLabels)
 const unitOptions = toSelectOptions(UNITS, pantryTexts.unitLabels)
 
-export const AddItemFields = ({ control }: AddItemFieldsProps) => (
-    <div className={'flex flex-col gap-4'}>
-        <FormInputField
-            control={control}
-            name={'name'}
-            label={pantryTexts.addForm.nameLabel}
-            render={(field) => (
-                <Input
-                    {...field}
-                    dir={'rtl'}
-                    placeholder={pantryTexts.addForm.namePlaceholder}
-                />
-            )}
-        />
-        <EmojiPickerField
-            control={control}
-            name={'emoji'}
-        />
-        <div className={'grid grid-cols-2 gap-3'}>
+export const AddItemFields = ({ control }: AddItemFieldsProps) => {
+    const unit = useWatch({ control, name: 'unit' })
+
+    return (
+        <div className={'flex flex-col gap-4'}>
             <FormInputField
                 control={control}
-                name={'quantity'}
-                label={pantryTexts.addForm.quantityLabel}
+                name={'name'}
+                label={pantryTexts.addForm.nameLabel}
                 render={(field) => (
                     <Input
                         {...field}
-                        type={'number'}
-                        min={0}
-                        step={0.1}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        dir={'rtl'}
+                        placeholder={pantryTexts.addForm.namePlaceholder}
                     />
                 )}
             />
-            <FormSelectField
+            <EmojiPickerField
                 control={control}
-                name={'unit'}
-                label={pantryTexts.addForm.unitLabel}
-                options={unitOptions}
+                name={'emoji'}
             />
-        </div>
-        <div className={'grid grid-cols-2 gap-3'}>
-            <FormSelectField
-                control={control}
-                name={'storage'}
-                label={pantryTexts.addForm.storageLabel}
-                options={storageOptions}
-            />
+            <div className={'grid grid-cols-2 gap-3'}>
+                <QuantityField
+                    control={control}
+                    name={'quantity'}
+                    unit={unit}
+                />
+                <FormSelectField
+                    control={control}
+                    name={'unit'}
+                    label={pantryTexts.addForm.unitLabel}
+                    options={unitOptions}
+                />
+            </div>
+            <div className={'grid grid-cols-2 gap-3'}>
+                <FormSelectField
+                    control={control}
+                    name={'storage'}
+                    label={pantryTexts.addForm.storageLabel}
+                    options={storageOptions}
+                />
+                <ExpiryDateField
+                    control={control}
+                    name={'expiryDate'}
+                    label={pantryTexts.addForm.expiryLabel}
+                />
+            </div>
             <FormInputField
                 control={control}
-                name={'expiryDate'}
-                label={pantryTexts.addForm.expiryLabel}
+                name={'notes'}
+                label={pantryTexts.addForm.notesLabel}
                 render={(field) => (
-                    <Input
+                    <Textarea
                         {...field}
-                        type={'date'}
+                        dir={'rtl'}
+                        rows={3}
                     />
                 )}
             />
         </div>
-        <FormInputField
-            control={control}
-            name={'notes'}
-            label={pantryTexts.addForm.notesLabel}
-            render={(field) => (
-                <Textarea
-                    {...field}
-                    dir={'rtl'}
-                    rows={3}
-                />
-            )}
-        />
-    </div>
-)
+    )
+}

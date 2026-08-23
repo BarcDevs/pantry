@@ -76,6 +76,7 @@ export const useEditItemForm = ({
     const [suggestion, setSuggestion] = useState<
         StorageSuggestion | null
     >(item.storageSuggestion)
+    const [suggestionFailed, setSuggestionFailed] = useState(false)
     const [isSuggesting, startSuggesting] = (
         useTransition()
     )
@@ -90,7 +91,10 @@ export const useEditItemForm = ({
         name: 'name'
     })
 
-    useResetOnChange(name, () => setSuggestion(null))
+    useResetOnChange(name, () => {
+        setSuggestion(null)
+        setSuggestionFailed(false)
+    })
 
     const requestSuggestion = () => {
         const trimmedName = name.trim()
@@ -100,11 +104,14 @@ export const useEditItemForm = ({
             try {
                 const result = await suggestStorage(trimmedName)
                 setSuggestion(result)
+                setSuggestionFailed(false)
                 if (result.suggestedType && !form.getValues('type')) {
                     form.setValue('type', result.suggestedType)
                 }
             } catch (error) {
                 console.error(error)
+                setSuggestion(null)
+                setSuggestionFailed(true)
             }
         })
     }
@@ -153,6 +160,7 @@ export const useEditItemForm = ({
         form,
         suggestion,
         isSuggesting,
+        suggestionFailed,
         isSubmitting,
         isDeleting,
         confirmDelete,

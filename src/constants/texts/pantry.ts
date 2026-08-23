@@ -30,6 +30,7 @@ export const pantryTexts = {
         vegetables: 'ירקות',
         fruits: 'פירות',
         dairy: 'מוצרי חלב',
+        eggs: 'ביצים',
         meat: 'בשר',
         fish: 'דגים',
         canned: 'שימורים',
@@ -50,6 +51,9 @@ export const pantryTexts = {
         quantityLabel: 'כמות',
         unitLabel: 'יחידה',
         expiryLabel: 'תאריך תפוגה',
+        expiryPlaceholder: 'בחירת תאריך',
+        suggestionError: 'לא הצלחנו לקבל הצעה',
+        suggestionRetry: 'נסה שוב',
         notesLabel: 'הערות (אופציונלי)',
         submit: 'הוספה למזווה',
         submitting: 'מוסיף...',
@@ -76,7 +80,7 @@ export const pantryTexts = {
         typeRowAdd: 'הוסף סוג מוצר +',
         typePickerTitle: 'מה סוג המוצר?',
         typePickerSkip: 'דלג',
-        saveError: 'שמירת המוצר נכשלה, נסו שוב'
+        saveError: 'שמירת המוצר נכשלה, נסה שוב'
     },
     duplicateDialog: {
         title: 'המוצר כבר קיים במזווה',
@@ -90,10 +94,10 @@ export const pantryTexts = {
         submitting: 'שומר...',
         suggestButton: 'קבלת המלצת אחסון',
         suggesting: 'בודק המלצת אחסון...',
-        saveError: 'שמירת השינויים נכשלה, נסו שוב',
+        saveError: 'שמירת השינויים נכשלה, נסה שוב',
         deleteButton: 'מחיקת מוצר',
         deleting: 'מוחק...',
-        deleteError: 'מחיקת המוצר נכשלה, נסו שוב'
+        deleteError: 'מחיקת המוצר נכשלה, נסה שוב'
     },
     deleteDialog: {
         title: 'מחיקת מוצר',

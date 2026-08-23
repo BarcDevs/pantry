@@ -1,20 +1,13 @@
 'use client'
 
-import type { PantryItem }
-    from '@/types/pantry-item'
+import type { PantryItem } from '@/types/pantry-item'
 
-import { AddItemFields }
-    from '@/components/pantry/add/add-item-fields'
-import { PantryTypeRow }
-    from '@/components/pantry/add/pantry-type-row'
-import { StorageSuggestionHint }
-    from '@/components/pantry/add/storage-suggestion-hint'
-import { DeleteItemDialog }
-    from '@/components/pantry/edit/delete-item-dialog'
-import { Button }
-    from '@/components/shared/Button'
-import { FormError }
-    from '@/components/shared/form/FormError'
+import { AddItemFields } from '@/components/pantry/add/add-item-fields'
+import { PantryTypeRow } from '@/components/pantry/add/pantry-type-row'
+import { StorageSuggestionHint } from '@/components/pantry/add/storage-suggestion-hint'
+import { DeleteItemDialog } from '@/components/pantry/edit/delete-item-dialog'
+import { Button } from '@/components/shared/Button'
+import { FormError } from '@/components/shared/form/FormError'
 import { Form } from '@/components/ui/form'
 import {
     Sheet,
@@ -23,11 +16,9 @@ import {
     SheetTitle
 } from '@/components/ui/sheet'
 
-import { useEditItemForm }
-    from '@/hooks/use-edit-item-form'
+import { useEditItemForm } from '@/hooks/use-edit-item-form'
 
-import { pantryTexts }
-    from '@/constants/texts/pantry'
+import { pantryTexts } from '@/constants/texts/pantry'
 
 type EditItemSheetProps = {
     item: PantryItem
@@ -46,6 +37,7 @@ export const EditItemSheet = ({
         form,
         suggestion,
         isSuggesting,
+        suggestionFailed,
         isSubmitting,
         isDeleting,
         confirmDelete,
@@ -67,13 +59,9 @@ export const EditItemSheet = ({
     return (
         <Sheet
             open
-            onOpenChange={(open) => {
-                if (!open) onClose()
-            }}
+            onOpenChange={(open) => { if (!open) onClose() }}
         >
-            <SheetContent
-                className={'overflow-y-auto p-4'}
-            >
+            <SheetContent className={'overflow-y-auto p-4'}>
                 <SheetHeader className={'p-0'}>
                     <SheetTitle>
                         {pantryTexts.editForm.title}
@@ -82,13 +70,9 @@ export const EditItemSheet = ({
                 <Form {...form}>
                     <form
                         onSubmit={handleSubmit}
-                        className={
-                            'flex flex-col gap-4'
-                        }
+                        className={'flex flex-col gap-4'}
                     >
-                        <AddItemFields
-                            control={form.control}
-                        />
+                        <AddItemFields control={form.control}/>
                         <Button
                             type={'button'}
                             variant={'outline'}
@@ -96,68 +80,47 @@ export const EditItemSheet = ({
                             onClick={requestSuggestion}
                         >
                             {isSuggesting
-                                ? pantryTexts.editForm
-                                    .suggesting
-                                : pantryTexts.editForm
-                                    .suggestButton}
+                                ? pantryTexts.editForm.suggesting
+                                : pantryTexts.editForm.suggestButton}
                         </Button>
-                        {suggestion && (
+                        {(suggestion || suggestionFailed) && (
                             <StorageSuggestionHint
                                 isLoading={false}
-                                suggestion={
-                                    suggestion
-                                }
-                                currentStorage={
-                                    currentStorage
-                                }
-                                onSelectRecommended={
-                                    applySuggestedStorage
-                                }
-                                onApplyExpiry={
-                                    applySuggestedExpiry
-                                }
+                                suggestion={suggestion}
+                                suggestionFailed={suggestionFailed}
+                                currentStorage={currentStorage}
+                                onSelectRecommended={applySuggestedStorage}
+                                onApplyExpiry={applySuggestedExpiry}
+                                onRetry={requestSuggestion}
                             />
                         )}
                         <PantryTypeRow
                             value={currentType}
                             onChange={(type) => form.setValue('type', type)}
                         />
-                        <FormError
-                            errors={
-                                form.formState.errors
-                            }
-                        />
+                        <FormError errors={form.formState.errors}/>
                         <Button
                             type={'submit'}
                             disabled={isSubmitting}
                             className={'w-full'}
                         >
                             {isSubmitting
-                                ? pantryTexts.editForm
-                                    .submitting
-                                : pantryTexts.editForm
-                                    .submit}
+                                ? pantryTexts.editForm.submitting
+                                : pantryTexts.editForm.submit}
                         </Button>
                         <Button
                             type={'button'}
                             variant={'destructive'}
                             className={'w-full'}
-                            onClick={() => (
-                                setConfirmDelete(true)
-                            )}
+                            onClick={() => setConfirmDelete(true)}
                         >
-                            {
-                                pantryTexts.editForm
-                                    .deleteButton
-                            }
+                            {pantryTexts.editForm.deleteButton}
                         </Button>
                     </form>
                 </Form>
                 <DeleteItemDialog
                     open={confirmDelete}
-                    onOpenChange={
-                        setConfirmDelete
-                    }
+                    onOpenChange={setConfirmDelete}
                     onConfirm={handleDelete}
                     isDeleting={isDeleting}
                 />

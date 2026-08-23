@@ -10,5 +10,5 @@ export const settingsTexts = {
     submit: 'שמירת שינויים',
     submitting: 'שומר...',
     saveSuccess: 'ההגדרות נשמרו',
-    saveError: 'שמירת ההגדרות נכשלה, נסו שוב'
+    saveError: 'שמירת ההגדרות נכשלה, נסה שוב'
 } as const

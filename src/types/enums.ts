@@ -10,6 +10,7 @@ export const FoodType = {
     Vegetables: 'vegetables',
     Fruits: 'fruits',
     Dairy: 'dairy',
+    Eggs: 'eggs',
     Meat: 'meat',
     Fish: 'fish',
     Canned: 'canned',

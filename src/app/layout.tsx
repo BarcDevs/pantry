@@ -1,3 +1,6 @@
+import '@/lib/zod-locale'
+import { Direction } from 'radix-ui'
+
 import { heIL } from '@clerk/localizations'
 import { ClerkProvider } from '@clerk/nextjs'
 
@@ -37,8 +40,10 @@ const RootLayout = ({
             )}
         >
             <body className={'min-h-full flex flex-col'}>
-                {children}
-                <ServiceWorkerRegister/>
+                <Direction.DirectionProvider dir={'rtl'}>
+                    {children}
+                    <ServiceWorkerRegister/>
+                </Direction.DirectionProvider>
             </body>
         </html>
     </ClerkProvider>

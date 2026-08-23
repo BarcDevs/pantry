@@ -86,7 +86,7 @@
     As a home cook, I want to maintain an accurate list of what's in my pantry and fridge so the AI always has a real context to work with.
     Acceptance Criteria
     
-      AC-1.1User can add an item with: name (required), storage location (fridge / freezer / pantry), food type (vegetables / fruits / dairy / meat / fish / canned / grains / snacks / beverages / condiments / other — optional, see AC-1.8b), quantity, unit, expiry date (optional), notes (optional)
+      AC-1.1User can add an item with: name (required), storage location (fridge / freezer / pantry), food type (vegetables / fruits / dairy / eggs / meat / fish / canned / grains / snacks / beverages / condiments / other — optional, see AC-1.8b), quantity, unit, expiry date (optional), notes (optional)
 
       - AC-1.2Storage location and food type are independent fields — a product can be "vegetables" stored in "fridge" or "freezer"
 
@@ -347,7 +347,7 @@ type StorageLocation = 'fridge' | 'freezer' | 'pantry'
 
 // Food type / category (what kind of ingredient it is)
 type FoodType =
-  | 'vegetables' | 'fruits' | 'dairy' | 'meat'
+  | 'vegetables' | 'fruits' | 'dairy' | 'eggs' | 'meat'
   | 'fish' | 'canned' | 'grains' | 'snacks'
   | 'beverages' | 'condiments' | 'other'
 

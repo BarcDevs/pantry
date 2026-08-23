@@ -18,6 +18,8 @@ export const AddItemForm = () => {
         form,
         suggestion,
         isSuggesting,
+        suggestionFailed,
+        retrySuggestion,
         isSubmitting,
         duplicate,
         setDuplicate,
@@ -51,9 +53,11 @@ export const AddItemForm = () => {
                     <StorageSuggestionHint
                         isLoading={isSuggesting}
                         suggestion={suggestion}
+                        suggestionFailed={suggestionFailed}
                         currentStorage={currentStorage}
                         onSelectRecommended={applySuggestedStorage}
                         onApplyExpiry={applySuggestedExpiry}
+                        onRetry={retrySuggestion}
                     />
                 )}
                 <PantryTypeRow

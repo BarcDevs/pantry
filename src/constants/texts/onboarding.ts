@@ -15,21 +15,21 @@ export const onboardingTexts = {
     householdSizePlural: 'נפשות',
     dietaryCountPrefix: 'נבחרו',
     dietaryCountEmpty: 'ללא העדפות מיוחדות',
-    saveError: 'שמירת ההעדפות נכשלה, נסו שוב',
+    saveError: 'שמירת ההעדפות נכשלה, נסה שוב',
     cookingLevels: {
         easy: {
             emoji: '🌱',
-            title: 'מתחיל/ה',
+            title: 'מתחיל',
             desc: 'מתכונים פשוטים עם מעט מרכיבים ושלבים'
         },
         medium: {
             emoji: '🍳',
-            title: 'בינוני/ת',
+            title: 'בינוני',
             desc: 'נוח במטבח, אשמח לגוון ולהתנסות'
         },
         hard: {
             emoji: '👨‍🍳',
-            title: 'מתקדם/ת',
+            title: 'מתקדם',
             desc: 'טכניקות מתקדמות ומתכונים מורכבים'
         }
     },

@@ -7,7 +7,8 @@ import env from '@/config/env'
 export const generateStructured = async <T>(
     prompt: string,
     schema: ZodType<T>,
-    mock?: () => T
+    mock?: () => T,
+    maxRetries?: number
 ): Promise<T> => {
     if (env.e2eMockAi) {
         if (!mock) {
@@ -21,7 +22,8 @@ export const generateStructured = async <T>(
     const { object: parsed } = await generateObject({
         model: aiModel,
         prompt,
-        schema
+        schema,
+        maxRetries
     })
     return parsed
 }

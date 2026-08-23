@@ -52,7 +52,7 @@ export const recipesTexts = {
         expiredGateRemove: 'הסרת פגי תוקף',
         submit: '✦ צור מתכון',
         submitting: 'יוצר מתכון...',
-        generateError: 'יצירת המתכון נכשלה, נסו שוב',
+        generateError: 'יצירת המתכון נכשלה, נסה שוב',
         pantryLoadError: 'טעינת המזווה נכשלה'
     },
     pantrySheet: {
@@ -77,11 +77,11 @@ export const recipesTexts = {
         refinePlaceholder: 'לדוגמה: הוסיפו חריפות, הפכו לצמחוני',
         refineSubmit: 'עדכון מתכון',
         refining: 'מעדכן...',
-        refineError: 'עדכון המתכון נכשל, נסו שוב',
+        refineError: 'עדכון המתכון נכשל, נסה שוב',
         save: 'שמירה לספרייה',
         saved: 'נשמר',
         saving: 'שומר...',
-        saveError: 'שמירת המתכון נכשלה, נסו שוב',
+        saveError: 'שמירת המתכון נכשלה, נסה שוב',
         startCooking: 'התחל לבשל ←',
         favoriteOn: 'הסר ממועדפים',
         favoriteOff: 'הוסף למועדפים'
@@ -125,7 +125,7 @@ export const recipesTexts = {
         deleteFromPantry: 'מחק מהמזווה',
         confirm: 'אישור ועדכון המזווה',
         skip: 'דלג — השאר את המזווה ללא שינוי',
-        deductError: 'עדכון המזווה נכשל, נסו שוב',
+        deductError: 'עדכון המזווה נכשל, נסה שוב',
         chooseRequired: 'יש לבחור השאר או מחק עבור פריטים שנגמרו'
     },
     rate: {
@@ -143,6 +143,6 @@ export const recipesTexts = {
         autoSaveNote: 'המתכון נשמר אוטומטית למתכונים שלי',
         finishWithRating: 'סיום ושמירה בהיסטוריה',
         finishWithoutRating: 'שמור להיסטוריה בלי דירוג',
-        rateError: 'שמירת הדירוג נכשלה, נסו שוב'
+        rateError: 'שמירת הדירוג נכשלה, נסה שוב'
     }
 } as const

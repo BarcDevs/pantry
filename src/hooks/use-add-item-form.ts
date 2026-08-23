@@ -72,6 +72,8 @@ export const useAddItemForm = () => {
     const [suggestion, setSuggestion] = useState<
         StorageSuggestion | null
     >(null)
+    const [suggestionFailed, setSuggestionFailed] = useState(false)
+    const [retryToken, setRetryToken] = useState(0)
     const [isSuggesting, startSuggesting] = useTransition()
     const [isSubmitting, startSubmitting] = useTransition()
     const [duplicate, setDuplicate] = useState<
@@ -91,7 +93,10 @@ export const useAddItemForm = () => {
         nameDebounceMs
     )
 
-    useResetOnChange(name, () => setSuggestion(null))
+    useResetOnChange(name, () => {
+        setSuggestion(null)
+        setSuggestionFailed(false)
+    })
 
     useEffect(() => {
         if (debouncedName.length < (
@@ -108,6 +113,7 @@ export const useAddItemForm = () => {
                 )
                 if (cancelled) return
                 setSuggestion(result)
+                setSuggestionFailed(false)
                 if (
                     result.suggestedType
                     && !form.getValues('type')
@@ -121,12 +127,13 @@ export const useAddItemForm = () => {
                 console.error(error)
                 if (!cancelled) {
                     setSuggestion(null)
+                    setSuggestionFailed(true)
                 }
             }
         })
 
         return () => { cancelled = true }
-    }, [debouncedName, form])
+    }, [debouncedName, retryToken, form])
 
     const isNameLongEnough = (
         name.trim().length >= minNameLengthForSuggestion
@@ -204,6 +211,8 @@ export const useAddItemForm = () => {
         form,
         suggestion: effectiveSuggestion,
         isSuggesting: isPendingSuggestion,
+        suggestionFailed,
+        retrySuggestion: () => setRetryToken((token) => token + 1),
         isSubmitting,
         duplicate,
         setDuplicate,

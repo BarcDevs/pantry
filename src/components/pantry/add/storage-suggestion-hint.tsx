@@ -16,17 +16,21 @@ const daysUntil = (dateStr: string): number => {
 type StorageSuggestionHintProps = {
     isLoading: boolean
     suggestion: StorageSuggestion | null
+    suggestionFailed: boolean
     currentStorage: StorageLocation
     onSelectRecommended: () => void
     onApplyExpiry: () => void
+    onRetry: () => void
 }
 
 export const StorageSuggestionHint = ({
     isLoading,
     suggestion,
+    suggestionFailed,
     currentStorage,
     onSelectRecommended,
-    onApplyExpiry
+    onApplyExpiry,
+    onRetry
 }: StorageSuggestionHintProps) => {
     const isMatch = suggestion
         ? currentStorage === suggestion.suggestedStorage
@@ -50,6 +54,21 @@ export const StorageSuggestionHint = ({
                     <span className={'size-3.25 animate-spin rounded-full border-2 border-soft-green-border border-t-green'}/>
                 )}
             </div>
+            {suggestionFailed && !isLoading && (
+                <div className={'mt-2 flex items-center justify-between gap-2.5'}>
+                    <span className={'text-caption text-ink-3'}>
+                        {pantryTexts.addForm.suggestionError}
+                    </span>
+                    <Button
+                        type={'button'}
+                        variant={'outline'}
+                        onClick={onRetry}
+                        className={'h-auto shrink-0 border-soft-green-border px-3.5 py-2 text-caption'}
+                    >
+                        {pantryTexts.addForm.suggestionRetry}
+                    </Button>
+                </div>
+            )}
             {suggestion && current && (
                 <div className={'mt-2 flex flex-col gap-2.5'}>
                     {isMatch ? (
