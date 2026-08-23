@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 
 import { SettingsView } from '@/components/settings/settings-view'
+import { PageHeader } from '@/components/shared/PageHeader'
 
 import { routes } from '@/constants/routes'
 import { settingsTexts } from '@/constants/texts/settings'
@@ -13,9 +14,7 @@ const SettingsPage = async () => {
 
     return (
         <main className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
-            <h1 className={'mb-5 font-display text-title font-weight-title text-ink'}>
-                {settingsTexts.title}
-            </h1>
+            <PageHeader title={settingsTexts.title}/>
             <SettingsView user={user}/>
         </main>
     )

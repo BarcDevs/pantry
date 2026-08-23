@@ -23,7 +23,7 @@ export const SettingsProfileCard = ({
             </div>
             <div
                 dir={'ltr'}
-                className={'text-label text-ink-3'}
+                className={'text-right text-label text-ink-3'}
             >
                 {email}
             </div>

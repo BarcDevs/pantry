@@ -179,6 +179,30 @@
     .flex-panel {
         flex: 1.1;
     }
+
+    .font-weight-display {
+        font-weight: var(--font-weight-display);
+    }
+
+    .font-weight-title {
+        font-weight: var(--font-weight-title);
+    }
+
+    .font-weight-heading {
+        font-weight: var(--font-weight-heading);
+    }
+
+    .font-weight-body {
+        font-weight: var(--font-weight-body);
+    }
+
+    .font-weight-label {
+        font-weight: var(--font-weight-label);
+    }
+
+    .font-weight-caption {
+        font-weight: var(--font-weight-caption);
+    }
 }
 
 @layer base {

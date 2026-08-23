@@ -11,6 +11,7 @@ import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingred
 import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero'
 import { RecipeResultStats } from '@/components/recipes/result/recipe-result-stats'
 import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
+import { PageHeader } from '@/components/shared/PageHeader'
 
 import { useRecipeDetail } from '@/hooks/use-recipe-detail'
 
@@ -33,6 +34,7 @@ export const RecipeDetailView = ({ recipe: initialRecipe }: RecipeDetailViewProp
 
     return (
         <div className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
+            <PageHeader/>
             <RecipeResultHero recipe={recipe}/>
             <RecipeResultStats recipe={recipe}/>
             {showsImageField(recipe.source) && !recipe.imageUrl && (

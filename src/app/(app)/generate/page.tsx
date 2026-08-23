@@ -1,4 +1,5 @@
 import { GenerateConfigForm } from '@/components/recipes/generate/generate-config-form'
+import { PageHeader } from '@/components/shared/PageHeader'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -9,9 +10,7 @@ const GeneratePage = async () => {
 
     return (
         <main className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
-            <h1 className={'mb-1 font-display text-title font-weight-title text-ink'}>
-                {recipesTexts.generate.title}
-            </h1>
+            <PageHeader title={recipesTexts.generate.title}/>
             <p className={'mb-5 text-body text-ink-3'}>
                 {recipesTexts.generate.subtitle}
             </p>
