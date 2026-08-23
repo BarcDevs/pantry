@@ -8,6 +8,7 @@ export type ExpiryStatus = {
 }
 
 const JERUSALEM_TIME_ZONE = 'Asia/Jerusalem'
+export const EXPIRY_SOON_THRESHOLD_DAYS = 7
 
 // Product is Israel-market-only, single timezone — anchor "today" and the
 // target date to Asia/Jerusalem's calendar day, not the runtime's local time,
@@ -30,7 +31,7 @@ export const getExpiryStatus = (expiryDate: Date | undefined): ExpiryStatus => {
 
     const daysLeft = Math.round((target.getTime() - today.getTime()) / dayInMs)
 
-    if (daysLeft < 3) return { tone: 'red', daysLeft }
-    if (daysLeft <= 7) return { tone: 'amber', daysLeft }
+    if (daysLeft <= 0) return { tone: 'red', daysLeft }
+    if (daysLeft <= EXPIRY_SOON_THRESHOLD_DAYS) return { tone: 'amber', daysLeft }
     return { tone: 'green', daysLeft }
 }

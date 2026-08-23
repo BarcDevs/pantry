@@ -23,6 +23,8 @@ export const pantryTexts = {
         units: 'יחידות'
     },
     expiredLabel: 'פג תוקף',
+    expiredTodayLabel: 'פג היום',
+    validLabel: 'תקף',
     daysLeftLabel: 'ימים',
     noExpiryLabel: 'ללא תאריך',
     noResults: 'לא נמצאו מוצרים תואמים',

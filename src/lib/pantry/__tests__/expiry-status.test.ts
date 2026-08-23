@@ -14,16 +14,16 @@ describe('getExpiryStatus', () => {
         expect(getExpiryStatus(past).tone).toBe('red')
     })
 
-    it('returns red when expiring in under 3 days', () => {
-        const soon = new Date()
-        soon.setDate(soon.getDate() + 2)
-        expect(getExpiryStatus(soon).tone).toBe('red')
+    it('returns red when expiring today', () => {
+        const today = new Date()
+        expect(getExpiryStatus(today).tone).toBe('red')
+        expect(getExpiryStatus(today).daysLeft).toBe(0)
     })
 
-    it('returns amber when expiring in 3-7 days', () => {
-        const mid = new Date()
-        mid.setDate(mid.getDate() + 5)
-        expect(getExpiryStatus(mid).tone).toBe('amber')
+    it('returns amber when expiring in 1-7 days', () => {
+        const soon = new Date()
+        soon.setDate(soon.getDate() + 5)
+        expect(getExpiryStatus(soon).tone).toBe('amber')
     })
 
     it('returns green when expiring in more than 7 days', () => {
