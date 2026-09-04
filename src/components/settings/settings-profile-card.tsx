@@ -32,7 +32,7 @@ export const SettingsProfileCard = ({
             type={'button'}
             variant={'ghost'}
             onClick={onEdit}
-            className={'h-auto p-0 font-bold text-body text-green'}
+            className={'h-auto shadow-none p-0 font-bold text-body text-green'}
         >
             {settingsTexts.profileEdit}
         </Button>

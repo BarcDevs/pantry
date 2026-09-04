@@ -13,13 +13,15 @@ export const SettingsCookingLevelField = ({
     value,
     onChange
 }: SettingsCookingLevelFieldProps) => (
-    <CookingLevelPicker
-        title={(
-            <h2 className={'text-heading font-bold text-ink'}>
-                {settingsTexts.cookingLevelTitle}
-            </h2>
-        )}
-        value={value}
-        onChange={onChange}
-    />
+    <div className={'[&_button]:shadow-none'}>
+        <CookingLevelPicker
+            title={(
+                <h2 className={'text-heading font-bold text-ink'}>
+                    {settingsTexts.cookingLevelTitle}
+                </h2>
+            )}
+            value={value}
+            onChange={onChange}
+        />
+    </div>
 )

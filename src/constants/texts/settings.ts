@@ -2,6 +2,7 @@ export const settingsTexts = {
     title: 'הגדרות',
     logout: 'התנתקות',
     profileEdit: 'עריכה',
+    profileDone: 'סיום',
     profileNameLabel: 'שם תצוגה',
     cookingPreferencesTitle: 'העדפות בישול',
     cookingLevelTitle: 'רמת בישול',
