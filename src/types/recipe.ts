@@ -77,6 +77,11 @@ export type UpdateRecipeInput = Partial<{
     imageUrl: string
 }>
 
+export type RecipeImportResult = {
+    recipe: RecipeDoc | null
+    fallbackToManual: boolean
+}
+
 export type GenerateRecipeInput = {
     mealCount: number
     maxTime: number
