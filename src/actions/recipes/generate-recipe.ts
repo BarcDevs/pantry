@@ -20,6 +20,8 @@ import type { RecipePromptUserContext } from '@/types/user'
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
+import { objectIdSchema } from '@/lib/object-id-schema'
+import { buildGenerateRecipePrompt } from '@/lib/prompts/generate-recipe-prompt'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { UserModel } from '@/models/user.model'
@@ -29,9 +31,7 @@ const generateRecipeSchema = z.object({
     maxTime: z.number().int().positive(),
     mealType: z.enum(MEAL_TYPES),
     scope: z.enum(RECIPE_SCOPES),
-    selectedItemIds: z.array(
-        z.string().regex(/^[0-9a-fA-F]{24}$/)
-    ).optional(),
+    selectedItemIds: z.array(objectIdSchema).optional(),
     allowAiGeneration: z.boolean(),
     matchStrictness: z.enum(MATCH_STRICTNESSES),
     customInstructions: z.string().max(500).optional()
@@ -52,35 +52,6 @@ const aiRecipeSchema = z.object({
         description: z.string()
     }))
 })
-
-const buildPrompt = (
-    input: z.infer<typeof generateRecipeSchema>,
-    pantryItemNames: string[],
-    userContext: RecipePromptUserContext
-): string => `
-    צור מתכון בעברית עבור ${input.mealCount} מנות, זמן הכנה כולל
-    עד ${input.maxTime} דקות, לארוחת ${input.mealType}.
-    מצב התאמה למזווה: ${input.scope}.
-    רמת דיוק התאמה למלאי: ${input.matchStrictness}.
-    ${input.allowAiGeneration
-        ? 'ניתן להשלים מרכיבים שאינם במזווה.'
-        : 'אין להמציא מרכיבים שאינם מופיעים במזווה או בחיפוש רשת.'}
-    פריטים זמינים במזווה: ${pantryItemNames.join(', ') || 'אין פריטים'}.
-    ${userContext.cookingLevel
-        ? `רמת בישול של המשתמש: ${userContext.cookingLevel}.`
-        : ''}
-    ${userContext.householdSize
-        ? `גודל משק הבית: ${userContext.householdSize}.`
-        : ''}
-    ${userContext.dietaryPreferences?.length
-        ? `העדפות תזונתיות: ${userContext.dietaryPreferences.join(', ')}.`
-        : ''}
-    ${input.customInstructions
-        ? `הוראות מיוחדות נוספות מהמשתמש: ${input.customInstructions}`
-        : ''}
-    לכל מרכיב ציין אם הוא נמצא במזווה (inPantry).
-    בחר אימוג'י יחיד המייצג את המתכון.
-`
 
 export const generateRecipe = async (
     input: GenerateRecipeInput
@@ -103,7 +74,7 @@ export const generateRecipe = async (
         .findOne({ clerkId: userId })
         .lean<RecipePromptUserContext | null>()
 
-    const prompt = buildPrompt(parsedInput, pantryItemNames, {
+    const prompt = buildGenerateRecipePrompt(parsedInput, pantryItemNames, {
         cookingLevel: user?.cookingLevel,
         householdSize: user?.householdSize,
         dietaryPreferences: user?.dietaryPreferences ?? []

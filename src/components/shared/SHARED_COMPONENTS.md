@@ -23,6 +23,20 @@ Centered icon + message for empty lists/collections. `message` accepts a string 
 />
 ```
 
+## `EmptyStateCard`
+
+Full-width empty-collection card with icon, title, subtitle and a CTA link button. Distinct from `EmptyState` (which has no CTA and is used for smaller inline empty lists).
+
+```tsx
+<EmptyStateCard
+    icon={'🧺'}
+    title={pantryTexts.emptyTitle}
+    subtitle={pantryTexts.emptySub}
+    ctaHref={routes.add}
+    ctaLabel={pantryTexts.addItem}
+/>
+```
+
 ## `ConfirmationDialog`
 
 Destructive-action confirmation modal (delete, remove, etc.) built on shadcn `Dialog`. `onConfirmAction` is awaited before the dialog closes, so pass an async action; `isLoading` disables the confirm button while it runs.

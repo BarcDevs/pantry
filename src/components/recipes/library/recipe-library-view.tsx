@@ -4,11 +4,12 @@ import type { Recipe } from '@/types/recipe'
 
 import { RecipeFilterTabs } from '@/components/recipes/library/recipe-filter-tabs'
 import { RecipeGrid } from '@/components/recipes/library/recipe-grid'
-import { RecipeLibraryEmptyState } from '@/components/recipes/library/recipe-library-empty-state'
 import { RecipeSearchInput } from '@/components/recipes/library/recipe-search-input'
+import { EmptyStateCard } from '@/components/shared/EmptyStateCard'
 
 import { useRecipeLibrary } from '@/hooks/use-recipe-library'
 
+import { routes } from '@/constants/routes'
 import { recipesTexts } from '@/constants/texts/recipes'
 
 type RecipeLibraryViewProps = {
@@ -25,7 +26,15 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
         toggleFavorite
     } = useRecipeLibrary(recipes)
 
-    if (recipes.length === 0) return <RecipeLibraryEmptyState/>
+    if (recipes.length === 0) return (
+        <EmptyStateCard
+            icon={'🍽️'}
+            title={recipesTexts.library.emptyTitle}
+            subtitle={recipesTexts.library.emptySub}
+            ctaHref={routes.generate}
+            ctaLabel={recipesTexts.library.generateCta}
+        />
+    )
 
     return (
         <div>

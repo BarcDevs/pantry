@@ -6,11 +6,12 @@ import type { DeductPantryItemEdit } from '@/types/pantry-item'
 
 import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
+import { objectIdSchema } from '@/lib/object-id-schema'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
 const deductEditSchema = z.object({
-    id: z.string().regex(/^[0-9a-fA-F]{24}$/),
+    id: objectIdSchema,
     newQuantity: z.number().min(0),
     remove: z.boolean().optional()
 })

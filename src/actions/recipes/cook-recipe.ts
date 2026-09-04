@@ -7,10 +7,10 @@ import type { Recipe, RecipeHistoryEntry } from '@/types/recipe'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
+import { objectIdSchema } from '@/lib/object-id-schema'
 
 import { RecipeModel } from '@/models/recipe.model'
 
-const objectIdSchema = z.string().regex(/^[0-9a-fA-F]{24}$/)
 const ratingSchema = z.number().min(1).max(5).nullable()
 
 const computeAverageRating = (

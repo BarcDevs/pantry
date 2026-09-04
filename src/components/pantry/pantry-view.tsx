@@ -11,8 +11,6 @@ import type { PantryItem }
 
 import { EditItemDialog }
     from '@/components/pantry/edit/edit-item-dialog'
-import { PantryEmptyState }
-    from '@/components/pantry/pantry-empty-state'
 import { PantryFilterChips }
     from '@/components/pantry/pantry-filter-chips'
 import { PantryGrid }
@@ -23,10 +21,14 @@ import { PantrySearchInput }
     from '@/components/pantry/pantry-search-input'
 import { PantryStatCards }
     from '@/components/pantry/pantry-stat-cards'
+import { EmptyStateCard }
+    from '@/components/shared/EmptyStateCard'
 
 import { getExpiryStatus }
     from '@/lib/pantry/expiry-status'
 
+import { routes }
+    from '@/constants/routes'
 import { pantryTexts }
     from '@/constants/texts/pantry'
 
@@ -79,7 +81,13 @@ export const PantryView = ({
         return (
             <div>
                 <PantryHeader displayName={displayName}/>
-                <PantryEmptyState/>
+                <EmptyStateCard
+                    icon={'🧺'}
+                    title={pantryTexts.emptyTitle}
+                    subtitle={pantryTexts.emptySub}
+                    ctaHref={routes.add}
+                    ctaLabel={pantryTexts.addItem}
+                />
             </div>
         )
     }

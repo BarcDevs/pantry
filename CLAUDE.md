@@ -50,6 +50,17 @@ Pantry is a mobile-first PWA: track pantry/fridge inventory, generate AI recipes
 
 `.claude/design/` — JSX design files from Claude Design (reference when building UI).
 
+## Modularity
+
+Never scatter the same kind of logic across `src/actions/` (or elsewhere) file by file. Centralize by kind:
+- Prompt-builder functions (e.g. `buildPrompt`) → one dedicated dir (e.g. `src/lib/prompts/` or `src/services/prompts/`), one fn per file, actions import from there.
+- Validation schemas (Zod, etc) → `src/schemas/`, never inline in actions/routes/components.
+- Types → `src/types/` (already a rule, see below).
+- Constants → `src/constants/` (already a rule, see below).
+- Repeated JSX/markup (2+ near-identical usages) → `src/components/shared/`.
+
+When adding or editing code, check for this scatter pattern and centralize proactively — don't wait for a dedicated cleanup pass. Don't force abstraction on one-off or superficially-similar code.
+
 ## Code Style
 
 Rules in `CORE_RULES.md`. Non-negotiable — follow exactly.

@@ -10,6 +10,7 @@ import type {
 
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
+import { buildRefineRecipePrompt } from '@/lib/prompts/refine-recipe-prompt'
 import {
     ingredientSchema,
     recipeDocSchema,
@@ -24,23 +25,6 @@ const refinedRecipeSchema = z.object({
     steps: z.array(stepSchema)
 })
 
-const buildPrompt = (
-    recipe: RecipeDoc,
-    instruction: string
-): string => `
-    להלן מתכון קיים בעברית בפורמט JSON:
-    ${JSON.stringify({
-        title: recipe.title,
-        ingredients: recipe.ingredients,
-        steps: recipe.steps
-    })}
-    עדכן את המתכון לפי ההוראה הבאה מהמשתמש: "${instruction}".
-    שמור על מספר המנות ועל זמן ההכנה הכולל ככל האפשר,
-    אלא אם ההוראה דורשת אחרת.
-    לכל מרכיב ציין אם הוא נמצא במזווה (inPantry).
-    בחר אימוג'י יחיד המייצג את המתכון המעודכן.
-`
-
 export const refineRecipe = async (
     input: RefineRecipeInput
 ): Promise<RecipeDoc> => {
@@ -52,7 +36,7 @@ export const refineRecipe = async (
     const instruction = z.string().trim()
         .min(1).max(500).parse(input.instruction)
 
-    const prompt = buildPrompt(recipe, instruction)
+    const prompt = buildRefineRecipePrompt(recipe, instruction)
     const refined = await generateStructured(
         prompt,
         refinedRecipeSchema,
