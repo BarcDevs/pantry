@@ -6,6 +6,7 @@ import type { ScannedReceiptItem } from '@/types/receipt'
 
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
+import { mockReceiptItems } from '@/lib/pantry/mock-receipt-items'
 import { receiptItemsSchema } from '@/lib/pantry/receipt-item-schema'
 import { buildScanReceiptPrompt } from '@/lib/prompts/scan-receipt-prompt'
 
@@ -30,7 +31,7 @@ export const scanReceipt = async (
     const { items } = await generateStructured(
         buildScanReceiptPrompt(),
         receiptItemsSchema,
-        () => ({ items: [] }),
+        mockReceiptItems,
         0,
         {
             base64: parsedBase64,
