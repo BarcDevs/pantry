@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import type { ReactNode } from 'react'
+
 import { useUser } from '@clerk/nextjs'
 
 import { GenerateIcon }
@@ -26,6 +28,46 @@ import { useIsChromeHidden }
 import { routes } from '@/constants/routes'
 import { commonTexts }
     from '@/constants/texts/common'
+
+type SidebarNavItem = {
+    href: string
+    label: string
+    icon: ReactNode
+    isActive: (pathname: string) => boolean
+}
+
+const sidebarNavItems: SidebarNavItem[] = [
+    {
+        href: routes.pantry,
+        label: commonTexts.navHome,
+        icon: <HomeIcon/>,
+        isActive: (pathname) => pathname === routes.pantry
+    },
+    {
+        href: routes.generate,
+        label: commonTexts.navGenerate,
+        icon: <GenerateIcon/>,
+        isActive: (pathname) => pathname.startsWith(routes.generate)
+    },
+    {
+        href: routes.recipes,
+        label: commonTexts.navLibrary,
+        icon: <LibraryIcon/>,
+        isActive: (pathname) => pathname.startsWith(routes.recipes)
+    },
+    {
+        href: routes.history,
+        label: commonTexts.navHistory,
+        icon: <HistoryIcon/>,
+        isActive: (pathname) => pathname.startsWith(routes.history)
+    },
+    {
+        href: routes.add,
+        label: commonTexts.navAdd,
+        icon: <PlusIcon/>,
+        isActive: (pathname) => pathname.startsWith(routes.add)
+    }
+]
 
 export const Sidebar = () => {
     const pathname = usePathname()
@@ -51,36 +93,15 @@ export const Sidebar = () => {
             </div>
 
             <nav className={'flex flex-col gap-1'}>
-                <NavItem
-                    href={routes.pantry}
-                    label={commonTexts.navHome}
-                    icon={<HomeIcon/>}
-                    active={pathname === routes.pantry}
-                />
-                <NavItem
-                    href={routes.generate}
-                    label={commonTexts.navGenerate}
-                    icon={<GenerateIcon/>}
-                    active={pathname.startsWith(routes.generate)}
-                />
-                <NavItem
-                    href={routes.recipes}
-                    label={commonTexts.navLibrary}
-                    icon={<LibraryIcon/>}
-                    active={pathname.startsWith(routes.recipes)}
-                />
-                <NavItem
-                    href={routes.history}
-                    label={commonTexts.navHistory}
-                    icon={<HistoryIcon/>}
-                    active={pathname.startsWith(routes.history)}
-                />
-                <NavItem
-                    href={routes.add}
-                    label={commonTexts.navAdd}
-                    icon={<PlusIcon/>}
-                    active={pathname.startsWith(routes.add)}
-                />
+                {sidebarNavItems.map((item) => (
+                    <NavItem
+                        key={item.href}
+                        href={item.href}
+                        label={item.label}
+                        icon={item.icon}
+                        active={item.isActive(pathname)}
+                    />
+                ))}
             </nav>
 
             <div className={'flex-1'}/>

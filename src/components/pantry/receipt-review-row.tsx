@@ -1,15 +1,10 @@
-import type { ReceiptReviewRow as Row }
-    from '@/types/receipt-review-row'
+import type { ReceiptReviewRow as Row } from '@/types/receipt-review-row'
 
-import { Button }
-    from '@/components/shared/Button'
-import { Checkbox }
-    from '@/components/ui/checkbox'
-import { Input }
-    from '@/components/ui/input'
+import { Button } from '@/components/shared/Button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
 
-import { pantryTexts }
-    from '@/constants/texts/pantry'
+import { pantryTexts } from '@/constants/texts/pantry'
 
 type ReceiptReviewRowProps = {
     row: Row
@@ -41,7 +36,10 @@ export const ReceiptReviewRow = ({
         <Input
             type={'number'}
             value={row.quantity}
-            onChange={(e) => onQuantityChange(row.id, Number(e.target.value))}
+            onChange={(e) => onQuantityChange(
+                row.id,
+                Number(e.target.value)
+            )}
             className={'w-16 shrink-0 text-center'}
         />
         <span className={'shrink-0 text-caption text-ink-3'}>
