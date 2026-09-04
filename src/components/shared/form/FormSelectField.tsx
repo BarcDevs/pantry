@@ -52,7 +52,7 @@ export const FormSelectField = <T extends FieldValues, V extends string>({
                     onValueChange={field.onChange}
                 >
                     <FormControl>
-                        <SelectTrigger className={'w-full'}>
+                        <SelectTrigger className={'w-full cursor-pointer'}>
                             <SelectValue placeholder={placeholder}/>
                         </SelectTrigger>
                     </FormControl>

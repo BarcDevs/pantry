@@ -1,10 +1,15 @@
-import type { ReceiptReviewRow as Row } from '@/types/receipt-review-row'
+import type { ReceiptReviewRow as Row }
+    from '@/types/receipt-review-row'
 
-import { Button } from '@/components/shared/Button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
+import { Button }
+    from '@/components/shared/Button'
+import { Checkbox }
+    from '@/components/ui/checkbox'
+import { Input }
+    from '@/components/ui/input'
 
-import { pantryTexts } from '@/constants/texts/pantry'
+import { pantryTexts }
+    from '@/constants/texts/pantry'
 
 type ReceiptReviewRowProps = {
     row: Row
@@ -26,7 +31,7 @@ export const ReceiptReviewRow = ({
             checked={row.included}
             onCheckedChange={() => onToggle(row.id)}
             aria-label={row.name}
-            className={'shrink-0'}
+            className={'shrink-0 cursor-pointer'}
         />
         <Input
             value={row.name}

@@ -4,7 +4,8 @@ import {
     screen
 } from '@testing-library/react'
 
-import { CookingHistoryRowItem } from './cooking-history-row'
+import { CookingHistoryRowItem }
+    from './cooking-history-row'
 
 const row = {
     recipeId: 'r1',
@@ -28,6 +29,19 @@ describe('CookingHistoryRowItem', () => {
         expect(screen.getByText('עוגת שוקולד')).toBeInTheDocument()
         fireEvent.click(screen.getByLabelText('4 כוכבים'))
         expect(onRate).toHaveBeenCalledWith(4)
+    })
+
+    it('links to the recipe detail page', () => {
+        render(
+            <CookingHistoryRowItem
+                row={row}
+                onRate={jest.fn()}
+            />
+        )
+        expect(screen.getByRole('link')).toHaveAttribute(
+            'href',
+            '/recipes/r1'
+        )
     })
 
     it('shows a pencil edit-affordance icon next to the stars', () => {

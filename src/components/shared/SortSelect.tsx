@@ -28,7 +28,7 @@ export const SortSelect = <T extends string>({
         value={value}
         onValueChange={onChange}
     >
-        <SelectTrigger className={'h-auto gap-1.5 rounded-full border border-border bg-surface px-3.5 py-2 text-label font-semibold text-ink-2 shadow-none'}>
+        <SelectTrigger className={'h-auto cursor-pointer gap-1.5 rounded-full border border-border bg-surface px-3.5 py-2 text-label font-semibold text-ink-2 shadow-none'}>
             <ArrowUpDownIcon size={14}/>
             <SelectValue/>
         </SelectTrigger>

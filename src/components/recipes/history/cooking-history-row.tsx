@@ -1,9 +1,18 @@
-import { format } from 'date-fns'
-import { PencilIcon, StarIcon } from 'lucide-react'
+import Link from 'next/link'
 
-import type { CookingHistoryRow } from '@/hooks/use-cooking-history'
+import {
+    PencilIcon,
+    StarIcon
+} from 'lucide-react'
 
+import type { CookingHistoryRow }
+    from '@/hooks/use-cooking-history'
+
+import { formatCookedAt }
+    from '@/lib/recipes/format-cooked-at'
 import { cn } from '@/lib/utils'
+
+import { routes } from '@/constants/routes'
 
 const STAR_VALUES = [1, 2, 3, 4, 5]
 
@@ -16,7 +25,10 @@ export const CookingHistoryRowItem = ({
     row,
     onRate
 }: CookingHistoryRowProps) => (
-    <div className={'flex items-center gap-3.5 rounded-lg border border-border-2 bg-surface p-3.5 shadow-sm'}>
+    <Link
+        href={routes.recipeDetail(row.recipeId)}
+        className={'flex items-center gap-3.5 rounded-lg border border-border-2 bg-surface p-3.5 shadow-sm'}
+    >
         <div className={'flex size-13 shrink-0 items-center justify-center rounded-md bg-canvas text-2xl'}>
             {row.emoji ?? '🍽️'}
         </div>
@@ -33,7 +45,10 @@ export const CookingHistoryRowItem = ({
                             aria-label={row.rating === value
                                 ? `${value} כוכבים, נבחר`
                                 : `${value} כוכבים`}
-                            onClick={() => onRate(value)}
+                            onClick={(e) => {
+                                e.preventDefault()
+                                onRate(value)
+                            }}
                             className={'cursor-pointer p-0.5'}
                         >
                             <StarIcon
@@ -53,9 +68,9 @@ export const CookingHistoryRowItem = ({
                     />
                 </div>
                 <span className={'text-caption text-ink-3'}>
-                    {format(row.cookedAt, 'd בMMMM')}
+                    {formatCookedAt(row.cookedAt)}
                 </span>
             </div>
         </div>
-    </div>
+    </Link>
 )

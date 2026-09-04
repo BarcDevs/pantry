@@ -5,26 +5,39 @@ import { usePathname } from 'next/navigation'
 
 import { useUser } from '@clerk/nextjs'
 
-import { GenerateIcon } from '@/components/icons/generate-icon'
-import { HistoryIcon } from '@/components/icons/history-icon'
-import { HomeIcon } from '@/components/icons/home-icon'
-import { LibraryIcon } from '@/components/icons/library-icon'
-import { PantryIcon } from '@/components/icons/pantry-icon'
-import { PlusIcon } from '@/components/icons/plus-icon'
-import { NavItem } from '@/components/shell/nav-item'
+import { GenerateIcon }
+    from '@/components/icons/generate-icon'
+import { HistoryIcon }
+    from '@/components/icons/history-icon'
+import { HomeIcon }
+    from '@/components/icons/home-icon'
+import { LibraryIcon }
+    from '@/components/icons/library-icon'
+import { PantryIcon }
+    from '@/components/icons/pantry-icon'
+import { PlusIcon }
+    from '@/components/icons/plus-icon'
+import { NavItem }
+    from '@/components/shell/nav-item'
 
-import { useIsChromeHidden } from '@/hooks/use-is-chrome-hidden'
+import { useIsChromeHidden }
+    from '@/hooks/use-is-chrome-hidden'
 
 import { routes } from '@/constants/routes'
-import { commonTexts } from '@/constants/texts/common'
+import { commonTexts }
+    from '@/constants/texts/common'
 
 export const Sidebar = () => {
     const pathname = usePathname()
     const { user } = useUser()
     const isChromeHidden = useIsChromeHidden()
 
-    const displayName = user?.fullName ?? user?.emailAddresses[0]?.emailAddress ?? ''
-    const initial = displayName.charAt(0).toUpperCase() || '?'
+    const displayName = user?.fullName
+        ?? user?.emailAddresses[0]?.emailAddress
+        ?? ''
+    const initial = displayName
+        .charAt(0)
+        .toUpperCase() || '?'
 
     if (isChromeHidden) return null
 
@@ -61,7 +74,6 @@ export const Sidebar = () => {
                     label={commonTexts.navHistory}
                     icon={<HistoryIcon/>}
                     active={pathname.startsWith(routes.history)}
-                    disabled
                 />
                 <NavItem
                     href={routes.add}
@@ -81,8 +93,12 @@ export const Sidebar = () => {
                     {initial}
                 </div>
                 <div className={'min-w-0'}>
-                    <div className={'truncate text-body font-bold'}>{displayName}</div>
-                    <div className={'text-caption text-ink-3'}>{commonTexts.navSettings}</div>
+                    <div className={'truncate text-body font-bold'}>
+                        {displayName}
+                    </div>
+                    <div className={'text-caption text-ink-3'}>
+                        {commonTexts.navSettings}
+                    </div>
                 </div>
             </Link>
         </aside>
