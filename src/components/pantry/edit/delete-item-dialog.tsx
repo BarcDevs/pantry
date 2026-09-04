@@ -1,12 +1,5 @@
+import { AppDialog } from '@/components/shared/AppDialog'
 import { Button } from '@/components/shared/Button'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle
-} from '@/components/ui/dialog'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -23,20 +16,13 @@ export const DeleteItemDialog = ({
     onConfirm,
     isDeleting
 }: DeleteItemDialogProps) => (
-    <Dialog
+    <AppDialog
         open={open}
         onOpenChange={onOpenChange}
-    >
-        <DialogContent>
-            <DialogHeader>
-                <DialogTitle>
-                    {pantryTexts.deleteDialog.title}
-                </DialogTitle>
-                <DialogDescription>
-                    {pantryTexts.deleteDialog.description}
-                </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
+        title={pantryTexts.deleteDialog.title}
+        description={pantryTexts.deleteDialog.description}
+        footer={(
+            <>
                 <Button
                     variant={'outline'}
                     onClick={() => onOpenChange(false)}
@@ -52,7 +38,7 @@ export const DeleteItemDialog = ({
                         ? pantryTexts.editForm.deleting
                         : pantryTexts.deleteDialog.confirm}
                 </Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
+            </>
+        )}
+    />
 )

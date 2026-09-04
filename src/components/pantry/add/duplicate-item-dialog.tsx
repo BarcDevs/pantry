@@ -1,12 +1,5 @@
+import { AppDialog } from '@/components/shared/AppDialog'
 import { Button } from '@/components/shared/Button'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle
-} from '@/components/ui/dialog'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -23,20 +16,13 @@ export const DuplicateItemDialog = ({
     onMerge,
     onKeepSeparate
 }: DuplicateItemDialogProps) => (
-    <Dialog
+    <AppDialog
         open={open}
         onOpenChange={onOpenChange}
-    >
-        <DialogContent>
-            <DialogHeader>
-                <DialogTitle>
-                    {pantryTexts.duplicateDialog.title}
-                </DialogTitle>
-                <DialogDescription>
-                    {pantryTexts.duplicateDialog.description}
-                </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
+        title={pantryTexts.duplicateDialog.title}
+        description={pantryTexts.duplicateDialog.description}
+        footer={(
+            <>
                 <Button
                     variant={'outline'}
                     onClick={onKeepSeparate}
@@ -46,7 +32,7 @@ export const DuplicateItemDialog = ({
                 <Button onClick={onMerge}>
                     {pantryTexts.duplicateDialog.merge}
                 </Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
+            </>
+        )}
+    />
 )

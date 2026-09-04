@@ -4,14 +4,9 @@ import { useState, useTransition } from 'react'
 
 import { toast } from 'sonner'
 
+import { AppDialog } from '@/components/shared/AppDialog'
 import { Button } from '@/components/shared/Button'
 import { DietaryPreferencesPicker } from '@/components/shared/DietaryPreferencesPicker'
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle
-} from '@/components/ui/dialog'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 import { settingsTexts } from '@/constants/texts/settings'
@@ -49,33 +44,27 @@ export const GenerateDietaryDialog = ({
     }
 
     return (
-        <Dialog
+        <AppDialog
             open={open}
             onOpenChange={(nextOpen) => {
                 if (nextOpen) setDraft(value)
                 onOpenChange(nextOpen)
             }}
+            title={texts.dietaryPreferencesLabel}
         >
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle className={'font-display text-heading font-bold text-ink'}>
-                        {texts.dietaryPreferencesLabel}
-                    </DialogTitle>
-                </DialogHeader>
-                <DietaryPreferencesPicker
-                    value={draft}
-                    onChange={setDraft}
-                />
-                <Button
-                    disabled={isSaving}
-                    onClick={handleSave}
-                    className={'w-full'}
-                >
-                    {isSaving
-                        ? settingsTexts.submitting
-                        : texts.dietaryPreferencesSave}
-                </Button>
-            </DialogContent>
-        </Dialog>
+            <DietaryPreferencesPicker
+                value={draft}
+                onChange={setDraft}
+            />
+            <Button
+                disabled={isSaving}
+                onClick={handleSave}
+                className={'w-full'}
+            >
+                {isSaving
+                    ? settingsTexts.submitting
+                    : texts.dietaryPreferencesSave}
+            </Button>
+        </AppDialog>
     )
 }

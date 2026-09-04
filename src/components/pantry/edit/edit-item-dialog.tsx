@@ -12,14 +12,9 @@ import { DeleteItemDialog }
     from '@/components/pantry/edit/delete-item-dialog'
 import { StorageSuggestionButton }
     from '@/components/pantry/edit/storage-suggestion-button'
+import { AppDialog } from '@/components/shared/AppDialog'
 import { Button } from '@/components/shared/Button'
 import { FormError } from '@/components/shared/form/FormError'
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle
-} from '@/components/ui/dialog'
 import { Form } from '@/components/ui/form'
 
 import { useEditItemForm } from '@/hooks/use-edit-item-form'
@@ -65,76 +60,71 @@ export const EditItemDialog = ({
     const canSuggest = name.trim().length >= 2
 
     return (
-        <Dialog
+        <AppDialog
             open
             onOpenChange={(open) => { if (!open) onClose() }}
+            title={pantryTexts.editForm.title}
+            contentClassName={'max-h-[85vh] overflow-y-auto'}
         >
-            <DialogContent className={'max-h-[85vh] overflow-y-auto'}>
-                <DialogHeader>
-                    <DialogTitle>
-                        {pantryTexts.editForm.title}
-                    </DialogTitle>
-                </DialogHeader>
-                <Form {...form}>
-                    <form
-                        noValidate
-                        onSubmit={handleSubmit}
-                        className={'flex flex-col gap-4'}
-                    >
-                        <AddItemFields control={form.control}/>
-                        {(
-                            canSuggest && (
-                                suggestion
-                                || suggestionFailed
-                            )
-                        ) ? (
-                            <StorageSuggestionHint
-                                isLoading={isSuggesting}
-                                suggestion={suggestion}
-                                suggestionFailed={suggestionFailed}
-                                currentStorage={currentStorage}
-                                onSelectRecommended={applySuggestedStorage}
-                                onApplyExpiry={applySuggestedExpiry}
-                                onRetry={requestSuggestion}
-                            />
-                        ) : (
-                            <StorageSuggestionButton
-                                disabled={!canSuggest}
-                                isLoading={isSuggesting}
-                                onClick={requestSuggestion}
-                            />
-                        )}
-                        <PantryTypeRow
-                            value={currentType}
-                            onChange={(type) => form.setValue('type', type)}
+            <Form {...form}>
+                <form
+                    noValidate
+                    onSubmit={handleSubmit}
+                    className={'flex flex-col gap-4'}
+                >
+                    <AddItemFields control={form.control}/>
+                    {(
+                        canSuggest && (
+                            suggestion
+                            || suggestionFailed
+                        )
+                    ) ? (
+                        <StorageSuggestionHint
+                            isLoading={isSuggesting}
+                            suggestion={suggestion}
+                            suggestionFailed={suggestionFailed}
+                            currentStorage={currentStorage}
+                            onSelectRecommended={applySuggestedStorage}
+                            onApplyExpiry={applySuggestedExpiry}
+                            onRetry={requestSuggestion}
                         />
-                        <FormError errors={form.formState.errors}/>
-                        <Button
-                            type={'submit'}
-                            disabled={isSubmitting}
-                            className={'w-full'}
-                        >
-                            {isSubmitting
-                                ? pantryTexts.editForm.submitting
-                                : pantryTexts.editForm.submit}
-                        </Button>
-                        <Button
-                            type={'button'}
-                            variant={'destructive'}
-                            className={'w-full'}
-                            onClick={() => setConfirmDelete(true)}
-                        >
-                            {pantryTexts.editForm.deleteButton}
-                        </Button>
-                    </form>
-                </Form>
-                <DeleteItemDialog
-                    open={confirmDelete}
-                    onOpenChange={setConfirmDelete}
-                    onConfirm={handleDelete}
-                    isDeleting={isDeleting}
-                />
-            </DialogContent>
-        </Dialog>
+                    ) : (
+                        <StorageSuggestionButton
+                            disabled={!canSuggest}
+                            isLoading={isSuggesting}
+                            onClick={requestSuggestion}
+                        />
+                    )}
+                    <PantryTypeRow
+                        value={currentType}
+                        onChange={(type) => form.setValue('type', type)}
+                    />
+                    <FormError errors={form.formState.errors}/>
+                    <Button
+                        type={'submit'}
+                        disabled={isSubmitting}
+                        className={'w-full'}
+                    >
+                        {isSubmitting
+                            ? pantryTexts.editForm.submitting
+                            : pantryTexts.editForm.submit}
+                    </Button>
+                    <Button
+                        type={'button'}
+                        variant={'destructive'}
+                        className={'w-full'}
+                        onClick={() => setConfirmDelete(true)}
+                    >
+                        {pantryTexts.editForm.deleteButton}
+                    </Button>
+                </form>
+            </Form>
+            <DeleteItemDialog
+                open={confirmDelete}
+                onOpenChange={setConfirmDelete}
+                onConfirm={handleDelete}
+                isDeleting={isDeleting}
+            />
+        </AppDialog>
     )
 }

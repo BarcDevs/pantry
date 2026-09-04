@@ -4,14 +4,8 @@ import {
 } from 'lucide-react'
 import type { MouseEvent } from 'react'
 
+import { AppDialog } from '@/components/shared/AppDialog'
 import { Button } from '@/components/shared/Button'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle
-} from '@/components/ui/dialog'
 
 type ConfirmationDialogProps = {
     open: boolean
@@ -63,29 +57,22 @@ export const ConfirmationDialog = ({
     }
 
     return (
-        <Dialog
+        <AppDialog
             open={open}
             onOpenChange={handleOpenChange}
-        >
-            <DialogContent
-                showCloseButton={false}
-                className={'max-w-sm'}
-            >
-                <DialogHeader>
-                    <div className={'flex items-center justify-center w-12 h-12 rounded-full bg-destructive/10 mx-auto mb-2'}>
-                        <Icon
-                            className={iconClass}
-                            size={20}
-                        />
-                    </div>
-                    <DialogTitle className={'text-center'}>
-                        {title}
-                    </DialogTitle>
-                    <DialogDescription className={'text-center'}>
-                        {description}
-                    </DialogDescription>
-                </DialogHeader>
-                <div className={'flex justify-center gap-2 mt-2'}>
+            title={title}
+            description={description}
+            icon={(
+                <Icon
+                    className={iconClass}
+                    size={20}
+                />
+            )}
+            align={'center'}
+            showCloseButton={false}
+            contentClassName={'max-w-sm'}
+            footer={(
+                <>
                     <Button
                         variant={'outline'}
                         disabled={isLoading}
@@ -100,8 +87,8 @@ export const ConfirmationDialog = ({
                     >
                         {label}
                     </Button>
-                </div>
-            </DialogContent>
-        </Dialog>
+                </>
+            )}
+        />
     )
 }
