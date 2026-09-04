@@ -8,11 +8,22 @@ import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import { storageSuggestionShape } from '@/lib/pantry/storage-suggestion-schema'
 
+const cacheTtlMs = 1000 * 60 * 60 * 24
+const suggestionCache = new Map<
+    string,
+    { suggestion: StorageSuggestion, expiresAt: number }
+>()
+
 export const suggestStorage = async (
     name: string
 ): Promise<StorageSuggestion> => {
     await requireUserId()
     const parsedName = z.string().trim().min(1).max(100).parse(name)
+    const cacheKey = parsedName.toLowerCase()
+    const cached = suggestionCache.get(cacheKey)
+    if (cached && cached.expiresAt > Date.now()) {
+        return cached.suggestion
+    }
     const today = new Date().toISOString().slice(0, 10)
 
     const prompt = `
@@ -35,7 +46,7 @@ export const suggestStorage = async (
         reason: 'בדיקה'
     }
 
-    return generateStructured(
+    const suggestion: StorageSuggestion = await generateStructured(
         prompt,
         storageSuggestionShape,
         () => ({
@@ -51,4 +62,9 @@ export const suggestStorage = async (
         }),
         0
     )
+    suggestionCache.set(cacheKey, {
+        suggestion,
+        expiresAt: Date.now() + cacheTtlMs
+    })
+    return suggestion
 }
