@@ -14,7 +14,7 @@ export const NavItem = ({
     <Link
         href={href}
         className={cn(
-            'flex w-full items-center gap-3 rounded-md px-3.5 py-3 text-right text-body transition-colors',
+            'flex w-full items-center gap-3 rounded-md px-3.5 py-3 text-start text-body transition-colors',
             active && 'bg-status-green-bg text-green font-bold',
             !active && !disabled && 'text-ink-2 hover:bg-border-3 font-semibold',
             disabled && 'pointer-events-none cursor-not-allowed text-ink-4 opacity-50 font-semibold'

@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { Switch } from '@/components/ui/switch'
 
 type ToggleProps = {
     checked: boolean
@@ -11,22 +11,10 @@ export const Toggle = ({
     onCheckedChange,
     'aria-label': ariaLabel
 }: ToggleProps) => (
-    <button
-        type={'button'}
-        role={'switch'}
-        aria-checked={checked}
+    <Switch
+        checked={checked}
+        onCheckedChange={onCheckedChange}
         aria-label={ariaLabel}
-        onClick={() => onCheckedChange(!checked)}
-        className={cn(
-            'relative h-6.5 w-11 shrink-0 cursor-pointer rounded-full transition-colors',
-            checked ? 'bg-green' : 'bg-track'
-        )}
-    >
-        <span
-            className={cn(
-                'absolute top-0.75 size-5 rounded-full bg-surface transition-all',
-                checked ? 'right-0.75' : 'left-0.75'
-            )}
-        />
-    </button>
+        className={'data-[state=checked]:bg-green'}
+    />
 )
