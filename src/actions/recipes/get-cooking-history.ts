@@ -7,8 +7,7 @@ import type { Recipe } from '@/types/recipe'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
 
-import { RecipeModel }
-    from '@/models/recipe.model'
+import { RecipeModel } from '@/models/recipe.model'
 
 const latestCookedAt = (recipe: Recipe): number => (
     recipe.history.reduce(

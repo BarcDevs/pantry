@@ -1,5 +1,4 @@
-import type { RecipeHistoryEntry }
-    from '@/types/recipe'
+import type { RecipeHistoryEntry } from '@/types/recipe'
 
 export const computeAverageRating = (
     history: RecipeHistoryEntry[]

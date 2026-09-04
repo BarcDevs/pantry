@@ -16,11 +16,9 @@ jest.mock('@/models/recipe.model', () => ({
 
 import { auth } from '@clerk/nextjs/server'
 
-import { RecipeModel }
-    from '@/models/recipe.model'
+import { RecipeModel } from '@/models/recipe.model'
 
-import { getCookingHistory }
-    from '../get-cooking-history'
+import { getCookingHistory } from '../get-cooking-history'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockFind = RecipeModel.find as jest.Mock

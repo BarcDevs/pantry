@@ -1,5 +1,4 @@
-import { formatCookedAt }
-    from './format-cooked-at'
+import { formatCookedAt } from './format-cooked-at'
 
 describe('formatCookedAt', () => {
     it('formats today as "היום · HH:mm"', () => {

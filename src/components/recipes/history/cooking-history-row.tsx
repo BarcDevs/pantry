@@ -5,11 +5,9 @@ import {
     StarIcon
 } from 'lucide-react'
 
-import type { CookingHistoryRow }
-    from '@/hooks/use-cooking-history'
+import type { CookingHistoryRow } from '@/hooks/use-cooking-history'
 
-import { formatCookedAt }
-    from '@/lib/recipes/format-cooked-at'
+import { formatCookedAt } from '@/lib/recipes/format-cooked-at'
 import { cn } from '@/lib/utils'
 
 import { routes } from '@/constants/routes'

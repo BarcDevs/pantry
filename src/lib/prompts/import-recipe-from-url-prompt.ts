@@ -1,5 +1,4 @@
-import { importRecipeExtractionInstructions }
-    from '@/lib/prompts/import-recipe-shared-instructions'
+import { importRecipeExtractionInstructions } from '@/lib/prompts/import-recipe-shared-instructions'
 
 export const buildImportRecipeFromUrlPrompt = (
     pageText: string

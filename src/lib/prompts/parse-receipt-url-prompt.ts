@@ -1,5 +1,4 @@
-import { receiptItemExtractionInstructions }
-    from '@/lib/prompts/receipt-item-extraction-instructions'
+import { receiptItemExtractionInstructions } from '@/lib/prompts/receipt-item-extraction-instructions'
 
 export const buildParseReceiptUrlPrompt = (
     pageText: string

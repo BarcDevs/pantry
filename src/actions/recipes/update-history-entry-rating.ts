@@ -5,14 +5,11 @@ import { z } from 'zod'
 import type { Recipe, RecipeHistoryEntry }
     from '@/types/recipe'
 
-import { requireUserId }
-    from '@/lib/auth/require-user-id'
+import { requireUserId } from '@/lib/auth/require-user-id'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
-import { objectIdSchema }
-    from '@/lib/object-id-schema'
-import { computeAverageRating }
-    from '@/lib/recipes/compute-average-rating'
+import { objectIdSchema } from '@/lib/object-id-schema'
+import { computeAverageRating } from '@/lib/recipes/compute-average-rating'
 
 import { RecipeModel } from '@/models/recipe.model'
 

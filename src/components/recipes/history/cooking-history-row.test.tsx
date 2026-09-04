@@ -4,8 +4,7 @@ import {
     screen
 } from '@testing-library/react'
 
-import { CookingHistoryRowItem }
-    from './cooking-history-row'
+import { CookingHistoryRowItem } from './cooking-history-row'
 
 const row = {
     recipeId: 'r1',
