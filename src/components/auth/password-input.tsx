@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import type { ComponentProps } from 'react'
 
+import { LtrInput } from '@/components/shared/LtrInput'
 import { Input } from '@/components/ui/input'
 
 import { cn } from '@/lib/utils'
@@ -19,10 +20,9 @@ export const PasswordInput = ({
 
     return (
         <div className={'relative'}>
-            <Input
+            <LtrInput
                 type={isVisible ? 'text' : 'password'}
-                dir={'ltr'}
-                className={cn('text-left pr-3 pl-9', className)}
+                className={cn('pr-3 pl-9', className)}
                 {...props}
             />
             <button

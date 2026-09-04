@@ -5,8 +5,8 @@ import type { UseFormReturn } from 'react-hook-form'
 import { Button } from '@/components/shared/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
+import { LtrInput } from '@/components/shared/LtrInput'
 import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 
 import { authTexts } from '@/constants/texts/auth'
 
@@ -33,11 +33,9 @@ export const ForgotPasswordRequestFields = ({
                 name={'email'}
                 label={authTexts.email}
                 render={(field) => (
-                    <Input
+                    <LtrInput
                         {...field}
                         type={'email'}
-                        dir={'ltr'}
-                        className={'text-left'}
                     />
                 )}
             />
