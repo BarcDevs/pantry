@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import {
     FOOD_TYPES,
+    ITEM_SOURCES,
     STORAGE_LOCATIONS,
     UNITS
 } from '@/types/enums'
@@ -35,6 +36,7 @@ const addPantryItemSchema = z.object({
     expiryDate: z.date().optional(),
     notes: z.string().max(500).optional(),
     storageSuggestion: storageSuggestionSchema,
+    source: z.enum(ITEM_SOURCES).optional(),
     mergeWithId: z.string().optional(),
     forceSeparate: z.boolean().optional()
 })
@@ -125,7 +127,8 @@ export const addPantryItems = async (
                 notes: entry.notes,
                 storageSuggestion: (
                     entry.storageSuggestion ?? null
-                )
+                ),
+                source: entry.source
             }
         )
 

@@ -87,6 +87,16 @@ export const PantryView = ({
                     subtitle={pantryTexts.emptySub}
                     ctaHref={routes.add}
                     ctaLabel={pantryTexts.addItem}
+                    secondaryActions={[
+                        {
+                            href: routes.addReceipt,
+                            label: pantryTexts.scanReceipt
+                        },
+                        {
+                            href: routes.addPaste,
+                            label: pantryTexts.pasteReceipt
+                        }
+                    ]}
                 />
             </div>
         )

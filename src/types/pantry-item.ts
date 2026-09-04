@@ -49,6 +49,7 @@ export type AddPantryItemInput = {
     expiryDate?: Date
     notes?: string
     storageSuggestion?: StorageSuggestion | null
+    source?: ItemSource
     mergeWithId?: string
     forceSeparate?: boolean
 }

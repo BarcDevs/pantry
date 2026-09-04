@@ -6,6 +6,8 @@ export const routes = {
     forgotPassword: '/forgot-password',
     pantry: '/pantry',
     add: '/add',
+    addReceipt: '/add/receipt',
+    addPaste: '/add/paste',
     generate: '/generate',
     generateResult: '/generate/result',
     recipes: '/recipes',
