@@ -51,10 +51,10 @@
     --size-sidebar: 248px;
 
     /* Shadow */
-    --shadow-card: 0 3px 10px -8px rgba(0, 0, 0, .2);
-    --shadow-button: 0 8px 18px -8px rgba(63, 125, 78, .8);
-    --shadow-button-ember: 0 8px 18px -8px rgba(224, 138, 60, .9);
-    --shadow-sheet: 0 12px 28px -10px rgba(0, 0, 0, .5);
+    --shadow-card: 0 2px 8px -8px rgba(0, 0, 0, .12);
+    --shadow-button: 0 4px 10px -6px rgba(63, 125, 78, .45);
+    --shadow-button-ember: 0 4px 10px -6px rgba(224, 138, 60, .5);
+    --shadow-sheet: 0 8px 20px -10px rgba(0, 0, 0, .35);
 
     /* Typography */
     --text-display: 32px;
