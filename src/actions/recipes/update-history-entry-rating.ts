@@ -2,12 +2,15 @@
 
 import { z } from 'zod'
 
-import type { Recipe, RecipeHistoryEntry } from '@/types/recipe'
+import type { Recipe, RecipeHistoryEntry }
+    from '@/types/recipe'
 
-import { requireUserId } from '@/lib/auth/require-user-id'
+import { requireUserId }
+    from '@/lib/auth/require-user-id'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
-import { objectIdSchema } from '@/lib/object-id-schema'
+import { objectIdSchema }
+    from '@/lib/object-id-schema'
 import { computeAverageRating }
     from '@/lib/recipes/compute-average-rating'
 
@@ -15,12 +18,14 @@ import { RecipeModel } from '@/models/recipe.model'
 
 const ratingSchema = z.number().min(1).max(5).nullable()
 
-export const cookRecipe = async (
+export const updateHistoryEntryRating = async (
     id: string,
+    entryId: string,
     rating: number | null
 ): Promise<Recipe> => {
     const userId = await requireUserId()
     const recipeId = objectIdSchema.parse(id)
+    const parsedEntryId = z.string().min(1).parse(entryId)
     const parsedRating = ratingSchema.parse(rating)
 
     await connectDB()
@@ -31,14 +36,18 @@ export const cookRecipe = async (
     }).lean<{ history: RecipeHistoryEntry[] } | null>()
     if (!recipe) throw new Error('Recipe not found')
 
-    const history: RecipeHistoryEntry[] = [
-        ...recipe.history,
-        {
-            entryId: crypto.randomUUID(),
-            cookedAt: new Date(),
-            rating: parsedRating
-        }
-    ]
+    const entryExists = recipe.history.some(
+        (entry) => entry.entryId === parsedEntryId
+    )
+    if (!entryExists) throw new Error('History entry not found')
+
+    const history: RecipeHistoryEntry[] = recipe.history.map(
+        (entry) => (
+            entry.entryId === parsedEntryId
+                ? { ...entry, rating: parsedRating }
+                : entry
+        )
+    )
 
     const updated = await RecipeModel.findOneAndUpdate(
         { _id: recipeId, userId },
