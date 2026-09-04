@@ -10,3 +10,8 @@ export type ImageInput = {
     base64: string
     mimeType: string
 }
+
+export type ParseReceiptUrlResult = {
+    items: ScannedReceiptItem[]
+    fallbackToManual: boolean
+}
