@@ -47,8 +47,10 @@ lands in exactly one place instead of being copy-pasted (and drifting) across ev
 - **`LtrInput`** (`src/components/shared/LtrInput.tsx`) wraps `ui/input` to bake in `dir="ltr"` + `text-left` for
   Latin-script fields (email, verification codes) inside the otherwise-RTL app — was copy-pasted across 5 auth forms
   before being extracted.
-- **`Toggle`** (`src/components/shared/Toggle.tsx`) wraps `ui/switch` instead of a hand-rolled `<button role="switch">`,
-  recoloring the checked state to the app's green via a className prop rather than editing the vendor file.
+- **`Toggle`** (`src/components/shared/Toggle.tsx`) is a hand-rolled `<button role="switch">`, *not* a wrapper around
+  `ui/switch` — shadcn's `Switch` (Radix-based) has a known visual bug seen across other projects, so this is a
+  deliberate exception to "always prefer the shadcn equivalent." It's still the single reusable component every
+  toggle in the app imports; the exception is only about what it's built on internally.
 
 ### twMerge and custom theme tokens — a related gotcha
 

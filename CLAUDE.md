@@ -61,6 +61,8 @@ Never scatter the same kind of logic across `src/actions/` (or elsewhere) file b
 
 When adding or editing code, check for this scatter pattern and centralize proactively — don't wait for a dedicated cleanup pass. Don't force abstraction on one-off or superficially-similar code.
 
+**Read `WORKFLOW.md` before wrapping or customizing a `src/components/ui/` (shadcn) component.** It documents the reusable-wrapper pattern (build one `src/components/shared/` wrapper as the sole consumer of a `ui/` primitive, drive differences through props) and the tailwind-merge custom-token gotcha. Follow it exactly.
+
 ## Code Style
 
 Rules in `CORE_RULES.md`. Non-negotiable — follow exactly.
