@@ -40,5 +40,8 @@ export const onboardingTexts = {
         dairyFree: { emoji: '🥛', label: 'ללא חלב' },
         kosher: { emoji: '✡️', label: 'כשר' },
         lowCarb: { emoji: '🥩', label: 'דל פחמימות' }
-    }
+    },
+    dietaryCustomPlaceholder: 'העדפה אחרת',
+    dietaryCustomAdd: 'הוספה',
+    dietaryCustomRemove: 'הסרת העדפה'
 } as const
