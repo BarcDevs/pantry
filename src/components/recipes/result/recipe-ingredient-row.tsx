@@ -2,6 +2,8 @@ import type { RecipeIngredient } from '@/types/recipe'
 
 import { cn } from '@/lib/utils'
 
+import { pantryTexts } from '@/constants/texts/pantry'
+
 type RecipeIngredientRowProps = {
     ingredient: RecipeIngredient
 }
@@ -20,7 +22,7 @@ export const RecipeIngredientRow = ({
             {ingredient.name}
         </span>
         <span className={'text-label text-ink-3'}>
-            {`${ingredient.quantity} ${ingredient.unit}`}
+            {`${ingredient.quantity} ${pantryTexts.unitLabels[ingredient.unit]}`}
         </span>
     </div>
 )

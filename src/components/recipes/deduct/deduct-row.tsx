@@ -5,6 +5,7 @@ import { DeductZeroWarning } from '@/components/recipes/deduct/deduct-zero-warni
 
 import { cn } from '@/lib/utils'
 
+import { pantryTexts } from '@/constants/texts/pantry'
 import { recipesTexts } from '@/constants/texts/recipes'
 
 type DeductRowProps = {
@@ -41,12 +42,12 @@ export const DeductRow = ({
                             isZero ? 'text-status-red-fg' : 'text-ink-3'
                         )}
                     >
-                        {`${recipesTexts.deduct.remainingLabel}: ${Math.max(0, remaining)} ${row.unit}`}
+                        {`${recipesTexts.deduct.remainingLabel}: ${Math.max(0, remaining)} ${pantryTexts.unitLabels[row.unit]}`}
                     </div>
                 </div>
                 <DeductRowStepper
                     used={row.used}
-                    unit={row.unit}
+                    unit={pantryTexts.unitLabels[row.unit]}
                     onMinus={onMinus}
                     onPlus={onPlus}
                 />

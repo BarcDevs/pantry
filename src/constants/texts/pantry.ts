@@ -19,7 +19,7 @@ export const pantryTexts = {
         kg: 'ק"ג',
         g: 'גרם',
         L: 'ליטר',
-        ml: 'מ"ל',
+        ml: 'מל',
         units: 'יחידות'
     },
     expiredLabel: 'פג תוקף',
