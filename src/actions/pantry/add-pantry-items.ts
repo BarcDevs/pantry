@@ -18,7 +18,7 @@ import { requireUserId }
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
 import { normalizeName }
-    from '@/lib/pantry/normalize-name'
+    from '@/lib/normalize-name'
 import { storageSuggestionSchema }
     from '@/lib/pantry/storage-suggestion-schema'
 

@@ -61,6 +61,8 @@ export type Recipe = RecipeDoc & MongoDbObject
 
 export type RecipeLibraryFilter = 'all' | 'can-cook' | 'favorites'
 
+export type RecipeSortOption = 'recent' | 'rating' | 'title'
+
 export type RefineRecipeInput = {
     recipe: RecipeDoc
     instruction: string

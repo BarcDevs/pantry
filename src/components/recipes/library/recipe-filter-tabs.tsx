@@ -32,7 +32,7 @@ export const RecipeFilterTabs = ({
     value,
     onChange
 }: RecipeFilterTabsProps) => (
-    <div className={'mb-4.5 flex flex-wrap gap-2'}>
+    <div className={'flex flex-wrap gap-2'}>
         {tabs.map((tab) => (
             <Button
                 key={tab.key}

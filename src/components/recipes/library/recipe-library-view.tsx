@@ -6,6 +6,7 @@ import { RecipeFilterTabs } from '@/components/recipes/library/recipe-filter-tab
 import { RecipeGrid } from '@/components/recipes/library/recipe-grid'
 import { RecipeSearchInput } from '@/components/recipes/library/recipe-search-input'
 import { EmptyStateCard } from '@/components/shared/EmptyStateCard'
+import { SortSelect } from '@/components/shared/SortSelect'
 
 import { useRecipeLibrary } from '@/hooks/use-recipe-library'
 
@@ -22,6 +23,8 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
         setQuery,
         filter,
         setFilter,
+        sort,
+        setSort,
         filteredRecipes,
         toggleFavorite
     } = useRecipeLibrary(recipes)
@@ -45,10 +48,21 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                 value={query}
                 onChange={setQuery}
             />
-            <RecipeFilterTabs
-                value={filter}
-                onChange={setFilter}
-            />
+            <div className={'mb-4.5 flex flex-wrap items-center justify-between gap-2'}>
+                <RecipeFilterTabs
+                    value={filter}
+                    onChange={setFilter}
+                />
+                <SortSelect
+                    value={sort}
+                    onChange={setSort}
+                    options={[
+                        { value: 'recent', label: recipesTexts.library.sortRecent },
+                        { value: 'rating', label: recipesTexts.library.sortRating },
+                        { value: 'title', label: recipesTexts.library.sortTitle }
+                    ]}
+                />
+            </div>
             {filteredRecipes.length === 0 ? (
                 <p className={'py-10 text-center text-body text-ink-3'}>
                     {recipesTexts.library.noResults}

@@ -108,7 +108,10 @@ export const recipesTexts = {
         emptySub: 'צרו מתכון חדש כדי להתחיל',
         noResults: 'לא נמצאו מתכונים תואמים',
         generateCta: 'יצירת מתכון',
-        favoriteToggleError: 'עדכון המועדפים נכשל'
+        favoriteToggleError: 'עדכון המועדפים נכשל',
+        sortRecent: 'החדשים ביותר',
+        sortRating: 'דירוג גבוה',
+        sortTitle: 'לפי שם (א-ב)'
     },
     cook: {
         stepLabel: 'שלב',
