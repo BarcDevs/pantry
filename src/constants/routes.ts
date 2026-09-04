@@ -11,6 +11,7 @@ export const routes = {
     generate: '/generate',
     generateResult: '/generate/result',
     recipes: '/recipes',
+    recipeImport: '/recipes/import',
     recipeDetail: (id: string) => `/recipes/${id}`,
     recipeCook: (id: string) => `/recipes/${id}/cook`,
     recipeDeduct: (id: string) => `/recipes/${id}/deduct`,

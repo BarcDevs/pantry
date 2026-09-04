@@ -4,6 +4,7 @@ import type { Recipe } from '@/types/recipe'
 
 import { RecipeFilterTabs } from '@/components/recipes/library/recipe-filter-tabs'
 import { RecipeGrid } from '@/components/recipes/library/recipe-grid'
+import { RecipeImportLink } from '@/components/recipes/library/recipe-import-link'
 import { RecipeSearchInput } from '@/components/recipes/library/recipe-search-input'
 import { EmptyStateCard } from '@/components/shared/EmptyStateCard'
 import { SortSelect } from '@/components/shared/SortSelect'
@@ -41,9 +42,12 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
 
     return (
         <div>
-            <p className={'mb-5.5 text-body text-ink-3'}>
-                {recipesTexts.library.subtitle(recipes.length)}
-            </p>
+            <div className={'mb-5.5 flex items-center justify-between gap-2'}>
+                <p className={'text-body text-ink-3'}>
+                    {recipesTexts.library.subtitle(recipes.length)}
+                </p>
+                <RecipeImportLink/>
+            </div>
             <RecipeSearchInput
                 value={query}
                 onChange={setQuery}

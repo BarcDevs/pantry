@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/Button'
+import { SourceTabs } from '@/components/shared/SourceTabs'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -11,20 +11,10 @@ export const ReceiptSourceTabs = ({
     tab,
     onChange
 }: ReceiptSourceTabsProps) => (
-    <div className={'flex gap-2'}>
-        <Button
-            type={'button'}
-            variant={tab === 'url' ? 'default' : 'outline'}
-            onClick={() => onChange('url')}
-        >
-            {pantryTexts.receiptReview.urlTab}
-        </Button>
-        <Button
-            type={'button'}
-            variant={tab === 'text' ? 'default' : 'outline'}
-            onClick={() => onChange('text')}
-        >
-            {pantryTexts.receiptReview.textTab}
-        </Button>
-    </div>
+    <SourceTabs
+        tab={tab}
+        urlLabel={pantryTexts.receiptReview.urlTab}
+        textLabel={pantryTexts.receiptReview.textTab}
+        onChange={onChange}
+    />
 )

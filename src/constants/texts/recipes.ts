@@ -148,5 +148,33 @@ export const recipesTexts = {
         finishWithRating: 'סיום ושמירה בהיסטוריה',
         finishWithoutRating: 'שמור להיסטוריה בלי דירוג',
         rateError: 'שמירת הדירוג נכשלה, נסה שוב'
+    },
+    history: {
+        title: 'היסטוריית בישול',
+        subtitle: 'הקישו על הכוכבים לעדכון הדירוג',
+        editHint: 'שינוי דירוג',
+        empty: 'עדיין לא בישלתם',
+        emptyHint: 'מתכונים שתסיימו לבשל יופיעו כאן.',
+        updateError: 'עדכון הדירוג נכשל, נסה שוב'
+    },
+    import: {
+        title: 'ייבוא מתכון',
+        urlTab: 'קישור',
+        textTab: 'טקסט',
+        urlLabel: 'קישור למתכון',
+        urlPlaceholder: 'https://...',
+        urlSubmit: 'ייבוא',
+        textLabel: 'הדביקו כאן את המתכון',
+        textPlaceholder: 'שם המתכון, מצרכים, אופן ההכנה...',
+        textSubmit: 'ייבוא',
+        importing: 'מייבא...',
+        importError: 'הייבוא נכשל, נסו קישור אחר או הדביקו כטקסט',
+        reviewTitle: 'סקירת המתכון',
+        titleLabel: 'שם המתכון',
+        ingredientsLabel: 'מצרכים (שורה לכל מצרך)',
+        stepsLabel: 'שלבי הכנה (שורה לכל שלב)',
+        save: 'שמירה למתכונים שלי',
+        saveError: 'שמירת המתכון נכשלה, נסה שוב',
+        saveSuccess: 'המתכון נשמר'
     }
 } as const
