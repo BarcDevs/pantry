@@ -47,7 +47,9 @@ export const TypePickerDialog = ({
                     )}
                 >
                     {pantryTexts.foodTypeLabels[type]}
-                    <span>{foodTypeEmoji[type]}</span>
+                    <span>
+                        {foodTypeEmoji[type]}
+                    </span>
                 </Button>
             ))}
         </div>

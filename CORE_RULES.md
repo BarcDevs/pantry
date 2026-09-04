@@ -52,6 +52,7 @@
 - Client-form zod schemas (react-hook-form resolvers) always live in `src/schemas/*.ts`, never inline in the hook file - the hook imports the schema and its inferred `*Values` type. Server-action input-validation schemas are exempt (stay local to the action, private/unexported)
 
 ## JSX Logic
+- Nested content on new lines, EXCEPT a single tiny expression child (~1-5 chars inside the braces, e.g. `{x}`, `{n}`) - keep that inline; anything longer (e.g. `{displayName}`) still breaks
 - Never use IIFEs in JSX - compute values in variables before `return`
 - Closing `)` of a multi-line callback stays inline with the next chained method: `.map(...).find(Boolean)` not `.map(...)\n.find(Boolean)`
 - Never leave a lone `)` and lone `: (` (or `? (`) on adjacent lines by themselves - stack them on one line: `) : (` not `)\n: (`

@@ -44,7 +44,9 @@ export const ReceiptUrlForm = ({
         {error && (
             <div className={'flex flex-col gap-2 text-label text-status-red-fg'}>
                 <span>{error}</span>
-                <span>{pantryTexts.receiptReview.urlFallback}</span>
+                <span>
+                    {pantryTexts.receiptReview.urlFallback}
+                </span>
                 <Link
                     href={routes.add}
                     className={'font-bold text-green underline'}

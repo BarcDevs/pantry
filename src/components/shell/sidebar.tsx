@@ -80,7 +80,9 @@ export const Sidebar = () => {
                 <div className={'flex size-10 items-center justify-center rounded-md bg-green text-surface'}>
                     <PantryIcon/>
                 </div>
-                <span className={'font-display text-heading font-bold'}>{commonTexts.appName}</span>
+                <span className={'font-display text-heading font-bold'}>
+                    {commonTexts.appName}
+                </span>
             </div>
 
             <nav className={'flex flex-col gap-1'}>

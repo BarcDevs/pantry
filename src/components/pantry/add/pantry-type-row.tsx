@@ -28,7 +28,9 @@ export const PantryTypeRow = ({
                     </span>
                     <span className={'flex items-center gap-1.5 rounded-full border border-border-2 bg-surface px-2.75 py-1.25 font-bold text-label text-ink'}>
                         {pantryTexts.foodTypeLabels[value]}
-                        <span>{foodTypeEmoji[value]}</span>
+                        <span>
+                            {foodTypeEmoji[value]}
+                        </span>
                     </span>
                     <Button
                         type={'button'}
