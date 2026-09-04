@@ -86,7 +86,6 @@ export const EditItemDialog = ({
                             canSuggest && (
                                 suggestion
                                 || suggestionFailed
-                                || isSuggesting
                             )
                         ) ? (
                             <StorageSuggestionHint

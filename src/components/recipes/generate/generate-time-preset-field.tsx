@@ -46,7 +46,7 @@ export const GenerateTimePresetField = <T extends FieldValues>({
                     <FormLabel>
                         {label}
                     </FormLabel>
-                    <div className={'grid grid-cols-4 gap-2'}>
+                    <div className={'flex flex-wrap gap-2'}>
                         {TIME_PRESETS.map((preset) => (
                             <SelectableOption
                                 key={preset}

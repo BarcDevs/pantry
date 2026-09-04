@@ -129,7 +129,7 @@ export const useEditItemForm = ({
                     expiryDate: values.expiryDate
                         ? new Date(values.expiryDate)
                         : undefined,
-                    notes: values.notes.trim() || undefined,
+                    notes: values?.notes.trim(),
                     storageSuggestion: suggestion
                 })
                 toast.success(pantryTexts.editForm.saveSuccess)

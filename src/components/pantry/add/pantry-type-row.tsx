@@ -34,7 +34,7 @@ export const PantryTypeRow = ({
                         type={'button'}
                         variant={'ghost'}
                         onClick={() => setIsPickerOpen(true)}
-                        className={'ms-auto h-auto shrink-0 gap-1 p-0 font-bold text-caption text-green'}
+                        className={'ms-auto h-auto shrink-0 gap-1 p-0 font-bold text-caption text-green shadow-none'}
                     >
                         {pantryTexts.addForm.typeRowChange}
                     </Button>
@@ -44,7 +44,7 @@ export const PantryTypeRow = ({
                     type={'button'}
                     variant={'ghost'}
                     onClick={() => setIsPickerOpen(true)}
-                    className={'h-auto w-fit p-0 font-bold text-caption text-ink-3'}
+                    className={'h-auto w-fit p-0 font-bold text-caption text-ink-3 shadow-none'}
                 >
                     {pantryTexts.addForm.typeRowAdd}
                 </Button>

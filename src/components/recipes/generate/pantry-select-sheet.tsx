@@ -1,11 +1,14 @@
 'use client'
 
+import { XIcon } from 'lucide-react'
+
 import type { PantryItem } from '@/types/pantry-item'
 
 import { PantrySelectRow } from '@/components/recipes/generate/pantry-select-row'
 import { Button } from '@/components/shared/Button'
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogHeader,
     DialogTitle
@@ -38,11 +41,19 @@ export const PantrySelectSheet = ({
             open={open}
             onOpenChange={onOpenChange}
         >
-            <DialogContent className={'flex max-h-[90vh] flex-col gap-0 rounded-2xl bg-canvas p-5.5'}>
-                <DialogHeader>
+            <DialogContent
+                showCloseButton={false}
+                className={'flex max-h-[90vh] flex-col gap-0 rounded-2xl bg-canvas p-5.5'}
+            >
+                <DialogHeader className={'flex-row items-center justify-between gap-3 space-y-0 py-px'}>
                     <DialogTitle className={'font-display text-heading font-bold text-ink'}>
                         {texts.title}
                     </DialogTitle>
+                    <DialogClose
+                        className={'flex size-8 shrink-0 items-center justify-center rounded-full border border-border-2 text-ink-4'}
+                    >
+                        <XIcon size={16}/>
+                    </DialogClose>
                 </DialogHeader>
                 <div className={'mb-4 flex items-center justify-between gap-2.5'}>
                     <span className={'text-caption text-ink-3'}>
@@ -52,7 +63,7 @@ export const PantrySelectSheet = ({
                         type={'button'}
                         variant={'ghost'}
                         onClick={onToggleAll}
-                        className={'h-auto shrink-0 p-0 font-bold text-caption text-green'}
+                        className={'h-auto shrink-0 p-0 font-bold text-caption text-green shadow-none'}
                     >
                         {texts.toggleAll(allSelected)}
                     </Button>

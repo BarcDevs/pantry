@@ -5,7 +5,7 @@ import { DietaryPreferenceChip } from '@/components/onboarding/dietary-preferenc
 import { dietaryOptionKeys, toggleDietaryPreference } from '@/lib/dietary-preferences'
 
 type DietaryPreferencesPickerProps = {
-    title: ReactNode
+    title?: ReactNode
     value: string[]
     onChange: (value: string[]) => void
     footer?: ReactNode

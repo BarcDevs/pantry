@@ -32,11 +32,11 @@ export const GenerateCountStepperField = <T extends FieldValues>({
         control={control}
         name={name}
         render={({ field }) => (
-            <FormItem className={'rounded-lg border border-border-2 bg-surface p-4'}>
+            <FormItem>
                 <FormLabel>
                     {label}
                 </FormLabel>
-                <div className={'flex items-center justify-between'}>
+                <div className={'flex w-fit items-center gap-4'}>
                     <Button
                         type={'button'}
                         variant={'ghost'}

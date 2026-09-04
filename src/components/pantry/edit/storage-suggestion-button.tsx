@@ -20,9 +20,12 @@ export const StorageSuggestionButton = ({
         variant={'outline'}
         disabled={disabled || isLoading}
         onClick={onClick}
-        className={'w-full border-dashed border-soft-green-border bg-soft-green-bg font-bold text-caption text-green shadow-none hover:bg-soft-green-bg'}
+        className={'w-full justify-center border-dashed border-soft-green-border bg-soft-green-bg font-bold text-caption text-green shadow-none hover:bg-soft-green-bg'}
     >
-        <SparklesIcon size={14}/>
+        <SparklesIcon
+            size={14}
+            className={'text-ember'}
+        />
         {pantryTexts.addForm.suggestionTitle}
         {isLoading && (
             <span className={'size-3.25 animate-spin rounded-full border-2 border-soft-green-border border-t-green'}/>

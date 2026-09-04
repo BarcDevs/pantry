@@ -4,6 +4,7 @@ import { MEAL_TYPES } from '@/types/enums'
 
 import { GenerateChipField } from '@/components/recipes/generate/generate-chip-field'
 import { GenerateCountStepperField } from '@/components/recipes/generate/generate-count-stepper-field'
+import { GenerateFieldCard } from '@/components/recipes/generate/generate-field-card'
 import { GenerateTimePresetField } from '@/components/recipes/generate/generate-time-preset-field'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -20,25 +21,33 @@ export const GenerateConfigFields = ({
     control
 }: GenerateConfigFieldsProps) => (
     <div className={'flex flex-col gap-4'}>
-        <GenerateCountStepperField
-            control={control}
-            name={'mealCount'}
-            label={texts.mealCountLabel}
-            unitLabel={texts.mealCountUnit}
-        />
-        <GenerateTimePresetField
-            control={control}
-            name={'maxTime'}
-            label={texts.maxTimeLabel}
-            presetSuffix={texts.maxTimePresetSuffix}
-            customLabel={texts.maxTimeCustomLabel}
-        />
-        <GenerateChipField
-            control={control}
-            name={'mealType'}
-            label={texts.mealTypeLabel}
-            values={MEAL_TYPES}
-            optionLabels={texts.mealTypeOptions}
-        />
+        <div className={'grid grid-cols-3 gap-3'}>
+            <GenerateFieldCard>
+                <GenerateCountStepperField
+                    control={control}
+                    name={'mealCount'}
+                    label={texts.mealCountLabel}
+                    unitLabel={texts.mealCountUnit}
+                />
+            </GenerateFieldCard>
+            <GenerateFieldCard>
+                <GenerateTimePresetField
+                    control={control}
+                    name={'maxTime'}
+                    label={texts.maxTimeLabel}
+                    presetSuffix={texts.maxTimePresetSuffix}
+                    customLabel={texts.maxTimeCustomLabel}
+                />
+            </GenerateFieldCard>
+            <GenerateFieldCard>
+                <GenerateChipField
+                    control={control}
+                    name={'mealType'}
+                    label={texts.mealTypeLabel}
+                    values={MEAL_TYPES}
+                    optionLabels={texts.mealTypeOptions}
+                />
+            </GenerateFieldCard>
+        </div>
     </div>
 )

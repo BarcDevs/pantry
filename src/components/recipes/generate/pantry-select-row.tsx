@@ -2,8 +2,10 @@ import { CheckIcon } from 'lucide-react'
 
 import type { PantryItem } from '@/types/pantry-item'
 
+import { PantryExpiryChip } from '@/components/pantry/pantry-expiry-chip'
 import { Button } from '@/components/shared/Button'
 
+import { getExpiryStatus } from '@/lib/pantry/expiry-status'
 import { cn } from '@/lib/utils'
 
 import { pantryTexts } from '@/constants/texts/pantry'
@@ -45,7 +47,7 @@ export const PantrySelectRow = ({
         <span className={'text-body'}>
             {item.emoji ?? '🥫'}
         </span>
-        <span className={'flex min-w-0 flex-col'}>
+        <span className={'flex min-w-0 flex-1 flex-col'}>
             <span className={'truncate font-bold text-body text-ink'}>
                 {item.name}
             </span>
@@ -53,5 +55,6 @@ export const PantrySelectRow = ({
                 {`${item.quantity} ${pantryTexts.unitLabels[item.unit]} · ${pantryTexts.storageLabels[item.storage]}`}
             </span>
         </span>
+        <PantryExpiryChip status={getExpiryStatus(item.expiryDate)}/>
     </Button>
 )

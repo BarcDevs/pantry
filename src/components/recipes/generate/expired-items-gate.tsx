@@ -34,9 +34,9 @@ export const ExpiredItemsGate = ({
                 {recipesTexts.generate.expiredGateRemove}
             </Button>
             <Button
-                variant={'ghost'}
+                variant={'outline'}
                 onClick={onContinueAnyway}
-                className={'flex-1'}
+                className={'flex-1 shadow-none'}
             >
                 {recipesTexts.generate.expiredGateContinue}
             </Button>

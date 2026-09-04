@@ -178,7 +178,6 @@ export const useAddItemForm = () => {
                 }
                 toast.success(pantryTexts.addForm.saveSuccess)
                 router.push(routes.pantry)
-                router.refresh()
             } catch (error) {
                 console.error(error)
                 form.setError('root', {

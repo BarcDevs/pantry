@@ -39,6 +39,7 @@ export const recipesTexts = {
         dietaryPreferencesLabel: 'העדפות תזונה',
         dietaryPreferencesEdit: 'עריכה',
         dietaryPreferencesNone: 'ללא העדפות',
+        dietaryPreferencesSave: 'שמירה',
         customInstructionsLabel: 'הוראות מיוחדות (אופציונלי)',
         customInstructionsPlaceholder: 'לדוגמה: ללא גלוטן, בלי בצל',
         pantrySelectionTitle: 'מצרכים מהמזווה',
