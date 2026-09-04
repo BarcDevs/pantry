@@ -53,6 +53,7 @@
     /* Shadow */
     --shadow-card: 0 3px 10px -8px rgba(0, 0, 0, .2);
     --shadow-button: 0 8px 18px -8px rgba(63, 125, 78, .8);
+    --shadow-button-ember: 0 8px 18px -8px rgba(224, 138, 60, .9);
     --shadow-sheet: 0 12px 28px -10px rgba(0, 0, 0, .5);
 
     /* Typography */
@@ -140,6 +141,7 @@
 
     --shadow-card: var(--shadow-card);
     --shadow-button: var(--shadow-button);
+    --shadow-button-ember: var(--shadow-button-ember);
     --shadow-sheet: var(--shadow-sheet);
 
     --text-display: var(--text-display);

@@ -2,37 +2,43 @@
 
 import type { PantryItem } from '@/types/pantry-item'
 
-import { AddItemFields } from '@/components/pantry/add/add-item-fields'
-import { PantryTypeRow } from '@/components/pantry/add/pantry-type-row'
-import { StorageSuggestionHint } from '@/components/pantry/add/storage-suggestion-hint'
-import { DeleteItemDialog } from '@/components/pantry/edit/delete-item-dialog'
+import { AddItemFields }
+    from '@/components/pantry/add/add-item-fields'
+import { PantryTypeRow }
+    from '@/components/pantry/add/pantry-type-row'
+import { StorageSuggestionHint }
+    from '@/components/pantry/add/storage-suggestion-hint'
+import { DeleteItemDialog }
+    from '@/components/pantry/edit/delete-item-dialog'
+import { StorageSuggestionButton }
+    from '@/components/pantry/edit/storage-suggestion-button'
 import { Button } from '@/components/shared/Button'
 import { FormError } from '@/components/shared/form/FormError'
-import { Form } from '@/components/ui/form'
 import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle
-} from '@/components/ui/sheet'
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle
+} from '@/components/ui/dialog'
+import { Form } from '@/components/ui/form'
 
 import { useEditItemForm } from '@/hooks/use-edit-item-form'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
-type EditItemSheetProps = {
+type EditItemDialogProps = {
     item: PantryItem
     onClose: () => void
     onSaved: () => void
     onDeleted: () => void
 }
 
-export const EditItemSheet = ({
+export const EditItemDialog = ({
     item,
     onClose,
     onSaved,
     onDeleted
-}: EditItemSheetProps) => {
+}: EditItemDialogProps) => {
     const {
         form,
         suggestion,
@@ -55,43 +61,48 @@ export const EditItemSheet = ({
 
     const currentStorage = form.watch('storage')
     const currentType = form.watch('type')
+    const name = form.watch('name')
+    const canSuggest = name.trim().length >= 2
 
     return (
-        <Sheet
+        <Dialog
             open
             onOpenChange={(open) => { if (!open) onClose() }}
         >
-            <SheetContent className={'overflow-y-auto p-4'}>
-                <SheetHeader className={'p-0'}>
-                    <SheetTitle>
+            <DialogContent className={'max-h-[85vh] overflow-y-auto'}>
+                <DialogHeader>
+                    <DialogTitle>
                         {pantryTexts.editForm.title}
-                    </SheetTitle>
-                </SheetHeader>
+                    </DialogTitle>
+                </DialogHeader>
                 <Form {...form}>
                     <form
+                        noValidate
                         onSubmit={handleSubmit}
                         className={'flex flex-col gap-4'}
                     >
                         <AddItemFields control={form.control}/>
-                        <Button
-                            type={'button'}
-                            variant={'outline'}
-                            disabled={isSuggesting}
-                            onClick={requestSuggestion}
-                        >
-                            {isSuggesting
-                                ? pantryTexts.editForm.suggesting
-                                : pantryTexts.editForm.suggestButton}
-                        </Button>
-                        {(suggestion || suggestionFailed) && (
+                        {(
+                            canSuggest && (
+                                suggestion
+                                || suggestionFailed
+                                || isSuggesting
+                            )
+                        ) ? (
                             <StorageSuggestionHint
-                                isLoading={false}
+                                isLoading={isSuggesting}
                                 suggestion={suggestion}
                                 suggestionFailed={suggestionFailed}
                                 currentStorage={currentStorage}
                                 onSelectRecommended={applySuggestedStorage}
                                 onApplyExpiry={applySuggestedExpiry}
                                 onRetry={requestSuggestion}
+                            />
+                        ) : (
+                            <StorageSuggestionButton
+                                disabled={!canSuggest}
+                                isLoading={isSuggesting}
+                                onClick={requestSuggestion}
                             />
                         )}
                         <PantryTypeRow
@@ -124,7 +135,7 @@ export const EditItemSheet = ({
                     onConfirm={handleDelete}
                     isDeleting={isDeleting}
                 />
-            </SheetContent>
-        </Sheet>
+            </DialogContent>
+        </Dialog>
     )
 }

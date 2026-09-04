@@ -9,8 +9,8 @@ import type { StorageLocation }
 import type { PantryItem }
     from '@/types/pantry-item'
 
-import { EditItemSheet }
-    from '@/components/pantry/edit/edit-item-sheet'
+import { EditItemDialog }
+    from '@/components/pantry/edit/edit-item-dialog'
 import { PantryEmptyState }
     from '@/components/pantry/pantry-empty-state'
 import { PantryFilterChips }
@@ -113,11 +113,9 @@ export const PantryView = ({
                     />
                 )}
             {editingItem && (
-                <EditItemSheet
+                <EditItemDialog
                     item={editingItem}
-                    onClose={() => (
-                        setEditingItem(null)
-                    )}
+                    onClose={() => setEditingItem(null)}
                     onSaved={() => {
                         setEditingItem(null)
                         router.refresh()

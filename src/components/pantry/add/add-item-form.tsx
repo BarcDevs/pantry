@@ -42,6 +42,7 @@ export const AddItemForm = () => {
     return (
         <Form {...form}>
             <form
+                noValidate
                 onSubmit={handleSubmit}
                 className={'flex flex-col gap-4 rounded-lg border border-border-2 bg-surface p-5'}
             >

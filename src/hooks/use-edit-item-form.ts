@@ -132,6 +132,7 @@ export const useEditItemForm = ({
                     notes: values.notes.trim() || undefined,
                     storageSuggestion: suggestion
                 })
+                toast.success(pantryTexts.editForm.saveSuccess)
                 onSaved()
             } catch (error) {
                 console.error(error)
@@ -148,6 +149,7 @@ export const useEditItemForm = ({
             try {
                 await deletePantryItem(item._id)
                 setConfirmDelete(false)
+                toast.success(pantryTexts.editForm.deleteSuccess)
                 onDeleted()
             } catch (error) {
                 console.error(error)

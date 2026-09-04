@@ -12,7 +12,8 @@ import { Button } from '@/components/shared/Button'
 import {
     FormField,
     FormItem,
-    FormLabel
+    FormLabel,
+    FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
@@ -68,7 +69,7 @@ export const QuantityField = <T extends FieldValues>({
                                 type={'number'}
                                 min={step}
                                 step={step}
-                                className={'text-center'}
+                                className={'text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'}
                                 onChange={(e) => {
                                     const next = Number(e.target.value)
                                     field.onChange(Number.isNaN(next) ? 0 : next)
@@ -85,6 +86,7 @@ export const QuantityField = <T extends FieldValues>({
                                 <PlusIcon/>
                             </Button>
                         </div>
+                        <FormMessage/>
                     </FormItem>
                 )
             }}

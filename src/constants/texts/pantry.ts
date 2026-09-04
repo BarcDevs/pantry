@@ -51,14 +51,16 @@ export const pantryTexts = {
         storageLabel: 'מיקום',
         typeLabel: 'סוג מוצר',
         quantityLabel: 'כמות',
+        quantityError: 'יש להזין כמות חיובית',
         unitLabel: 'יחידה',
         expiryLabel: 'תאריך תפוגה',
-        expiryPlaceholder: 'בחירת תאריך',
+        expiryPlaceholder: 'בחר תאריך',
         suggestionError: 'לא הצלחנו לקבל הצעה',
         suggestionRetry: 'נסה שוב',
         notesLabel: 'הערות (אופציונלי)',
         submit: 'הוספה למזווה',
         submitting: 'מוסיף...',
+        saveSuccess: 'המוצר נוסף למזווה',
         suggestionTitle: 'הצעת אחסון ותפוגה חכמה',
         suggestionMatchTitle: (location: string) => (
             `הבחירה שלך מומלצת לאחסון: ${location}`
@@ -94,15 +96,17 @@ export const pantryTexts = {
         title: 'עריכת מוצר',
         submit: 'שמירת שינויים',
         submitting: 'שומר...',
-        suggestButton: 'קבלת המלצת אחסון',
+        suggestButton: 'קבל המלצת אחסון',
         suggesting: 'בודק המלצת אחסון...',
         saveError: 'שמירת השינויים נכשלה, נסה שוב',
-        deleteButton: 'מחיקת מוצר',
+        saveSuccess: 'השינויים נשמרו',
+        deleteButton: 'מחק מוצר',
         deleting: 'מוחק...',
-        deleteError: 'מחיקת המוצר נכשלה, נסה שוב'
+        deleteError: 'מחיקת המוצר נכשלה, נסה שוב',
+        deleteSuccess: 'המוצר נמחק'
     },
     deleteDialog: {
-        title: 'מחיקת מוצר',
+        title: 'למחוק את המוצר?',
         description: 'הפעולה תמחק את המוצר מהמזווה לצמיתות. לא ניתן לבטל.',
         cancel: 'ביטול',
         confirm: 'מחיקה'
