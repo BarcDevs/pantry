@@ -15,8 +15,8 @@
 - Text: never use `-` character. only the simple hyphen `-` for all text, including classnames and config keys. This avoids encoding issues and ensures consistency across all contexts (JSX, CSS, config, etc.)
 - Use unified imports for module that has many imports
 - Short conditional blocks - never use `{`
-- Don't break single imports to multiple lines unless very long (50+ chars)
-- Never break line around single imports - if import is too long, break before the `from` keyword
+- Don't break single imports to multiple lines - import line length is nearly irrelevant, only break truly excessive lines (~100+ chars)
+- Never break line around single imports - if an import genuinely must break, break before the `from` keyword
 - Don't make line-breaking too strict
 - Always provide informative and self-explanatory filenames and variable names
 - Components with 5+ related props (e.g. a form's field values, or their change handlers): group into a single object prop (e.g. `values`, `handlers`) instead of listing each field individually. Use `group.field` directly at the usage site - don't destructure the group back into individual local names

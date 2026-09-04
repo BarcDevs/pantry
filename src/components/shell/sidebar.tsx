@@ -7,27 +7,18 @@ import type { ReactNode } from 'react'
 
 import { useUser } from '@clerk/nextjs'
 
-import { GenerateIcon }
-    from '@/components/icons/generate-icon'
-import { HistoryIcon }
-    from '@/components/icons/history-icon'
-import { HomeIcon }
-    from '@/components/icons/home-icon'
-import { LibraryIcon }
-    from '@/components/icons/library-icon'
-import { PantryIcon }
-    from '@/components/icons/pantry-icon'
-import { PlusIcon }
-    from '@/components/icons/plus-icon'
-import { NavItem }
-    from '@/components/shell/nav-item'
+import { GenerateIcon } from '@/components/icons/generate-icon'
+import { HistoryIcon } from '@/components/icons/history-icon'
+import { HomeIcon } from '@/components/icons/home-icon'
+import { LibraryIcon } from '@/components/icons/library-icon'
+import { PantryIcon } from '@/components/icons/pantry-icon'
+import { PlusIcon } from '@/components/icons/plus-icon'
+import { NavItem } from '@/components/shell/nav-item'
 
-import { useIsChromeHidden }
-    from '@/hooks/use-is-chrome-hidden'
+import { useIsChromeHidden } from '@/hooks/use-is-chrome-hidden'
 
 import { routes } from '@/constants/routes'
-import { commonTexts }
-    from '@/constants/texts/common'
+import { commonTexts } from '@/constants/texts/common'
 
 type SidebarNavItem = {
     href: string
