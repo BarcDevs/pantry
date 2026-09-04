@@ -30,7 +30,7 @@ export const recipesTexts = {
         sourceGroupDescription: 'קבעו מאיפה יגיע המתכון וכמה מדויקת ההתאמה למלאי.',
         allowAiGenerationHint: {
             true: 'אם אין מתכון מתאים ברשת, ה-AI ייצור מתכון חדש שמותאם למזווה.',
-            false: 'יוצגו רק מתכונים ממקורות ברשת. אם אין התאמה — נציג "לא נמצא מתכון".'
+            false: 'יוצגו רק מתכונים ממקורות ברשת. אם אין התאמה - נציג "לא נמצא מתכון".'
         },
         matchStrictnessHint: {
             strict: 'המתכון יתבסס כמעט רק על המצרכים שכבר נמצאים במלאי.',
@@ -46,7 +46,7 @@ export const recipesTexts = {
         pantrySelectionAll: (count: number) => `כל הפריטים (${count})`,
         pantrySelectionPartial: (selected: number, total: number) => `${selected} מתוך ${total} נבחרו`,
         pantrySelectionEdit: 'בחירה',
-        sparsePantryWarning: 'פחות מ-5 פריטים נבחרו — המתכון עלול להיות פחות מגוון',
+        sparsePantryWarning: 'פחות מ-5 פריטים נבחרו - המתכון עלול להיות פחות מגוון',
         expiredGateTitle: 'חלק מהפריטים שנבחרו פגי תוקף',
         expiredGateDescription: 'הסירו אותם מהבחירה או המשיכו בכל זאת',
         expiredGateContinue: 'המשך בכל זאת',
@@ -90,7 +90,7 @@ export const recipesTexts = {
     detail: {
         ratingTitle: 'דירוג המתכון',
         ratingWithHistory: (cookCount: number) => `ממוצע מתוך ${cookCount} בישולים`,
-        ratingNoHistory: 'עדיין לא בושל — אין דירוג',
+        ratingNoHistory: 'עדיין לא בושל - אין דירוג',
         tagsLabel: 'תגיות',
         tagsPlaceholder: 'הוספת תגית...',
         tagsUpdateError: 'עדכון התגיות נכשל',
@@ -124,18 +124,18 @@ export const recipesTexts = {
         title: 'בתיאבון!',
         description: 'כמה השתמשתם מכל מצרך? עדכנו את הכמויות ונעדכן את המזווה בהתאם.',
         remainingLabel: 'נשארו',
-        zeroWarning: 'נגמר במזווה — מה לעשות?',
+        zeroWarning: 'נגמר במזווה - מה לעשות?',
         keepAtZero: 'השאר ברשימה (0)',
         deleteFromPantry: 'מחק מהמזווה',
         confirm: 'אישור ועדכון המזווה',
-        skip: 'דלג — השאר את המזווה ללא שינוי',
+        skip: 'דלג - השאר את המזווה ללא שינוי',
         deductError: 'עדכון המזווה נכשל, נסה שוב',
         chooseRequired: 'יש לבחור השאר או מחק עבור פריטים שנגמרו'
     },
     rate: {
         title: 'איך יצא?',
         descriptionPrefix: 'דרגו את',
-        descriptionSuffix: '— נשמור אותו בהיסטוריית הבישול שלכם.',
+        descriptionSuffix: '- נשמור אותו בהיסטוריית הבישול שלכם.',
         ratingLabels: [
             'דרגו כדי לשמור',
             'לא יצא טוב',

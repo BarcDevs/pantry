@@ -39,7 +39,7 @@ const createAuthedPage = async (browser: Browser): Promise<Page> => {
 
 test.describe.configure({ mode: 'serial' })
 
-test.describe('phase 2 — recipes', () => {
+test.describe('phase 2 - recipes', () => {
     test.beforeAll(async ({ browser }) => {
         test.setTimeout(90000)
         const page = await createAuthedPage(browser)
@@ -73,7 +73,7 @@ test.describe('phase 2 — recipes', () => {
         await page.getByRole('button', { name: 'סיום בישול' }).click()
         await page.waitForURL('**/recipes/*/deduct', { timeout: 15000 })
 
-        await page.getByRole('button', { name: 'דלג — השאר את המזווה ללא שינוי' }).click()
+        await page.getByRole('button', { name: 'דלג - השאר את המזווה ללא שינוי' }).click()
         await page.waitForURL('**/recipes/*/rate', { timeout: 15000 })
 
         await page.getByRole('button', { name: '3 כוכבים' }).click()

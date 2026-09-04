@@ -170,7 +170,7 @@ const config = [
             'out/**',
             'build/**',
             'next-env.d.ts',
-            // shadcn/ui — read-only, never lint or auto-format
+            // shadcn/ui - read-only, never lint or auto-format
             'src/components/ui/**'
         ]
     },

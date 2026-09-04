@@ -38,7 +38,7 @@ export const getPantryItems = async (
         (doc) => toPlainDoc<PantryItem>(doc)
     )
 
-    // Mongo's ascending sort puts missing/null expiryDate first, not last —
+    // Mongo's ascending sort puts missing/null expiryDate first, not last -
     // re-partition in JS to get the "nulls last" ordering the PRD requires.
     const withExpiry = items.filter((item) => item.expiryDate)
     const withoutExpiry = items.filter((item) => !item.expiryDate)

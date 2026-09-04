@@ -1,4 +1,4 @@
-# Components — Code Conventions
+# Components - Code Conventions
 
 ## Component structure:
 
@@ -17,7 +17,7 @@
 - Nested content or content wrapped with a jsx/html, ALWAYS on new line
 - Props (2+): Each on new line
 - Single quotes wrapped with curly braces for all props and string values: `prop={'value'}`
-- Fragment children don't work with Recharts — keep component logic separate
+- Fragment children don't work with Recharts - keep component logic separate
 - Never use redundant trailing space after component - ` />` ❌
 - Never break line in single-prop components
 - Never concatenate text with JSX fragments: `{text}{' '}` ❌ → use template strings instead: {`${text} `} ✓
@@ -27,7 +27,7 @@
 
 ## Imports
 
-- Don't use `React.*` types — import directly from react
+- Don't use `React.*` types - import directly from react
 - Order: react → third-party → @/ → relative → styles
 
 ## Props
@@ -36,11 +36,11 @@
 
 ## State & Props
 
-- Avoid prop drilling — use context or composition
+- Avoid prop drilling - use context or composition
 - Use hooks at top of component
 - Extract reusable logic and helper functions to separate files
 - Don't break lines in a middle of a string
-- COMPLETELY IGNORE classnames line-breaking — this means: no `cn()` wrapping, no `+` splitting, no reformatting — touch
+- COMPLETELY IGNORE classnames line-breaking - this means: no `cn()` wrapping, no `+` splitting, no reformatting - touch
   nothing in a `className` value
 - 50-char line limit does NOT apply to `className` strings
 - Avoid redundant linebreaks in lines shorter that the threshold (50-60 chars)
@@ -66,12 +66,12 @@
 - Colors: check `globals.css` @utility blocks first. Only add custom tw color if it doesn't exist. Never hardcode
   colors. Before adding new custom color, verify it's not already defined under different name
 - Always prefer custom brand colors over tw-native colors
-- **TW Shorthand**: always use Tailwind shorthand over verbose equivalents — `shrink-0` not `flex-shrink-0`, `grow` not
+- **TW Shorthand**: always use Tailwind shorthand over verbose equivalents - `shrink-0` not `flex-shrink-0`, `grow` not
   `flex-grow-1`, `basis-auto` not `flex-basis-auto`, `w-1.25` not `w-[5px]`, `size-4` not `w-4 h-4`
 
-### UI components — shadcn first
+### UI components - shadcn first
 
 - Always use shadcn/ui component if one exists (`Button`, `Input`, `Select`, `Badge`, `Card`, etc.)
 - ❌ Never use plain `<button>`, `<input>`, `<select>` when shadcn equivalent available
-- shadcn components live in `src/components/ui/` — read-only, never edit them
+- shadcn components live in `src/components/ui/` - read-only, never edit them
 - After shadcn, check `src/components/shared/` before creating new UI

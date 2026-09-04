@@ -10,7 +10,7 @@ export type ExpiryStatus = {
 const JERUSALEM_TIME_ZONE = 'Asia/Jerusalem'
 export const EXPIRY_SOON_THRESHOLD_DAYS = 7
 
-// Product is Israel-market-only, single timezone — anchor "today" and the
+// Product is Israel-market-only, single timezone - anchor "today" and the
 // target date to Asia/Jerusalem's calendar day, not the runtime's local time,
 // so days-left doesn't shift for users/servers outside that timezone.
 const toJerusalemDateOnly = (date: Date): Date => {

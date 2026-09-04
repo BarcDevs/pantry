@@ -240,7 +240,7 @@ export const useAddItemForm = () => {
         applySuggestedExpiry: () => (
             applySuggestedExpiry(form, effectiveSuggestion)
         ),
-        // Submits the values snapshotted when the type picker opened, not live form state —
+        // Submits the values snapshotted when the type picker opened, not live form state -
         // the picker is modal, so nothing else can change while it's open.
         selectPendingType: (
             type: NonNullable<AddItemFormValues['type']>

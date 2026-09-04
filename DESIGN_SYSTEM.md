@@ -1,4 +1,4 @@
-# Pantry — Design System
+# Pantry - Design System
 
 A warm, kitchen-pantry aesthetic for a Hebrew (RTL), mobile-first PWA. Friendly and homey but precise. All UI is `dir="rtl"`.
 
@@ -51,9 +51,9 @@ Line-height 1.4–1.55 for paragraphs; `text-wrap: pretty` on long copy.
 |---|---|---|
 | green | `#3f7d4e` | Primary buttons, links, active states, toggles-on |
 | green-deep | `#2f5f3b` → `#284f33` | Brand gradient (`linear-gradient(165deg,#3f7d4e,#2f5f3b 60%,#284f33)`) |
-| saffron | `#f4c98a` | Warm accent — logo mark detail, loading spinner top |
+| saffron | `#f4c98a` | Warm accent - logo mark detail, loading spinner top |
 
-### Status (expiry / stock) — `[background, foreground]`
+### Status (expiry / stock) - `[background, foreground]`
 | State | Bg | Fg | Meaning |
 |---|---|---|---|
 | green | `#e7f1e9` | `#3f7d4e` | >7 days |
@@ -83,42 +83,42 @@ Spacing rhythm: 6 / 10 / 14 / 18 / 24 / 28px. Use flex/grid with `gap`. Inputs p
 
 ## 4. Components
 
-**Primary button** — `background:#3f7d4e; color:#fff; font-weight:700; padding:15px; border-radius:14px;` green shadow. Active: `transform:scale(.985)`.
+**Primary button** - `background:#3f7d4e; color:#fff; font-weight:700; padding:15px; border-radius:14px;` green shadow. Active: `transform:scale(.985)`.
 
-**Secondary / OAuth button** — `background:#fff; border:1px solid #e2ddd0; color:#2c2a26; font-weight:600; padding:13px; border-radius:14px;` icon + label, `gap:10px`.
+**Secondary / OAuth button** - `background:#fff; border:1px solid #e2ddd0; color:#2c2a26; font-weight:600; padding:13px; border-radius:14px;` icon + label, `gap:10px`.
 
-**Inline action button** (e.g. "קבע תפוגה") — green fill, `font-size:12.5px; padding:8px 14px; border-radius:9px`.
+**Inline action button** (e.g. "קבע תפוגה") - green fill, `font-size:12.5px; padding:8px 14px; border-radius:9px`.
 
-**Input** — `background:#fff; border:1px solid #e2ddd0; border-radius:13px; padding:14px 15px;` label above at 13/600 `#6f6a5e`. Password/email fields are `dir="ltr"`, left-aligned.
+**Input** - `background:#fff; border:1px solid #e2ddd0; border-radius:13px; padding:14px 15px;` label above at 13/600 `#6f6a5e`. Password/email fields are `dir="ltr"`, left-aligned.
 
-**Checkbox** — 22×22, `border-radius:7px`, off `1.5px #e2ddd0`, on filled green with white ✓.
+**Checkbox** - 22×22, `border-radius:7px`, off `1.5px #e2ddd0`, on filled green with white ✓.
 
-**Toggle** — pill track 44×24-ish, off `#d8d2c4`, on `#3f7d4e`, white knob inset 3px.
+**Toggle** - pill track 44×24-ish, off `#d8d2c4`, on `#3f7d4e`, white knob inset 3px.
 
-**Filter chip** — pill, selected = green fill/white, idle = `#fff` + `#e2ddd0` border, label 13/600.
+**Filter chip** - pill, selected = green fill/white, idle = `#fff` + `#e2ddd0` border, label 13/600.
 
-**Pantry item card** — white, `border:1px solid #efe8d9; border-radius:18px; padding:15px;` shadow. Layout: emoji (32px) top-start + status chip top-end; name 17/700; meta line 13 `#8a8578` with `✎` edit affordance.
+**Pantry item card** - white, `border:1px solid #efe8d9; border-radius:18px; padding:15px;` shadow. Layout: emoji (32px) top-start + status chip top-end; name 17/700; meta line 13 `#8a8578` with `✎` edit affordance.
 
-**Status chip** — `background:<status.bg>; color:<status.fg>; border-radius:full; padding:~4px 10px; font-size:12px; font-weight:700`.
+**Status chip** - `background:<status.bg>; color:<status.fg>; border-radius:full; padding:~4px 10px; font-size:12px; font-weight:700`.
 
-**Suggestion panel (smart storage/expiry)** — soft tinted card; **match** state shows confirmation + reason only; **mismatch** shows current vs. recommended reasons side by side + a green "Select/קבע" inline button.
+**Suggestion panel (smart storage/expiry)** - soft tinted card; **match** state shows confirmation + reason only; **mismatch** shows current vs. recommended reasons side by side + a green "Select/קבע" inline button.
 
-**Recipe card visual** — AI recipes: single emoji centered on a colored gradient. Imported: `og:image`, falling back to emoji+gradient.
+**Recipe card visual** - AI recipes: single emoji centered on a colored gradient. Imported: `og:image`, falling back to emoji+gradient.
 
-**Loading state** — full-bleed brand-gradient panel, 92px ring spinner (`3px` track, `#f4c98a` top), `animation:spin 1s linear`, Assistant title beneath.
+**Loading state** - full-bleed brand-gradient panel, 92px ring spinner (`3px` track, `#f4c98a` top), `animation:spin 1s linear`, Assistant title beneath.
 
-**Toast** — centered top, `#2c2a26` bg, white, `border-radius:13px; padding:12px 20px`, deep shadow.
+**Toast** - centered top, `#2c2a26` bg, white, `border-radius:13px; padding:12px 20px`, deep shadow.
 
 ---
 
 ## 5. RTL & layout rules
 - App root: `dir="rtl"`, default text-align right.
 - Mobile-first single column; responsive split (brand panel + form) on auth at wide widths.
-- LTR islands: email, password, numeric inputs — set `dir="ltr"` + `text-align:left`.
+- LTR islands: email, password, numeric inputs - set `dir="ltr"` + `text-align:left`.
 - Cooking mode is the one **dark** surface: brand-gradient/near-black bg, large step text, minimal chrome, step counter + progress bar.
 - Custom scrollbar: 8px, thumb `#d8d2c4`.
 
 ---
 
 ## 6. Voice
-Warm, second-person plural Hebrew ("בשלו ממה שכבר יש לכם בבית"). Sparing, on-brand emoji (🥕 👋 🍝) as friendly punctuation — never decorative filler. Concise helper text; reasons kept ≤5 words.
+Warm, second-person plural Hebrew ("בשלו ממה שכבר יש לכם בבית"). Sparing, on-brand emoji (🥕 👋 🍝) as friendly punctuation - never decorative filler. Concise helper text; reasons kept ≤5 words.

@@ -1,6 +1,6 @@
 # Shared Components
 
-Reusable wrappers in `src/components/shared/`. Check here before creating new UI — after shadcn/ui itself, this is the next place to look (see `CORE_RULES.md`).
+Reusable wrappers in `src/components/shared/`. Check here before creating new UI - after shadcn/ui itself, this is the next place to look (see `CORE_RULES.md`).
 
 ## `Button`
 
@@ -53,13 +53,13 @@ Destructive-action confirmation modal (delete, remove, etc.) built on shadcn `Di
 />
 ```
 
-## `form/` — React Hook Form field components
+## `form/` - React Hook Form field components
 
-All form fields are RHF-based: they take `control`/`name` (not `value`/`onChange`) and wire into `FormField`/`FormItem`/`FormMessage` from `@/components/ui/form` for built-in label association and validation-error display. Build the form with `useForm` (+ `zodResolver`) and pass `form.control` down — see `useAddItemForm`/`AddItemFields` for the reference pattern.
+All form fields are RHF-based: they take `control`/`name` (not `value`/`onChange`) and wire into `FormField`/`FormItem`/`FormMessage` from `@/components/ui/form` for built-in label association and validation-error display. Build the form with `useForm` (+ `zodResolver`) and pass `form.control` down - see `useAddItemForm`/`AddItemFields` for the reference pattern.
 
 ### `form/FormInputField`
 
-Label + validation message wrapper around any input-like control. Takes a `render(field)` prop so it works with plain `Input`, custom widgets, etc. — spread `field` (`value`/`onChange`/`onBlur`/`ref`/`name`) onto the rendered control.
+Label + validation message wrapper around any input-like control. Takes a `render(field)` prop so it works with plain `Input`, custom widgets, etc. - spread `field` (`value`/`onChange`/`onBlur`/`ref`/`name`) onto the rendered control.
 
 ```tsx
 <FormInputField
@@ -102,10 +102,10 @@ Renders a form-level (`errors.root.message`) error string, e.g. for a failed ser
 
 Extract here when the same Label+Input/Select-style boilerplate (or similar shadcn composition) shows up in 2+ places, or when a single component's field list would otherwise violate the 5+ grouped-props rule in `CORE_RULES.md` and a generic field renderer removes the duplication instead of just moving it around.
 
-Don't extract prematurely — a one-off `<Input>` with no label (e.g. `pantry-search-input.tsx`'s icon-prefixed search box) is a different UI pattern, not a `FormInputField` candidate.
+Don't extract prematurely - a one-off `<Input>` with no label (e.g. `pantry-search-input.tsx`'s icon-prefixed search box) is a different UI pattern, not a `FormInputField` candidate.
 
 ## Known gotchas
 
-- **`ui/*` components are real, unmodified shadcn CLI output (Radix-based, `style: "new-york"` in `components.json`) — always add new ones via `npx shadcn add <name>`, never hand-write them.** This project ran on a mislabeled `"base-nova"` style backed by `@base-ui/react` for a while, which meant every `shadcn add` silently reverted `ui/*` files to an incompatible primitive set. That's fixed — the whole `ui/` folder is now Radix, so the CLI is safe to use for future additions.
+- **`ui/*` components are real, unmodified shadcn CLI output (Radix-based, `style: "new-york"` in `components.json`) - always add new ones via `npx shadcn add <name>`, never hand-write them.** This project ran on a mislabeled `"base-nova"` style backed by `@base-ui/react` for a while, which meant every `shadcn add` silently reverted `ui/*` files to an incompatible primitive set. That's fixed - the whole `ui/` folder is now Radix, so the CLI is safe to use for future additions.
 - Polymorphic rendering (button-as-link, etc.) uses Radix's `asChild`, not a `render`/`nativeButton` prop pair: `<Button asChild><Link href={...}>{label}</Link></Button>`.
-- **`bg-popover`/`text-popover-foreground` require `--popover`/`--popover-foreground` to be defined in `globals.css`.** They are mapped there (bridge tokens, same pattern as `--background`, `--primary`, etc.) — if a new shadcn primitive references a token that isn't in that bridge list, it silently renders transparent/uncolored instead of erroring.
+- **`bg-popover`/`text-popover-foreground` require `--popover`/`--popover-foreground` to be defined in `globals.css`.** They are mapped there (bridge tokens, same pattern as `--background`, `--primary`, etc.) - if a new shadcn primitive references a token that isn't in that bridge list, it silently renders transparent/uncolored instead of erroring.

@@ -45,7 +45,7 @@ export const RecipeRatingDisplay = ({
                     ))}
                 </div>
                 <span className={'min-w-[2rem] text-center font-display text-heading font-weight-heading text-ink'}>
-                    {rating !== null ? rating.toFixed(1) : '—'}
+                    {rating !== null ? rating.toFixed(1) : '-'}
                 </span>
             </div>
         </div>

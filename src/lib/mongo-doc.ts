@@ -10,7 +10,7 @@ const isObjectIdLike = (value: unknown): value is { toString: () => string } => 
 )
 
 // Subdocuments in arrays (e.g. recipe ingredients[]/steps[]) get their own
-// auto _id from Mongoose — stringify it so no BSON ObjectId instance leaks
+// auto _id from Mongoose - stringify it so no BSON ObjectId instance leaks
 // into a client-component prop. Only touches plain-object array items.
 const stringifySubdocIds = (value: unknown): unknown => {
     if (!Array.isArray(value)) return value

@@ -8,7 +8,7 @@ export const onboardingTexts = {
     stepCookingLevelTitle: 'מה רמת הבישול שלכם? 🍳',
     stepCookingLevelSubtitle: 'נתאים את מורכבות המתכונים שנציע לרמה שנוחה לכם.',
     stepDietaryPreferencesTitle: 'העדפות תזונה 🥗',
-    stepDietaryPreferencesSubtitle: 'בחרו כל מה שרלוונטי — נסנן מתכונים בהתאם. אפשר לדלג ולעדכן בהמשך.',
+    stepDietaryPreferencesSubtitle: 'בחרו כל מה שרלוונטי - נסנן מתכונים בהתאם. אפשר לדלג ולעדכן בהמשך.',
     stepHouseholdSizeTitle: 'לכמה אנשים בדרך כלל? 🍽️',
     stepHouseholdSizeSubtitle: 'נשתמש בזה כדי לכוון כמויות ומנות במתכונים שנציע.',
     householdSizeSingular: 'נפש אחת',

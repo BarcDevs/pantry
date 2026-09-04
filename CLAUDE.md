@@ -19,9 +19,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Behavior
 
-**Before coding:** State assumptions. Ask when uncertain (95% rule). Surface tradeoffs. Don't implement until 95% confident — ask until there.
+**Before coding:** State assumptions. Ask when uncertain (95% rule). Surface tradeoffs. Don't implement until 95% confident - ask until there.
 **Simplicity:** Minimum code that solves the problem. No extra features, abstractions, flexibility, or impossible-scenario handling. 200 lines that could be 50 → rewrite.
-**Surgical:** Touch only what you must. Don't improve adjacent code. Match existing style. Mention unrelated dead code — don't delete it. Remove only imports/vars YOUR changes made unused.
+**Surgical:** Touch only what you must. Don't improve adjacent code. Match existing style. Mention unrelated dead code - don't delete it. Remove only imports/vars YOUR changes made unused.
 **Learn from mistakes:** Save feedback memory on any correction or confirmed non-obvious choice. User should never repeat the same correction. Check memory before similar work.
 **Goal-driven:** Define success criteria before starting. For multi-step tasks, state a plan: `1. [step] → verify: [check]`. Loop until verified.
 
@@ -30,25 +30,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Phase 0 scaffold complete (Next.js 16.2.9, Tailwind v4 CSS-only config, Clerk, Mongoose, Vercel AI SDK, Jest, Playwright). Phases 1-3 (pantry CRUD, recipes, receipts) per `docs/plans/gentle-watching-giraffe.md`.
 
 Commands:
-- `npm run dev` — dev server
-- `npm run build` — production build
-- `npm run typecheck` — `tsc --noEmit`
-- `npm run lint` — eslint
-- `npm run test` — Jest (unit/component)
-- `npm run test:e2e` — Playwright (end-to-end)
+- `npm run dev` - dev server
+- `npm run build` - production build
+- `npm run typecheck` - `tsc --noEmit`
+- `npm run lint` - eslint
+- `npm run test` - Jest (unit/component)
+- `npm run test:e2e` - Playwright (end-to-end)
 
-Requires `.env.local` (see `.env.local.example`) with Clerk, MongoDB, and Gemini credentials — app will not boot without them (env validated at import of `src/config/env.ts`).
+Requires `.env.local` (see `.env.local.example`) with Clerk, MongoDB, and Gemini credentials - app will not boot without them (env validated at import of `src/config/env.ts`).
 
 ## Product
 
 Pantry is a mobile-first PWA: track pantry/fridge inventory, generate AI recipes from what's on hand, cook, then deduct inventory. Single-household personal-use MVP; multi-household is schema-ready but UI-deferred to Phase 2. Hebrew-language, Israel-market only at MVP, single timezone (Asia/Jerusalem).
 
-- Full spec (acceptance criteria, screens, API contracts, data model, risks): `docs/pantry-prd.md` — read the relevant section before implementing a feature rather than re-deriving requirements.
-- Condensed architecture decisions, planned stack, and shared enums: `docs/architecture.md` — read this before touching pantry items, recipes, or the AI suggestion flow.
+- Full spec (acceptance criteria, screens, API contracts, data model, risks): `docs/pantry-prd.md` - read the relevant section before implementing a feature rather than re-deriving requirements.
+- Condensed architecture decisions, planned stack, and shared enums: `docs/architecture.md` - read this before touching pantry items, recipes, or the AI suggestion flow.
 
 ## Design Files
 
-`.claude/design/` — JSX design files from Claude Design (reference when building UI).
+`.claude/design/` - JSX design files from Claude Design (reference when building UI).
 
 ## Modularity
 
@@ -59,13 +59,13 @@ Never scatter the same kind of logic across `src/actions/` (or elsewhere) file b
 - Constants → `src/constants/` (already a rule, see below).
 - Repeated JSX/markup (2+ near-identical usages) → `src/components/shared/`.
 
-When adding or editing code, check for this scatter pattern and centralize proactively — don't wait for a dedicated cleanup pass. Don't force abstraction on one-off or superficially-similar code.
+When adding or editing code, check for this scatter pattern and centralize proactively - don't wait for a dedicated cleanup pass. Don't force abstraction on one-off or superficially-similar code.
 
 **Read `WORKFLOW.md` before wrapping or customizing a `src/components/ui/` (shadcn) component.** It documents the reusable-wrapper pattern (build one `src/components/shared/` wrapper as the sole consumer of a `ui/` primitive, drive differences through props) and the tailwind-merge custom-token gotcha. Follow it exactly.
 
 ## Code Style
 
-Rules in `CORE_RULES.md`. Non-negotiable — follow exactly.
+Rules in `CORE_RULES.md`. Non-negotiable - follow exactly.
 
 ### Quick Checklist
 
@@ -84,11 +84,11 @@ IMPORTANT: Next.js 16 renamed `middleware` → `proxy`. dont suggest `middleware
 ## Git & Commits
 
 **Read `GIT_RULES.md` before committing or when instructed to commit.** Do not skip it.
-Full rules there. Key constraint: never invoke `/commit` skill on small fixes, formatting, or docs changes — use plain `git commit` for those.
+Full rules there. Key constraint: never invoke `/commit` skill on small fixes, formatting, or docs changes - use plain `git commit` for those.
 
 ## Browser Verification
 
-Use `playwright-cli` (installed as dev dep) for all browser verification tasks — more token-efficient than chrome extension tools.
+Use `playwright-cli` (installed as dev dep) for all browser verification tasks - more token-efficient than chrome extension tools.
 
 ```bash
 npx playwright-cli open http://localhost:3000
@@ -98,7 +98,7 @@ npx playwright-cli console           # check for errors
 npx playwright-cli close
 ```
 
-Prefer `snapshot` over `screenshot` — returns element refs for interaction, not pixels. Use `console` after interactions to catch JS errors.
+Prefer `snapshot` over `screenshot` - returns element refs for interaction, not pixels. Use `console` after interactions to catch JS errors.
 
 ## graphify
 

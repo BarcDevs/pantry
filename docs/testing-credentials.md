@@ -6,14 +6,14 @@
 |-------|----------|
 | `testuser+clerk_test@example.com` | `TestPassword123!` |
 
-Add more rows as needed — any `+clerk_test` suffix works.
+Add more rows as needed - any `+clerk_test` suffix works.
 
 ## How It Works
 
 - `+clerk_test` suffix → skips email verification (no real email sent)
 - OTP/magic link code → always `424242`
 - Test phone numbers → `+12015550100` through `+12015550199`, code `424242`
-- Dev instance only — test mode is automatic, no config needed
+- Dev instance only - test mode is automatic, no config needed
 
 ## ngrok static domain
 
@@ -25,6 +25,6 @@ Add more rows as needed — any `+clerk_test` suffix works.
 
 ## E2E Tests
 
-Call `setupClerkTestingToken()` before navigating to auth pages — bypasses bot detection.
+Call `setupClerkTestingToken()` before navigating to auth pages - bypasses bot detection.
 
 Seeded fixtures and per-step test data will be appended here as each Playwright spec is added.
