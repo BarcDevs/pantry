@@ -18,6 +18,7 @@ const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockGenerateStructured = generateStructured as jest.Mock
 
 const suggestion = {
+    recognized: true,
     suggestedStorage: 'fridge',
     reason: 'שומר על טריות',
     expiryByStorage: {

@@ -1,11 +1,11 @@
 {
   "name": "pantry",
-  "version": "0.24.6",
+  "version": "0.24.7",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8080",
     "lint": "eslint",
     "lint:check": "eslint",
     "lint:fix": "eslint --fix",

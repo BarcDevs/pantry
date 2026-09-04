@@ -19,6 +19,11 @@ const expiryEntrySchema = {
 
 const storageSuggestionSchema = new mongoose.Schema<StorageSuggestion>(
     {
+        recognized: {
+            type: Boolean,
+            required: true,
+            default: true
+        },
         suggestedStorage: { type: String, required: true },
         suggestedType: {
             type: String,

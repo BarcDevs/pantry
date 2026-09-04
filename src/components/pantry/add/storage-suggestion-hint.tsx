@@ -69,7 +69,12 @@ export const StorageSuggestionHint = ({
                     </Button>
                 </div>
             )}
-            {suggestion && current && (
+            {suggestion && !suggestion.recognized && !isLoading && (
+                <p className={'mt-2 text-caption text-ink-3'}>
+                    {pantryTexts.addForm.suggestionNotRecognized}
+                </p>
+            )}
+            {suggestion && suggestion.recognized && current && (
                 <div className={'mt-2 flex flex-col gap-2.5'}>
                     {isMatch ? (
                         <div className={'flex items-start gap-2.25 pb-2.5'}>

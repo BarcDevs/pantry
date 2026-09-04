@@ -56,6 +56,7 @@ export const pantryTexts = {
         expiryLabel: 'תאריך תפוגה',
         expiryPlaceholder: 'בחר תאריך',
         suggestionError: 'לא הצלחנו לקבל הצעה',
+        suggestionNotRecognized: 'לא זיהינו מוצר מזון בשם הזה',
         suggestionRetry: 'נסה שוב',
         notesLabel: 'הערות (אופציונלי)',
         submit: 'הוספה למזווה',

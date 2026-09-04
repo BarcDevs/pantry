@@ -12,6 +12,7 @@ export type ExpiryEntry = {
 }
 
 export type StorageSuggestion = {
+    recognized: boolean
     suggestedStorage: StorageLocation
     suggestedType?: FoodType | null
     reason: string

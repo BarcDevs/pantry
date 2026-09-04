@@ -11,6 +11,7 @@ const expiryEntrySchema = z.object({
 })
 
 export const storageSuggestionShape = z.object({
+    recognized: z.boolean(),
     suggestedStorage: z.enum(STORAGE_LOCATIONS),
     suggestedType: z.enum(FOOD_TYPES).nullish(),
     reason: z.string(),
