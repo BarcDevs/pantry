@@ -55,6 +55,7 @@
     --shadow-button: 0 4px 10px -6px rgba(63, 125, 78, .45);
     --shadow-button-ember: 0 4px 10px -6px rgba(224, 138, 60, .5);
     --shadow-sheet: 0 8px 20px -10px rgba(0, 0, 0, .35);
+    --shadow-chip: 0 2px 6px -4px rgba(63, 125, 78, .35);
 
     /* Typography */
     --text-display: 32px;
@@ -143,6 +144,7 @@
     --shadow-button: var(--shadow-button);
     --shadow-button-ember: var(--shadow-button-ember);
     --shadow-sheet: var(--shadow-sheet);
+    --shadow-chip: var(--shadow-chip);
 
     --text-display: var(--text-display);
     --text-title: var(--text-title);

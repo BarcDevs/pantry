@@ -1,7 +1,23 @@
 import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
 
-const cn = (...inputs: ClassValue[]) =>
-    twMerge(clsx(inputs))
+const customTwMerge = extendTailwindMerge({
+    extend: {
+        classGroups: {
+            shadow: [
+                {
+                    shadow: [
+                        'card',
+                        'button',
+                        'button-ember',
+                        'sheet',
+                        'chip'
+                    ]
+                }
+            ]
+        }
+    }
+})
 
-export { cn }
+export const cn = (...inputs: ClassValue[]) =>
+    customTwMerge(clsx(inputs))

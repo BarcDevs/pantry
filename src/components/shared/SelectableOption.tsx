@@ -5,7 +5,7 @@ import { Button } from '@/components/shared/Button'
 import { cn } from '@/lib/utils'
 
 const cardClass = 'h-auto w-full justify-start gap-3.5 rounded-lg border-2 px-4 py-4 text-start'
-const chipClass = 'h-auto gap-2 rounded-full border px-4 py-2.75 text-label font-weight-label'
+const chipClass = 'h-auto gap-2 rounded-full border px-4 py-2.75 text-label font-weight-label shadow-chip'
 
 const CardContent = ({
     emoji,
