@@ -6,6 +6,8 @@ import {
     MEAL_TYPES
 } from '@/types/enums'
 
+import { quantitySchema } from '@/lib/recipes/recipe-doc-schema'
+
 export const importedRecipeSchema = z.object({
     title: z.string(),
     difficulty: z.enum(DIFFICULTIES),
@@ -15,7 +17,7 @@ export const importedRecipeSchema = z.object({
     emoji: z.string(),
     ingredients: z.array(z.object({
         name: z.string(),
-        quantity: z.number(),
+        quantity: quantitySchema,
         unit: z.enum(COOKING_UNITS),
         optional: z.boolean().default(false)
     })),

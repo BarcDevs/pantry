@@ -9,9 +9,14 @@ import {
     RECIPE_SOURCES
 } from '@/types/enums'
 
+export const quantitySchema = z.union([
+    z.number(),
+    z.string().regex(/^\d+(\.\d+)?-\d+(\.\d+)?$/, 'Quantity range must be like "8-10"')
+])
+
 export const ingredientSchema = z.object({
     name: z.string(),
-    quantity: z.number(),
+    quantity: quantitySchema,
     unit: z.enum(COOKING_UNITS),
     inPantry: z.boolean(),
     optional: z.boolean().default(false)

@@ -22,6 +22,7 @@ import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
 import { objectIdSchema } from '@/lib/object-id-schema'
 import { buildGenerateRecipePrompt } from '@/lib/prompts/generate-recipe-prompt'
+import { quantitySchema } from '@/lib/recipes/recipe-doc-schema'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { UserModel } from '@/models/user.model'
@@ -43,7 +44,7 @@ const aiRecipeSchema = z.object({
     emoji: z.string(),
     ingredients: z.array(z.object({
         name: z.string(),
-        quantity: z.number(),
+        quantity: quantitySchema,
         unit: z.enum(COOKING_UNITS),
         inPantry: z.boolean(),
         optional: z.boolean().default(false)

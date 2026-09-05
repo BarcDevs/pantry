@@ -16,9 +16,15 @@ const recipeIngredientSchema = {
         required: true
     },
     quantity: {
-        type: Number,
+        type: mongoose.Schema.Types.Mixed,
         required: true,
-        min: 0
+        validate: {
+            validator: (value: unknown) => (
+                typeof value === 'number'
+                || (typeof value === 'string' && /^\d+(\.\d+)?-\d+(\.\d+)?$/.test(value))
+            ),
+            message: 'quantity must be a number or a range like "8-10"'
+        }
     },
     unit: {
         type: String,

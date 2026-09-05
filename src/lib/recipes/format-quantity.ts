@@ -16,7 +16,9 @@ const FRACTION_GLYPHS: Array<[number, string]> = [
 
 const FRACTION_TOLERANCE = 0.02
 
-export const formatQuantity = (quantity: number): string => {
+export const formatQuantity = (quantity: number | string): string => {
+    if (typeof quantity === 'string') return quantity
+
     const whole = Math.floor(quantity)
     const fraction = quantity - whole
 

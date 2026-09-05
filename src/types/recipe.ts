@@ -10,7 +10,7 @@ import type {
 
 export type RecipeIngredient = {
     name: string
-    quantity: number
+    quantity: number | string
     unit: CookingUnit
     inPantry: boolean
     optional: boolean

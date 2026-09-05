@@ -14,6 +14,8 @@ import type {
 } from '@/types/pantry-item'
 import type { RecipeIngredient } from '@/types/recipe'
 
+import { resolveQuantityNumber } from '@/lib/recipes/resolve-quantity-number'
+
 import { routes } from '@/constants/routes'
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -34,7 +36,7 @@ const buildInitialRows = (
                 type: item.type,
                 unit: item.unit,
                 pantryQty: item.quantity,
-                used: Math.min(ingredient.quantity, item.quantity),
+                used: Math.min(resolveQuantityNumber(ingredient.quantity), item.quantity),
                 choice: null
             }]
         })
