@@ -10,7 +10,7 @@ export const recipesTexts = {
         cup: 'כוס',
         pinch: 'קורט',
         handful: 'חופן',
-        clove: 'שן',
+        clove: 'שיניים',
         slice: 'פרוסה',
         bundle: 'צרור'
     },
