@@ -60,6 +60,7 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                 <SortSelect
                     value={sort}
                     onChange={setSort}
+                    label={recipesTexts.library.sortLabel}
                     options={[
                         { value: 'recent', label: recipesTexts.library.sortRecent },
                         { value: 'rating', label: recipesTexts.library.sortRating },

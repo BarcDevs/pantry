@@ -67,6 +67,7 @@ export const recipesTexts = {
         stepsLabel: 'שלבים',
         pantryMatchLabel: 'מהמלאי',
         ingredientsTitle: 'מצרכים',
+        ingredientOptionalLabel: 'רשות',
         stepsTitle: 'תקציר ההכנה',
         imageFieldTitle: 'תמונת המתכון',
         imageFieldOptional: '· אופציונלי',
@@ -95,7 +96,17 @@ export const recipesTexts = {
         tagsPlaceholder: 'הוספת תגית...',
         tagsUpdateError: 'עדכון התגיות נכשל',
         favoriteUpdateError: 'עדכון המועדפים נכשל',
-        startCooking: 'התחל לבשל ←'
+        startCooking: 'התחל לבשל ←',
+        deleteButton: 'מחק מתכון',
+        deleting: 'מוחק...',
+        deleteError: 'מחיקת המתכון נכשלה, נסה שוב',
+        deleteSuccess: 'המתכון נמחק'
+    },
+    deleteDialog: {
+        title: 'למחוק את המתכון?',
+        description: 'הפעולה תמחק את המתכון לצמיתות. לא ניתן לבטל.',
+        cancel: 'ביטול',
+        confirm: 'מחיקה'
     },
     library: {
         title: 'המתכונים שלי',
@@ -109,6 +120,7 @@ export const recipesTexts = {
         noResults: 'לא נמצאו מתכונים תואמים',
         generateCta: 'יצירת מתכון',
         favoriteToggleError: 'עדכון המועדפים נכשל',
+        sortLabel: 'מיון',
         sortRecent: 'החדשים ביותר',
         sortRating: 'דירוג גבוה',
         sortTitle: 'לפי שם (א-ב)'
@@ -166,6 +178,7 @@ export const recipesTexts = {
         urlSubmit: 'ייבוא',
         textLabel: 'הדביקו כאן את המתכון',
         textPlaceholder: 'שם המתכון, מצרכים, אופן ההכנה...',
+        textImageLabel: 'קישור לתמונה (אופציונלי)',
         textSubmit: 'ייבוא',
         importing: 'מייבא...',
         importError: 'הייבוא נכשל, נסו קישור אחר או הדביקו כטקסט',

@@ -24,7 +24,7 @@ const tabs: Array<{
 const chipClassName = (isActive: boolean) => cn(
     'h-auto rounded-full border px-3.5 py-2 text-label font-semibold',
     isActive
-        ? 'border-green bg-green text-white'
+        ? 'border-ink bg-ink text-white'
         : 'border-border bg-surface text-ink-2'
 )
 
