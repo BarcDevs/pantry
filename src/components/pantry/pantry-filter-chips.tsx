@@ -1,7 +1,8 @@
-import type { StorageLocation } from '@/types/enums'
+import type { FoodType, StorageLocation } from '@/types/enums'
 import { STORAGE_LOCATIONS } from '@/types/enums'
 import type { SetState } from '@/types/react'
 
+import { PantryTypeFilter } from '@/components/pantry/pantry-type-filter'
 import { Button } from '@/components/shared/Button'
 
 import { cn } from '@/lib/utils'
@@ -13,6 +14,8 @@ type PantryFilter = StorageLocation | 'all'
 type PantryFilterChipsProps = {
     value: PantryFilter
     onChange: SetState<PantryFilter>
+    typeFilterValue: FoodType[]
+    onTypeFilterChange: SetState<FoodType[]>
 }
 
 const chipClassName = (isActive: boolean) => cn(
@@ -24,9 +27,11 @@ const chipClassName = (isActive: boolean) => cn(
 
 export const PantryFilterChips = ({
     value,
-    onChange
+    onChange,
+    typeFilterValue,
+    onTypeFilterChange
 }: PantryFilterChipsProps) => (
-    <div className={'mb-4.5 flex flex-wrap gap-2'}>
+    <div className={'mb-4.5 flex flex-wrap items-center gap-2'}>
         <Button
             variant={'ghost'}
             onClick={() => onChange('all')}
@@ -44,5 +49,9 @@ export const PantryFilterChips = ({
                 {pantryTexts.storageLabels[location]}
             </Button>
         ))}
+        <PantryTypeFilter
+            value={typeFilterValue}
+            onChange={onTypeFilterChange}
+        />
     </div>
 )

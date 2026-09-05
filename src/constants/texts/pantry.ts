@@ -10,6 +10,8 @@ export const pantryTexts = {
     statExpiringSoon: 'מתקלקלים בקרוב',
     statSavedRecipes: 'מתכונים שמורים',
     filterAll: 'הכל',
+    typeFilterLabel: 'סוג מוצר',
+    typeFilterClear: 'נקה',
     storageLabels: {
         fridge: 'מקרר',
         freezer: 'מקפיא',

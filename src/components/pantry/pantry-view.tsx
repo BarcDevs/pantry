@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import type { StorageLocation }
+import type { FoodType, StorageLocation }
     from '@/types/enums'
 import type { PantryItem }
     from '@/types/pantry-item'
@@ -48,6 +48,9 @@ export const PantryView = ({
     const [filter, setFilter] = useState<
         StorageLocation | 'all'
     >('all')
+    const [typeFilter, setTypeFilter] = useState<
+        FoodType[]
+    >([])
     const [editingItem, setEditingItem] = useState<
         PantryItem | null
     >(null)
@@ -70,11 +73,15 @@ export const PantryView = ({
                     || item.storage === filter
             )
             .filter(
+                (item) => typeFilter.length === 0
+                    || (item.type !== null && typeFilter.includes(item.type))
+            )
+            .filter(
                 (item) => item.name.includes(
                     query.trim()
                 )
             ),
-        [items, filter, query]
+        [items, filter, typeFilter, query]
     )
 
     if (items.length === 0) {
@@ -117,6 +124,8 @@ export const PantryView = ({
             <PantryFilterChips
                 value={filter}
                 onChange={setFilter}
+                typeFilterValue={typeFilter}
+                onTypeFilterChange={setTypeFilter}
             />
             {filteredItems.length === 0
                 ? (
