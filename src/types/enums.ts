@@ -93,7 +93,8 @@ export const CookingUnit = {
     Pinch: 'pinch',
     Handful: 'handful',
     Clove: 'clove',
-    Slice: 'slice'
+    Slice: 'slice',
+    Bundle: 'bundle'
 } as const
 export type CookingUnit = typeof CookingUnit[keyof typeof CookingUnit]
 export const COOKING_UNITS = Object.values(CookingUnit)

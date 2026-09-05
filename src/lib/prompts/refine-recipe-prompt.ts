@@ -1,5 +1,10 @@
 import type { RecipeDoc } from '@/types/recipe'
 
+import {
+    recipeStepsDetailInstructions,
+    recipeUnitsInstructions
+} from '@/lib/prompts/recipe-shared-instructions'
+
 export const buildRefineRecipePrompt = (
     recipe: RecipeDoc,
     instruction: string
@@ -16,14 +21,9 @@ export const buildRefineRecipePrompt = (
     לכל מרכיב ציין אם הוא נמצא במזווה (inPantry) ואם הוא אופציונלי
     (optional) - שמור על הסימון הקיים של כל מרכיב אלא אם ההוראה
     משנה אותו במפורש.
-    שמור על יחידת המידה (unit) המקורית של כל מרכיב שלא שינית, ולמרכיבים
-    חדשים בחר יחידה התואמת לאופן שבו מבשלים בפועל משתמשים בה - kg, g,
-    L, ml, units, tsp (כפית), tbsp (כף), cup (כוס), pinch (קורט),
-    handful (חופן), clove (שן), slice (פרוסה) - אל תמיר הכל ל-units.
+    שמור על יחידת המידה (unit) המקורית של כל מרכיב שלא שינית.
+    ${recipeUnitsInstructions}
     בחר אימוג'י יחיד המייצג את המתכון המעודכן.
-    כתוב את שלבי ההכנה (steps) במלואם - אסור לקצר, לסכם, או להשמיט
-    כל פרט תפעולי: זמנים, טמפרטורות, כמויות, סימני מוכנות חזותיים/
-    ריחניים/קוליים (למשל "עד שמתחיל לבעבע", "עד שמזהיב"), ופעולות
-    ביניים כמו "לערבב מדי פעם", "לכסות". זה חל גם על שלבים שלא נגעת
-    בהם ישירות - אל תסכם אותם מחדש בקיצור. אורך הטקסט אינו שיקול.
+    ${recipeStepsDetailInstructions}
+    זה חל גם על שלבים שלא נגעת בהם ישירות - אל תסכם אותם מחדש בקיצור.
 `

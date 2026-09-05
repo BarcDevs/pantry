@@ -11,7 +11,8 @@ export const recipesTexts = {
         pinch: 'קורט',
         handful: 'חופן',
         clove: 'שן',
-        slice: 'פרוסה'
+        slice: 'פרוסה',
+        bundle: 'צרור'
     },
     generate: {
         title: 'יצירת מתכון',
