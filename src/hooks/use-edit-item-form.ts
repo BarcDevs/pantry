@@ -46,7 +46,6 @@ const toFormValues = (
     item: PantryItem
 ): AddItemFormValues => ({
     name: item.name,
-    emoji: item.emoji ?? '🥬',
     storage: item.storage,
     type: item.type,
     quantity: item.quantity,
@@ -121,7 +120,6 @@ export const useEditItemForm = ({
             try {
                 await updatePantryItem(item._id, {
                     name: values.name.trim(),
-                    emoji: values.emoji,
                     storage: values.storage,
                     type: values.type,
                     quantity: values.quantity,

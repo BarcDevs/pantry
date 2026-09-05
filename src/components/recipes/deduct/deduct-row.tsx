@@ -3,6 +3,7 @@ import type { DeductRow as DeductRowType } from '@/types/pantry-item'
 import { DeductRowStepper } from '@/components/recipes/deduct/deduct-row-stepper'
 import { DeductZeroWarning } from '@/components/recipes/deduct/deduct-zero-warning'
 
+import { getFoodTypeIcon } from '@/lib/pantry/food-type-icon'
 import { cn } from '@/lib/utils'
 
 import { pantryTexts } from '@/constants/texts/pantry'
@@ -30,7 +31,7 @@ export const DeductRow = ({
         <div className={'border-b border-border-3 py-3.5 last:border-b-0'}>
             <div className={'flex items-center gap-3.25'}>
                 <span className={'text-heading'}>
-                    {row.emoji ?? '🥫'}
+                    {getFoodTypeIcon(row.type)}
                 </span>
                 <div className={'min-w-0 flex-1'}>
                     <div className={'text-body font-bold text-ink'}>

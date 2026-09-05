@@ -69,7 +69,7 @@ export type UpdatePantryItemInput = Partial<{
 export type DeductRow = {
     pantryItemId: string
     name: string
-    emoji?: string
+    type: FoodType | null
     unit: Unit
     pantryQty: number
     used: number

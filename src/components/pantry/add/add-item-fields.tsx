@@ -6,7 +6,6 @@ import {
     UNITS
 } from '@/types/enums'
 
-import { EmojiPickerField } from '@/components/pantry/add/emoji-picker-field'
 import { ExpiryDateField } from '@/components/pantry/add/expiry-date-field'
 import { QuantityField } from '@/components/pantry/add/quantity-field'
 import { FormInputField } from '@/components/shared/form/FormInputField'
@@ -43,10 +42,6 @@ export const AddItemFields = ({ control }: AddItemFieldsProps) => {
                         placeholder={pantryTexts.addForm.namePlaceholder}
                     />
                 )}
-            />
-            <EmojiPickerField
-                control={control}
-                name={'emoji'}
             />
             <div className={'grid grid-cols-2 gap-3'}>
                 <QuantityField

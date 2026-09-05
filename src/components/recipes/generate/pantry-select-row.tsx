@@ -6,6 +6,7 @@ import { PantryExpiryChip } from '@/components/pantry/pantry-expiry-chip'
 import { Button } from '@/components/shared/Button'
 
 import { getExpiryStatus } from '@/lib/pantry/expiry-status'
+import { getFoodTypeIcon } from '@/lib/pantry/food-type-icon'
 import { cn } from '@/lib/utils'
 
 import { pantryTexts } from '@/constants/texts/pantry'
@@ -45,7 +46,7 @@ export const PantrySelectRow = ({
             )}
         </span>
         <span className={'text-body'}>
-            {item.emoji ?? '🥫'}
+            {getFoodTypeIcon(item.type)}
         </span>
         <span className={'flex min-w-0 flex-1 flex-col'}>
             <span className={'truncate font-bold text-body text-ink'}>

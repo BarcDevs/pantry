@@ -4,6 +4,7 @@ import { PantryExpiryChip } from '@/components/pantry/pantry-expiry-chip'
 import { Button } from '@/components/shared/Button'
 
 import { getExpiryStatus } from '@/lib/pantry/expiry-status'
+import { getFoodTypeIcon } from '@/lib/pantry/food-type-icon'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -23,7 +24,7 @@ export const PantryItemCard = ({
     >
         <div className={'flex items-start justify-between'}>
             <span className={'text-2xl'}>
-                {item.emoji ?? '🥫'}
+                {getFoodTypeIcon(item.type)}
             </span>
             <PantryExpiryChip status={getExpiryStatus(item.expiryDate)}/>
         </div>

@@ -31,7 +31,7 @@ const buildInitialRows = (
             return [{
                 pantryItemId: item._id,
                 name: item.name,
-                emoji: item.emoji,
+                type: item.type,
                 unit: item.unit,
                 pantryQty: item.quantity,
                 used: Math.min(ingredient.quantity, item.quantity),

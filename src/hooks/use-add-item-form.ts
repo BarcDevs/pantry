@@ -59,7 +59,6 @@ export const useAddItemForm = () => {
         resolver: zodResolver(addItemFormSchema),
         defaultValues: {
             name: '',
-            emoji: '🥬',
             storage: StorageLocation.Fridge,
             type: null,
             quantity: 1,
@@ -150,7 +149,6 @@ export const useAddItemForm = () => {
         overrides?: Partial<AddPantryItemInput>
     ): AddPantryItemInput => ({
         name: values.name.trim(),
-        emoji: values.emoji,
         storage: values.storage,
         type: values.type,
         quantity: values.quantity,
