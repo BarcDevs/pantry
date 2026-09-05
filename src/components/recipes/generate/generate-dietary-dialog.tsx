@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { AppDialog } from '@/components/shared/AppDialog'
 import { Button } from '@/components/shared/Button'
 import { DietaryPreferencesPicker } from '@/components/shared/DietaryPreferencesPicker'
+import { LabeledCheckbox } from '@/components/shared/LabeledCheckbox'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 import { settingsTexts } from '@/constants/texts/settings'
@@ -27,10 +28,17 @@ export const GenerateDietaryDialog = ({
     onSaved
 }: GenerateDietaryDialogProps) => {
     const [draft, setDraft] = useState(value)
+    const [saveToProfile, setSaveToProfile] = useState(true)
     const [isSaving, startSaving] = useTransition()
     const texts = recipesTexts.generate
 
     const handleSave = () => {
+        if (!saveToProfile) {
+            onSaved(draft)
+            onOpenChange(false)
+            return
+        }
+
         startSaving(async () => {
             try {
                 await updateUserProfile({ dietaryPreferences: draft })
@@ -55,6 +63,11 @@ export const GenerateDietaryDialog = ({
             <DietaryPreferencesPicker
                 value={draft}
                 onChange={setDraft}
+            />
+            <LabeledCheckbox
+                checked={saveToProfile}
+                onCheckedChange={setSaveToProfile}
+                label={texts.dietaryPreferencesSaveToProfile}
             />
             <Button
                 disabled={isSaving}
