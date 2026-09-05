@@ -30,16 +30,16 @@ export const ExpiredItemsGate = ({
         </p>
         <div className={'flex gap-2'}>
             <Button
-                variant={'outline'}
+                variant={'ghost'}
                 onClick={onRemoveExpired}
-                className={'flex-1 shadow-card'}
+                className={'flex-1 rounded-md border border-border-2 bg-surface shadow-card'}
             >
                 {recipesTexts.generate.expiredGateRemove}
             </Button>
             <Button
-                variant={'outline'}
+                variant={'ghost'}
                 onClick={onContinueAnyway}
-                className={'flex-1 shadow-card'}
+                className={'flex-1 rounded-md border border-border-2 bg-surface shadow-card'}
             >
                 {recipesTexts.generate.expiredGateContinue}
             </Button>
