@@ -1,7 +1,10 @@
 import type { RecipeDoc } from '@/types/recipe'
 
 import type { ImportedRecipe } from '@/lib/recipes/imported-recipe-schema'
-import { normalizeStepFractions } from '@/lib/recipes/normalize-fraction-words'
+import {
+    normalizeIngredientFractions,
+    normalizeStepFractions
+} from '@/lib/recipes/normalize-fraction-words'
 
 export const buildImportedRecipeDoc = (
     userId: string,
@@ -19,7 +22,7 @@ export const buildImportedRecipeDoc = (
     maxTime: generated.maxTime,
     mealCount: generated.mealCount,
     mealType: generated.mealType,
-    ingredients: generated.ingredients.map(
+    ingredients: normalizeIngredientFractions(generated.ingredients).map(
         (ingredient) => ({
             ...ingredient,
             inPantry: false

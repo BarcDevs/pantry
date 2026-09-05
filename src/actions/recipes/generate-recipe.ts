@@ -22,7 +22,10 @@ import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
 import { objectIdSchema } from '@/lib/object-id-schema'
 import { buildGenerateRecipePrompt } from '@/lib/prompts/generate-recipe-prompt'
-import { normalizeStepFractions } from '@/lib/recipes/normalize-fraction-words'
+import {
+    normalizeIngredientFractions,
+    normalizeStepFractions
+} from '@/lib/recipes/normalize-fraction-words'
 import { quantitySchema } from '@/lib/recipes/recipe-doc-schema'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
@@ -114,7 +117,7 @@ export const generateRecipe = async (
         maxTime: parsedInput.maxTime,
         mealCount: parsedInput.mealCount,
         mealType: parsedInput.mealType,
-        ingredients: generated.ingredients.map((ingredient) => ({
+        ingredients: normalizeIngredientFractions(generated.ingredients).map((ingredient) => ({
             ...ingredient,
             inPantry: pantryItemNames.includes(ingredient.name)
         })),

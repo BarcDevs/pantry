@@ -1,5 +1,8 @@
+import { CookingUnit } from '@/types/enums'
+
 import {
     normalizeFractionWords,
+    normalizeIngredientFractions,
     normalizeStepFractions
 } from './normalize-fraction-words'
 
@@ -30,6 +33,43 @@ describe('normalizeStepFractions', () => {
         expect(normalizeStepFractions(steps)).toEqual([
             { order: 1, description: 'הוסיפו חצי כוס מים' },
             { order: 2, description: 'בשלו 10 דקות' }
+        ])
+    })
+})
+
+describe('normalizeIngredientFractions', () => {
+    it('normalizes fractions embedded in an ingredient name', () => {
+        const ingredients = [
+            {
+                name: '1/2 לימון',
+                quantity: 1,
+                unit: CookingUnit.Units,
+                inPantry: false,
+                optional: false
+            },
+            {
+                name: 'עגבנייה',
+                quantity: 2,
+                unit: CookingUnit.Units,
+                inPantry: false,
+                optional: false
+            }
+        ]
+        expect(normalizeIngredientFractions(ingredients)).toEqual([
+            {
+                name: 'חצי לימון',
+                quantity: 1,
+                unit: CookingUnit.Units,
+                inPantry: false,
+                optional: false
+            },
+            {
+                name: 'עגבנייה',
+                quantity: 2,
+                unit: CookingUnit.Units,
+                inPantry: false,
+                optional: false
+            }
         ])
     })
 })

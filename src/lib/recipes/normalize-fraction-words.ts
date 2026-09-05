@@ -20,3 +20,12 @@ export const normalizeStepFractions = (steps: RecipeStep[]): RecipeStep[] => (
         description: normalizeFractionWords(step.description)
     }))
 )
+
+export const normalizeIngredientFractions = <T extends { name: string }>(
+    ingredients: T[]
+): T[] => (
+    ingredients.map((ingredient) => ({
+        ...ingredient,
+        name: normalizeFractionWords(ingredient.name)
+    }))
+)
