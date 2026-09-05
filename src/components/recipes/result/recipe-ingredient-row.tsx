@@ -18,16 +18,18 @@ export const RecipeIngredientRow = ({
                 ingredient.inPantry ? 'bg-green' : 'bg-status-amber-fg'
             )}
         />
-        <span className={'flex-1 text-body text-ink'}>
-            {ingredient.name}
+        <span className={'flex items-baseline gap-1.5 text-body text-ink'}>
+            <span className={'text-label text-ink-3'}>
+                {`${ingredient.quantity} ${recipesTexts.unitLabels[ingredient.unit]}`}
+            </span>
+            <span>
+                {ingredient.name}
+            </span>
         </span>
         {ingredient.optional && (
-            <span className={'rounded-full bg-border-3 px-2 py-0.5 text-caption text-ink-3'}>
+            <span className={'ms-auto rounded-full bg-border-3 px-2 py-0.5 text-caption text-ink-3'}>
                 {recipesTexts.result.ingredientOptionalLabel}
             </span>
         )}
-        <span className={'text-label text-ink-3'}>
-            {`${ingredient.quantity} ${recipesTexts.unitLabels[ingredient.unit]}`}
-        </span>
     </div>
 )
