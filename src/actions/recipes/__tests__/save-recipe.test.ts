@@ -36,7 +36,8 @@ const recipe = {
             name: 'עגבניה',
             quantity: 2,
             unit: 'units' as const,
-            inPantry: true
+            inPantry: true,
+            optional: false
         }
     ],
     steps: [{ order: 1, description: 'לבשל פסטה' }],

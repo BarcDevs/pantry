@@ -28,6 +28,11 @@ const recipeIngredientSchema = {
     inPantry: {
         type: Boolean,
         required: true
+    },
+    optional: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 }
 

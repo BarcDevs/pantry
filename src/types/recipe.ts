@@ -13,6 +13,7 @@ export type RecipeIngredient = {
     quantity: number
     unit: Unit
     inPantry: boolean
+    optional: boolean
 }
 
 export type RecipeStep = {

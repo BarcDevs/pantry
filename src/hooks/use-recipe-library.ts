@@ -35,7 +35,11 @@ export const useRecipeLibrary = (initialRecipes: Recipe[]) => {
     const filteredRecipes = useMemo(() => {
         const trimmedQuery = normalizeName(query)
         const tabFiltered = recipes.filter((recipe) => {
-            if (filter === 'can-cook') return recipe.ingredients.every((ingredient) => ingredient.inPantry)
+            if (filter === 'can-cook') {
+                return recipe.ingredients
+                    .filter((ingredient) => !ingredient.optional)
+                    .every((ingredient) => ingredient.inPantry)
+            }
             if (filter === 'favorites') return recipe.isFavorite
             return true
         })

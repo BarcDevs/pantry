@@ -13,7 +13,8 @@ export const ingredientSchema = z.object({
     name: z.string(),
     quantity: z.number(),
     unit: z.enum(UNITS),
-    inPantry: z.boolean()
+    inPantry: z.boolean(),
+    optional: z.boolean().default(false)
 })
 
 export const stepSchema = z.object({
