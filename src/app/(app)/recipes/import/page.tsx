@@ -16,6 +16,7 @@ const ImportRecipePage = () => {
     const [tab, setTab] = useState<'url' | 'text'>('url')
     const [url, setUrl] = useState('')
     const [text, setText] = useState('')
+    const [textImageUrl, setTextImageUrl] = useState('')
 
     const {
         recipe,
@@ -60,7 +61,9 @@ const ImportRecipePage = () => {
                                 <ImportTextForm
                                     text={text}
                                     onTextChange={setText}
-                                    onSubmit={() => importFromText(text.trim())}
+                                    imageUrl={textImageUrl}
+                                    onImageUrlChange={setTextImageUrl}
+                                    onSubmit={() => importFromText(text.trim(), textImageUrl.trim() || undefined)}
                                     isSubmitting={isImporting}
                                     error={error}
                                 />

@@ -36,11 +36,11 @@ export const useRecipeImport = () => {
         })
     }
 
-    const importFromText = (text: string) => {
+    const importFromText = (text: string, imageUrl?: string) => {
         setError(null)
         startImporting(async () => {
             try {
-                const result = await importRecipeFromText(text)
+                const result = await importRecipeFromText(text, imageUrl)
                 if (result.fallbackToManual || !result.recipe) {
                     setError(recipesTexts.import.importError)
                     return
