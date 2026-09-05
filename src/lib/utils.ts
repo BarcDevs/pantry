@@ -14,6 +14,16 @@ const customTwMerge = extendTailwindMerge({
                         'chip'
                     ]
                 }
+            ],
+            'bg-color': [
+                {
+                    bg: ['surface']
+                }
+            ],
+            'border-color': [
+                {
+                    border: ['border']
+                }
             ]
         }
     }

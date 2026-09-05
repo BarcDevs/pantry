@@ -36,11 +36,12 @@ export const SortSelect = <T extends string>({
                 <ArrowUpDownIcon size={14}/>
                 <span>{`${label}: ${currentLabel}`}</span>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position={'popper'}>
                 {options.map((option) => (
                     <SelectItem
                         key={option.value}
                         value={option.value}
+                        className={'cursor-pointer'}
                     >
                         {option.label}
                     </SelectItem>

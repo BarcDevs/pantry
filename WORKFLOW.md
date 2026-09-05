@@ -74,3 +74,48 @@ const customTwMerge = extendTailwindMerge({
 
 Never work around this with a hardcoded arbitrary-value class (`shadow-[...]`) at a call site - that's exactly the
 kind of literal, un-tokenized CSS the design system rules forbid. Extend the merge config instead.
+
+When extending, add **only the specific tokens actually in conflict** at the call site that surfaced the bug, not
+every token in the theme's palette speculatively - the wider `bg-color`/`text-color`/`border-color` groups need this
+same treatment eventually, but grow them one proven conflict at a time.
+
+### shadcn's `dark:` utilities firing on a light-only app
+
+This app has no dark theme and never toggles a `.dark` class, but several shadcn primitives (`ui/select.tsx`,
+`ui/button.tsx`, etc.) ship hardcoded `dark:bg-input/30`-style utilities. Tailwind v4's default `dark:` variant is
+`@media (prefers-color-scheme: dark)`, so on any visitor whose **OS/browser** is set to dark mode, those utilities
+activate for real - `tailwind-merge` can't help here since `dark:bg-input/30` and `bg-surface` aren't in the same
+conflict group (one is conditional on a media query, the other isn't), so both rules exist in the stylesheet and the
+media query wins when it matches. This was the actual cause behind a long-running "button is yellow-brown instead of
+white" report - the browser's own dark-mode media query was overriding `bg-surface` with `var(--input)` for anyone
+testing with OS dark mode on.
+
+Fixed at the source (`src/styles/globals.css`, right after the `@import` lines): rescope `dark:` to a class selector
+that's never applied, so the variant can never fire:
+
+```css
+@custom-variant dark (&:where(.dark, .dark *));
+```
+
+This requires a full dev-server restart (`.next` cache included) to take effect - a plain HMR reload does not
+recompile this directive.
+
+### Radix `Select` + RTL: default `item-aligned` positioning breaks
+
+`ui/select.tsx`'s `SelectContent` defaults to `position="item-aligned"`. Under this app's global `dir="rtl"`, that
+positioning mode can place the dropdown far from its trigger (e.g. anchored near the opposite screen corner) instead
+of directly beneath it - a known Radix/floating-ui miscalculation under RTL. It still opens and works, so it reads as
+"unresponsive" rather than "mispositioned," which is easy to misdiagnose from a description alone - a real click-through
+or bounding-rect check settles it, not judgment about how a CSS class merges.
+
+Fix per call site (wrapper level, e.g. `src/components/shared/SortSelect.tsx`): pass `position={'popper'}` explicitly,
+which anchors via floating-ui against the trigger rect and handles RTL correctly.
+
+### Verifying a CSS/positioning fix actually works - don't stop at unit-testing `cn()`
+
+Proving `cn(...)` produces the right class string is necessary but not sufficient - it doesn't confirm the browser
+renders what you expect (a `dark:` media-query rule, a stale `.next` cache, or a Radix positioning bug are all
+invisible to that check). When a report is specifically about rendered appearance or interactive behavior, verify
+against the real compiled CSS and a real browser: a temporary same-origin route rendering the actual component (not
+an isolated HTML snippet - cross-origin `data:`/`file:` pages block stylesheet/cssRules access), a real click, and
+`getComputedStyle`/`getBoundingClientRect` on the actual DOM node. Delete the temporary route before finishing.
