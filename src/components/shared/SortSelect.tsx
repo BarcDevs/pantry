@@ -25,7 +25,8 @@ export const SortSelect = <T extends string>({
     options,
     label
 }: SortSelectProps<T>) => {
-    const currentLabel = options.find((option) => option.value === value)?.label ?? value
+    const currentLabel = options.find((option) =>
+        option.value === value)?.label ?? value
 
     return (
         <Select
@@ -36,11 +37,12 @@ export const SortSelect = <T extends string>({
                 <ArrowUpDownIcon size={14}/>
                 <span>{`${label}: ${currentLabel}`}</span>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position={'popper'}>
                 {options.map((option) => (
                     <SelectItem
                         key={option.value}
                         value={option.value}
+                        className={'cursor-pointer'}
                     >
                         {option.label}
                     </SelectItem>

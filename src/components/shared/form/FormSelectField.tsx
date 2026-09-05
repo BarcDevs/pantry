@@ -56,7 +56,7 @@ export const FormSelectField = <T extends FieldValues, V extends string>({
                             <SelectValue placeholder={placeholder}/>
                         </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent position={'popper'}>
                         {options.map((option) => (
                             <SelectItem
                                 key={option.value}
