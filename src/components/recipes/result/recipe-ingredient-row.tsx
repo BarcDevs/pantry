@@ -21,7 +21,10 @@ export const RecipeIngredientRow = ({
         />
         <span className={'flex items-baseline gap-1.5 text-body text-ink'}>
             <span className={'text-label text-ink-3'}>
-                {`${formatQuantity(ingredient.quantity)} ${recipesTexts.unitLabels[ingredient.unit]}`}
+                <span dir={'ltr'}>
+                    {formatQuantity(ingredient.quantity)}
+                </span>
+                {` ${recipesTexts.unitLabels[ingredient.unit]}`}
             </span>
             <span>
                 {ingredient.name}
