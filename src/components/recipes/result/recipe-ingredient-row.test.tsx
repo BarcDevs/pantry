@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 
-import { Unit } from '@/types/enums'
+import { CookingUnit } from '@/types/enums'
 
 import { RecipeIngredientRow } from './recipe-ingredient-row'
 
@@ -11,7 +11,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'בזיליקום לקישוט',
                     quantity: 1,
-                    unit: Unit.Units,
+                    unit: CookingUnit.Units,
                     inPantry: false,
                     optional: true
                 }}
@@ -26,7 +26,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'עגבניות',
                     quantity: 1,
-                    unit: Unit.Units,
+                    unit: CookingUnit.Units,
                     inPantry: true,
                     optional: false
                 }}

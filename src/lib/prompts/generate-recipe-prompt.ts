@@ -26,6 +26,11 @@ export const buildGenerateRecipePrompt = (
     ${input.customInstructions
         ? `הוראות מיוחדות נוספות מהמשתמש: ${input.customInstructions}`
         : ''}
+    לכל מרכיב ציין יחידת מידה (unit) התואמת לאופן שבו מבשלים בפועל
+    משתמשים בה - kg, g, L, ml, units, tsp (כפית), tbsp (כף), cup (כוס),
+    pinch (קורט), handful (חופן), clove (שן), slice (פרוסה). אל תמיר
+    הכל ל-units כברירת מחדל - למשל מלח שנמדד בכפיות מקבל unit: tsp,
+    לא unit: units.
     לכל מרכיב ציין אם הוא נמצא במזווה (inPantry).
     לכל מרכיב ציין גם אם הוא אופציונלי (optional) - כלומר תוספת,
     קישוט להגשה, או משהו שניתן להשמיט בלי לפגוע במתכון עצמו

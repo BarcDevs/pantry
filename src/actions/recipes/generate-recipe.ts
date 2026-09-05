@@ -3,13 +3,13 @@
 import { z } from 'zod'
 
 import {
+    COOKING_UNITS,
+    CookingUnit,
     DIFFICULTIES,
     Difficulty,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
-    RECIPE_SCOPES,
-    Unit,
-    UNITS
+    RECIPE_SCOPES
 } from '@/types/enums'
 import type {
     GenerateRecipeInput,
@@ -44,7 +44,7 @@ const aiRecipeSchema = z.object({
     ingredients: z.array(z.object({
         name: z.string(),
         quantity: z.number(),
-        unit: z.enum(UNITS),
+        unit: z.enum(COOKING_UNITS),
         inPantry: z.boolean(),
         optional: z.boolean().default(false)
     })),
@@ -88,7 +88,7 @@ export const generateRecipe = async (
         ingredients: pantryItemNames.slice(0, 3).map((name) => ({
             name,
             quantity: 1,
-            unit: Unit.Units,
+            unit: CookingUnit.Units,
             inPantry: true,
             optional: false
         })),

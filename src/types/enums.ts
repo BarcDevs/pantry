@@ -71,12 +71,29 @@ export const MatchStrictness = {
 export type MatchStrictness = typeof MatchStrictness[keyof typeof MatchStrictness]
 export const MATCH_STRICTNESSES = Object.values(MatchStrictness)
 
-export const Unit = {
+export const PantryUnit = {
     Kg: 'kg',
     G: 'g',
     L: 'L',
     Ml: 'ml',
     Units: 'units'
 } as const
-export type Unit = typeof Unit[keyof typeof Unit]
-export const UNITS = Object.values(Unit)
+export type PantryUnit = typeof PantryUnit[keyof typeof PantryUnit]
+export const PANTRY_UNITS = Object.values(PantryUnit)
+
+export const CookingUnit = {
+    Kg: 'kg',
+    G: 'g',
+    L: 'L',
+    Ml: 'ml',
+    Units: 'units',
+    Teaspoon: 'tsp',
+    Tablespoon: 'tbsp',
+    Cup: 'cup',
+    Pinch: 'pinch',
+    Handful: 'handful',
+    Clove: 'clove',
+    Slice: 'slice'
+} as const
+export type CookingUnit = typeof CookingUnit[keyof typeof CookingUnit]
+export const COOKING_UNITS = Object.values(CookingUnit)

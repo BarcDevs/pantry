@@ -1,17 +1,17 @@
 import type { MongoDbObject } from '@/types'
 import type {
+    CookingUnit,
     Difficulty,
     MatchStrictness,
     MealType,
     RecipeScope,
-    RecipeSource,
-    Unit
+    RecipeSource
 } from '@/types/enums'
 
 export type RecipeIngredient = {
     name: string
     quantity: number
-    unit: Unit
+    unit: CookingUnit
     inPantry: boolean
     optional: boolean
 }

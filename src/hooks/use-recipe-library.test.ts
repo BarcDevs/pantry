@@ -3,7 +3,7 @@ import {
     renderHook
 } from '@testing-library/react'
 
-import { Unit } from '@/types/enums'
+import { CookingUnit } from '@/types/enums'
 import type { Recipe } from '@/types/recipe'
 
 import { useRecipeLibrary } from './use-recipe-library'
@@ -37,14 +37,14 @@ describe('useRecipeLibrary can-cook filter', () => {
                 {
                     name: 'עגבניות',
                     quantity: 1,
-                    unit: Unit.Units,
+                    unit: CookingUnit.Units,
                     inPantry: true,
                     optional: false
                 },
                 {
                     name: 'בזיליקום לקישוט',
                     quantity: 1,
-                    unit: Unit.Units,
+                    unit: CookingUnit.Units,
                     inPantry: false,
                     optional: true
                 }
@@ -62,7 +62,7 @@ describe('useRecipeLibrary can-cook filter', () => {
             ingredients: [{
                 name: 'עגבניות',
                 quantity: 1,
-                unit: Unit.Units,
+                unit: CookingUnit.Units,
                 inPantry: false,
                 optional: false
             }]

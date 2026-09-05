@@ -1,18 +1,18 @@
 import { z } from 'zod'
 
 import {
+    COOKING_UNITS,
     DIFFICULTIES,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
     RECIPE_SCOPES,
-    RECIPE_SOURCES,
-    UNITS
+    RECIPE_SOURCES
 } from '@/types/enums'
 
 export const ingredientSchema = z.object({
     name: z.string(),
     quantity: z.number(),
-    unit: z.enum(UNITS),
+    unit: z.enum(COOKING_UNITS),
     inPantry: z.boolean(),
     optional: z.boolean().default(false)
 })

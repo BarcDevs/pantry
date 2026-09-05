@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
 import {
+    COOKING_UNITS,
     DIFFICULTIES,
-    MEAL_TYPES,
-    UNITS
+    MEAL_TYPES
 } from '@/types/enums'
 
 export const importedRecipeSchema = z.object({
@@ -16,7 +16,7 @@ export const importedRecipeSchema = z.object({
     ingredients: z.array(z.object({
         name: z.string(),
         quantity: z.number(),
-        unit: z.enum(UNITS),
+        unit: z.enum(COOKING_UNITS),
         optional: z.boolean().default(false)
     })),
     steps: z.array(z.object({

@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
 
 import {
+    COOKING_UNITS,
     DIFFICULTIES,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
     RECIPE_SCOPES,
-    RECIPE_SOURCES,
-    UNITS
+    RECIPE_SOURCES
 } from '@/types/enums'
 import type { RecipeDoc } from '@/types/recipe'
 
@@ -22,7 +22,7 @@ const recipeIngredientSchema = {
     },
     unit: {
         type: String,
-        enum: UNITS,
+        enum: COOKING_UNITS,
         required: true
     },
     inPantry: {

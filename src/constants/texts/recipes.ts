@@ -1,4 +1,18 @@
 export const recipesTexts = {
+    unitLabels: {
+        kg: 'ק"ג',
+        g: 'גרם',
+        L: 'ליטר',
+        ml: 'מ"ל',
+        units: 'יחידות',
+        tsp: 'כפית',
+        tbsp: 'כף',
+        cup: 'כוס',
+        pinch: 'קורט',
+        handful: 'חופן',
+        clove: 'שן',
+        slice: 'פרוסה'
+    },
     generate: {
         title: 'יצירת מתכון',
         subtitle: 'בחרו אילו פריטים מהמזווה ייכנסו ליצירה הזו, וכוונו את ההעדפות.',
