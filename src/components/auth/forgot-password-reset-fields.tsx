@@ -2,11 +2,11 @@
 
 import type { UseFormReturn } from 'react-hook-form'
 
+import { OtpInput } from '@/components/auth/otp-input'
 import { PasswordInput } from '@/components/auth/password-input'
 import { Button } from '@/components/shared/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
-import { LtrInput } from '@/components/shared/LtrInput'
 import { Form } from '@/components/ui/form'
 
 import { authTexts } from '@/constants/texts/auth'
@@ -33,12 +33,7 @@ export const ForgotPasswordResetFields = ({
                 control={form.control}
                 name={'code'}
                 label={authTexts.resetCodeLabel}
-                render={(field) => (
-                    <LtrInput
-                        {...field}
-                        inputMode={'numeric'}
-                    />
-                )}
+                render={(field) => <OtpInput {...field}/>}
             />
             <FormInputField
                 control={form.control}
