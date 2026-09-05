@@ -1,6 +1,7 @@
 import type { RecipeDoc } from '@/types/recipe'
 
 import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingredients-list'
+import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero'
 import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
 import { Button } from '@/components/shared/Button'
 import { Input } from '@/components/ui/input'
@@ -21,6 +22,7 @@ export const ImportRecipeReview = ({
     onSave
 }: ImportRecipeReviewProps) => (
     <div className={'flex flex-col gap-5'}>
+        <RecipeResultHero recipe={recipe}/>
         <div className={'flex flex-col gap-2'}>
             <label className={'text-label font-bold text-ink'}>
                 {recipesTexts.import.titleLabel}
