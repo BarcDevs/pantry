@@ -4,9 +4,8 @@ import {
     FOOD_TYPES,
     ITEM_SOURCES,
     ItemSource,
-    STORAGE_LOCATIONS,
-    UNITS
-} from '@/types/enums'
+    PANTRY_UNITS,
+    STORAGE_LOCATIONS } from '@/types/enums'
 import type {
     PantryItemDoc,
     StorageSuggestion
@@ -58,7 +57,7 @@ const pantryItemSchema = new mongoose.Schema<PantryItemDoc>(
         quantity: { type: Number, required: true, min: 0 },
         unit: {
             type: String,
-            enum: UNITS,
+            enum: PANTRY_UNITS,
             required: true
         },
         expiryDate: { type: Date },

@@ -2,9 +2,8 @@ import { z } from 'zod'
 
 import {
     FOOD_TYPES,
-    STORAGE_LOCATIONS,
-    UNITS
-} from '@/types/enums'
+    PANTRY_UNITS,
+    STORAGE_LOCATIONS } from '@/types/enums'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -13,7 +12,7 @@ export const addItemFormSchema = z.object({
     storage: z.enum(STORAGE_LOCATIONS),
     type: z.enum(FOOD_TYPES).nullable(),
     quantity: z.number().positive({ message: pantryTexts.addForm.quantityError }),
-    unit: z.enum(UNITS),
+    unit: z.enum(PANTRY_UNITS),
     expiryDate: z.string(),
     notes: z.string().max(500)
 })

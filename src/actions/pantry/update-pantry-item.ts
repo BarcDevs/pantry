@@ -5,9 +5,8 @@ import { z } from 'zod'
 
 import {
     FOOD_TYPES,
-    STORAGE_LOCATIONS,
-    UNITS
-} from '@/types/enums'
+    PANTRY_UNITS,
+    STORAGE_LOCATIONS } from '@/types/enums'
 import type {
     PantryItem,
     UpdatePantryItemInput
@@ -26,7 +25,7 @@ const updatePantryItemSchema = z.object({
     storage: z.enum(STORAGE_LOCATIONS).optional(),
     type: z.enum(FOOD_TYPES).nullable().optional(),
     quantity: z.number().positive().optional(),
-    unit: z.enum(UNITS).optional(),
+    unit: z.enum(PANTRY_UNITS).optional(),
     expiryDate: z.date().optional(),
     notes: z.string().max(500).optional(),
     storageSuggestion: storageSuggestionSchema

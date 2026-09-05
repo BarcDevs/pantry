@@ -13,9 +13,8 @@ import { zodResolver }
     from '@hookform/resolvers/zod'
 
 import {
-    StorageLocation,
-    Unit
-} from '@/types/enums'
+    PantryUnit,
+    StorageLocation } from '@/types/enums'
 import type {
     AddPantryItemInput,
     AddPantryItemOutcome,
@@ -62,7 +61,7 @@ export const useAddItemForm = () => {
             storage: StorageLocation.Fridge,
             type: null,
             quantity: 1,
-            unit: Unit.Units,
+            unit: PantryUnit.Units,
             expiryDate: '',
             notes: ''
         }

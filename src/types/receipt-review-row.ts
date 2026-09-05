@@ -1,9 +1,9 @@
-import type { Unit } from '@/types/enums'
+import type { PantryUnit } from '@/types/enums'
 
 export type ReceiptReviewRow = {
     id: string
     name: string
     quantity: number
-    unit: Unit
+    unit: PantryUnit
     included: boolean
 }

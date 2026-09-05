@@ -5,9 +5,8 @@ import {
 
 import {
     FoodType,
-    StorageLocation,
-    Unit
-} from '@/types/enums'
+    PantryUnit,
+    StorageLocation } from '@/types/enums'
 import type { PantryItem } from '@/types/pantry-item'
 
 import { PantryItemCard } from './pantry-item-card'
@@ -19,7 +18,7 @@ const baseItem: PantryItem = {
     storage: StorageLocation.Fridge,
     type: FoodType.Eggs,
     quantity: 6,
-    unit: Unit.Units,
+    unit: PantryUnit.Units,
     source: 'manual',
     storageSuggestion: null
 } as PantryItem

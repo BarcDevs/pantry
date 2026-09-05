@@ -2,9 +2,8 @@ import type { Control } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
 
 import {
-    STORAGE_LOCATIONS,
-    UNITS
-} from '@/types/enums'
+    PANTRY_UNITS,
+    STORAGE_LOCATIONS } from '@/types/enums'
 
 import { ExpiryDateField } from '@/components/pantry/add/expiry-date-field'
 import { QuantityField } from '@/components/pantry/add/quantity-field'
@@ -24,7 +23,7 @@ type AddItemFieldsProps = {
 }
 
 const storageOptions = toSelectOptions(STORAGE_LOCATIONS, pantryTexts.storageLabels)
-const unitOptions = toSelectOptions(UNITS, pantryTexts.unitLabels)
+const unitOptions = toSelectOptions(PANTRY_UNITS, pantryTexts.unitLabels)
 
 export const AddItemFields = ({ control }: AddItemFieldsProps) => {
     const unit = useWatch({ control, name: 'unit' })

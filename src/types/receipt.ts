@@ -1,9 +1,9 @@
-import type { Unit } from '@/types/enums'
+import type { PantryUnit } from '@/types/enums'
 
 export type ScannedReceiptItem = {
     name: string
     quantity: number
-    unit: Unit
+    unit: PantryUnit
 }
 
 export type ImageInput = {

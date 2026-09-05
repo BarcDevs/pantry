@@ -1,4 +1,4 @@
-import { Unit } from '@/types/enums'
+import { PantryUnit } from '@/types/enums'
 import type { ScannedReceiptItem } from '@/types/receipt'
 
 export const mockReceiptItems = (): { items: ScannedReceiptItem[] } => ({
@@ -6,7 +6,7 @@ export const mockReceiptItems = (): { items: ScannedReceiptItem[] } => ({
         {
             name: 'עגבניות',
             quantity: 1,
-            unit: Unit.Kg
+            unit: PantryUnit.Kg
         }
     ]
 })

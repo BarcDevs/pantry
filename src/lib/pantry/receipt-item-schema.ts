@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
-import { UNITS } from '@/types/enums'
+import { PANTRY_UNITS } from '@/types/enums'
 
 export const receiptItemShape = z.object({
     name: z.string().min(1).max(120),
     quantity: z.number().positive().max(10_000),
-    unit: z.enum(UNITS)
+    unit: z.enum(PANTRY_UNITS)
 })
 
 export const receiptItemsSchema = z.object({

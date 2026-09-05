@@ -2,9 +2,8 @@ import type { MongoDbObject } from '@/types'
 import type {
     FoodType,
     ItemSource,
-    StorageLocation,
-    Unit
-} from '@/types/enums'
+    PantryUnit,
+    StorageLocation } from '@/types/enums'
 
 export type ExpiryEntry = {
     date: string
@@ -30,7 +29,7 @@ export type PantryItemDoc = {
     storage: StorageLocation
     type: FoodType | null
     quantity: number
-    unit: Unit
+    unit: PantryUnit
     expiryDate?: Date
     notes?: string
     source: ItemSource
@@ -45,7 +44,7 @@ export type AddPantryItemInput = {
     storage: StorageLocation
     type: FoodType | null
     quantity: number
-    unit: Unit
+    unit: PantryUnit
     expiryDate?: Date
     notes?: string
     storageSuggestion?: StorageSuggestion | null
@@ -60,7 +59,7 @@ export type UpdatePantryItemInput = Partial<{
     storage: StorageLocation
     type: FoodType | null
     quantity: number
-    unit: Unit
+    unit: PantryUnit
     expiryDate: Date
     notes: string
     storageSuggestion: StorageSuggestion | null
@@ -70,7 +69,7 @@ export type DeductRow = {
     pantryItemId: string
     name: string
     type: FoodType | null
-    unit: Unit
+    unit: PantryUnit
     pantryQty: number
     used: number
     choice: 'keep' | 'delete' | null
