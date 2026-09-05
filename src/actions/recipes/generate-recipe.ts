@@ -9,6 +9,7 @@ import {
     Difficulty,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
+    type PantryUnit,
     RECIPE_SCOPES
 } from '@/types/enums'
 import type {
@@ -22,6 +23,10 @@ import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
 import { objectIdSchema } from '@/lib/object-id-schema'
 import { buildGenerateRecipePrompt } from '@/lib/prompts/generate-recipe-prompt'
+import {
+    findMatchingPantryItem,
+    hasEnoughPantryQuantity
+} from '@/lib/recipes/check-pantry-sufficiency'
 import {
     normalizeIngredientFractions,
     normalizeStepFractions
@@ -73,7 +78,11 @@ export const generateRecipe = async (
     }
     const pantryItems = await PantryItemModel
         .find(pantryQuery)
-        .lean<Array<{ name: string }>>()
+        .lean<Array<{
+            name: string
+            quantity: number
+            unit: PantryUnit
+        }>>()
     const pantryItemNames = pantryItems.map((item) => item.name)
 
     const user = await UserModel
@@ -117,10 +126,18 @@ export const generateRecipe = async (
         maxTime: parsedInput.maxTime,
         mealCount: parsedInput.mealCount,
         mealType: parsedInput.mealType,
-        ingredients: normalizeIngredientFractions(generated.ingredients).map((ingredient) => ({
-            ...ingredient,
-            inPantry: pantryItemNames.includes(ingredient.name)
-        })),
+        ingredients: normalizeIngredientFractions(generated.ingredients).map((ingredient) => {
+            const matchedItem = findMatchingPantryItem(ingredient.name, pantryItems)
+            return {
+                ...ingredient,
+                inPantry: matchedItem !== undefined && hasEnoughPantryQuantity(
+                    ingredient.quantity,
+                    ingredient.unit,
+                    matchedItem.quantity,
+                    matchedItem.unit
+                )
+            }
+        }),
         steps: normalizeStepFractions(generated.steps),
         emoji: generated.emoji,
         rating: null,
