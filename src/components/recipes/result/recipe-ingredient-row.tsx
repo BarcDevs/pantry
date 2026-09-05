@@ -21,7 +21,10 @@ export const RecipeIngredientRow = ({
         />
         <span className={'flex items-baseline gap-1.5 text-body text-ink'}>
             <span className={'text-label text-ink-3'}>
-                <span dir={'ltr'}>
+                <span
+                    dir={'ltr'}
+                    style={{ unicodeBidi: 'isolate' }}
+                >
                     {formatQuantity(ingredient.quantity)}
                 </span>
                 {` ${recipesTexts.unitLabels[ingredient.unit]}`}
