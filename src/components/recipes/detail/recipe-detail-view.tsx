@@ -3,7 +3,6 @@
 import { RECIPE_SOURCES } from '@/types/enums'
 import type { Recipe } from '@/types/recipe'
 
-import { DeleteRecipeDialog } from '@/components/recipes/detail/delete-recipe-dialog'
 import { RecipeDetailActions } from '@/components/recipes/detail/recipe-detail-actions'
 import { RecipeRatingDisplay } from '@/components/recipes/detail/recipe-rating-display'
 import { RecipeTagsEditor } from '@/components/recipes/detail/recipe-tags-editor'
@@ -12,6 +11,7 @@ import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingred
 import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero'
 import { RecipeResultStats } from '@/components/recipes/result/recipe-result-stats'
 import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
+import { DeleteRecipeDialog } from '@/components/recipes/shared/delete-recipe-dialog'
 import { PageHeader } from '@/components/shared/PageHeader'
 
 import { useRecipeDetail } from '@/hooks/use-recipe-detail'

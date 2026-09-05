@@ -5,11 +5,13 @@ import { RecipeCard } from '@/components/recipes/shared/recipe-card'
 type RecipeGridProps = {
     recipes: Recipe[]
     onToggleFavorite: (recipe: Recipe) => void
+    onDelete: (recipe: Recipe) => Promise<void>
 }
 
 export const RecipeGrid = ({
     recipes,
-    onToggleFavorite
+    onToggleFavorite,
+    onDelete
 }: RecipeGridProps) => (
     <div className={'grid grid-cols-2 gap-3 md:grid-cols-3'}>
         {recipes.map((recipe) => (
@@ -17,6 +19,7 @@ export const RecipeGrid = ({
                 key={recipe._id}
                 recipe={recipe}
                 onToggleFavorite={() => onToggleFavorite(recipe)}
+                onDelete={() => onDelete(recipe)}
             />
         ))}
     </div>

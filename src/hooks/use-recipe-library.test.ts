@@ -9,6 +9,7 @@ import type { Recipe } from '@/types/recipe'
 import { useRecipeLibrary } from './use-recipe-library'
 
 jest.mock('@/actions/recipes/update-recipe', () => ({ updateRecipe: jest.fn() }))
+jest.mock('@/actions/recipes/delete-recipe', () => ({ deleteRecipe: jest.fn() }))
 
 const makeRecipe = (overrides: Partial<Recipe>): Recipe => ({
     _id: overrides._id ?? 'r1',
