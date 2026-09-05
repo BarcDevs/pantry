@@ -37,6 +37,8 @@
 | Pantry item form | 🆕 Match vs. mismatch suggestion UI | Suggestion panel behaves differently depending on whether the current storage selection matches the AI's recommendation. Match: confirmation only, no action needed. Mismatch: shows a "Select" button to apply the better location, with both the current and recommended option's reasons displayed side by side so the user understands the trade-off before deciding. |
 | Pantry item form | 🆕 Product name autocomplete | Name field is a Combobox filtering against a static list of ~150-200 common Hebrew food items (no AI, no network call, works offline). Substring match after 1 character, up to 8 suggestions. Selecting a suggestion triggers the existing debounced storage suggestion call. Free text accepted when no match. |
 | Pantry item form | 🆕 Auto-fill food type from AI suggestion | `suggested_type: FoodType` added to the `StorageSuggestion` response (same single AI call, zero extra latency). Not shown as a form field upfront - displayed as a chip below the suggestion panel after AI responds ("סוג מוצר: X + שנה"). If AI didn't identify a type, a non-blocking popup on save asks the user to select or skip. Saved as `null` if skipped - does not block core functionality. |
+| Pantry item icon | 🆕 Derived from food type, no picker | Pantry item visual icon is a fixed emoji determined by `FoodType` (e.g. vegetables→🥦, dairy→🥛, meat→🍗, null→📦). No manual emoji picker - removes a form field and eliminates mismatches between icon and food type. Mapping lives in `src/constants/food-type-emoji.ts`, resolved via `src/lib/pantry/food-type-icon.ts`. |
+| Pantry list | 🆕 Product-type filter (multi-select) | Alongside the existing storage-location chips, a popover filter lets the user select any number of food types at once to narrow the pantry grid; independent of and combinable with the storage filter and search box. |
 | Recipe generation config | 🆕 Selectable pantry subset | User can choose which pantry items to include for a given recipe generation via checklist (all selected by default, with Select All / Deselect All toggle) instead of always using the entire pantry |
 | Recipe generation config | 🆕 Unified time field | Single `max_time` field replaces separate prep_time/cook_time inputs on the generation config screen - simpler MVP UX |
 | Recipe generation config | 🆕 Meal count field | New `meal_count` (servings) input added to generation config |
@@ -73,6 +75,7 @@
 | Cooking session history | MVP | Moved up from Phase 2. Implemented as `recipes.history` JSONB array (cook timestamps + per-cook ratings), not a separate cooking_sessions table - keeps the original "no new entity" simplicity goal while still supporting the Cooking History screen. |
 | Recipe version history | Phase 2 | Deferred. parent_recipe_id chain not needed at MVP. |
 | Dish request (`dish_request`) | Phase 2 | Optional free-text field ("מה אתם רוצים להכין?") on the generation config screen. When present, AI attempts to realize the specific requested dish using pantry contents, surfacing missing core ingredients and labeled substitutes rather than freely picking a dish. Deferred: requires a fundamentally different generation response structure (matched / substituted / missing-core ingredient states), a more complex Result screen (title qualifier when substitutes used, three-state ingredient list), and relies on AI reliably identifying "core" vs "substitutable" ingredients - better evaluated after baseline generation quality is known in production. |
+| AI recipe feedback loop | Phase 2 / Scaling only | Per-recipe rating data already exists in `recipes.history`. At scale, inject top-rated and low-rated recipe patterns into the generation prompt to personalize future suggestions ("המשתמש דירג נמוך מתכונים עם דגים"). Not relevant for single-user personal use - Gemini is stateless between calls so this requires explicit prompt injection per generation. Evaluate when user base justifies the added prompt tokens and complexity. |
 | Web-search recipe sourcing (`allow_ai_generation` toggle) | MVP | Moved up from Phase 2 - Gemini's web search (Google Search Grounding) is included in the standard API, no added cost/complexity. Default: AI searches the web for a matching recipe; if none found, AI generates one. Toggle off → AI only returns web-sourced matches, never invents. |
 | Match strictness control (`match_strictness`) | MVP | Moved up from Phase 2 - simple prompt parameter, no added complexity. 'strict' (recipe must closely match available ingredients) vs 'flexible' (core match sufficient, some missing ingredients OK). Independent of `scope` (pantry-only/first/open). |
 | Meal count / servings (`meal_count`) | MVP | New. User sets number of servings (default 3) on the generation config screen; included in the AI prompt for ingredient quantity scaling. |
@@ -86,13 +89,15 @@
     As a home cook, I want to maintain an accurate list of what's in my pantry and fridge so the AI always has a real context to work with.
     Acceptance Criteria
     
-      AC-1.1User can add an item with: name (required), storage location (fridge / freezer / pantry), food type (vegetables / fruits / dairy / eggs / meat / fish / canned / grains / snacks / beverages / condiments / other - optional, see AC-1.8b), quantity, unit, expiry date (optional), notes (optional)
+      AC-1.1User can add an item with: name (required), storage location (fridge / freezer / pantry), food type (vegetables / fruits / dairy / meat / fish / canned / grains / snacks / beverages / condiments / other - optional, see AC-1.8b), quantity, unit, expiry date (optional), notes (optional). The pantry item's visual icon is derived automatically from its food type - there is no manual emoji/icon picker. Each FoodType maps to a fixed emoji (e.g. vegetables→🥦, dairy→🥛, meat→🍗); items with `type: null` show a generic icon (📦).
 
       - AC-1.2Storage location and food type are independent fields - a product can be "vegetables" stored in "fridge" or "freezer"
 
       - AC-1.3Items with expiry dates show color-coded indicators: green (>7 days), orange (3–7 days), red (<3 days or expired)
 
       - AC-1.4Pantry list is sorted by expiry date ascending (soonest first); items without expiry appear at the bottom
+
+      - AC-1.4bAlongside the existing storage-location filter chips, a popover lets the user select any number of food types at once (multi-select) to filter the pantry list; an item with `type: null` is excluded whenever any type filter is active. Combines with the storage filter and search box (all three narrow the same list together, not mutually exclusive).
 
       - AC-1.5User can edit any field of an existing item
 
@@ -347,7 +352,7 @@ type StorageLocation = 'fridge' | 'freezer' | 'pantry'
 
 // Food type / category (what kind of ingredient it is)
 type FoodType =
-  | 'vegetables' | 'fruits' | 'dairy' | 'eggs' | 'meat'
+  | 'vegetables' | 'fruits' | 'dairy' | 'meat'
   | 'fish' | 'canned' | 'grains' | 'snacks'
   | 'beverages' | 'condiments' | 'other'
 
