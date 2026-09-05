@@ -2,10 +2,10 @@
 
 import type { UseFormReturn } from 'react-hook-form'
 
+import { OtpInput } from '@/components/auth/otp-input'
 import { Button } from '@/components/shared/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
-import { LtrInput } from '@/components/shared/LtrInput'
 import { Form } from '@/components/ui/form'
 
 import { authTexts } from '@/constants/texts/auth'
@@ -32,12 +32,7 @@ export const VerifyEmailFields = ({
                 control={form.control}
                 name={'code'}
                 label={authTexts.verifyCodeLabel}
-                render={(field) => (
-                    <LtrInput
-                        {...field}
-                        inputMode={'numeric'}
-                    />
-                )}
+                render={(field) => <OtpInput {...field}/>}
             />
             <FormError errors={form.formState.errors}/>
             <Button
