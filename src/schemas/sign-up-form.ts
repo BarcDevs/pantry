@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { authTexts } from '@/constants/texts/auth'
+
 export const signUpFormSchema = z.object({
     fullName: z.string().trim().min(1).max(100),
     email: z.string().trim().email(),
@@ -7,7 +9,7 @@ export const signUpFormSchema = z.object({
 })
 
 export const verifyFormSchema = z.object({
-    code: z.string().trim().min(6).max(6)
+    code: z.string().trim().length(6, { message: authTexts.codeTooShort })
 })
 
 export type SignUpFormValues = z.infer<typeof signUpFormSchema>

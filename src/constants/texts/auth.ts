@@ -29,6 +29,7 @@ export const authTexts = {
     verifyCodeLabel: 'קוד אימות',
     verifySubmit: 'אימות',
     verifyError: 'קוד שגוי, נסה שוב',
+    codeTooShort: 'הקוד קצר מדי, יש להזין 6 ספרות',
     forgotTitle: 'איפוס סיסמה 🔑',
     forgotSub: 'נשלח לכם קוד לאיפוס הסיסמה',
     forgotRequestSubmit: 'שליחת קוד',
