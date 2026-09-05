@@ -11,11 +11,14 @@ import type { Recipe } from '@/types/recipe'
 import { routes } from '@/constants/routes'
 import { recipesTexts } from '@/constants/texts/recipes'
 
+import { deleteRecipe } from '@/actions/recipes/delete-recipe'
 import { updateRecipe } from '@/actions/recipes/update-recipe'
 
 export const useRecipeDetail = (initialRecipe: Recipe) => {
     const router = useRouter()
     const [recipe, setRecipe] = useState(initialRecipe)
+    const [confirmDelete, setConfirmDelete] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
 
     const applyOptimisticUpdate = async <K extends keyof Recipe>(
         key: K,
@@ -55,11 +58,28 @@ export const useRecipeDetail = (initialRecipe: Recipe) => {
         router.push(routes.recipeCook(recipe._id))
     }
 
+    const handleDelete = async () => {
+        setIsDeleting(true)
+        try {
+            await deleteRecipe(recipe._id)
+            toast.success(recipesTexts.detail.deleteSuccess)
+            router.push(routes.recipes)
+        } catch (error) {
+            console.error(error)
+            toast.error(recipesTexts.detail.deleteError)
+            setIsDeleting(false)
+        }
+    }
+
     return {
         recipe,
         toggleFavorite,
         updateTags,
         updateImageUrl,
-        startCooking
+        startCooking,
+        confirmDelete,
+        setConfirmDelete,
+        isDeleting,
+        handleDelete
     }
 }

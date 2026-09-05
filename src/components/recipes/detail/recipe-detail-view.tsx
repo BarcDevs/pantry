@@ -3,6 +3,7 @@
 import { RECIPE_SOURCES } from '@/types/enums'
 import type { Recipe } from '@/types/recipe'
 
+import { DeleteRecipeDialog } from '@/components/recipes/detail/delete-recipe-dialog'
 import { RecipeDetailActions } from '@/components/recipes/detail/recipe-detail-actions'
 import { RecipeRatingDisplay } from '@/components/recipes/detail/recipe-rating-display'
 import { RecipeTagsEditor } from '@/components/recipes/detail/recipe-tags-editor'
@@ -29,7 +30,11 @@ export const RecipeDetailView = ({ recipe: initialRecipe }: RecipeDetailViewProp
         toggleFavorite,
         updateTags,
         updateImageUrl,
-        startCooking
+        startCooking,
+        confirmDelete,
+        setConfirmDelete,
+        isDeleting,
+        handleDelete
     } = useRecipeDetail(initialRecipe)
 
     return (
@@ -59,6 +64,13 @@ export const RecipeDetailView = ({ recipe: initialRecipe }: RecipeDetailViewProp
                 recipe={recipe}
                 onToggleFavorite={toggleFavorite}
                 onStartCooking={startCooking}
+                onRequestDelete={() => setConfirmDelete(true)}
+            />
+            <DeleteRecipeDialog
+                open={confirmDelete}
+                onOpenChange={setConfirmDelete}
+                onConfirm={handleDelete}
+                isDeleting={isDeleting}
             />
         </div>
     )
