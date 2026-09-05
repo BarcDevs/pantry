@@ -8,7 +8,11 @@ import { useCookingHistory } from '@/hooks/use-cooking-history'
 import { recipesTexts } from '@/constants/texts/recipes'
 
 const CookingHistoryPage = () => {
-    const { rows, rate } = useCookingHistory()
+    const {
+        rows,
+        rate,
+        toggleFavorite
+    } = useCookingHistory()
 
     return (
         <main className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
@@ -20,6 +24,7 @@ const CookingHistoryPage = () => {
                 <CookingHistoryList
                     rows={rows}
                     onRate={(row, value) => rate(row, value)}
+                    onToggleFavorite={toggleFavorite}
                 />
             )}
         </main>

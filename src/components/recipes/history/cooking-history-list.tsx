@@ -7,11 +7,13 @@ import { recipesTexts } from '@/constants/texts/recipes'
 type CookingHistoryListProps = {
     rows: CookingHistoryRow[]
     onRate: (row: CookingHistoryRow, value: number) => void
+    onToggleFavorite: (row: CookingHistoryRow) => void
 }
 
 export const CookingHistoryList = ({
     rows,
-    onRate
+    onRate,
+    onToggleFavorite
 }: CookingHistoryListProps) => {
     if (rows.length === 0) {
         return (
@@ -34,6 +36,7 @@ export const CookingHistoryList = ({
                     key={row.entryId}
                     row={row}
                     onRate={(value) => onRate(row, value)}
+                    onToggleFavorite={() => onToggleFavorite(row)}
                 />
             ))}
         </div>

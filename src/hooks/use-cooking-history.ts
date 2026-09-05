@@ -12,6 +12,7 @@ import { recipesTexts } from '@/constants/texts/recipes'
 
 import { getCookingHistory } from '@/actions/recipes/get-cooking-history'
 import { updateHistoryEntryRating } from '@/actions/recipes/update-history-entry-rating'
+import { updateRecipe } from '@/actions/recipes/update-recipe'
 
 export type CookingHistoryRow = {
     recipeId: string
@@ -20,6 +21,7 @@ export type CookingHistoryRow = {
     emoji?: string
     rating: number | null
     cookedAt: Date
+    isFavorite: boolean
 }
 
 const toRows = (recipes: Recipe[]): CookingHistoryRow[] => recipes
@@ -29,7 +31,8 @@ const toRows = (recipes: Recipe[]): CookingHistoryRow[] => recipes
         name: recipe.title,
         emoji: recipe.emoji,
         rating: entry.rating,
-        cookedAt: new Date(entry.cookedAt)
+        cookedAt: new Date(entry.cookedAt),
+        isFavorite: recipe.isFavorite
     })))
     .sort((a, b) => b.cookedAt.getTime() - a.cookedAt.getTime())
 
@@ -71,5 +74,29 @@ export const useCookingHistory = () => {
         })
     }
 
-    return { rows, rate }
+    const toggleFavorite = (row: CookingHistoryRow) => {
+        const nextIsFavorite = !row.isFavorite
+        setRows((prev) => prev?.map((current) => (
+            current.recipeId === row.recipeId
+                ? { ...current, isFavorite: nextIsFavorite }
+                : current
+        )) ?? null)
+
+        startUpdating(async () => {
+            try {
+                await updateRecipe(row.recipeId, {
+                    isFavorite: nextIsFavorite
+                })
+            } catch {
+                setRows((prev) => prev?.map((current) => (
+                    current.recipeId === row.recipeId
+                        ? { ...current, isFavorite: row.isFavorite }
+                        : current
+                )) ?? null)
+                toast.error(recipesTexts.history.updateError)
+            }
+        })
+    }
+
+    return { rows, rate, toggleFavorite }
 }

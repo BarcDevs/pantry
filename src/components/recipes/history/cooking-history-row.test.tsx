@@ -12,7 +12,8 @@ const row = {
     name: 'עוגת שוקולד',
     emoji: '🍫',
     rating: 3,
-    cookedAt: new Date('2026-01-10')
+    cookedAt: new Date('2026-01-10'),
+    isFavorite: false
 }
 
 describe('CookingHistoryRowItem', () => {
@@ -22,6 +23,7 @@ describe('CookingHistoryRowItem', () => {
             <CookingHistoryRowItem
                 row={row}
                 onRate={onRate}
+                onToggleFavorite={jest.fn()}
             />
         )
 
@@ -35,6 +37,7 @@ describe('CookingHistoryRowItem', () => {
             <CookingHistoryRowItem
                 row={row}
                 onRate={jest.fn()}
+                onToggleFavorite={jest.fn()}
             />
         )
         expect(screen.getByRole('link')).toHaveAttribute(
@@ -48,8 +51,22 @@ describe('CookingHistoryRowItem', () => {
             <CookingHistoryRowItem
                 row={row}
                 onRate={jest.fn()}
+                onToggleFavorite={jest.fn()}
             />
         )
         expect(container.querySelector('svg.lucide-pencil')).toBeInTheDocument()
+    })
+
+    it('calls onToggleFavorite without navigating when the heart is clicked', () => {
+        const onToggleFavorite = jest.fn()
+        render(
+            <CookingHistoryRowItem
+                row={row}
+                onRate={jest.fn()}
+                onToggleFavorite={onToggleFavorite}
+            />
+        )
+        fireEvent.click(screen.getByLabelText('הוסף למועדפים'))
+        expect(onToggleFavorite).toHaveBeenCalled()
     })
 })

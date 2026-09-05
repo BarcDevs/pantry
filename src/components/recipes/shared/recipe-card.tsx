@@ -1,13 +1,12 @@
 import Link from 'next/link'
 
-import { HeartIcon, StarIcon } from 'lucide-react'
+import { StarIcon } from 'lucide-react'
 
 import type { Recipe } from '@/types/recipe'
 
-import { Button } from '@/components/shared/Button'
+import { RecipeHeartToggle } from '@/components/recipes/shared/recipe-heart-toggle'
 
 import { routes } from '@/constants/routes'
-import { recipesTexts } from '@/constants/texts/recipes'
 
 type RecipeCardProps = {
     recipe: Recipe
@@ -35,24 +34,11 @@ export const RecipeCard = ({
                 <span className={'rounded-full bg-surface/90 px-2.5 py-1 text-caption font-bold text-ink'}>
                     {`⏱ ${recipe.maxTime} דק׳`}
                 </span>
-                <Button
-                    variant={'ghost'}
-                    aria-label={
-                        recipe.isFavorite
-                            ? recipesTexts.result.favoriteOn
-                            : recipesTexts.result.favoriteOff
-                    }
-                    onClick={(e) => {
-                        e.preventDefault()
-                        onToggleFavorite()
-                    }}
-                    className={'flex size-8 cursor-pointer items-center justify-center rounded-full bg-surface/90 p-0'}
-                >
-                    <HeartIcon
-                        size={17}
-                        className={recipe.isFavorite ? 'fill-status-red-fg stroke-status-red-fg' : 'fill-none stroke-ink-3'}
-                    />
-                </Button>
+                <RecipeHeartToggle
+                    isFavorite={recipe.isFavorite}
+                    onToggle={onToggleFavorite}
+                    className={'bg-surface/90'}
+                />
             </div>
         </div>
         <div className={'p-3.5'}>

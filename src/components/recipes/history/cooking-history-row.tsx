@@ -5,6 +5,8 @@ import {
     StarIcon
 } from 'lucide-react'
 
+import { RecipeHeartToggle } from '@/components/recipes/shared/recipe-heart-toggle'
+
 import type { CookingHistoryRow } from '@/hooks/use-cooking-history'
 
 import { formatCookedAt } from '@/lib/recipes/format-cooked-at'
@@ -17,11 +19,13 @@ const STAR_VALUES = [1, 2, 3, 4, 5]
 type CookingHistoryRowProps = {
     row: CookingHistoryRow
     onRate: (value: number) => void
+    onToggleFavorite: () => void
 }
 
 export const CookingHistoryRowItem = ({
     row,
-    onRate
+    onRate,
+    onToggleFavorite
 }: CookingHistoryRowProps) => (
     <Link
         href={routes.recipeDetail(row.recipeId)}
@@ -31,8 +35,15 @@ export const CookingHistoryRowItem = ({
             {row.emoji ?? '🍽️'}
         </div>
         <div className={'min-w-0 flex-1'}>
-            <div className={'text-heading font-bold text-ink'}>
-                {row.name}
+            <div className={'flex items-center justify-between gap-2'}>
+                <div className={'text-heading font-bold text-ink'}>
+                    {row.name}
+                </div>
+                <RecipeHeartToggle
+                    isFavorite={row.isFavorite}
+                    onToggle={onToggleFavorite}
+                    className={'shadow-none'}
+                />
             </div>
             <div className={'mt-1.75 flex flex-wrap items-center gap-2.5'}>
                 <div className={'flex items-center gap-0.5 rounded-full border border-border-2 bg-canvas px-2.25 py-0.75'}>
