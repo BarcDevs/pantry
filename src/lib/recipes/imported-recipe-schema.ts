@@ -16,7 +16,8 @@ export const importedRecipeSchema = z.object({
     ingredients: z.array(z.object({
         name: z.string(),
         quantity: z.number(),
-        unit: z.enum(UNITS)
+        unit: z.enum(UNITS),
+        optional: z.boolean().default(false)
     })),
     steps: z.array(z.object({
         order: z.number(),

@@ -3,6 +3,7 @@ import type { RecipeIngredient } from '@/types/recipe'
 import { cn } from '@/lib/utils'
 
 import { pantryTexts } from '@/constants/texts/pantry'
+import { recipesTexts } from '@/constants/texts/recipes'
 
 type RecipeIngredientRowProps = {
     ingredient: RecipeIngredient
@@ -21,6 +22,11 @@ export const RecipeIngredientRow = ({
         <span className={'flex-1 text-body text-ink'}>
             {ingredient.name}
         </span>
+        {ingredient.optional && (
+            <span className={'rounded-full bg-border-3 px-2 py-0.5 text-caption text-ink-3'}>
+                {recipesTexts.result.ingredientOptionalLabel}
+            </span>
+        )}
         <span className={'text-label text-ink-3'}>
             {`${ingredient.quantity} ${pantryTexts.unitLabels[ingredient.unit]}`}
         </span>

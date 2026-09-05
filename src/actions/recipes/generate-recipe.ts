@@ -45,7 +45,8 @@ const aiRecipeSchema = z.object({
         name: z.string(),
         quantity: z.number(),
         unit: z.enum(UNITS),
-        inPantry: z.boolean()
+        inPantry: z.boolean(),
+        optional: z.boolean().default(false)
     })),
     steps: z.array(z.object({
         order: z.number(),
@@ -88,7 +89,8 @@ export const generateRecipe = async (
             name,
             quantity: 1,
             unit: Unit.Units,
-            inPantry: true
+            inPantry: true,
+            optional: false
         })),
         steps: [
             {

@@ -30,7 +30,8 @@ const recipe = {
             name: 'עגבניה',
             quantity: 2,
             unit: 'units' as const,
-            inPantry: true
+            inPantry: true,
+            optional: false
         }
     ],
     steps: [{ order: 1, description: 'לבשל פסטה' }],
@@ -51,13 +52,15 @@ const refinedResponse = {
             name: 'עגבניה',
             quantity: 2,
             unit: 'units',
-            inPantry: true
+            inPantry: true,
+            optional: false
         },
         {
             name: 'צ׳ילי',
             quantity: 1,
             unit: 'units',
-            inPantry: false
+            inPantry: false,
+            optional: false
         }
     ],
     steps: [{ order: 1, description: 'לבשל פסטה עם צ׳ילי' }]
