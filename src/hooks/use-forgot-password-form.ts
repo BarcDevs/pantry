@@ -86,7 +86,7 @@ export const useForgotPasswordForm = () => {
                     password: values.password
                 })
 
-                if (error || signIn.status !== 'complete') {
+                if (error) {
                     resetForm.setError('root', {
                         message: authTexts.forgotError
                     })

@@ -78,7 +78,7 @@ export const useSignUpForm = () => {
                     code: values.code
                 })
 
-                if (error || signUp.status !== 'complete') {
+                if (error) {
                     verifyForm.setError('root', {
                         message: authTexts.verifyError
                     })
