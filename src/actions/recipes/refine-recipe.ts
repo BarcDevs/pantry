@@ -11,6 +11,7 @@ import type {
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import { buildRefineRecipePrompt } from '@/lib/prompts/refine-recipe-prompt'
+import { normalizeStepFractions } from '@/lib/recipes/normalize-fraction-words'
 import {
     ingredientSchema,
     recipeDocSchema,
@@ -55,6 +56,6 @@ export const refineRecipe = async (
         difficulty: refined.difficulty,
         emoji: refined.emoji,
         ingredients: refined.ingredients,
-        steps: refined.steps
+        steps: normalizeStepFractions(refined.steps)
     }
 }

@@ -22,6 +22,7 @@ import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
 import { objectIdSchema } from '@/lib/object-id-schema'
 import { buildGenerateRecipePrompt } from '@/lib/prompts/generate-recipe-prompt'
+import { normalizeStepFractions } from '@/lib/recipes/normalize-fraction-words'
 import { quantitySchema } from '@/lib/recipes/recipe-doc-schema'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
@@ -117,7 +118,7 @@ export const generateRecipe = async (
             ...ingredient,
             inPantry: pantryItemNames.includes(ingredient.name)
         })),
-        steps: generated.steps,
+        steps: normalizeStepFractions(generated.steps),
         emoji: generated.emoji,
         rating: null,
         history: [],

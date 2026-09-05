@@ -1,6 +1,7 @@
 import type { RecipeDoc } from '@/types/recipe'
 
 import type { ImportedRecipe } from '@/lib/recipes/imported-recipe-schema'
+import { normalizeStepFractions } from '@/lib/recipes/normalize-fraction-words'
 
 export const buildImportedRecipeDoc = (
     userId: string,
@@ -24,7 +25,7 @@ export const buildImportedRecipeDoc = (
             inPantry: false
         })
     ),
-    steps: generated.steps,
+    steps: normalizeStepFractions(generated.steps),
     emoji: generated.emoji,
     imageUrl: extras.imageUrl,
     rating: null,
