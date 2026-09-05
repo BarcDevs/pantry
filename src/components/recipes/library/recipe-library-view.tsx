@@ -27,7 +27,8 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
         sort,
         setSort,
         filteredRecipes,
-        toggleFavorite
+        toggleFavorite,
+        deleteRecipe
     } = useRecipeLibrary(recipes)
 
     if (recipes.length === 0) return (
@@ -76,6 +77,7 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                 <RecipeGrid
                     recipes={filteredRecipes}
                     onToggleFavorite={toggleFavorite}
+                    onDelete={deleteRecipe}
                 />
             )}
         </div>

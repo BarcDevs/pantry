@@ -12,6 +12,7 @@ import { normalizeName } from '@/lib/normalize-name'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
+import { deleteRecipe as deleteRecipeAction } from '@/actions/recipes/delete-recipe'
 import { updateRecipe } from '@/actions/recipes/update-recipe'
 
 const sortComparators: Record<RecipeSortOption, (a: Recipe, b: Recipe) => number> = {
@@ -81,6 +82,17 @@ export const useRecipeLibrary = (initialRecipes: Recipe[]) => {
         })
     }
 
+    const deleteRecipe = async (recipe: Recipe) => {
+        try {
+            await deleteRecipeAction(recipe._id)
+            setRecipes((current) => current.filter((item) => item._id !== recipe._id))
+        } catch (error) {
+            console.error(error)
+            toast.error(recipesTexts.detail.deleteError)
+            throw error
+        }
+    }
+
     return {
         query,
         setQuery,
@@ -89,6 +101,7 @@ export const useRecipeLibrary = (initialRecipes: Recipe[]) => {
         sort,
         setSort,
         filteredRecipes,
-        toggleFavorite
+        toggleFavorite,
+        deleteRecipe
     }
 }
