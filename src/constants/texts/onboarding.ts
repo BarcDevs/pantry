@@ -36,6 +36,7 @@ export const onboardingTexts = {
     dietaryOptions: {
         vegetarian: { emoji: '🥦', label: 'צמחוני' },
         vegan: { emoji: '🌱', label: 'טבעוני' },
+        pescatarian: { emoji: '🐟', label: 'פסקטריאני' },
         glutenFree: { emoji: '🌾', label: 'ללא גלוטן' },
         dairyFree: { emoji: '🥛', label: 'ללא חלב' },
         kosher: { emoji: '✡️', label: 'כשר' },
