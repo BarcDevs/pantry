@@ -13,5 +13,8 @@ export const importRecipeExtractionInstructions = `
     ורשימת שלבי הכנה ממוספרים (steps: order, description).
     ${recipeUnitsInstructions}
     ${recipeStepsDetailInstructions}
+    אם התוכן המקורי אינו בעברית, תרגם הכל לעברית - כולל את הכותרת
+    (title) עצמה, לא רק את המרכיבים והשלבים. אל תשאיר את הכותרת בשפת
+    המקור.
     אם פרט מסוים אינו מצוין בתוכן, הסק ניחוש סביר במקומו.
 `
