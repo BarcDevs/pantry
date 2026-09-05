@@ -20,7 +20,13 @@ export const RecipeIngredientRow = ({
             )}
         />
         <span className={'flex items-baseline gap-1.5 text-body text-ink'}>
-            <span className={'text-label text-ink-3'}>
+            <span
+                className={cn(
+                    'text-label',
+                    ingredient.inPantry ? 'text-ink-3' : 'font-bold text-status-amber-fg'
+                )}
+            >
+                {!ingredient.inPantry && `${recipesTexts.result.ingredientMissingLabel} · `}
                 <span
                     dir={'ltr'}
                     style={{ unicodeBidi: 'isolate' }}

@@ -84,6 +84,7 @@ export const recipesTexts = {
         pantryMatchLabel: 'מהמלאי',
         ingredientsTitle: 'מצרכים',
         ingredientOptionalLabel: 'רשות',
+        ingredientMissingLabel: 'חסר',
         stepsTitle: 'תקציר ההכנה',
         imageFieldTitle: 'תמונת המתכון',
         imageFieldOptional: '· אופציונלי',

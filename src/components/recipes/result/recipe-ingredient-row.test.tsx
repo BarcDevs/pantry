@@ -34,4 +34,34 @@ describe('RecipeIngredientRow', () => {
         )
         expect(screen.queryByText('רשות')).not.toBeInTheDocument()
     })
+
+    it('flags a missing ingredient not found in the pantry', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    name: 'פפריקה מתוקה',
+                    quantity: 1,
+                    unit: CookingUnit.Tsp,
+                    inPantry: false,
+                    optional: false
+                }}
+            />
+        )
+        expect(screen.getByText('חסר ·', { exact: false })).toBeInTheDocument()
+    })
+
+    it('does not flag an ingredient found in the pantry', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    name: 'עגבניות',
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: true,
+                    optional: false
+                }}
+            />
+        )
+        expect(screen.queryByText('חסר ·', { exact: false })).not.toBeInTheDocument()
+    })
 })
