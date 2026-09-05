@@ -5,10 +5,13 @@ import {
     normalizeIngredientFractions,
     normalizeStepFractions
 } from '@/lib/recipes/normalize-fraction-words'
+import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
+import { resolveIngredientPantryStatus } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
 export const buildImportedRecipeDoc = (
     userId: string,
     generated: ImportedRecipe,
+    pantryItems: MinimalPantryItem[],
     extras: {
         sourceUrl?: string
         imageUrl?: string
@@ -22,11 +25,9 @@ export const buildImportedRecipeDoc = (
     maxTime: generated.maxTime,
     mealCount: generated.mealCount,
     mealType: generated.mealType,
-    ingredients: normalizeIngredientFractions(generated.ingredients).map(
-        (ingredient) => ({
-            ...ingredient,
-            inPantry: false
-        })
+    ingredients: resolveIngredientPantryStatus(
+        normalizeIngredientFractions(generated.ingredients),
+        pantryItems
     ),
     steps: normalizeStepFractions(generated.steps),
     emoji: generated.emoji,

@@ -4,6 +4,15 @@
 jest.mock('@clerk/nextjs/server', () => ({
     auth: jest.fn()
 }))
+jest.mock('@/lib/mongodb', () => ({
+    __esModule: true,
+    default: jest.fn()
+}))
+jest.mock('@/models/pantry-item.model', () => ({
+    PantryItemModel: {
+        find: jest.fn()
+    }
+}))
 jest.mock('@/lib/ai/gemini', () => ({
     generateStructured: jest.fn()
 }))
@@ -12,10 +21,13 @@ import { auth } from '@clerk/nextjs/server'
 
 import { generateStructured } from '@/lib/ai/gemini'
 
+import { PantryItemModel } from '@/models/pantry-item.model'
+
 import { importRecipeFromText } from '../import-recipe-from-text'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockGenerateStructured = generateStructured as jest.Mock
+const mockFind = PantryItemModel.find as jest.Mock
 
 const aiRecipe = {
     title: 'עוגת שוקולד',
@@ -42,6 +54,7 @@ const aiRecipe = {
 describe('importRecipeFromText', () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        mockFind.mockReturnValue({ lean: jest.fn().mockResolvedValue([]) })
     })
 
     it('throws when unauthenticated', async () => {

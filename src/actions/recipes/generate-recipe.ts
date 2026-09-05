@@ -9,7 +9,6 @@ import {
     Difficulty,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
-    type PantryUnit,
     RECIPE_SCOPES
 } from '@/types/enums'
 import type {
@@ -24,14 +23,12 @@ import connectDB from '@/lib/mongodb'
 import { objectIdSchema } from '@/lib/object-id-schema'
 import { buildGenerateRecipePrompt } from '@/lib/prompts/generate-recipe-prompt'
 import {
-    findMatchingPantryItem,
-    hasEnoughPantryQuantity
-} from '@/lib/recipes/check-pantry-sufficiency'
-import {
     normalizeIngredientFractions,
     normalizeStepFractions
 } from '@/lib/recipes/normalize-fraction-words'
 import { quantitySchema } from '@/lib/recipes/recipe-doc-schema'
+import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
+import { resolveIngredientPantryStatus } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { UserModel } from '@/models/user.model'
@@ -72,18 +69,18 @@ export const generateRecipe = async (
 
     await connectDB()
 
+    const allPantryItems = await PantryItemModel
+        .find({ userId })
+        .lean<MinimalPantryItem[]>()
+
     const pantryQuery: Record<string, unknown> = { userId }
     if (parsedInput.selectedItemIds) {
         pantryQuery._id = { $in: parsedInput.selectedItemIds }
     }
-    const pantryItems = await PantryItemModel
-        .find(pantryQuery)
-        .lean<Array<{
-            name: string
-            quantity: number
-            unit: PantryUnit
-        }>>()
-    const pantryItemNames = pantryItems.map((item) => item.name)
+    const selectedPantryItems = parsedInput.selectedItemIds
+        ? await PantryItemModel.find(pantryQuery).lean<MinimalPantryItem[]>()
+        : allPantryItems
+    const pantryItemNames = selectedPantryItems.map((item) => item.name)
 
     const user = await UserModel
         .findOne({ clerkId: userId })
@@ -126,18 +123,10 @@ export const generateRecipe = async (
         maxTime: parsedInput.maxTime,
         mealCount: parsedInput.mealCount,
         mealType: parsedInput.mealType,
-        ingredients: normalizeIngredientFractions(generated.ingredients).map((ingredient) => {
-            const matchedItem = findMatchingPantryItem(ingredient.name, pantryItems)
-            return {
-                ...ingredient,
-                inPantry: matchedItem !== undefined && hasEnoughPantryQuantity(
-                    ingredient.quantity,
-                    ingredient.unit,
-                    matchedItem.quantity,
-                    matchedItem.unit
-                )
-            }
-        }),
+        ingredients: resolveIngredientPantryStatus(
+            normalizeIngredientFractions(generated.ingredients),
+            allPantryItems
+        ),
         steps: normalizeStepFractions(generated.steps),
         emoji: generated.emoji,
         rating: null,

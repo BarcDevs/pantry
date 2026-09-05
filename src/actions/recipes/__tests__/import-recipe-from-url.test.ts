@@ -4,6 +4,15 @@
 jest.mock('@clerk/nextjs/server', () => ({
     auth: jest.fn()
 }))
+jest.mock('@/lib/mongodb', () => ({
+    __esModule: true,
+    default: jest.fn()
+}))
+jest.mock('@/models/pantry-item.model', () => ({
+    PantryItemModel: {
+        find: jest.fn()
+    }
+}))
 jest.mock('@/lib/ai/gemini', () => ({
     generateStructured: jest.fn()
 }))
@@ -17,11 +26,14 @@ import { auth } from '@clerk/nextjs/server'
 
 import { generateStructured } from '@/lib/ai/gemini'
 
+import { PantryItemModel } from '@/models/pantry-item.model'
+
 import { importRecipeFromUrl } from '../import-recipe-from-url'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockGenerateStructured = generateStructured as jest.Mock
 const mockLookup = lookup as jest.Mock
+const mockFind = PantryItemModel.find as jest.Mock
 const mockFetch = jest.fn()
 
 const aiRecipe = {
@@ -92,6 +104,7 @@ describe('importRecipeFromUrl', () => {
                 family: 4
             }
         ])
+        mockFind.mockReturnValue({ lean: jest.fn().mockResolvedValue([]) })
     })
 
     it('throws when unauthenticated', async () => {
@@ -126,6 +139,36 @@ describe('importRecipeFromUrl', () => {
             )
             expect(result.recipe?.title).toBe(aiRecipe.title)
             expect(result.recipe?.imageUrl).toBeUndefined()
+        }
+    )
+
+    it(
+        'flags an ingredient as in-pantry when it matches a pantry item with enough stock',
+        async () => {
+            mockAuth.mockResolvedValue(
+                { userId: 'user_123' } as never
+            )
+            mockFetch.mockResolvedValue(
+                makeResponse(
+                    '<html><body>פסטה ברוטב עגבניות</body></html>'
+                )
+            )
+            mockGenerateStructured.mockResolvedValue(aiRecipe)
+            mockFind.mockReturnValue({
+                lean: jest.fn().mockResolvedValue([
+                    {
+                        name: 'פסטה',
+                        quantity: 500,
+                        unit: 'g'
+                    }
+                ])
+            })
+
+            const result = await importRecipeFromUrl(
+                'https://example.com/recipe'
+            )
+
+            expect(result.recipe?.ingredients[0].inPantry).toBe(true)
         }
     )
 
