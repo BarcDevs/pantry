@@ -78,7 +78,7 @@ export const RecipeCard = ({
                     </div>
                 </div>
             </div>
-            <div className={'p-3.5'}>
+            <div className={'mt-2 p-3.5'}>
                 <div className={'flex items-center justify-between gap-2'}>
                     <span className={'text-body font-bold text-ink'}>
                         {recipe.title}
