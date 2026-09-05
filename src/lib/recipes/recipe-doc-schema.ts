@@ -32,7 +32,7 @@ export const aiPromptContextSchema = z.object({
     pantrySnapshot: z.array(z.string())
 })
 
-const httpUrlSchema = z.string().url().refine(
+export const httpUrlSchema = z.string().url().refine(
     (url) => ['http:', 'https:'].includes(new URL(url).protocol),
     'Only http/https URLs are allowed'
 )

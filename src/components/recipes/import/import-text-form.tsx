@@ -1,4 +1,5 @@
 import { Button } from '@/components/shared/Button'
+import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -6,6 +7,8 @@ import { recipesTexts } from '@/constants/texts/recipes'
 type ImportTextFormProps = {
     text: string
     onTextChange: (text: string) => void
+    imageUrl: string
+    onImageUrlChange: (imageUrl: string) => void
     onSubmit: () => void
     isSubmitting: boolean
     error: string | null
@@ -14,6 +17,8 @@ type ImportTextFormProps = {
 export const ImportTextForm = ({
     text,
     onTextChange,
+    imageUrl,
+    onImageUrlChange,
     onSubmit,
     isSubmitting,
     error
@@ -27,6 +32,15 @@ export const ImportTextForm = ({
             placeholder={recipesTexts.import.textPlaceholder}
             onChange={(e) => onTextChange(e.target.value)}
             rows={8}
+        />
+        <label className={'text-label font-bold text-ink'}>
+            {recipesTexts.import.textImageLabel}
+        </label>
+        <Input
+            dir={'ltr'}
+            value={imageUrl}
+            placeholder={recipesTexts.result.imageUrlPlaceholder}
+            onChange={(e) => onImageUrlChange(e.target.value)}
         />
         <Button
             type={'button'}
