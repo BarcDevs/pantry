@@ -11,7 +11,8 @@ import {
 
 export const quantitySchema = z.union([
     z.number(),
-    z.string().regex(/^\d+(\.\d+)?-\d+(\.\d+)?$/, 'Quantity range must be like "8-10"')
+    z.string().regex(/^\d+(\.\d+)?-\d+(\.\d+)?$/, 'Quantity range must be like "8-10"'),
+    z.string().regex(/^\d+(\.\d+)?$/).transform(Number)
 ])
 
 export const ingredientSchema = z.object({
