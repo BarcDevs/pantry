@@ -1,8 +1,9 @@
 {
   "name": "pantry",
-  "version": "0.43.2",
+  "version": "0.43.3",
   "private": true,
   "scripts": {
+    "postinstall": "git config core.hooksPath .husky",
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p 8080",
