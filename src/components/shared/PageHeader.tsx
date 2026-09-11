@@ -25,7 +25,7 @@ export const PageHeader = ({ title, className }: PageHeaderProps) => {
                 variant={'ghost'}
                 size={'icon'}
                 onClick={() => router.back()}
-                className={'shrink-0 p-0 text-ink'}
+                className={'shrink-0 p-0 text-ink shadow-none'}
             >
                 <ArrowRightIcon className={'size-6'}/>
             </Button>

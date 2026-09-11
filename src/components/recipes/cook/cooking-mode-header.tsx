@@ -24,7 +24,7 @@ export const CookingModeHeader = ({
         <Button
             asChild
             variant={'ghost'}
-            className={'shrink-0 p-0 text-surface'}
+            className={'shrink-0 p-0 text-surface shadow-none'}
         >
             <Link href={routes.recipes}>
                 <ArrowRightIcon size={24}/>
