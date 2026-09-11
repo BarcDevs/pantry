@@ -20,8 +20,8 @@ export const RecipeIngredientRow = ({
                 className={cn(
                     'size-2 shrink-0 rounded-full',
                     ingredient.inPantry && 'bg-green',
-                    !ingredient.inPantry && hasReplacement && 'bg-status-blue-fg',
-                    !ingredient.inPantry && !hasReplacement && 'bg-status-amber-fg'
+                    !ingredient.inPantry && hasReplacement && 'bg-status-amber-fg',
+                    !ingredient.inPantry && !hasReplacement && 'bg-status-red-fg'
                 )}
             />
             <span className={'flex items-baseline gap-1.5 text-body text-ink'}>
@@ -29,8 +29,8 @@ export const RecipeIngredientRow = ({
                     className={cn(
                         'text-label',
                         ingredient.inPantry && 'text-ink-3',
-                        !ingredient.inPantry && hasReplacement && 'font-bold text-status-blue-fg',
-                        !ingredient.inPantry && !hasReplacement && 'font-bold text-status-amber-fg'
+                        !ingredient.inPantry && hasReplacement && 'font-bold text-status-amber-fg',
+                        !ingredient.inPantry && !hasReplacement && 'font-bold text-status-red-fg'
                     )}
                 >
                     {!ingredient.inPantry && (
