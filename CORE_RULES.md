@@ -70,6 +70,14 @@
 - Generic utility types (`Pick`, `Omit` etc.) with 3+ keys → each key on its own line
 - 2+ elements in an array → each on its own line
 
+- No trailing commas anywhere - not in arrays, objects, function args, or import braces
+- No space before self-closing JSX tags: `<Component/>`, not `<Component />` - no exceptions, applies to components and HTML void elements used as self-closing
+
+## Data & Types
+- Never import Mongoose models or run DB queries directly in `.tsx` files (pages, layouts, components) - even server components. Extract into `src/actions/<domain>/<verb-noun>.ts` (one action per file, `'use server'`) and call the action from the component
+- Domain/API types go in `src/types/` - never inline in route handlers or server actions. Component `*Props` types are the one exception: colocating them in the component file is fine and expected
+- Layout components that take only `children: ReactNode` use the shared `LayoutProps` from `@/types` - never define a local `type XProps = { children: ReactNode }`
+
 ## Formatting Tools
 - **ESLint** (`.eslint.config.mjs`): Enforces all formatting rules. Run `npm run lint:fix` to auto-apply fixes before committing.
 - **.editorconfig**: Cross-IDE settings (4-space indent, UTF-8, LF line endings). Respected by WebStorm, VS Code, etc.

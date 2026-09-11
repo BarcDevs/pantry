@@ -86,6 +86,31 @@ IMPORTANT: Next.js 16 renamed `middleware` → `proxy`. dont suggest `middleware
 **Read `GIT_RULES.md` before committing or when instructed to commit.** Do not skip it.
 Full rules there. Key constraint: never invoke `/commit` skill on small fixes, formatting, or docs changes - use plain `git commit` for those.
 
+**Never commit without explicit user instruction** - not even after `/review` finishes, lint passes, and typecheck is clean. Those are quality gates, not permission. Wait for "commit", "/commit", or equivalent.
+
+**Commit type:** does this add user-facing behavior? -> `feat`. Fix a bug? -> `fix`. Restructure existing code without changing behavior (config/constant extraction, type aliasing, centralization)? -> `rfc`, never `feat` or `chore`.
+
+## Style/formatting fixes
+
+For style/formatting violations, run `npm run lint:fix` first and only hand-edit what it doesn't resolve.
+
+## Matching a design file exactly
+
+When implementing UI against a `.dc.html` design in `.claude/design/`, treat it as the literal spec, not a reference to approximate:
+- Never invent UX copy - pull every label/hint/placeholder string verbatim from the design HTML (or its JS state object for dynamic strings).
+- Never substitute colors/tokens - match the exact token in `design_system.md`, not a token that merely "looks close" (e.g. `border-3` vs `border` are different weights, not interchangeable).
+- Conditional visibility/logic must match the design's actual gating condition, not a simplified guess.
+- Component fidelity matters, not just data-equivalence - a design toggle switch needs an actual switch, not a chip-picker that happens to control the same boolean.
+- Before marking a screen "matches design," diff every visible string, color class, and conditional against the design file/`design_system.md` directly - not memory from having read it once earlier in the session.
+
+## Verifying UI/CSS fixes
+
+Never claim a visual/functional bug is fixed based on reading source or unit-testing a class-merge function alone. Prove it against the real compiled CSS and a real browser: drive the actual component (same-origin, not a `data:`/`file:` snippet) and read `getComputedStyle`/`getBoundingClientRect` off the real DOM node, or get the user's own DevTools computed-style output. Some causes (e.g. a Tailwind dark-mode variant firing under the OS's dark-mode media query) are invisible to code-reading and isolated unit tests. If browser automation is itself blocked, say so and ask for the user's DevTools output rather than asserting the fix worked.
+
+## Layout gotcha: `justify-between` on `min-h-screen`
+
+Don't combine `min-h-screen flex flex-col justify-between` on a container with only a few children (title + content + footer) - it distributes the *entire* viewport height as gaps between them. To pin a footer to the bottom while keeping content compact at the top, wrap the content (not the whole page) in a `flex-1` div and let it default to `justify-start` - the spacer absorbs leftover height. Reserve `justify-between` for cases where children genuinely should spread evenly (e.g. a real multi-item toolbar).
+
 ## Browser Verification
 
 Use `playwright-cli` (installed as dev dep) for all browser verification tasks - more token-efficient than chrome extension tools.
