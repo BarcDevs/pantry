@@ -86,6 +86,8 @@ export const recipesTexts = {
         ingredientOptionalLabel: 'רשות',
         ingredientMissingLabel: 'חסר',
         ingredientReplacementLabel: (name: string) => `תחליף זמין: ${name}`,
+        ingredientUsingReplacementLabel: (name: string) => `משתמשים ב${name}`,
+        ingredientRemovedLabel: 'הוסר',
         addToAdjustments: 'הוסף להתאמות המתכון',
         removeFromAdjustments: 'הסר מההתאמות',
         removeIngredientButton: 'הסר מהמתכון',

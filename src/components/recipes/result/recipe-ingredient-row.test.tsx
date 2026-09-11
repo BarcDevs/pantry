@@ -57,7 +57,7 @@ describe('RecipeIngredientRow', () => {
                 }}
             />
         )
-        expect(screen.getByText('חסר ·', { exact: false })).toBeInTheDocument()
+        expect(screen.getByText('חסר')).toBeInTheDocument()
     })
 
     it('does not flag an ingredient found in the pantry', () => {
@@ -74,7 +74,7 @@ describe('RecipeIngredientRow', () => {
                 }}
             />
         )
-        expect(screen.queryByText('חסר ·', { exact: false })).not.toBeInTheDocument()
+        expect(screen.queryByText('חסר')).not.toBeInTheDocument()
     })
 
     it('shows a replacement suggestion instead of the missing label when one is available', () => {
@@ -92,8 +92,8 @@ describe('RecipeIngredientRow', () => {
                 }}
             />
         )
-        expect(screen.getByText('תחליף זמין: חלב ·', { exact: false })).toBeInTheDocument()
-        expect(screen.queryByText('חסר ·', { exact: false })).not.toBeInTheDocument()
+        expect(screen.getByText('תחליף זמין: חלב')).toBeInTheDocument()
+        expect(screen.queryByText('חסר')).not.toBeInTheDocument()
     })
 
     it('does not show an add-to-adjustments button without a replacement handler', () => {
@@ -159,6 +159,28 @@ describe('RecipeIngredientRow', () => {
         expect(screen.queryByText('הוסף להתאמות המתכון')).not.toBeInTheDocument()
     })
 
+    it('shows the "now using" label instead of the replacement suggestion once added', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    label: 'חלב סויה',
+                    name: 'חלב סויה',
+                    category: FoodType.Vegetables,
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: false,
+                    optional: false,
+                    replacementName: 'חלב'
+                }}
+                isReplacementAdded
+                onToggleReplacement={jest.fn()}
+            />
+        )
+
+        expect(screen.getByText('משתמשים בחלב')).toBeInTheDocument()
+        expect(screen.queryByText('תחליף זמין: חלב')).not.toBeInTheDocument()
+    })
+
     it('does not show a remove button for an optional ingredient without a removal handler', () => {
         render(
             <RecipeIngredientRow
@@ -217,6 +239,26 @@ describe('RecipeIngredientRow', () => {
 
         expect(screen.getByText('הסר מההתאמות')).toBeInTheDocument()
         expect(screen.queryByText('הסר מהמתכון')).not.toBeInTheDocument()
+    })
+
+    it('shows the "removed" label once the removal was added', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    label: 'בזיליקום לקישוט',
+                    name: 'בזיליקום לקישוט',
+                    category: FoodType.Vegetables,
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: true,
+                    optional: true
+                }}
+                isRemovalAdded
+                onToggleRemoval={jest.fn()}
+            />
+        )
+
+        expect(screen.getByText('הוסר')).toBeInTheDocument()
     })
 
     it('does not show a remove button for a required (non-optional) ingredient', () => {
