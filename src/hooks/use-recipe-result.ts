@@ -33,6 +33,8 @@ export const useRecipeResult = () => {
         setInstruction: setRefineInstruction,
         usedReplacements,
         toggleReplacement,
+        usedRemovals,
+        toggleRemoval,
         reset: resetAdjustments
     } = useRecipeAdjustments()
     const [isRefining, startRefining] = useTransition()
@@ -116,6 +118,8 @@ export const useRecipeResult = () => {
         setRefineInstruction,
         usedReplacements,
         toggleReplacement,
+        usedRemovals,
+        toggleRemoval,
         isRefining,
         refine,
         toggleFavorite,

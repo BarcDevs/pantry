@@ -57,4 +57,63 @@ describe('useRecipeAdjustments', () => {
         expect(result.current.instruction).toBe('')
         expect(result.current.usedReplacements).toEqual({})
     })
+
+    it('appends a removal line to the instruction when toggled on', () => {
+        const { result } = renderHook(() => useRecipeAdjustments())
+
+        act(() => {
+            result.current.toggleRemoval('בזיליקום לקישוט')
+        })
+
+        expect(result.current.instruction).toBe('בלי בזיליקום לקישוט')
+        expect(result.current.usedRemovals['בזיליקום לקישוט']).toBe(true)
+    })
+
+    it('removes the removal line when toggled off again', () => {
+        const { result } = renderHook(() => useRecipeAdjustments())
+
+        act(() => {
+            result.current.toggleRemoval('בזיליקום לקישוט')
+        })
+        act(() => {
+            result.current.toggleRemoval('בזיליקום לקישוט')
+        })
+
+        expect(result.current.instruction).toBe('')
+        expect(result.current.usedRemovals['בזיליקום לקישוט']).toBe(false)
+    })
+
+    it('tracks replacement and removal lines independently', () => {
+        const { result } = renderHook(() => useRecipeAdjustments())
+
+        act(() => {
+            result.current.toggleReplacement('חלב סויה', 'חלב')
+        })
+        act(() => {
+            result.current.toggleRemoval('בזיליקום לקישוט')
+        })
+
+        expect(result.current.instruction).toBe(
+            'להשתמש בחלב במקום חלב סויה\nבלי בזיליקום לקישוט'
+        )
+
+        act(() => {
+            result.current.toggleReplacement('חלב סויה', 'חלב')
+        })
+
+        expect(result.current.instruction).toBe('בלי בזיליקום לקישוט')
+    })
+
+    it('resets removal state too', () => {
+        const { result } = renderHook(() => useRecipeAdjustments())
+
+        act(() => {
+            result.current.toggleRemoval('בזיליקום לקישוט')
+        })
+        act(() => {
+            result.current.reset()
+        })
+
+        expect(result.current.usedRemovals).toEqual({})
+    })
 })

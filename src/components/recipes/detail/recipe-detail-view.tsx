@@ -46,6 +46,8 @@ export const RecipeDetailView = ({ recipe: initialRecipe }: RecipeDetailViewProp
         setInstruction: setAdjustInstruction,
         usedReplacements,
         toggleReplacement,
+        usedRemovals,
+        toggleRemoval,
         isBranching,
         branch
     } = useRecipeBranch(recipe)
@@ -66,6 +68,8 @@ export const RecipeDetailView = ({ recipe: initialRecipe }: RecipeDetailViewProp
                     ingredients={recipe.ingredients}
                     usedReplacements={usedReplacements}
                     onToggleReplacement={toggleReplacement}
+                    usedRemovals={usedRemovals}
+                    onToggleRemoval={toggleRemoval}
                 />
                 <RecipeStepsList steps={recipe.steps}/>
             </div>

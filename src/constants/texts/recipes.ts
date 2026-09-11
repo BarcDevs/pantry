@@ -88,9 +88,11 @@ export const recipesTexts = {
         ingredientReplacementLabel: (name: string) => `תחליף זמין: ${name}`,
         addToAdjustments: 'הוסף להתאמות המתכון',
         removeFromAdjustments: 'הסר מההתאמות',
+        removeIngredientButton: 'הסר מהמתכון',
         replacementAdjustmentLine: (replacementName: string, ingredientName: string) => (
             `להשתמש ב${replacementName} במקום ${ingredientName}`
         ),
+        removalAdjustmentLine: (ingredientName: string) => `בלי ${ingredientName}`,
         stepsTitle: 'תקציר ההכנה',
         imageFieldTitle: 'תמונת המתכון',
         imageFieldOptional: '· אופציונלי',

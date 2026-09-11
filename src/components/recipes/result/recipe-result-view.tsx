@@ -24,6 +24,8 @@ export const RecipeResultView = () => {
         setRefineInstruction,
         usedReplacements,
         toggleReplacement,
+        usedRemovals,
+        toggleRemoval,
         isRefining,
         refine,
         toggleFavorite,
@@ -50,6 +52,8 @@ export const RecipeResultView = () => {
                     ingredients={recipe.ingredients}
                     usedReplacements={usedReplacements}
                     onToggleReplacement={toggleReplacement}
+                    usedRemovals={usedRemovals}
+                    onToggleRemoval={toggleRemoval}
                 />
                 <RecipeStepsList steps={recipe.steps}/>
             </div>

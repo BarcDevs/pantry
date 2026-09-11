@@ -8,12 +8,16 @@ type RecipeIngredientsListProps = {
     ingredients: RecipeIngredient[]
     usedReplacements?: Record<string, boolean>
     onToggleReplacement?: (ingredientName: string, replacementName: string) => void
+    usedRemovals?: Record<string, boolean>
+    onToggleRemoval?: (ingredientName: string) => void
 }
 
 export const RecipeIngredientsList = ({
     ingredients,
     usedReplacements = {},
-    onToggleReplacement
+    onToggleReplacement,
+    usedRemovals = {},
+    onToggleRemoval
 }: RecipeIngredientsListProps) => (
     <div>
         <div className={'mb-3 font-display text-heading font-weight-heading text-ink'}>
@@ -27,6 +31,10 @@ export const RecipeIngredientsList = ({
                     isReplacementAdded={!!usedReplacements[ingredient.name]}
                     onToggleReplacement={onToggleReplacement && ingredient.replacementName
                         ? () => onToggleReplacement(ingredient.name, ingredient.replacementName!)
+                        : undefined}
+                    isRemovalAdded={!!usedRemovals[ingredient.name]}
+                    onToggleRemoval={onToggleRemoval
+                        ? () => onToggleRemoval(ingredient.name)
                         : undefined}
                 />
             ))}

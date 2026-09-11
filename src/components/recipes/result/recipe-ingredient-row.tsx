@@ -11,12 +11,16 @@ type RecipeIngredientRowProps = {
     ingredient: RecipeIngredient
     isReplacementAdded?: boolean
     onToggleReplacement?: () => void
+    isRemovalAdded?: boolean
+    onToggleRemoval?: () => void
 }
 
 export const RecipeIngredientRow = ({
     ingredient,
     isReplacementAdded = false,
-    onToggleReplacement
+    onToggleReplacement,
+    isRemovalAdded = false,
+    onToggleRemoval
 }: RecipeIngredientRowProps) => {
     const hasReplacement = !ingredient.inPantry && !!ingredient.replacementName
 
@@ -63,23 +67,45 @@ export const RecipeIngredientRow = ({
                     </span>
                 )}
             </div>
-            {hasReplacement && onToggleReplacement && (
-                <Button
-                    type={'button'}
-                    variant={'ghost'}
-                    size={'xs'}
-                    onClick={onToggleReplacement}
-                    className={cn(
-                        'me-4.5 mt-1.5 h-auto shadow-none',
-                        isReplacementAdded
-                            ? 'text-ink-3 underline'
-                            : 'border border-dashed border-warning-border text-status-amber-fg'
+            {(hasReplacement || ingredient.optional) && (
+                <div className={'me-4.5 mt-1.5 flex flex-wrap gap-1.5'}>
+                    {hasReplacement && onToggleReplacement && (
+                        <Button
+                            type={'button'}
+                            variant={'ghost'}
+                            size={'xs'}
+                            onClick={onToggleReplacement}
+                            className={cn(
+                                'h-auto shadow-none',
+                                isReplacementAdded
+                                    ? 'text-ink-3 underline'
+                                    : 'border border-dashed border-warning-border text-status-amber-fg'
+                            )}
+                        >
+                            {isReplacementAdded
+                                ? recipesTexts.result.removeFromAdjustments
+                                : recipesTexts.result.addToAdjustments}
+                        </Button>
                     )}
-                >
-                    {isReplacementAdded
-                        ? recipesTexts.result.removeFromAdjustments
-                        : recipesTexts.result.addToAdjustments}
-                </Button>
+                    {ingredient.optional && onToggleRemoval && (
+                        <Button
+                            type={'button'}
+                            variant={'ghost'}
+                            size={'xs'}
+                            onClick={onToggleRemoval}
+                            className={cn(
+                                'h-auto shadow-none',
+                                isRemovalAdded
+                                    ? 'text-ink-3 underline'
+                                    : 'border border-dashed border-warning-border text-status-amber-fg'
+                            )}
+                        >
+                            {isRemovalAdded
+                                ? recipesTexts.result.removeFromAdjustments
+                                : recipesTexts.result.removeIngredientButton}
+                        </Button>
+                    )}
+                </div>
             )}
         </div>
     )

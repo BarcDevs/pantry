@@ -150,4 +150,78 @@ describe('RecipeIngredientRow', () => {
         expect(screen.getByText('הסר מההתאמות')).toBeInTheDocument()
         expect(screen.queryByText('הוסף להתאמות המתכון')).not.toBeInTheDocument()
     })
+
+    it('does not show a remove button for an optional ingredient without a removal handler', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    name: 'בזיליקום לקישוט',
+                    baseName: 'בזיליקום',
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: true,
+                    optional: true
+                }}
+            />
+        )
+        expect(screen.queryByText('הסר מהמתכון')).not.toBeInTheDocument()
+    })
+
+    it('calls onToggleRemoval when the remove button is clicked', () => {
+        const onToggleRemoval = jest.fn()
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    name: 'בזיליקום לקישוט',
+                    baseName: 'בזיליקום',
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: true,
+                    optional: true
+                }}
+                onToggleRemoval={onToggleRemoval}
+            />
+        )
+
+        fireEvent.click(screen.getByText('הסר מהמתכון'))
+
+        expect(onToggleRemoval).toHaveBeenCalledTimes(1)
+    })
+
+    it('shows the remove-from-adjustments label once the removal was added', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    name: 'בזיליקום לקישוט',
+                    baseName: 'בזיליקום',
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: true,
+                    optional: true
+                }}
+                isRemovalAdded
+                onToggleRemoval={jest.fn()}
+            />
+        )
+
+        expect(screen.getByText('הסר מההתאמות')).toBeInTheDocument()
+        expect(screen.queryByText('הסר מהמתכון')).not.toBeInTheDocument()
+    })
+
+    it('does not show a remove button for a required (non-optional) ingredient', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    name: 'עגבניות',
+                    baseName: 'עגבניות',
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: true,
+                    optional: false
+                }}
+                onToggleRemoval={jest.fn()}
+            />
+        )
+        expect(screen.queryByText('הסר מהמתכון')).not.toBeInTheDocument()
+    })
 })
