@@ -153,3 +153,19 @@ punctuation placed *outside* the isolate (`<bdi>{name}</bdi>,`) can attach to th
 bidi algorithm, since the neutral comma sits right at the isolate/RTL-run boundary. Move the punctuation *inside*
 the isolate, attached to the name itself (`<bdi>{`${name},`}</bdi>`), so it's unambiguously part of the isolated run
 and never touches the outer context's neutral-character resolution.
+
+### `items-end` on a `flex-col` container is flush-LEFT in RTL, not flush-right
+
+Counter-intuitive Tailwind/Flexbox gotcha that cost a long debugging session on `PantryHeader`: a
+`flex flex-col items-end` container's cross-axis (horizontal, since main axis is vertical for a column) resolves
+`flex-end` against the *inline-end* side, which in an RTL document is the **left** edge, not the right. So a
+narrower child (e.g. a short greeting line above a wider title) renders flush-left with a visible gap on the right,
+even though `items-end` "sounds like" it should push things to the right in RTL. Use `items-start` to get flush-right
+alignment in RTL `flex-col` containers - it's the inverse of what the utility name suggests.
+
+This was misdiagnosed for several rounds as a Unicode bidi/text-direction bug (see above) before being found by
+directly measuring `getBoundingClientRect()` on the real element in a real browser (via the Chrome extension against
+the actual page, not an isolated snippet) and comparing it to its parent's rect - the screenshot alone didn't make
+the ~100px flush-left gap obvious at a glance. When a reported "LTR"/alignment bug doesn't show up clearly in a
+screenshot, compare exact bounding-box coordinates of the suspect element against its container before assuming it's
+a text-direction/bidi issue.
