@@ -37,29 +37,29 @@ describe('findMatchingPantryItem', () => {
 })
 
 describe('findRelatedPantryItem', () => {
-    it('suggests a related pantry item sharing a word (soy milk vs milk)', () => {
-        const items = [{ name: 'חלב' }]
-        expect(findRelatedPantryItem('חלב סויה', items)).toBe(items[0])
+    it('suggests a related pantry item sharing a word and category (soy milk vs milk)', () => {
+        const items = [{ name: 'חלב', type: 'dairy' as const }]
+        expect(findRelatedPantryItem('חלב סויה', 'dairy', items)).toBe(items[0])
     })
 
-    it('suggests a related pantry item sharing a word (olive oil vs oil)', () => {
-        const items = [{ name: 'שמן' }]
-        expect(findRelatedPantryItem('שמן זית', items)).toBe(items[0])
+    it('suggests a related pantry item sharing a word and category (olive oil vs oil)', () => {
+        const items = [{ name: 'שמן', type: 'condiments' as const }]
+        expect(findRelatedPantryItem('שמן זית', 'condiments', items)).toBe(items[0])
     })
 
     it('returns undefined when no words overlap', () => {
-        const items = [{ name: 'מלח' }]
-        expect(findRelatedPantryItem('סוכר', items)).toBeUndefined()
+        const items = [{ name: 'מלח', type: 'condiments' as const }]
+        expect(findRelatedPantryItem('סוכר', 'condiments', items)).toBeUndefined()
     })
 
     it('does not suggest the same item as its own replacement', () => {
-        const items = [{ name: 'פלפל אדום' }]
-        expect(findRelatedPantryItem('פלפל אדום', items)).toBeUndefined()
+        const items = [{ name: 'פלפל אדום', type: 'vegetables' as const }]
+        expect(findRelatedPantryItem('פלפל אדום', 'vegetables', items)).toBeUndefined()
     })
 
-    it('does not cross categories when both sides have a distinct qualifier (red pepper vs black pepper)', () => {
-        const items = [{ name: 'פלפל שחור' }]
-        expect(findRelatedPantryItem('פלפל אדום', items)).toBeUndefined()
+    it('does not cross categories even when words overlap (red pepper/vegetables vs black pepper/condiments)', () => {
+        const items = [{ name: 'פלפל שחור', type: 'condiments' as const }]
+        expect(findRelatedPantryItem('פלפל אדום', 'vegetables', items)).toBeUndefined()
     })
 })
 

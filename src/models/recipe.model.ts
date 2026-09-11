@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import {
     COOKING_UNITS,
     DIFFICULTIES,
+    FOOD_TYPES,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
     RECIPE_SCOPES,
@@ -17,6 +18,11 @@ const recipeIngredientSchema = {
     },
     baseName: {
         type: String,
+        required: true
+    },
+    category: {
+        type: String,
+        enum: FOOD_TYPES,
         required: true
     },
     quantity: {

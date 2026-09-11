@@ -1,4 +1,8 @@
-import type { CookingUnit, PantryUnit } from '@/types/enums'
+import type {
+    CookingUnit,
+    FoodType,
+    PantryUnit
+} from '@/types/enums'
 
 import {
     findMatchingPantryItem,
@@ -9,12 +13,14 @@ import {
 type MinimalIngredient = {
     name: string
     baseName: string
+    category: FoodType
     quantity: number | string
     unit: CookingUnit
 }
 
 export type MinimalPantryItem = {
     name: string
+    type: FoodType | null
     quantity: number
     unit: PantryUnit
 }
@@ -33,7 +39,11 @@ export const resolveIngredientPantryStatus = <T extends MinimalIngredient>(
             matchedItem.unit
         )
         const replacementItem = !inPantry
-            ? findRelatedPantryItem(baseName, pantryItems)
+            ? findRelatedPantryItem(
+                baseName,
+                ingredient.category,
+                pantryItems
+            )
             : undefined
 
         return {

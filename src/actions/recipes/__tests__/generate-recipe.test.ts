@@ -64,6 +64,7 @@ const aiResponse = {
         {
             name: 'עגבניה',
             baseName: 'עגבניה',
+            category: 'vegetables',
             quantity: 2,
             unit: 'units',
             inPantry: true

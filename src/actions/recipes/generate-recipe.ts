@@ -7,6 +7,8 @@ import {
     CookingUnit,
     DIFFICULTIES,
     Difficulty,
+    FOOD_TYPES,
+    FoodType,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
     RECIPE_SCOPES
@@ -51,6 +53,7 @@ const aiRecipeSchema = z.object({
     ingredients: z.array(z.object({
         name: z.string(),
         baseName: z.string(),
+        category: z.enum(FOOD_TYPES),
         quantity: quantitySchema,
         unit: z.enum(COOKING_UNITS),
         inPantry: z.boolean(),
@@ -97,9 +100,10 @@ export const generateRecipe = async (
         title: 'שקשוקה למבחן',
         difficulty: Difficulty.Easy,
         emoji: '🍳',
-        ingredients: pantryItemNames.slice(0, 3).map((name) => ({
-            name,
-            baseName: name,
+        ingredients: selectedPantryItems.slice(0, 3).map((item) => ({
+            name: item.name,
+            baseName: item.name,
+            category: item.type ?? FoodType.Other,
             quantity: 1,
             unit: CookingUnit.Units,
             inPantry: true,

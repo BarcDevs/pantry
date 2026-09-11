@@ -3,6 +3,7 @@ import { z } from 'zod'
 import {
     COOKING_UNITS,
     DIFFICULTIES,
+    FOOD_TYPES,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
     RECIPE_SCOPES,
@@ -18,6 +19,7 @@ export const quantitySchema = z.union([
 export const ingredientSchema = z.object({
     name: z.string(),
     baseName: z.string(),
+    category: z.enum(FOOD_TYPES),
     quantity: quantitySchema,
     unit: z.enum(COOKING_UNITS),
     inPantry: z.boolean(),

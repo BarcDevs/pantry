@@ -40,6 +40,7 @@ const aiRecipe = {
         {
             name: 'קמח',
             baseName: 'קמח',
+            category: 'grains',
             quantity: 2,
             unit: 'units'
         }

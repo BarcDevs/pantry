@@ -47,6 +47,7 @@ const aiRecipe = {
         {
             name: 'פסטה',
             baseName: 'פסטה',
+            category: 'grains',
             quantity: 250,
             unit: 'g'
         }

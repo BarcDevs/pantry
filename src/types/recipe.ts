@@ -2,6 +2,7 @@ import type { MongoDbObject } from '@/types'
 import type {
     CookingUnit,
     Difficulty,
+    FoodType,
     MatchStrictness,
     MealType,
     RecipeScope,
@@ -11,6 +12,7 @@ import type {
 export type RecipeIngredient = {
     name: string
     baseName: string
+    category: FoodType
     quantity: number | string
     unit: CookingUnit
     inPantry: boolean

@@ -25,6 +25,10 @@ export const buildRefineRecipePrompt = (
     תוספות הכנה כמו קצוץ/פרוס/טחון) - שמור עליו כפי שהוא במרכיבים
     שלא שינית, ועבור מרכיבים חדשים או ששונו קבע baseName מתאים לפי
     אותו עיקרון.
+    לכל מרכיב יש גם שדה category (קטגוריית מזון - vegetables/fruits/
+    dairy/eggs/meat/fish/canned/grains/snacks/beverages/condiments/
+    other) - שמור עליו כפי שהוא במרכיבים שלא שינית, ועבור מרכיבים
+    חדשים או ששונו קבע category מתאימה מבחינה קולינרית.
     שמור על יחידת המידה (unit) המקורית של כל מרכיב שלא שינית.
     ${recipeUnitsInstructions}
     בחר אימוג'י יחיד המייצג את המתכון המעודכן.

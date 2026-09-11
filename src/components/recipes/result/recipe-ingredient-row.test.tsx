@@ -15,6 +15,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'בזיליקום לקישוט',
                     baseName: 'בזיליקום',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -31,6 +32,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'עגבניות',
                     baseName: 'עגבניות',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -47,6 +49,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'פפריקה מתוקה',
                     baseName: 'פפריקה מתוקה',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Tsp,
                     inPantry: false,
@@ -63,6 +66,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'עגבניות',
                     baseName: 'עגבניות',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -79,6 +83,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'חלב סויה',
                     baseName: 'חלב סויה',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -97,6 +102,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'חלב סויה',
                     baseName: 'חלב סויה',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -115,6 +121,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'חלב סויה',
                     baseName: 'חלב סויה',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -136,6 +143,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'חלב סויה',
                     baseName: 'חלב סויה',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -157,6 +165,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'בזיליקום לקישוט',
                     baseName: 'בזיליקום',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -174,6 +183,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'בזיליקום לקישוט',
                     baseName: 'בזיליקום',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -194,6 +204,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'בזיליקום לקישוט',
                     baseName: 'בזיליקום',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -214,6 +225,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'עגבניות',
                     baseName: 'עגבניות',
+                    category: 'vegetables',
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,

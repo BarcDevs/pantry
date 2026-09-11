@@ -41,6 +41,7 @@ const recipe = {
         {
             name: 'עגבניה',
             baseName: 'עגבניה',
+            category: 'vegetables' as const,
             quantity: 2,
             unit: 'units' as const,
             inPantry: true,
