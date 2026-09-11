@@ -1,5 +1,6 @@
 import {
     format,
+    formatDistanceToNow,
     isToday,
     isYesterday
 } from 'date-fns'
@@ -9,10 +10,8 @@ export const formatCookedAt = (cookedAt: Date): string => {
     const time = format(cookedAt, 'HH:mm')
     if (isToday(cookedAt)) return `היום · ${time}`
     if (isYesterday(cookedAt)) return `אתמול · ${time}`
-    const dayLabel = format(
+    return formatDistanceToNow(
         cookedAt,
-        'd בMMMM',
-        { locale: he }
+        { locale: he, addSuffix: true }
     )
-    return `${dayLabel} · ${time}`
 }

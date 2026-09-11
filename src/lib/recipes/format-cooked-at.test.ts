@@ -14,8 +14,9 @@ describe('formatCookedAt', () => {
         expect(formatCookedAt(yesterday)).toBe('אתמול · 19:40')
     })
 
-    it('formats older dates as "d בMMMM · HH:mm"', () => {
-        const older = new Date('2026-06-12T13:25:00')
-        expect(formatCookedAt(older)).toBe('12 ביוני · 13:25')
+    it('formats older dates as relative time', () => {
+        const older = new Date()
+        older.setDate(older.getDate() - 5)
+        expect(formatCookedAt(older)).toBe('לפני 5 ימים')
     })
 })
