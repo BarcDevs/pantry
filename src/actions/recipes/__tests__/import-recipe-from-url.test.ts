@@ -24,6 +24,8 @@ import { lookup } from 'node:dns/promises'
 
 import { auth } from '@clerk/nextjs/server'
 
+import { FoodType } from '@/types/enums'
+
 import { generateStructured } from '@/lib/ai/gemini'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
@@ -47,7 +49,7 @@ const aiRecipe = {
         {
             name: 'פסטה',
             baseName: 'פסטה',
-            category: 'grains',
+            category: FoodType.Grains,
             quantity: 250,
             unit: 'g'
         }

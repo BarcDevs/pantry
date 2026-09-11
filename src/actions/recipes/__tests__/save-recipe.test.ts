@@ -16,6 +16,8 @@ jest.mock('@/models/recipe.model', () => ({
 
 import { auth } from '@clerk/nextjs/server'
 
+import { FoodType } from '@/types/enums'
+
 import { RecipeModel } from '@/models/recipe.model'
 
 import { saveRecipe } from '../save-recipe'
@@ -35,7 +37,7 @@ const recipe = {
         {
             name: 'עגבניה',
             baseName: 'עגבניה',
-            category: 'vegetables' as const,
+            category: FoodType.Vegetables,
             quantity: 2,
             unit: 'units' as const,
             inPantry: true,

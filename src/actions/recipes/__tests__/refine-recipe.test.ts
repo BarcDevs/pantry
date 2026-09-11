@@ -10,6 +10,8 @@ jest.mock('@/lib/ai/gemini', () => ({
 
 import { auth } from '@clerk/nextjs/server'
 
+import { FoodType } from '@/types/enums'
+
 import { generateStructured } from '@/lib/ai/gemini'
 
 import { refineRecipe } from '../refine-recipe'
@@ -29,7 +31,7 @@ const recipe = {
         {
             name: 'עגבניה',
             baseName: 'עגבניה',
-            category: 'vegetables' as const,
+            category: FoodType.Vegetables,
             quantity: 2,
             unit: 'units' as const,
             inPantry: true,
@@ -53,7 +55,7 @@ const refinedResponse = {
         {
             name: 'עגבניה',
             baseName: 'עגבניה',
-            category: 'vegetables',
+            category: FoodType.Vegetables,
             quantity: 2,
             unit: 'units',
             inPantry: true,
@@ -62,7 +64,7 @@ const refinedResponse = {
         {
             name: 'צ׳ילי',
             baseName: 'צ׳ילי',
-            category: 'vegetables',
+            category: FoodType.Vegetables,
             quantity: 1,
             unit: 'units',
             inPantry: false,

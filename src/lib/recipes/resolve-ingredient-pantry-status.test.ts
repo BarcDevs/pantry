@@ -1,3 +1,5 @@
+import { FoodType } from '@/types/enums'
+
 import { resolveIngredientPantryStatus } from './resolve-ingredient-pantry-status'
 
 describe('resolveIngredientPantryStatus', () => {
@@ -6,13 +8,13 @@ describe('resolveIngredientPantryStatus', () => {
             [{
                 name: 'בצל קצוץ',
                 baseName: 'בצל',
-                category: 'vegetables' as const,
+                category: FoodType.Vegetables,
                 quantity: 1,
                 unit: 'units' as const
             }],
             [{
                 name: 'בצל',
-                type: 'vegetables' as const,
+                type: FoodType.Vegetables,
                 quantity: 3,
                 unit: 'units' as const
             }]
@@ -27,13 +29,13 @@ describe('resolveIngredientPantryStatus', () => {
             [{
                 name: 'חלב סויה',
                 baseName: 'חלב סויה',
-                category: 'dairy' as const,
+                category: FoodType.Dairy,
                 quantity: 1,
                 unit: 'units' as const
             }],
             [{
                 name: 'חלב',
-                type: 'dairy' as const,
+                type: FoodType.Dairy,
                 quantity: 1,
                 unit: 'units' as const
             }]
@@ -48,13 +50,13 @@ describe('resolveIngredientPantryStatus', () => {
             [{
                 name: 'פלפל אדום',
                 baseName: 'פלפל אדום',
-                category: 'vegetables' as const,
+                category: FoodType.Vegetables,
                 quantity: 5,
                 unit: 'units' as const
             }],
             [{
                 name: 'פלפל אדום',
-                type: 'vegetables' as const,
+                type: FoodType.Vegetables,
                 quantity: 1,
                 unit: 'units' as const
             }]
@@ -69,13 +71,13 @@ describe('resolveIngredientPantryStatus', () => {
             [{
                 name: 'פלפל אדום',
                 baseName: 'פלפל אדום',
-                category: 'vegetables' as const,
+                category: FoodType.Vegetables,
                 quantity: 1,
                 unit: 'units' as const
             }],
             [{
                 name: 'פלפל שחור',
-                type: 'condiments' as const,
+                type: FoodType.Condiments,
                 quantity: 1,
                 unit: 'units' as const
             }]
@@ -90,13 +92,13 @@ describe('resolveIngredientPantryStatus', () => {
             [{
                 name: 'סוכר',
                 baseName: 'סוכר',
-                category: 'condiments' as const,
+                category: FoodType.Condiments,
                 quantity: 1,
                 unit: 'cup' as const
             }],
             [{
                 name: 'מלח',
-                type: 'condiments' as const,
+                type: FoodType.Condiments,
                 quantity: 1,
                 unit: 'kg' as const
             }]

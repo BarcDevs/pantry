@@ -4,7 +4,7 @@ import {
     screen
 } from '@testing-library/react'
 
-import { CookingUnit } from '@/types/enums'
+import { CookingUnit, FoodType } from '@/types/enums'
 
 import { RecipeIngredientRow } from './recipe-ingredient-row'
 
@@ -15,7 +15,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'בזיליקום לקישוט',
                     baseName: 'בזיליקום',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -32,7 +32,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'עגבניות',
                     baseName: 'עגבניות',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -49,7 +49,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'פפריקה מתוקה',
                     baseName: 'פפריקה מתוקה',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Tsp,
                     inPantry: false,
@@ -66,7 +66,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'עגבניות',
                     baseName: 'עגבניות',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -83,7 +83,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'חלב סויה',
                     baseName: 'חלב סויה',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -102,7 +102,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'חלב סויה',
                     baseName: 'חלב סויה',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -121,7 +121,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'חלב סויה',
                     baseName: 'חלב סויה',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -143,7 +143,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'חלב סויה',
                     baseName: 'חלב סויה',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -165,7 +165,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'בזיליקום לקישוט',
                     baseName: 'בזיליקום',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -183,7 +183,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'בזיליקום לקישוט',
                     baseName: 'בזיליקום',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -204,7 +204,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'בזיליקום לקישוט',
                     baseName: 'בזיליקום',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
@@ -225,7 +225,7 @@ describe('RecipeIngredientRow', () => {
                 ingredient={{
                     name: 'עגבניות',
                     baseName: 'עגבניות',
-                    category: 'vegetables',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,

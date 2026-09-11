@@ -60,8 +60,16 @@ export const findMatchingPantryItem = <T extends { name: string }>(
     return pantryItems.find((item) => normalizeItemName(item.name) === normalized)
 }
 
-const nameWords = (name: string): Set<string> => new Set(
+const nameWords = (name: string): string[] => (
     normalizeItemName(name).split(/\s+/).filter((word) => word.length > 1)
+)
+
+const wordsRelate = (wordA: string, wordB: string): boolean => (
+    wordA.includes(wordB) || wordB.includes(wordA)
+)
+
+const wordsCoveredBy = (words: string[], otherWords: string[]): boolean => (
+    words.every((word) => otherWords.some((otherWord) => wordsRelate(word, otherWord)))
 )
 
 export const findRelatedPantryItem = <T extends { name: string, type: FoodType | null }>(
@@ -77,10 +85,7 @@ export const findRelatedPantryItem = <T extends { name: string, type: FoodType |
         if (normalizeItemName(item.name) === normalizedIngredient) return false
 
         const itemWords = nameWords(item.name)
-        for (const word of ingredientWords) {
-            if (itemWords.has(word)) return true
-        }
-        return false
+        return wordsCoveredBy(ingredientWords, itemWords) || wordsCoveredBy(itemWords, ingredientWords)
     })
 }
 

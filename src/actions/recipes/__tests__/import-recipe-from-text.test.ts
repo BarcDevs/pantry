@@ -19,6 +19,8 @@ jest.mock('@/lib/ai/gemini', () => ({
 
 import { auth } from '@clerk/nextjs/server'
 
+import { FoodType } from '@/types/enums'
+
 import { generateStructured } from '@/lib/ai/gemini'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
@@ -40,7 +42,7 @@ const aiRecipe = {
         {
             name: 'קמח',
             baseName: 'קמח',
-            category: 'grains',
+            category: FoodType.Grains,
             quantity: 2,
             unit: 'units'
         }
