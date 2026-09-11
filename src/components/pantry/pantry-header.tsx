@@ -16,7 +16,7 @@ export const PantryHeader = ({
     hasCookingHistory
 }: PantryHeaderProps) => (
     <div className={'mb-5 flex items-start justify-between gap-3'}>
-        <div className={'flex flex-col items-end gap-1'}>
+        <div className={'flex flex-col items-start gap-1'}>
             <span className={'text-body text-ink-3'}>
                 {`${pantryTexts.greetingPrefix} `}
                 <bdi>
