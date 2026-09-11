@@ -138,3 +138,18 @@ invisible to that check). When a report is specifically about rendered appearanc
 against the real compiled CSS and a real browser: a temporary same-origin route rendering the actual component (not
 an isolated HTML snippet - cross-origin `data:`/`file:` pages block stylesheet/cssRules access), a real click, and
 `getComputedStyle`/`getBoundingClientRect` on the actual DOM node. Delete the temporary route before finishing.
+
+### Never "verify" a bidi/RTL text bug by injecting text via `page.evaluate`
+
+For a mixed RTL/LTR text bug (e.g. Hebrew `"היי {name},"` embedding a Latin name), don't fake the verification by
+using `page.evaluate` to set `textContent` on a DOM node directly - that bypasses the actual React render path
+entirely and can look fixed in a screenshot while the real component is still broken. This happened on
+`PantryHeader`'s greeting line: an eval-injected screenshot "confirmed" a fix that hadn't actually landed, and the
+user had to point out it was still wrong. Always render the real component with the real prop values that reproduce
+the bug (a temporary route is fine, per the rule above) and screenshot/inspect *that*.
+
+The actual fix pattern for this class of bug: when a `<bdi>{name}</bdi>` isolate sits inside RTL text, trailing
+punctuation placed *outside* the isolate (`<bdi>{name}</bdi>,`) can attach to the wrong neighbor under the Unicode
+bidi algorithm, since the neutral comma sits right at the isolate/RTL-run boundary. Move the punctuation *inside*
+the isolate, attached to the name itself (`<bdi>{`${name},`}</bdi>`), so it's unambiguously part of the isolated run
+and never touches the outer context's neutral-character resolution.

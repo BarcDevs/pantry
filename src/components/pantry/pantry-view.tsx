@@ -35,12 +35,14 @@ import { pantryTexts }
 type PantryViewProps = {
     items: PantryItem[]
     savedRecipesCount: number
+    hasCookingHistory: boolean
     displayName: string
 }
 
 export const PantryView = ({
     items,
     savedRecipesCount,
+    hasCookingHistory,
     displayName
 }: PantryViewProps) => {
     const router = useRouter()
@@ -87,7 +89,10 @@ export const PantryView = ({
     if (items.length === 0) {
         return (
             <div>
-                <PantryHeader displayName={displayName}/>
+                <PantryHeader
+                    displayName={displayName}
+                    hasCookingHistory={hasCookingHistory}
+                />
                 <EmptyStateCard
                     icon={'🧺'}
                     title={pantryTexts.emptyTitle}
@@ -111,7 +116,10 @@ export const PantryView = ({
 
     return (
         <div>
-            <PantryHeader displayName={displayName}/>
+            <PantryHeader
+                displayName={displayName}
+                hasCookingHistory={hasCookingHistory}
+            />
             <PantryStatCards
                 itemCount={items.length}
                 expiringSoonCount={expiringSoonCount}

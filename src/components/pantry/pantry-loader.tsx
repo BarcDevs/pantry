@@ -15,6 +15,7 @@ export const PantryLoader = async () => {
         <PantryView
             items={items}
             savedRecipesCount={recipes.length}
+            hasCookingHistory={recipes.some((recipe) => recipe.history.length > 0)}
             displayName={user?.displayName ?? ''}
         />
     )
