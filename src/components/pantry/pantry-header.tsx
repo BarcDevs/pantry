@@ -20,7 +20,7 @@ export const PantryHeader = ({
             <span className={'text-body text-ink-3'}>
                 {`${pantryTexts.greetingPrefix} `}
                 <bdi>
-                    {`${displayName}${pantryTexts.greetingSuffix}`}
+                    {displayName}
                 </bdi>
             </span>
             <h1 className={'font-display text-title font-weight-title text-ink'}>

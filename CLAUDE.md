@@ -123,6 +123,11 @@ npx playwright-cli console           # check for errors
 npx playwright-cli close
 ```
 
+**Never start `npm run dev` yourself, and never leave one running.** The user runs their own dev server
+persistently. Assume it's already up at `http://localhost:3000` and just navigate to it. If it isn't running,
+say so and ask the user to start it - don't launch one in the background. If you ever do start one for any
+reason, kill it (and confirm it's dead) before finishing the task - don't leave an orphaned process behind.
+
 Prefer `snapshot` over `screenshot` - returns element refs for interaction, not pixels. Use `console` after interactions to catch JS errors.
 
 ## graphify
