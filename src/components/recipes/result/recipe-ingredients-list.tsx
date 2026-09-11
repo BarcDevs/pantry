@@ -6,10 +6,14 @@ import { recipesTexts } from '@/constants/texts/recipes'
 
 type RecipeIngredientsListProps = {
     ingredients: RecipeIngredient[]
+    usedReplacements?: Record<string, boolean>
+    onToggleReplacement?: (ingredientName: string, replacementName: string) => void
 }
 
 export const RecipeIngredientsList = ({
-    ingredients
+    ingredients,
+    usedReplacements = {},
+    onToggleReplacement
 }: RecipeIngredientsListProps) => (
     <div>
         <div className={'mb-3 font-display text-heading font-weight-heading text-ink'}>
@@ -20,6 +24,10 @@ export const RecipeIngredientsList = ({
                 <RecipeIngredientRow
                     key={ingredient.name}
                     ingredient={ingredient}
+                    isReplacementAdded={!!usedReplacements[ingredient.name]}
+                    onToggleReplacement={onToggleReplacement && ingredient.replacementName
+                        ? () => onToggleReplacement(ingredient.name, ingredient.replacementName!)
+                        : undefined}
                 />
             ))}
         </div>

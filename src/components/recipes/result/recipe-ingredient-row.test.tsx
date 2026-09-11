@@ -1,4 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import {
+    fireEvent,
+    render,
+    screen
+} from '@testing-library/react'
 
 import { CookingUnit } from '@/types/enums'
 
@@ -85,5 +89,65 @@ describe('RecipeIngredientRow', () => {
         )
         expect(screen.getByText('תחליף זמין: חלב ·', { exact: false })).toBeInTheDocument()
         expect(screen.queryByText('חסר ·', { exact: false })).not.toBeInTheDocument()
+    })
+
+    it('does not show an add-to-adjustments button without a replacement handler', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    name: 'חלב סויה',
+                    baseName: 'חלב סויה',
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: false,
+                    optional: false,
+                    replacementName: 'חלב'
+                }}
+            />
+        )
+        expect(screen.queryByText('הוסף להתאמות המתכון')).not.toBeInTheDocument()
+    })
+
+    it('calls onToggleReplacement when the add-to-adjustments button is clicked', () => {
+        const onToggleReplacement = jest.fn()
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    name: 'חלב סויה',
+                    baseName: 'חלב סויה',
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: false,
+                    optional: false,
+                    replacementName: 'חלב'
+                }}
+                onToggleReplacement={onToggleReplacement}
+            />
+        )
+
+        fireEvent.click(screen.getByText('הוסף להתאמות המתכון'))
+
+        expect(onToggleReplacement).toHaveBeenCalledTimes(1)
+    })
+
+    it('shows the remove-from-adjustments label when the replacement was already added', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    name: 'חלב סויה',
+                    baseName: 'חלב סויה',
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    inPantry: false,
+                    optional: false,
+                    replacementName: 'חלב'
+                }}
+                isReplacementAdded
+                onToggleReplacement={jest.fn()}
+            />
+        )
+
+        expect(screen.getByText('הסר מההתאמות')).toBeInTheDocument()
+        expect(screen.queryByText('הוסף להתאמות המתכון')).not.toBeInTheDocument()
     })
 })

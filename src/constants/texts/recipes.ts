@@ -86,6 +86,11 @@ export const recipesTexts = {
         ingredientOptionalLabel: 'רשות',
         ingredientMissingLabel: 'חסר',
         ingredientReplacementLabel: (name: string) => `תחליף זמין: ${name}`,
+        addToAdjustments: 'הוסף להתאמות המתכון',
+        removeFromAdjustments: 'הסר מההתאמות',
+        replacementAdjustmentLine: (replacementName: string, ingredientName: string) => (
+            `להשתמש ב${replacementName} במקום ${ingredientName}`
+        ),
         stepsTitle: 'תקציר ההכנה',
         imageFieldTitle: 'תמונת המתכון',
         imageFieldOptional: '· אופציונלי',
@@ -107,6 +112,12 @@ export const recipesTexts = {
         favoriteOff: 'הוסף למועדפים'
     },
     detail: {
+        adjustLabel: 'רוצים לשנות משהו?',
+        adjustPlaceholder: 'לדוגמה: הוסיפו חריפות, החליפו מרכיב',
+        adjustSubmit: 'יצירת מתכון מעודכן',
+        adjusting: 'יוצר מתכון חדש...',
+        branchSuccess: 'נוצר מתכון חדש מההתאמות',
+        branchError: 'יצירת המתכון המעודכן נכשלה, נסה שוב',
         ratingTitle: 'דירוג המתכון',
         ratingWithHistory: (cookCount: number) => `ממוצע מתוך ${cookCount} בישולים`,
         ratingNoHistory: 'עדיין לא בושל - אין דירוג',

@@ -22,6 +22,8 @@ export const RecipeResultView = () => {
         savedRecipeId,
         refineInstruction,
         setRefineInstruction,
+        usedReplacements,
+        toggleReplacement,
         isRefining,
         refine,
         toggleFavorite,
@@ -44,7 +46,11 @@ export const RecipeResultView = () => {
                 />
             )}
             <div className={'grid grid-cols-1 gap-5.5 md:grid-cols-2'}>
-                <RecipeIngredientsList ingredients={recipe.ingredients}/>
+                <RecipeIngredientsList
+                    ingredients={recipe.ingredients}
+                    usedReplacements={usedReplacements}
+                    onToggleReplacement={toggleReplacement}
+                />
                 <RecipeStepsList steps={recipe.steps}/>
             </div>
             <RecipeRefineInput

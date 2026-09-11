@@ -148,9 +148,13 @@
 
       - AC-2.3A soft warning is shown if pantry contains fewer than 5 items; user can proceed anyway
 
-      - AC-2.4Generated recipe includes: title, ingredient list (pantry-matched items highlighted, missing items marked), step-by-step instructions array, difficulty, max_time, meal_count, meal_type, AI disclaimer
+      - AC-2.4Generated recipe includes: title, ingredient list (pantry-matched items highlighted, missing items marked, and - when a missing ingredient has a close-but-not-exact pantry match, e.g. milk for soy milk - a distinct "replacement available" state, see AC-2.4b), step-by-step instructions array, difficulty, max_time, meal_count, meal_type, AI disclaimer
 
-      - AC-2.5User can send a refinement instruction (e.g. "replace chicken with tofu"); updated recipe replaces the current view
+      - AC-2.4bEach ingredient carries a `name` (display, can include prep detail like "chopped") and an AI-assigned `base_name` (canonical identity, used only for pantry matching) - this fixes false matches (soy milk matching plain milk) without losing legitimate prep-variant matches (chopped onion matching onion). Matching against the pantry runs live on every read (generate, view, refresh), never cached on the recipe, so adding a previously-missing item to the pantry clears its "missing" flag immediately. Three ingredient-row states, visually distinct: available (green), missing with a related pantry item as a substitute (amber, "תחליף זמין: X"), missing with nothing related (red).
+
+      - AC-2.5User can send a refinement instruction (e.g. "replace chicken with tofu"); updated recipe replaces the current view. Each ingredient row with a replacement suggestion (AC-2.4b) has an "add to adjustments" toggle that appends a ready-made instruction line ("use X instead of Y") to this field instead of requiring the user to type it - toggling again removes just that line.
+
+      - AC-2.5bA saved (already in the library) recipe also exposes this adjustments field. Submitting it there does not modify the saved recipe: it sends the current recipe + instruction through the same refinement call, then saves the result as a brand-new recipe (fresh id, rating/history/favorite reset, no lineage recorded - see the `recipes` data model note on parent_recipe_id), and navigates to it. The original recipe is left untouched.
 
       - AC-2.6User's dietary preferences and cooking level from onboarding are included in the AI prompt as default constraints
 
@@ -183,7 +187,7 @@
 
       - AC-3.5User can update favorite status and tags on any saved recipe directly from the library or detail screen. Rating is not directly editable here - see AC-4.7 to AC-4.9: rating is only set via the post-cooking flow and displayed as a computed average.
 
-      - AC-3.6Editing ingredients or instructions saves as the same record (no versioning at MVP)
+      - AC-3.6Editing ingredients or instructions saves as the same record (no versioning at MVP). Exception: the adjustments field on the detail screen (AC-3.13) - submitting it creates a new record rather than editing this one.
 
       - AC-3.7Recipe cards display a visual identifier: AI-generated recipes show a single AI-selected emoji on a colored gradient background (no image search or generation). Imported (`imported_url`) recipes show the source page's `og:image` when available, falling back to the same emoji + gradient treatment when no image exists.
 
@@ -196,6 +200,8 @@
       - AC-3.11Recipes with no automatic `image_url` (`ai_generated` and text-paste `imported_url`) show an optional manual image URL field, clearly labeled "optional," on the Recipe Result screen - immediately after generation/import, before the recipe is saved - and on the saved recipe's detail/edit screen. If the user pastes a URL, it populates `image_url` and the card switches from emoji+gradient to the image. This field does not appear for URL-imported recipes that already have an `image_url` from `og:image` - that value is not user-overridable in the MVP.
 
       - AC-3.12If the user enters an image URL on the text-paste import screen (AC-3.9), that value pre-fills the same field on the subsequent Recipe Result screen - it is the same piece of state carried forward, not a separate entry. The user can still edit or clear it on the Result screen before saving. This avoids asking for the same input twice while still allowing a final check before save.
+
+      - AC-3.13The saved recipe detail screen has the same adjustments field and per-ingredient "add to adjustments" toggle described in AC-2.4b/AC-2.5. Submitting it does not edit this recipe in place (unlike AC-3.6) - it branches: the recipe + instruction go through the same refinement call as AC-2.5, the result is saved as a new library entry (fresh id, `rating`/`history` reset, `is_favorite` reset to false), and the user is navigated to the new recipe. The original stays exactly as it was, so a cooking history or rating already recorded on it is never lost or altered by an adjustment.
 
     
   
@@ -312,7 +318,7 @@
 | Add Item (Manual) | MVP | Form: name, storage, type, quantity, unit, expiry (optional), notes (optional). AI storage/expiry suggestion persisted on save. |
 | Receipt Scan Review | MVP | Editable extracted item list before committing to pantry. |
 | Recipe Generation Config | MVP | Meal count, unified max time, meal type, scope mode, allow_ai_generation toggle, match_strictness, expired-item resolution, pantry item checklist (select/deselect which items are available for this recipe). |
-| Recipe Result | MVP | Generated recipe with pantry-match highlights, missing-ingredient flags, refinement input, save + start cooking buttons. |
+| Recipe Result | MVP | Generated recipe with pantry-match highlights, missing-ingredient flags (including replacement suggestions with an "add to adjustments" toggle, see AC-2.4b), refinement input, save + start cooking buttons. |
 | Cooking Mode | MVP | Step-by-step view, dark theme, large text, step counter (e.g. "1/5") with progress bar, persistent "Done Cooking" action and "Previous" navigation. |
 | Post-Cooking Deduction | MVP | "Bon appétit" confirmation header. Ingredient list with pre-filled quantities (editable +/-), shows resulting pantry quantity per item ("X left"). "Confirm & Update Pantry" or "Skip - leave pantry unchanged." |
 | Rating Prompt | MVP | Appears immediately after deduction (confirm or skip). 5-star input + "Save to history without rating" skip option. Only entry point for rating a recipe. |
@@ -450,7 +456,7 @@ recipes
   max_time         integer         - Minutes. Unified prep+cook time used in the generation request.
   meal_count       integer         - Servings this recipe yields.
   meal_type        text            - 'breakfast' | 'lunch' | 'dinner' | 'snack'
-  ingredients      jsonb           - [{name, quantity, unit, in_pantry: boolean}]
+  ingredients      jsonb           - [{name, base_name, quantity, unit, in_pantry: boolean}]. `base_name` is the AI-assigned canonical ingredient identity used for pantry matching (e.g. `name: "בצל קצוץ"` but `base_name: "בצל"`) - `name` stays the free-text display form, `base_name` strips non-identity-changing prep/state words (chopped, sliced, ground, etc.) while keeping real type/variant differences (e.g. soy milk vs. milk). `in_pantry` and a `replacement_name` (when a related-but-not-exact pantry item exists, e.g. milk for soy milk) are recomputed live against the current pantry on every read, not stored.
   steps            jsonb           - [{order: number, description: string}]
   emoji            text            - Single AI-selected emoji representing the recipe (e.g. 🍝 for pasta). Used as card visual instead of a generated/searched image.
   image_url        text            - Nullable. Auto-populated for URL-imported recipes when source page has an og:image (not user-editable in MVP). For ai_generated and text-paste recipes (no automatic source), user may optionally paste an image URL manually via the recipe detail/edit screen. Falls back to emoji + gradient card if absent.
@@ -463,7 +469,7 @@ recipes
   updated_at       timestamptz
 
 - Note: no separate cooking_sessions table. Inventory deduction is a direct UPDATE on pantry_items, and cooking history (timestamps + ratings) lives on `recipes.history` instead of a dedicated table.
-- Note: no parent_recipe_id / version_number at MVP. Edits overwrite in place.
+- Note: no parent_recipe_id / version_number at MVP. Direct metadata edits (is_favorite, tags, title, steps, ingredients via PATCH) overwrite in place. Exception: submitting a refinement instruction on an already-saved recipe (via the "adjustments" field, AC-2.5b) always creates a brand-new recipe row rather than mutating the saved one - the original is untouched. There is still no `parent_recipe_id` link recorded between the two at MVP; they are independent rows.
 ```
 
 
@@ -486,7 +492,8 @@ recipes
 | POST | /api/pantry/scan-receipt | Accepts base64 receipt image. Sends to Gemini Flash Vision server-side. Returns extracted [{name, quantity, unit}] for client review. Image not persisted. |
 | POST | /api/pantry/parse-receipt-url | Accepts a URL. Fetches page content, sends to Gemini for extraction. Returns items for review or error with fallback_to_manual flag. |
 | POST | /api/recipes/generate | Assembles pantry context (with expiry weighting for storage type), sends to Gemini with user prefs. Body: meal_count, max_time, meal_type, scope, selected_item_ids (optional), allow_ai_generation, match_strictness. When allow_ai_generation is true, uses Gemini Google Search Grounding to search the web first. Returns structured recipe object. |
-| POST | /api/recipes/refine | Accepts recipe_id (or inline recipe) + free-text instruction. Returns modified recipe for client preview before save. |
+| POST | /api/recipes/refine | Accepts recipe_id (or inline recipe) + free-text instruction. Returns modified recipe for client preview before save. Used both for the not-yet-saved generate/import result screen (updates the in-memory preview) and, via /api/recipes/:id/branch, for already-saved recipes. |
+| POST | /api/recipes/:id/branch | Accepts an already-saved recipe + free-text adjustments instruction (AC-2.5b). Internally calls refine, then saves the result as a new recipe row (rating/history/favorite reset) rather than updating `:id`. Returns the new recipe; client navigates to it. |
 | POST | /api/recipes/import-url | Accepts recipe URL. LLM parses page into structured recipe. Returns recipe object for review, or error with fallback_to_manual flag. |
 | POST | /api/recipes/import-text | Accepts raw pasted recipe text. LLM parses text into the same structured recipe object as URL import. Returns recipe object for review. No image_url is set (no source page to pull og:image from) - falls back to emoji + gradient. |
 | GET | /api/recipes | Returns user's recipe library. Supports ?search=, ?is_favorite=true, ?min_rating=N, ?source=. |

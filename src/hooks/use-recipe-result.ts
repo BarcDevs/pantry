@@ -10,6 +10,8 @@ import { toast } from 'sonner'
 
 import type { RecipeDoc } from '@/types/recipe'
 
+import { useRecipeAdjustments } from '@/hooks/use-recipe-adjustments'
+
 import {
     clearGeneratedRecipe,
     readGeneratedRecipe
@@ -26,7 +28,13 @@ export const useRecipeResult = () => {
 
     const [recipe, setRecipe] = useState<RecipeDoc | null>(null)
     const [savedRecipeId, setSavedRecipeId] = useState<string | null>(null)
-    const [refineInstruction, setRefineInstruction] = useState('')
+    const {
+        instruction: refineInstruction,
+        setInstruction: setRefineInstruction,
+        usedReplacements,
+        toggleReplacement,
+        reset: resetAdjustments
+    } = useRecipeAdjustments()
     const [isRefining, startRefining] = useTransition()
     const [isSaving, startSaving] = useTransition()
 
@@ -58,7 +66,7 @@ export const useRecipeResult = () => {
                 })
                 setRecipe(refined)
                 setSavedRecipeId(null)
-                setRefineInstruction('')
+                resetAdjustments()
             } catch (error) {
                 console.error(error)
                 toast.error(recipesTexts.result.refineError)
@@ -106,6 +114,8 @@ export const useRecipeResult = () => {
         savedRecipeId,
         refineInstruction,
         setRefineInstruction,
+        usedReplacements,
+        toggleReplacement,
         isRefining,
         refine,
         toggleFavorite,
