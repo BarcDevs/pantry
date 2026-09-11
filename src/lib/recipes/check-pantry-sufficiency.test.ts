@@ -9,14 +9,24 @@ describe('findMatchingPantryItem', () => {
         expect(findMatchingPantryItem('פפריקה', items)).toBe(items[0])
     })
 
-    it('matches when the ingredient name contains the pantry item name', () => {
-        const items = [{ name: 'פפריקה' }]
-        expect(findMatchingPantryItem('פפריקה חריפה', items)).toBe(items[0])
+    it('matches ignoring case and surrounding whitespace', () => {
+        const items = [{ name: ' Milk ' }]
+        expect(findMatchingPantryItem('milk', items)).toBe(items[0])
     })
 
-    it('matches when the pantry item name contains the ingredient name', () => {
+    it('does not match a specific variant against a different base item (soy milk vs milk)', () => {
+        const items = [{ name: 'חלב סויה' }]
+        expect(findMatchingPantryItem('חלב', items)).toBeUndefined()
+    })
+
+    it('matches a pantry item against a recipe ingredient with a prep-state addition (onion vs chopped onion)', () => {
+        const items = [{ name: 'בצל' }]
+        expect(findMatchingPantryItem('בצל קצוץ', items)).toBe(items[0])
+    })
+
+    it('does not match when the pantry item is a more specific variant', () => {
         const items = [{ name: 'פפריקה מתוקה טחונה' }]
-        expect(findMatchingPantryItem('פפריקה', items)).toBe(items[0])
+        expect(findMatchingPantryItem('פפריקה', items)).toBeUndefined()
     })
 
     it('returns undefined when nothing matches', () => {

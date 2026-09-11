@@ -31,17 +31,20 @@ export const importRecipeFromUrl = async (
         }
     }
 
-    const generated = await generateStructured(
-        buildImportRecipeFromUrlPrompt(fetched.pageText),
-        importedRecipeSchema,
-        importedRecipeFallback,
-        0
-    )
-
     await connectDB()
     const pantryItems = await PantryItemModel
         .find({ userId })
         .lean<MinimalPantryItem[]>()
+
+    const generated = await generateStructured(
+        buildImportRecipeFromUrlPrompt(
+            fetched.pageText,
+            pantryItems.map((item) => item.name)
+        ),
+        importedRecipeSchema,
+        importedRecipeFallback,
+        0
+    )
 
     const recipe = buildImportedRecipeDoc(userId, generated, pantryItems, {
         sourceUrl: parsedUrl,

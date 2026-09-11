@@ -1,9 +1,12 @@
 import {
+    recipePantryMatchingInstruction,
     recipeStepsDetailInstructions,
     recipeUnitsInstructions
 } from '@/lib/prompts/recipe-shared-instructions'
 
-export const importRecipeExtractionInstructions = `
+export const importRecipeExtractionInstructions = (
+    pantryItemNames: string[]
+): string => `
     חלץ מהתוכן מתכון מובנה: כותרת (title), רמת קושי (difficulty: easy/medium/hard),
     סוג ארוחה (mealType: breakfast/lunch/dinner/snack), מספר מנות (mealCount),
     זמן הכנה בדקות (maxTime), אימוג'י מתאים (emoji), רשימת מצרכים (ingredients:
@@ -12,6 +15,7 @@ export const importRecipeExtractionInstructions = `
     לקישוט (רשות)" - אל תשמיט מרכיבים כאלה, כלול אותם עם optional: true),
     ורשימת שלבי הכנה ממוספרים (steps: order, description).
     ${recipeUnitsInstructions}
+    ${recipePantryMatchingInstruction(pantryItemNames)}
     ${recipeStepsDetailInstructions}
     אם התוכן המקורי אינו בעברית, תרגם הכל לעברית - כולל את הכותרת
     (title) עצמה, לא רק את המרכיבים והשלבים. אל תשאיר את הכותרת בשפת

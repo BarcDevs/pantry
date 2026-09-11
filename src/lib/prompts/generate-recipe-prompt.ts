@@ -2,6 +2,7 @@ import type { GenerateRecipeInput } from '@/types/recipe'
 import type { RecipePromptUserContext } from '@/types/user'
 
 import {
+    recipePantryMatchingInstruction,
     recipeStepsDetailInstructions,
     recipeUnitsInstructions
 } from '@/lib/prompts/recipe-shared-instructions'
@@ -32,6 +33,7 @@ export const buildGenerateRecipePrompt = (
         ? `הוראות מיוחדות נוספות מהמשתמש: ${input.customInstructions}`
         : ''}
     ${recipeUnitsInstructions}
+    ${recipePantryMatchingInstruction(pantryItemNames)}
     לכל מרכיב ציין אם הוא נמצא במזווה (inPantry).
     לכל מרכיב ציין גם אם הוא אופציונלי (optional) - כלומר תוספת,
     קישוט להגשה, או משהו שניתן להשמיט בלי לפגוע במתכון עצמו

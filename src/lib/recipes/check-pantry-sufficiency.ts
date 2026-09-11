@@ -23,17 +23,37 @@ const toBaseAmount = (
     return { family: 'other', amount: quantity }
 }
 
+const PREP_MODIFIER_WORDS = new Set([
+    'קצוץ', 'קצוצה', 'קצוצים', 'קצוצות',
+    'פרוס', 'פרוסה', 'פרוסים', 'פרוסות',
+    'טחון', 'טחונה', 'טחונים', 'טחונות',
+    'מגורר', 'מגוררת', 'מגוררים', 'מגוררות',
+    'קפוא', 'קפואה', 'קפואים', 'קפואות',
+    'טרי', 'טריה', 'טריים', 'טריות',
+    'חתוך', 'חתוכה', 'חתוכים', 'חתוכות',
+    'מרוסק', 'מרוסקת', 'מרוסקים', 'מרוסקות',
+    'שלם', 'שלמה', 'שלמים', 'שלמות',
+    'יבש', 'יבשה', 'יבשים', 'יבשות',
+    'חצוי', 'חצויה', 'חצויים', 'חצויות',
+    'מבושל', 'מבושלת', 'מבושלים', 'מבושלות',
+    'קלוף', 'קלופה', 'קלופים', 'קלופות'
+])
+
+const normalizeItemName = (name: string): string => (
+    name
+        .trim()
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((word) => !PREP_MODIFIER_WORDS.has(word))
+        .join(' ')
+)
+
 export const findMatchingPantryItem = <T extends { name: string }>(
     ingredientName: string,
     pantryItems: T[]
 ): T | undefined => {
-    const normalized = ingredientName.trim()
-    return pantryItems.find((item) => {
-        const itemName = item.name.trim()
-        return itemName === normalized
-            || normalized.includes(itemName)
-            || itemName.includes(normalized)
-    })
+    const normalized = normalizeItemName(ingredientName)
+    return pantryItems.find((item) => normalizeItemName(item.name) === normalized)
 }
 
 export const hasEnoughPantryQuantity = (
