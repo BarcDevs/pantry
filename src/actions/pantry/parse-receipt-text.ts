@@ -1,0 +1,30 @@
+'use server'
+
+import { z } from 'zod'
+
+import type { ParseReceiptUrlResult } from '@/types/receipt'
+
+import { generateStructured } from '@/lib/ai/gemini'
+import { requireUserId } from '@/lib/auth/require-user-id'
+import { mockReceiptItems } from '@/lib/pantry/mock-receipt-items'
+import { receiptItemsSchema } from '@/lib/pantry/receipt-item-schema'
+import { buildParseReceiptTextPrompt } from '@/lib/prompts/parse-receipt-text-prompt'
+
+export const parseReceiptText = async (
+    text: string
+): Promise<ParseReceiptUrlResult> => {
+    await requireUserId()
+    const receiptText = z.string().trim().min(1).parse(text)
+
+    const { items } = await generateStructured(
+        buildParseReceiptTextPrompt(receiptText),
+        receiptItemsSchema,
+        mockReceiptItems,
+        0
+    )
+
+    return {
+        items,
+        fallbackToManual: false
+    }
+}

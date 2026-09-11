@@ -4,7 +4,7 @@ import type {
     Path
 } from 'react-hook-form'
 
-import { PantryUnit } from '@/types/enums'
+import type { PantryUnit } from '@/types/enums'
 
 import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
@@ -17,15 +17,9 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { pantryTexts } from '@/constants/texts/pantry'
+import { quantityStepByUnit } from '@/lib/pantry/quantity-step-by-unit'
 
-const stepByUnit: Record<PantryUnit, number> = {
-    [PantryUnit.Units]: 1,
-    [PantryUnit.Kg]: 0.1,
-    [PantryUnit.L]: 0.1,
-    [PantryUnit.G]: 50,
-    [PantryUnit.Ml]: 50
-}
+import { pantryTexts } from '@/constants/texts/pantry'
 
 type QuantityFieldProps<T extends FieldValues> = {
     control: Control<T>
@@ -38,7 +32,7 @@ export const QuantityField = <T extends FieldValues>({
     name,
     unit
 }: QuantityFieldProps<T>) => {
-    const step = stepByUnit[unit]
+    const step = quantityStepByUnit[unit]
 
     return (
         <FormField

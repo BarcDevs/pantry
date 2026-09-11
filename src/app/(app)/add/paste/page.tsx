@@ -2,25 +2,32 @@
 
 import { useState, useTransition } from 'react'
 
+import { useSearchParams } from 'next/navigation'
+
 import { ItemSource } from '@/types/enums'
 
 import { ReceiptReviewShell } from '@/components/pantry/receipt-review-shell'
-import { ReceiptSourceTabs } from '@/components/pantry/receipt-source-tabs'
+import { ReceiptTextForm } from '@/components/pantry/receipt-text-form'
 import { ReceiptUrlForm } from '@/components/pantry/receipt-url-form'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
+import { parseReceiptText } from '@/actions/pantry/parse-receipt-text'
 import { parseReceiptUrl } from '@/actions/pantry/parse-receipt-url'
 
 const AddPastePage = () => {
-    const [tab, setTab] = useState<'url' | 'text'>('url')
+    const searchParams = useSearchParams()
+    const isTextMode = searchParams.get('tab') === 'text'
     const [url, setUrl] = useState('')
+    const [text, setText] = useState('')
     const [error, setError] = useState<string | null>(null)
     const [isParsing, startParsing] = useTransition()
 
     return (
         <ReceiptReviewShell
-            title={pantryTexts.pasteReceipt}
+            title={isTextMode
+                ? pantryTexts.addForm.pasteTextPageTitle
+                : pantryTexts.addForm.pasteLinkTileTitle}
             source={ItemSource.ReceiptUrl}
         >
             {({ onScanned }) => {
@@ -32,18 +39,40 @@ const AddPastePage = () => {
                             setError(pantryTexts.receiptReview.urlError)
                             return
                         }
-                        onScanned(result.items)
+                        await onScanned(result.items)
+                    })
+                }
+
+                const handleSubmitText = () => {
+                    setError(null)
+                    startParsing(async () => {
+                        const result = await parseReceiptText(text.trim())
+                        if (result.items.length === 0) {
+                            setError(pantryTexts.receiptReview.pasteTextError)
+                            return
+                        }
+                        await onScanned(result.items)
                     })
                 }
 
                 return (
                     <div className={'flex flex-col gap-4'}>
-                        <ReceiptSourceTabs
-                            tab={tab}
-                            onChange={setTab}
-                        />
-                        {tab === 'url'
+                        <p className={'text-body text-ink-3'}>
+                            {isTextMode
+                                ? pantryTexts.receiptReview.pasteTextSubtitle
+                                : pantryTexts.receiptReview.pasteLinkSubtitle}
+                        </p>
+                        {isTextMode
                             ? (
+                                <ReceiptTextForm
+                                    text={text}
+                                    onTextChange={setText}
+                                    onSubmit={handleSubmitText}
+                                    isSubmitting={isParsing}
+                                    error={error}
+                                />
+                            )
+                            : (
                                 <ReceiptUrlForm
                                     url={url}
                                     onUrlChange={setUrl}
@@ -51,11 +80,6 @@ const AddPastePage = () => {
                                     isSubmitting={isParsing}
                                     error={error}
                                 />
-                            )
-                            : (
-                                <p className={'rounded-lg border border-border-2 bg-surface p-5 text-center text-body text-ink-3'}>
-                                    {pantryTexts.receiptReview.textTabComingSoon}
-                                </p>
                             )}
                     </div>
                 )

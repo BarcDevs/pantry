@@ -1,4 +1,7 @@
-import type { ReceiptReviewRow as Row } from '@/types/receipt-review-row'
+import type {
+    ReceiptReviewRow as Row,
+    ReceiptReviewRowActions
+} from '@/types/receipt-review-row'
 
 import { ReceiptReviewRow } from '@/components/pantry/receipt-review-row'
 import { Button } from '@/components/shared/Button'
@@ -8,12 +11,7 @@ import { pantryTexts } from '@/constants/texts/pantry'
 type ReceiptReviewListProps = {
     rows: Row[]
     isSubmitting: boolean
-    onToggle: (id: string) => void
-    onNameChange: (id: string, name: string) => void
-    onQuantityChange: (id: string, quantity: number) => void
-    onRemove: (id: string) => void
-    onSelectAll: () => void
-    onClearAll: () => void
+    rowActions: ReceiptReviewRowActions
     onConfirm: () => void
     onCancel: () => void
 }
@@ -21,35 +19,11 @@ type ReceiptReviewListProps = {
 export const ReceiptReviewList = ({
     rows,
     isSubmitting,
-    onToggle,
-    onNameChange,
-    onQuantityChange,
-    onRemove,
-    onSelectAll,
-    onClearAll,
+    rowActions,
     onConfirm,
     onCancel
 }: ReceiptReviewListProps) => (
     <div className={'flex flex-col gap-4'}>
-        <p className={'text-body text-ink-3'}>
-            {pantryTexts.receiptReview.subtitle}
-        </p>
-        <div className={'flex justify-end gap-4'}>
-            <Button
-                type={'button'}
-                variant={'ghost'}
-                onClick={onSelectAll}
-            >
-                {pantryTexts.receiptReview.selectAll}
-            </Button>
-            <Button
-                type={'button'}
-                variant={'ghost'}
-                onClick={onClearAll}
-            >
-                {pantryTexts.receiptReview.clearAll}
-            </Button>
-        </div>
         {rows.length === 0
             ? (
                 <p className={'py-6 text-center text-body text-ink-3'}>
@@ -62,10 +36,7 @@ export const ReceiptReviewList = ({
                         <ReceiptReviewRow
                             key={row.id}
                             row={row}
-                            onToggle={onToggle}
-                            onNameChange={onNameChange}
-                            onQuantityChange={onQuantityChange}
-                            onRemove={onRemove}
+                            actions={rowActions}
                         />
                     ))}
                 </div>

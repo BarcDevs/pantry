@@ -111,6 +111,25 @@ or bounding-rect check settles it, not judgment about how a CSS class merges.
 Fix per call site (wrapper level, e.g. `src/components/shared/SortSelect.tsx`): pass `position={'popper'}` explicitly,
 which anchors via floating-ui against the trigger rect and handles RTL correctly.
 
+### Search before building - a flat text-button ("link" variant) already exists as a pattern
+
+Before writing a new component for a UI pattern (a styled `Button` variant, a card layout, a row shape), grep the
+codebase for the classNames/shape you're about to write - it's very likely already been built inline somewhere and
+just never got extracted. Concretely: a flat, colored, no-background text button (`variant={'link'}`, `h-auto p-0
+font-bold shadow-none` + a color token) already appears in `PantryTypeRow`, `SettingsProfileCard`,
+`PantrySelectSheet`, and `PantryTypeFilter` - grep for `p-0 font-bold` + `shadow-none` before reaching for a new
+wrapper component or re-deriving the classNames from scratch.
+
+This also explains a recurring bug: `Button` (`src/components/shared/Button.tsx`) always applies `shadow-button`
+regardless of `variant`, so every flat/link-style button needs an explicit `shadow-none` override or it renders with
+a visible box-shadow that doesn't belong on a plain text link. Forgetting this override is the actual root cause of
+the "ghost shadow" report on the receipt review screen's select-all/clear-all buttons - copy the existing pattern's
+full className (including `shadow-none`), don't just add `variant={'link'}` and assume it's flat.
+
+Do **not** default to extracting a new shared component just because the same classNames appear in 2+ places -
+`CORE_RULES.md`'s extraction bar (`SHARED_COMPONENTS.md`) still applies. Reuse the existing inline pattern (copy the
+proven className string) unless the user asks for a shared abstraction.
+
 ### Verifying a CSS/positioning fix actually works - don't stop at unit-testing `cn()`
 
 Proving `cn(...)` produces the right class string is necessary but not sufficient - it doesn't confirm the browser

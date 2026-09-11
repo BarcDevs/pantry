@@ -12,7 +12,7 @@ import { pantryTexts } from '@/constants/texts/pantry'
 import { scanReceipt } from '@/actions/pantry/scan-receipt'
 
 type ReceiptUploadProps = {
-    onScanned: (items: ScannedReceiptItem[]) => void
+    onScanned: (items: ScannedReceiptItem[]) => Promise<void>
 }
 
 const maxUploadBytes = 8 * 1024 * 1024
@@ -45,7 +45,7 @@ export const ReceiptUpload = ({ onScanned }: ReceiptUploadProps) => {
                 : await fileToBase64(file)
             const mimeType = isPdf ? 'image/png' : file.type
             const items = await scanReceipt(base64, mimeType)
-            onScanned(items)
+            await onScanned(items)
         } catch {
             setError(pantryTexts.receiptReview.scanError)
         } finally {

@@ -24,6 +24,13 @@ export const pantryTexts = {
         ml: 'מל',
         units: 'יחידות'
     },
+    unitShortLabels: {
+        kg: 'ק"ג',
+        g: 'גרם',
+        L: 'ליטר',
+        ml: 'מל',
+        units: 'יח\''
+    },
     expiredLabel: 'פג תוקף',
     expiredTodayLabel: 'פג היום',
     validLabel: 'תקף',
@@ -45,7 +52,15 @@ export const pantryTexts = {
         other: 'אחר'
     },
     addForm: {
-        title: 'הוספת מוצר',
+        title: 'הוספת מצרך',
+        subtitle: 'הוסיפו ידנית, סרקו ברקוד או צלמו קבלה והמערכת תזהה את המוצרים.',
+        scanTileTitle: 'סריקת קבלה',
+        scanTileSubtitle: 'זיהוי אוטומטי',
+        pasteLinkTileTitle: 'הדבקת קישור',
+        pasteLinkTileSubtitle: 'קבלה דיגיטלית מקישור',
+        pasteTextTileTitle: 'הדבקת טקסט',
+        pasteTextTileSubtitle: 'העתיקו טקסט קבלה',
+        pasteTextPageTitle: 'הדבקת טקסט קבלה',
         manualEntryTitle: 'הוספה ידנית',
         nameLabel: 'שם המוצר',
         namePlaceholder: 'לדוגמה: קישואים',
@@ -100,6 +115,15 @@ export const pantryTexts = {
     receiptReview: {
         title: 'סקירת קבלה',
         subtitle: 'בדקו את הפריטים, כווננו כמויות והסירו מה שלא רלוונטי לפני ההוספה.',
+        scanTitle: 'מוצרים שזוהו בקבלה',
+        scanSourceLabel: 'סריקת קבלה',
+        urlTitle: 'מוצרים מהקבלה הדיגיטלית',
+        urlSourceLabel: 'קבלה דיגיטלית מקישור',
+        itemsDetectedCount: (count: number) => `${count} מוצרים זוהו`,
+        deselectAll: 'בטל בחירה',
+        rowExpirySoon: (days: number) => `תפוגה בעוד ${days} ימים`,
+        editRowTitle: 'עריכת שם המוצר',
+        editRowDone: 'סיום',
         uploadPrompt: 'העלו תמונה או PDF של הקבלה',
         uploadHint: 'התמונה מעובדת בשרת ואינה נשמרת',
         uploadButton: 'בחירת קובץ',
@@ -116,15 +140,18 @@ export const pantryTexts = {
         cancelButton: 'ביטול',
         saveSuccess: 'הפריטים נוספו למזווה',
         saveError: 'הוספת הפריטים נכשלה, נסה שוב',
-        urlTab: 'קישור',
-        textTab: 'טקסט',
         urlLabel: 'קישור לקבלה או לעמוד הקנייה',
         urlPlaceholder: 'https://...',
         urlSubmit: 'ייבוא',
         urlError: 'לא הצלחנו לחלץ פריטים מהקישור',
         urlFallback: 'ניתן להזין את הפריטים ידנית במקום',
         manualEntryLink: 'הוספה ידנית',
-        textTabComingSoon: 'ייבוא מטקסט יתווסף בקרוב'
+        pasteLinkSubtitle: 'הדביקו קישור לקבלה דיגיטלית - נזהה את המוצרים אוטומטית.',
+        pasteTextSubtitle: 'הדביקו את שורות הקבלה - נזהה מוצרים, כמויות ומיקום.',
+        pasteTextLabel: 'טקסט הקבלה',
+        pasteTextPlaceholder: 'הדביקו כאן את שורות הקבלה, למשל:\nעגבניות שרי 1 ק"ג\nחזה עוף 0.9 ק"ג\nיוגורט ביו x4',
+        pasteSubmit: 'זיהוי מוצרים',
+        pasteTextError: 'לא הצלחנו לחלץ פריטים מהטקסט'
     },
     editForm: {
         title: 'עריכת מוצר',

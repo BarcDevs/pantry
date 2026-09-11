@@ -4,15 +4,21 @@ import { useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
 
+import type { PantryUnit } from '@/types/enums'
 import { ItemSource, StorageLocation } from '@/types/enums'
 import type { AddPantryItemInput, AddPantryItemOutcome } from '@/types/pantry-item'
 import type { ScannedReceiptItem } from '@/types/receipt'
-import type { ReceiptReviewRow } from '@/types/receipt-review-row'
+import type {
+    ReceiptReviewRow,
+    ReceiptReviewRowActions,
+    ReceiptReviewRowEditPatch
+} from '@/types/receipt-review-row'
 
 import { routes } from '@/constants/routes'
 import { pantryTexts } from '@/constants/texts/pantry'
 
 import { addPantryItems } from '@/actions/pantry/add-pantry-items'
+import { suggestStorage } from '@/actions/pantry/suggest-storage'
 
 type DuplicateOutcome = Extract<
     AddPantryItemOutcome,
@@ -29,6 +35,10 @@ const toRow = (item: ScannedReceiptItem, index: number): ReceiptReviewRow => ({
     name: item.name,
     quantity: item.quantity,
     unit: item.unit,
+    storage: StorageLocation.Pantry,
+    type: null,
+    expiryDate: '',
+    storageSuggestion: null,
     included: true
 })
 
@@ -40,29 +50,63 @@ export const useReceiptReview = (
     const [duplicates, setDuplicates] = useState<PendingDuplicate[]>([])
     const [isSubmitting, startSubmitting] = useTransition()
 
-    const setScannedItems = (items: ScannedReceiptItem[]) => {
-        setRows(items.map(toRow))
+    const withSuggestion = async (row: ReceiptReviewRow): Promise<ReceiptReviewRow> => {
+        try {
+            const result = await suggestStorage(row.name)
+            if (!result.recognized) return row
+            const entry = result.expiryByStorage[result.suggestedStorage]
+            return {
+                ...row,
+                storage: result.suggestedStorage,
+                type: result.suggestedType ?? row.type,
+                expiryDate: entry?.date ?? row.expiryDate,
+                storageSuggestion: result
+            }
+        } catch (error) {
+            console.error(error)
+            return row
+        }
+    }
+
+    // Suggestions are fetched for every row up front, before the rows are ever
+    // shown - no per-row loading state or separate "suggest all" step on screen.
+    const setScannedItems = async (items: ScannedReceiptItem[]) => {
+        const suggestedRows = await Promise.all(items.map(toRow).map(withSuggestion))
+        setRows(suggestedRows)
     }
 
     const toggleRow = (id: string) => setRows((prev) => prev.map(
         (row) => (row.id === id ? { ...row, included: !row.included } : row)
     ))
 
-    const setRowName = (id: string, name: string) => setRows((prev) => prev.map(
-        (row) => (row.id === id ? { ...row, name } : row)
+    const saveRowEdit = (id: string, patch: ReceiptReviewRowEditPatch) => setRows((prev) => prev.map(
+        (row) => (row.id === id ? { ...row, ...patch } : row)
     ))
 
     const setRowQuantity = (id: string, quantity: number) => setRows((prev) => prev.map(
         (row) => (row.id === id ? { ...row, quantity } : row)
     ))
 
+    const setRowUnit = (id: string, unit: PantryUnit) => setRows((prev) => prev.map(
+        (row) => (row.id === id ? { ...row, unit } : row)
+    ))
+
     const removeRow = (id: string) => setRows(
         (prev) => prev.filter((row) => row.id !== id)
     )
 
-    const selectAll = () => setRows(
-        (prev) => prev.map((row) => ({ ...row, included: true }))
-    )
+    const rowActions: ReceiptReviewRowActions = {
+        onToggle: toggleRow,
+        onQuantityChange: setRowQuantity,
+        onUnitChange: setRowUnit,
+        onEditSave: saveRowEdit,
+        onRemove: removeRow
+    }
+
+    const toggleAll = () => setRows((prev) => {
+        const allIncluded = prev.every((row) => row.included)
+        return prev.map((row) => ({ ...row, included: !allIncluded }))
+    })
 
     const clearAll = () => setRows(
         (prev) => prev.map((row) => ({ ...row, included: false }))
@@ -70,11 +114,12 @@ export const useReceiptReview = (
 
     const buildInput = (row: ReceiptReviewRow): AddPantryItemInput => ({
         name: row.name.trim(),
-        storage: StorageLocation.Pantry,
-        type: null,
+        storage: row.storage,
+        type: row.type,
         quantity: row.quantity,
         unit: row.unit,
-        storageSuggestion: null,
+        expiryDate: row.expiryDate ? new Date(row.expiryDate) : undefined,
+        storageSuggestion: row.storageSuggestion,
         source
     })
 
@@ -153,11 +198,8 @@ export const useReceiptReview = (
     return {
         rows,
         setScannedItems,
-        toggleRow,
-        setRowName,
-        setRowQuantity,
-        removeRow,
-        selectAll,
+        rowActions,
+        toggleAll,
         clearAll,
         confirm,
         isSubmitting,

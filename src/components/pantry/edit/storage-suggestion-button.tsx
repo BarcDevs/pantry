@@ -8,12 +8,14 @@ type StorageSuggestionButtonProps = {
     disabled: boolean
     isLoading: boolean
     onClick: () => void
+    label?: string
 }
 
 export const StorageSuggestionButton = ({
     disabled,
     isLoading,
-    onClick
+    onClick,
+    label = pantryTexts.addForm.suggestionTitle
 }: StorageSuggestionButtonProps) => (
     <Button
         type={'button'}
@@ -26,7 +28,7 @@ export const StorageSuggestionButton = ({
             size={14}
             className={'text-ember'}
         />
-        {pantryTexts.addForm.suggestionTitle}
+        {label}
         {isLoading && (
             <span className={'size-3.25 animate-spin rounded-full border-2 border-soft-green-border border-t-green'}/>
         )}

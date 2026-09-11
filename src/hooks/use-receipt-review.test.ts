@@ -12,6 +12,9 @@ jest.mock('sonner', () => ({
 jest.mock('@/actions/pantry/add-pantry-items', () => ({
     addPantryItems: jest.fn()
 }))
+jest.mock('@/actions/pantry/suggest-storage', () => ({
+    suggestStorage: jest.fn().mockResolvedValue({ recognized: false })
+}))
 
 import { useRouter } from 'next/navigation'
 
@@ -72,7 +75,7 @@ describe('useReceiptReview', () => {
             () => useReceiptReview(ItemSource.ReceiptScan)
         )
 
-        act(() => result.current.setScannedItems(scanned))
+        await act(async () => result.current.setScannedItems(scanned))
         expect(result.current.rows).toHaveLength(2)
 
         await act(async () => result.current.confirm())

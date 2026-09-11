@@ -4,17 +4,22 @@ import { useRouter } from 'next/navigation'
 
 import { ArrowRightIcon } from 'lucide-react'
 
+import type { ClassName } from '@/types/react'
+
 import { Button } from '@/components/shared/Button'
+
+import { cn } from '@/lib/utils'
 
 type PageHeaderProps = {
     title?: string
+    className?: ClassName
 }
 
-export const PageHeader = ({ title }: PageHeaderProps) => {
+export const PageHeader = ({ title, className }: PageHeaderProps) => {
     const router = useRouter()
 
     return (
-        <div className={'mb-5 flex items-center gap-3.25'}>
+        <div className={cn('mb-5 flex items-center gap-3.25', className)}>
             <Button
                 type={'button'}
                 variant={'ghost'}
