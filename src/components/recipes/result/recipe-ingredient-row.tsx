@@ -55,7 +55,7 @@ export const RecipeIngredientRow = ({
                         >
                             {formatQuantity(ingredient.quantity)}
                         </span>
-                        {` ${recipesTexts.unitLabels[ingredient.unit]}`}
+                        {` ${recipesTexts.unitLabels[ingredient.unit]} `}
                     </span>
                     <span>
                         {ingredient.name}

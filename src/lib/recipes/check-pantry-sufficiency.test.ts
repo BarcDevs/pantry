@@ -51,6 +51,16 @@ describe('findRelatedPantryItem', () => {
         const items = [{ name: 'מלח' }]
         expect(findRelatedPantryItem('סוכר', items)).toBeUndefined()
     })
+
+    it('does not suggest the same item as its own replacement', () => {
+        const items = [{ name: 'פלפל אדום' }]
+        expect(findRelatedPantryItem('פלפל אדום', items)).toBeUndefined()
+    })
+
+    it('does not cross categories when both sides have a distinct qualifier (red pepper vs black pepper)', () => {
+        const items = [{ name: 'פלפל שחור' }]
+        expect(findRelatedPantryItem('פלפל אדום', items)).toBeUndefined()
+    })
 })
 
 describe('hasEnoughPantryQuantity', () => {

@@ -60,17 +60,25 @@ const nameWords = (name: string): Set<string> => new Set(
     normalizeItemName(name).split(/\s+/).filter((word) => word.length > 1)
 )
 
+const isSubset = (smaller: Set<string>, larger: Set<string>): boolean => {
+    for (const word of smaller) {
+        if (!larger.has(word)) return false
+    }
+    return true
+}
+
 export const findRelatedPantryItem = <T extends { name: string }>(
     ingredientName: string,
     pantryItems: T[]
 ): T | undefined => {
+    const normalizedIngredient = normalizeItemName(ingredientName)
     const ingredientWords = nameWords(ingredientName)
+
     return pantryItems.find((item) => {
+        if (normalizeItemName(item.name) === normalizedIngredient) return false
+
         const itemWords = nameWords(item.name)
-        for (const word of ingredientWords) {
-            if (itemWords.has(word)) return true
-        }
-        return false
+        return isSubset(ingredientWords, itemWords) || isSubset(itemWords, ingredientWords)
     })
 }
 
