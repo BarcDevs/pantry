@@ -36,6 +36,8 @@
     --status-amber-fg: #bd6f1f;
     --status-red-bg: #fbe9e5;
     --status-red-fg: #c4452f;
+    --status-blue-bg: #e8f0fb;
+    --status-blue-fg: #3d6fb4;
     --warning-bg: #fdf3ef;
     --warning-border: #f3d6cd;
     --warning-fg: #c4452f;
@@ -122,6 +124,8 @@
     --color-status-amber-fg: var(--status-amber-fg);
     --color-status-red-bg: var(--status-red-bg);
     --color-status-red-fg: var(--status-red-fg);
+    --color-status-blue-bg: var(--status-blue-bg);
+    --color-status-blue-fg: var(--status-blue-fg);
     --color-warning-bg: var(--warning-bg);
     --color-warning-border: var(--warning-border);
     --color-warning-fg: var(--warning-fg);

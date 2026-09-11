@@ -11,42 +11,50 @@ type RecipeIngredientRowProps = {
 
 export const RecipeIngredientRow = ({
     ingredient
-}: RecipeIngredientRowProps) => (
-    <div className={'flex items-center gap-2.5 border-b border-border-3 py-2.75 last:border-b-0'}>
-        <span
-            className={cn(
-                'size-2 shrink-0 rounded-full',
-                ingredient.inPantry ? 'bg-green' : 'bg-status-amber-fg'
-            )}
-        />
-        <span className={'flex items-baseline gap-1.5 text-body text-ink'}>
+}: RecipeIngredientRowProps) => {
+    const hasReplacement = !ingredient.inPantry && !!ingredient.replacementName
+
+    return (
+        <div className={'flex items-center gap-2.5 border-b border-border-3 py-2.75 last:border-b-0'}>
             <span
                 className={cn(
-                    'text-label',
-                    ingredient.inPantry ? 'text-ink-3' : 'font-bold text-status-amber-fg'
+                    'size-2 shrink-0 rounded-full',
+                    ingredient.inPantry && 'bg-green',
+                    !ingredient.inPantry && hasReplacement && 'bg-status-blue-fg',
+                    !ingredient.inPantry && !hasReplacement && 'bg-status-amber-fg'
                 )}
-            >
-                {!ingredient.inPantry && (
-                    ingredient.replacementName
-                        ? `${recipesTexts.result.ingredientReplacementLabel(ingredient.replacementName)} · `
-                        : `${recipesTexts.result.ingredientMissingLabel} · `
-                )}
+            />
+            <span className={'flex items-baseline gap-1.5 text-body text-ink'}>
                 <span
-                    dir={'ltr'}
-                    style={{ unicodeBidi: 'isolate' }}
+                    className={cn(
+                        'text-label',
+                        ingredient.inPantry && 'text-ink-3',
+                        !ingredient.inPantry && hasReplacement && 'font-bold text-status-blue-fg',
+                        !ingredient.inPantry && !hasReplacement && 'font-bold text-status-amber-fg'
+                    )}
                 >
-                    {formatQuantity(ingredient.quantity)}
+                    {!ingredient.inPantry && (
+                        ingredient.replacementName
+                            ? `${recipesTexts.result.ingredientReplacementLabel(ingredient.replacementName)} · `
+                            : `${recipesTexts.result.ingredientMissingLabel} · `
+                    )}
+                    <span
+                        dir={'ltr'}
+                        style={{ unicodeBidi: 'isolate' }}
+                    >
+                        {formatQuantity(ingredient.quantity)}
+                    </span>
+                    {` ${recipesTexts.unitLabels[ingredient.unit]}`}
                 </span>
-                {` ${recipesTexts.unitLabels[ingredient.unit]}`}
+                <span>
+                    {ingredient.name}
+                </span>
             </span>
-            <span>
-                {ingredient.name}
-            </span>
-        </span>
-        {ingredient.optional && (
-            <span className={'ms-auto rounded-full bg-border-3 px-2 py-0.5 text-caption text-ink-3'}>
-                {recipesTexts.result.ingredientOptionalLabel}
-            </span>
-        )}
-    </div>
-)
+            {ingredient.optional && (
+                <span className={'ms-auto rounded-full bg-border-3 px-2 py-0.5 text-caption text-ink-3'}>
+                    {recipesTexts.result.ingredientOptionalLabel}
+                </span>
+            )}
+        </div>
+    )
+}
