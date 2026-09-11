@@ -51,12 +51,10 @@ const aiRecipeSchema = z.object({
     difficulty: z.enum(DIFFICULTIES),
     emoji: z.string(),
     ingredients: z.array(z.object({
-        name: z.string(),
-        baseName: z.string(),
+        label: z.string(),
         category: z.enum(FOOD_TYPES),
         quantity: quantitySchema,
         unit: z.enum(COOKING_UNITS),
-        inPantry: z.boolean(),
         optional: z.boolean().default(false)
     })),
     steps: z.array(z.object({
@@ -101,12 +99,10 @@ export const generateRecipe = async (
         difficulty: Difficulty.Easy,
         emoji: '🍳',
         ingredients: selectedPantryItems.slice(0, 3).map((item) => ({
-            name: item.name,
-            baseName: item.name,
+            label: item.name,
             category: item.type ?? FoodType.Other,
             quantity: 1,
             unit: CookingUnit.Units,
-            inPantry: true,
             optional: false
         })),
         steps: [

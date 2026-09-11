@@ -13,8 +13,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'בזיליקום לקישוט',
                     name: 'בזיליקום לקישוט',
-                    baseName: 'בזיליקום',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -30,8 +30,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'עגבניות',
                     name: 'עגבניות',
-                    baseName: 'עגבניות',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -47,8 +47,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'פפריקה מתוקה',
                     name: 'פפריקה מתוקה',
-                    baseName: 'פפריקה מתוקה',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Tsp,
@@ -64,8 +64,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'עגבניות',
                     name: 'עגבניות',
-                    baseName: 'עגבניות',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -81,8 +81,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'חלב סויה',
                     name: 'חלב סויה',
-                    baseName: 'חלב סויה',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -100,8 +100,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'חלב סויה',
                     name: 'חלב סויה',
-                    baseName: 'חלב סויה',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -119,8 +119,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'חלב סויה',
                     name: 'חלב סויה',
-                    baseName: 'חלב סויה',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -141,8 +141,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'חלב סויה',
                     name: 'חלב סויה',
-                    baseName: 'חלב סויה',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -163,8 +163,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'בזיליקום לקישוט',
                     name: 'בזיליקום לקישוט',
-                    baseName: 'בזיליקום',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -181,8 +181,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'בזיליקום לקישוט',
                     name: 'בזיליקום לקישוט',
-                    baseName: 'בזיליקום',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -202,8 +202,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'בזיליקום לקישוט',
                     name: 'בזיליקום לקישוט',
-                    baseName: 'בזיליקום',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
@@ -223,8 +223,8 @@ describe('RecipeIngredientRow', () => {
         render(
             <RecipeIngredientRow
                 ingredient={{
+                    label: 'עגבניות',
                     name: 'עגבניות',
-                    baseName: 'עגבניות',
                     category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,

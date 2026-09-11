@@ -7,9 +7,9 @@ import { recipesTexts } from '@/constants/texts/recipes'
 type RecipeIngredientsListProps = {
     ingredients: RecipeIngredient[]
     usedReplacements?: Record<string, boolean>
-    onToggleReplacement?: (ingredientName: string, replacementName: string) => void
+    onToggleReplacement?: (ingredientName: string, ingredientLabel: string, replacementName: string) => void
     usedRemovals?: Record<string, boolean>
-    onToggleRemoval?: (ingredientName: string) => void
+    onToggleRemoval?: (ingredientName: string, ingredientLabel: string) => void
 }
 
 export const RecipeIngredientsList = ({
@@ -30,11 +30,15 @@ export const RecipeIngredientsList = ({
                     ingredient={ingredient}
                     isReplacementAdded={!!usedReplacements[ingredient.name]}
                     onToggleReplacement={onToggleReplacement && ingredient.replacementName
-                        ? () => onToggleReplacement(ingredient.name, ingredient.replacementName!)
+                        ? () => onToggleReplacement(
+                            ingredient.name,
+                            ingredient.label,
+                            ingredient.replacementName!
+                        )
                         : undefined}
                     isRemovalAdded={!!usedRemovals[ingredient.name]}
                     onToggleRemoval={onToggleRemoval
-                        ? () => onToggleRemoval(ingredient.name)
+                        ? () => onToggleRemoval(ingredient.name, ingredient.label)
                         : undefined}
                 />
             ))}

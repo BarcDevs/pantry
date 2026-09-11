@@ -16,14 +16,18 @@ export const quantitySchema = z.union([
     z.string().regex(/^\d+(\.\d+)?$/).transform(Number)
 ])
 
-export const ingredientSchema = z.object({
-    name: z.string(),
-    baseName: z.string(),
+/** What the AI is allowed to produce - `name`/`inPantry` are always code-derived, never AI input. */
+export const aiIngredientSchema = z.object({
+    label: z.string(),
     category: z.enum(FOOD_TYPES),
     quantity: quantitySchema,
     unit: z.enum(COOKING_UNITS),
+    optional: z.boolean().default(false)
+})
+
+export const ingredientSchema = aiIngredientSchema.extend({
+    name: z.string(),
     inPantry: z.boolean(),
-    optional: z.boolean().default(false),
     replacementName: z.string().optional()
 })
 

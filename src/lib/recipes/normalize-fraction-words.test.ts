@@ -41,33 +41,29 @@ describe('normalizeIngredientFractions', () => {
     it('normalizes fractions embedded in an ingredient name', () => {
         const ingredients = [
             {
-                name: '1/2 לימון',
+                label: '1/2 לימון',
                 quantity: 1,
                 unit: CookingUnit.Units,
-                inPantry: false,
                 optional: false
             },
             {
-                name: 'עגבנייה',
+                label: 'עגבנייה',
                 quantity: 2,
                 unit: CookingUnit.Units,
-                inPantry: false,
                 optional: false
             }
         ]
         expect(normalizeIngredientFractions(ingredients)).toEqual([
             {
-                name: 'חצי לימון',
+                label: 'חצי לימון',
                 quantity: 1,
                 unit: CookingUnit.Units,
-                inPantry: false,
                 optional: false
             },
             {
-                name: 'עגבנייה',
+                label: 'עגבנייה',
                 quantity: 2,
                 unit: CookingUnit.Units,
-                inPantry: false,
                 optional: false
             }
         ])

@@ -21,11 +21,11 @@ export const normalizeStepFractions = (steps: RecipeStep[]): RecipeStep[] => (
     }))
 )
 
-export const normalizeIngredientFractions = <T extends { name: string }>(
+export const normalizeIngredientFractions = <T extends { label: string }>(
     ingredients: T[]
 ): T[] => (
     ingredients.map((ingredient) => ({
         ...ingredient,
-        name: normalizeFractionWords(ingredient.name)
+        label: normalizeFractionWords(ingredient.label)
     }))
 )

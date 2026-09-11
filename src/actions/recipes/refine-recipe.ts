@@ -10,22 +10,27 @@ import type {
 
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
+import connectDB from '@/lib/mongodb'
 import { buildRefineRecipePrompt } from '@/lib/prompts/refine-recipe-prompt'
 import {
     normalizeIngredientFractions,
     normalizeStepFractions
 } from '@/lib/recipes/normalize-fraction-words'
 import {
-    ingredientSchema,
+    aiIngredientSchema,
     recipeDocSchema,
     stepSchema
 } from '@/lib/recipes/recipe-doc-schema'
+import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
+import { resolveIngredientPantryStatus } from '@/lib/recipes/resolve-ingredient-pantry-status'
+
+import { PantryItemModel } from '@/models/pantry-item.model'
 
 const refinedRecipeSchema = z.object({
     title: z.string(),
     difficulty: z.enum(DIFFICULTIES),
     emoji: z.string(),
-    ingredients: z.array(ingredientSchema),
+    ingredients: z.array(aiIngredientSchema),
     steps: z.array(stepSchema)
 })
 
@@ -53,12 +58,20 @@ export const refineRecipe = async (
         })
     )
 
+    await connectDB()
+    const pantryItems = await PantryItemModel
+        .find({ userId })
+        .lean<MinimalPantryItem[]>()
+
     return {
         ...recipe,
         title: refined.title,
         difficulty: refined.difficulty,
         emoji: refined.emoji,
-        ingredients: normalizeIngredientFractions(refined.ingredients),
+        ingredients: resolveIngredientPantryStatus(
+            normalizeIngredientFractions(refined.ingredients),
+            pantryItems
+        ),
         steps: normalizeStepFractions(refined.steps)
     }
 }

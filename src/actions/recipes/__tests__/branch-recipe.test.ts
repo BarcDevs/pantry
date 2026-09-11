@@ -16,13 +16,22 @@ jest.mock('@/models/recipe.model', () => ({
 jest.mock('@/lib/ai/gemini', () => ({
     generateStructured: jest.fn()
 }))
+jest.mock('@/models/pantry-item.model', () => ({
+    PantryItemModel: {
+        find: jest.fn()
+    }
+}))
 
 import { auth } from '@clerk/nextjs/server'
 
-import { FoodType } from '@/types/enums'
+import {
+    CookingUnit,
+    FoodType
+} from '@/types/enums'
 
 import { generateStructured } from '@/lib/ai/gemini'
 
+import { PantryItemModel } from '@/models/pantry-item.model'
 import { RecipeModel } from '@/models/recipe.model'
 
 import { branchRecipe } from '../branch-recipe'
@@ -30,6 +39,11 @@ import { branchRecipe } from '../branch-recipe'
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockGenerateStructured = generateStructured as jest.Mock
 const mockCreate = RecipeModel.create as jest.Mock
+const mockFind = PantryItemModel.find as jest.Mock
+
+const leanChain = (result: unknown) => ({
+    lean: jest.fn().mockResolvedValue(result)
+})
 
 const recipe = {
     userId: 'user_123',
@@ -41,11 +55,11 @@ const recipe = {
     mealType: 'dinner' as const,
     ingredients: [
         {
+            label: 'עגבניה',
             name: 'עגבניה',
-            baseName: 'עגבניה',
             category: FoodType.Vegetables,
             quantity: 2,
-            unit: 'units' as const,
+            unit: CookingUnit.Units,
             inPantry: true,
             optional: false
         }
@@ -77,6 +91,7 @@ describe('branchRecipe', () => {
     it('creates a new recipe from the refined result instead of updating the original', async () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
         mockGenerateStructured.mockResolvedValue(refinedResponse)
+        mockFind.mockReturnValue(leanChain([]))
         mockCreate.mockResolvedValue({
             toObject: () => ({
                 ...recipe,
@@ -99,6 +114,7 @@ describe('branchRecipe', () => {
     it('resets rating, history, and favorite status on the branched recipe', async () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
         mockGenerateStructured.mockResolvedValue(refinedResponse)
+        mockFind.mockReturnValue(leanChain([]))
         mockCreate.mockResolvedValue({
             toObject: () => ({
                 ...recipe,

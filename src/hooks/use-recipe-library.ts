@@ -23,7 +23,7 @@ const sortComparators: Record<RecipeSortOption, (a: Recipe, b: Recipe) => number
 
 const titleMatches = (recipe: Recipe, query: string) => normalizeName(recipe.title).includes(query)
 const ingredientMatches = (recipe: Recipe, query: string) => (
-    recipe.ingredients.some((ingredient) => normalizeName(ingredient.name).includes(query))
+    recipe.ingredients.some((ingredient) => normalizeName(ingredient.label).includes(query))
 )
 
 export const useRecipeLibrary = (initialRecipes: Recipe[]) => {

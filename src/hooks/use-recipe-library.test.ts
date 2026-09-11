@@ -3,7 +3,10 @@ import {
     renderHook
 } from '@testing-library/react'
 
-import { CookingUnit } from '@/types/enums'
+import {
+    CookingUnit,
+    FoodType
+} from '@/types/enums'
 import type { Recipe } from '@/types/recipe'
 
 import { useRecipeLibrary } from './use-recipe-library'
@@ -35,14 +38,18 @@ describe('useRecipeLibrary can-cook filter', () => {
         const recipe = makeRecipe({
             ingredients: [
                 {
+                    label: 'עגבניות',
                     name: 'עגבניות',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: true,
                     optional: false
                 },
                 {
-                    name: 'בזיליקום לקישוט',
+                    label: 'בזיליקום לקישוט',
+                    name: 'בזיליקום',
+                    category: FoodType.Vegetables,
                     quantity: 1,
                     unit: CookingUnit.Units,
                     inPantry: false,
@@ -60,7 +67,9 @@ describe('useRecipeLibrary can-cook filter', () => {
     it('excludes a recipe missing a non-optional ingredient', () => {
         const recipe = makeRecipe({
             ingredients: [{
+                label: 'עגבניות',
                 name: 'עגבניות',
+                category: FoodType.Vegetables,
                 quantity: 1,
                 unit: CookingUnit.Units,
                 inPantry: false,

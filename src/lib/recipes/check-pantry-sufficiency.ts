@@ -4,6 +4,11 @@ import type {
     PantryUnit
 } from '@/types/enums'
 
+import {
+    nameWords,
+    nameWordsForMatching,
+    normalizeItemName
+} from '@/lib/recipes/ingredient-name-words'
 import { resolveQuantityNumber } from '@/lib/recipes/resolve-quantity-number'
 
 type UnitFamily = 'weight' | 'volume' | 'other'
@@ -27,31 +32,6 @@ const toBaseAmount = (
     return { family: 'other', amount: quantity }
 }
 
-const PREP_MODIFIER_WORDS = new Set([
-    'קצוץ', 'קצוצה', 'קצוצים', 'קצוצות',
-    'פרוס', 'פרוסה', 'פרוסים', 'פרוסות',
-    'טחון', 'טחונה', 'טחונים', 'טחונות',
-    'מגורר', 'מגוררת', 'מגוררים', 'מגוררות',
-    'קפוא', 'קפואה', 'קפואים', 'קפואות',
-    'טרי', 'טריה', 'טריים', 'טריות',
-    'חתוך', 'חתוכה', 'חתוכים', 'חתוכות',
-    'מרוסק', 'מרוסקת', 'מרוסקים', 'מרוסקות',
-    'שלם', 'שלמה', 'שלמים', 'שלמות',
-    'יבש', 'יבשה', 'יבשים', 'יבשות',
-    'חצוי', 'חצויה', 'חצויים', 'חצויות',
-    'מבושל', 'מבושלת', 'מבושלים', 'מבושלות',
-    'קלוף', 'קלופה', 'קלופים', 'קלופות'
-])
-
-const normalizeItemName = (name: string): string => (
-    name
-        .trim()
-        .toLowerCase()
-        .split(/\s+/)
-        .filter((word) => !PREP_MODIFIER_WORDS.has(word))
-        .join(' ')
-)
-
 export const findMatchingPantryItem = <T extends { name: string }>(
     ingredientName: string,
     pantryItems: T[]
@@ -59,10 +39,6 @@ export const findMatchingPantryItem = <T extends { name: string }>(
     const normalized = normalizeItemName(ingredientName)
     return pantryItems.find((item) => normalizeItemName(item.name) === normalized)
 }
-
-const nameWords = (name: string): string[] => (
-    normalizeItemName(name).split(/\s+/).filter((word) => word.length > 1)
-)
 
 const wordsRelate = (wordA: string, wordB: string): boolean => (
     wordA.includes(wordB) || wordB.includes(wordA)
@@ -72,19 +48,38 @@ const wordsCoveredBy = (words: string[], otherWords: string[]): boolean => (
     words.every((word) => otherWords.some((otherWord) => wordsRelate(word, otherWord)))
 )
 
+const sameWordSet = (words: string[], otherWords: string[]): boolean => (
+    words.length > 0
+    && words.length === otherWords.length
+    && wordsCoveredBy(words, otherWords)
+    && wordsCoveredBy(otherWords, words)
+)
+
 export const findRelatedPantryItem = <T extends { name: string, type: FoodType | null }>(
     ingredientName: string,
-    ingredientCategory: FoodType,
+    ingredientCategory: FoodType | undefined,
     pantryItems: T[]
 ): T | undefined => {
     const normalizedIngredient = normalizeItemName(ingredientName)
     const ingredientWords = nameWords(ingredientName)
+    const ingredientCoreWords = nameWordsForMatching(ingredientName)
 
     return pantryItems.find((item) => {
-        if (item.type !== ingredientCategory) return false
+        if (
+            ingredientCategory !== undefined
+            && item.type !== null
+            && item.type !== ingredientCategory
+        ) return false
         if (normalizeItemName(item.name) === normalizedIngredient) return false
 
         const itemWords = nameWords(item.name)
+        // Color-only differences (green pepper / red pepper) are interchangeable -
+        // checked as an exact match once color words are stripped from both sides,
+        // separately from the general coverage check below (which must run on the
+        // full, un-stripped words - otherwise "black pepper" reduces to the same
+        // bare "pepper" as "red pepper" and would wrongly match it too).
+        if (sameWordSet(ingredientCoreWords, nameWordsForMatching(item.name))) return true
+
         return wordsCoveredBy(ingredientWords, itemWords) || wordsCoveredBy(itemWords, ingredientWords)
     })
 }

@@ -17,8 +17,7 @@ export const importedRecipeSchema = z.object({
     maxTime: z.number().int().positive(),
     emoji: z.string(),
     ingredients: z.array(z.object({
-        name: z.string(),
-        baseName: z.string(),
+        label: z.string(),
         category: z.enum(FOOD_TYPES),
         quantity: quantitySchema,
         unit: z.enum(COOKING_UNITS),

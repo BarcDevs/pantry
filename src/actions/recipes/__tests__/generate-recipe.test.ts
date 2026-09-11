@@ -24,7 +24,10 @@ jest.mock('@/lib/ai/gemini', () => ({
 
 import { auth } from '@clerk/nextjs/server'
 
-import { FoodType } from '@/types/enums'
+import {
+    CookingUnit,
+    FoodType
+} from '@/types/enums'
 
 import { generateStructured } from '@/lib/ai/gemini'
 
@@ -64,12 +67,10 @@ const aiResponse = {
     emoji: '🍝',
     ingredients: [
         {
-            name: 'עגבניה',
-            baseName: 'עגבניה',
+            label: 'עגבניה',
             category: FoodType.Vegetables,
             quantity: 2,
-            unit: 'units',
-            inPantry: true
+            unit: CookingUnit.Units
         }
     ],
     steps: [{ order: 1, description: 'לבשל פסטה' }]

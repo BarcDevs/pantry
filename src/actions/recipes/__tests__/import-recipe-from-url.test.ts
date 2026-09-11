@@ -47,8 +47,7 @@ const aiRecipe = {
     emoji: '🍝',
     ingredients: [
         {
-            name: 'פסטה',
-            baseName: 'פסטה',
+            label: 'פסטה',
             category: FoodType.Grains,
             quantity: 250,
             unit: 'g'

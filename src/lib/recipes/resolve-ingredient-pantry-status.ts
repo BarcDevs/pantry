@@ -9,11 +9,13 @@ import {
     findRelatedPantryItem,
     hasEnoughPantryQuantity
 } from '@/lib/recipes/check-pantry-sufficiency'
+import { deriveIngredientName } from '@/lib/recipes/derive-ingredient-name'
 
 type MinimalIngredient = {
-    name: string
-    baseName: string
-    category: FoodType
+    label?: string
+    /** Legacy documents (pre-label/name split) store display text here instead. */
+    name?: string
+    category?: FoodType
     quantity: number | string
     unit: CookingUnit
 }
@@ -28,10 +30,16 @@ export type MinimalPantryItem = {
 export const resolveIngredientPantryStatus = <T extends MinimalIngredient>(
     ingredients: T[],
     pantryItems: MinimalPantryItem[]
-): Array<T & { inPantry: boolean, replacementName?: string }> => (
+): Array<T & {
+    name: string
+    inPantry: boolean
+    replacementName?: string
+}> => (
     ingredients.map((ingredient) => {
-        const baseName = ingredient.baseName ?? ingredient.name
-        const matchedItem = findMatchingPantryItem(baseName, pantryItems)
+        // `name` is never trusted from storage or the AI - always re-derived live from the
+        // display text, so pantry matching can't drift from a stale or bad stored value.
+        const name = deriveIngredientName(ingredient.label ?? ingredient.name ?? '')
+        const matchedItem = findMatchingPantryItem(name, pantryItems)
         const inPantry = matchedItem !== undefined && hasEnoughPantryQuantity(
             ingredient.quantity,
             ingredient.unit,
@@ -40,7 +48,7 @@ export const resolveIngredientPantryStatus = <T extends MinimalIngredient>(
         )
         const replacementItem = !inPantry
             ? findRelatedPantryItem(
-                baseName,
+                name,
                 ingredient.category,
                 pantryItems
             )
@@ -48,6 +56,7 @@ export const resolveIngredientPantryStatus = <T extends MinimalIngredient>(
 
         return {
             ...ingredient,
+            name,
             inPantry,
             replacementName: replacementItem?.name
         }

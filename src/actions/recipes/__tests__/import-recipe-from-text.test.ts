@@ -40,8 +40,7 @@ const aiRecipe = {
     emoji: '🍫',
     ingredients: [
         {
-            name: 'קמח',
-            baseName: 'קמח',
+            label: 'קמח',
             category: FoodType.Grains,
             quantity: 2,
             unit: 'units'

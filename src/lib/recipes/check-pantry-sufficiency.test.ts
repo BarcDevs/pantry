@@ -73,6 +73,26 @@ describe('findRelatedPantryItem', () => {
         const items = [{ name: 'פלפל אדום', type: FoodType.Vegetables }]
         expect(findRelatedPantryItem('פלפל חריף', FoodType.Vegetables, items)).toBeUndefined()
     })
+
+    it('suggests a replacement across a color-only variant (green pepper vs red pepper)', () => {
+        const items = [{ name: 'פלפל אדום', type: FoodType.Vegetables }]
+        expect(findRelatedPantryItem('פלפל ירוק', FoodType.Vegetables, items)).toBe(items[0])
+    })
+
+    it('does not let color-stripping cause a false match (black pepper vs red pepper, no category)', () => {
+        const items = [{ name: 'פלפל אדום', type: null }]
+        expect(findRelatedPantryItem('פלפל שחור', undefined, items)).toBeUndefined()
+    })
+
+    it('still suggests a replacement when the pantry item has no category set (uncategorized items are common)', () => {
+        const items = [{ name: 'פלפל אדום', type: null }]
+        expect(findRelatedPantryItem('פלפלים', FoodType.Vegetables, items)).toBe(items[0])
+    })
+
+    it('still suggests a replacement when the ingredient has no category (legacy recipes saved before the field existed)', () => {
+        const items = [{ name: 'פלפל אדום', type: FoodType.Vegetables }]
+        expect(findRelatedPantryItem('פלפלים', undefined, items)).toBe(items[0])
+    })
 })
 
 describe('hasEnoughPantryQuantity', () => {

@@ -12,11 +12,11 @@ import {
 import type { RecipeDoc } from '@/types/recipe'
 
 const recipeIngredientSchema = {
-    name: {
+    label: {
         type: String,
         required: true
     },
-    baseName: {
+    name: {
         type: String,
         required: true
     },

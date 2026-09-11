@@ -10,7 +10,7 @@ describe('useRecipeAdjustments', () => {
         const { result } = renderHook(() => useRecipeAdjustments())
 
         act(() => {
-            result.current.toggleReplacement('חלב סויה', 'חלב')
+            result.current.toggleReplacement('חלב סויה', 'חלב סויה', 'חלב')
         })
 
         expect(result.current.instruction).toBe('להשתמש בחלב במקום חלב סויה')
@@ -21,10 +21,10 @@ describe('useRecipeAdjustments', () => {
         const { result } = renderHook(() => useRecipeAdjustments())
 
         act(() => {
-            result.current.toggleReplacement('חלב סויה', 'חלב')
+            result.current.toggleReplacement('חלב סויה', 'חלב סויה', 'חלב')
         })
         act(() => {
-            result.current.toggleReplacement('חלב סויה', 'חלב')
+            result.current.toggleReplacement('חלב סויה', 'חלב סויה', 'חלב')
         })
 
         expect(result.current.instruction).toBe('')
@@ -38,7 +38,7 @@ describe('useRecipeAdjustments', () => {
             result.current.setInstruction('בלי בצל')
         })
         act(() => {
-            result.current.toggleReplacement('חלב סויה', 'חלב')
+            result.current.toggleReplacement('חלב סויה', 'חלב סויה', 'חלב')
         })
 
         expect(result.current.instruction).toBe('בלי בצל, להשתמש בחלב במקום חלב סויה')
@@ -48,7 +48,7 @@ describe('useRecipeAdjustments', () => {
         const { result } = renderHook(() => useRecipeAdjustments())
 
         act(() => {
-            result.current.toggleReplacement('חלב סויה', 'חלב')
+            result.current.toggleReplacement('חלב סויה', 'חלב סויה', 'חלב')
         })
         act(() => {
             result.current.reset()
@@ -62,7 +62,7 @@ describe('useRecipeAdjustments', () => {
         const { result } = renderHook(() => useRecipeAdjustments())
 
         act(() => {
-            result.current.toggleRemoval('בזיליקום לקישוט')
+            result.current.toggleRemoval('בזיליקום לקישוט', 'בזיליקום לקישוט')
         })
 
         expect(result.current.instruction).toBe('בלי בזיליקום לקישוט')
@@ -73,10 +73,10 @@ describe('useRecipeAdjustments', () => {
         const { result } = renderHook(() => useRecipeAdjustments())
 
         act(() => {
-            result.current.toggleRemoval('בזיליקום לקישוט')
+            result.current.toggleRemoval('בזיליקום לקישוט', 'בזיליקום לקישוט')
         })
         act(() => {
-            result.current.toggleRemoval('בזיליקום לקישוט')
+            result.current.toggleRemoval('בזיליקום לקישוט', 'בזיליקום לקישוט')
         })
 
         expect(result.current.instruction).toBe('')
@@ -87,10 +87,10 @@ describe('useRecipeAdjustments', () => {
         const { result } = renderHook(() => useRecipeAdjustments())
 
         act(() => {
-            result.current.toggleReplacement('חלב סויה', 'חלב')
+            result.current.toggleReplacement('חלב סויה', 'חלב סויה', 'חלב')
         })
         act(() => {
-            result.current.toggleRemoval('בזיליקום לקישוט')
+            result.current.toggleRemoval('בזיליקום לקישוט', 'בזיליקום לקישוט')
         })
 
         expect(result.current.instruction).toBe(
@@ -98,7 +98,7 @@ describe('useRecipeAdjustments', () => {
         )
 
         act(() => {
-            result.current.toggleReplacement('חלב סויה', 'חלב')
+            result.current.toggleReplacement('חלב סויה', 'חלב סויה', 'חלב')
         })
 
         expect(result.current.instruction).toBe('בלי בזיליקום לקישוט')
@@ -108,7 +108,7 @@ describe('useRecipeAdjustments', () => {
         const { result } = renderHook(() => useRecipeAdjustments())
 
         act(() => {
-            result.current.toggleRemoval('בזיליקום לקישוט')
+            result.current.toggleRemoval('בזיליקום לקישוט', 'בזיליקום לקישוט')
         })
         act(() => {
             result.current.reset()

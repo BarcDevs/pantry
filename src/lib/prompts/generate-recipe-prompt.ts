@@ -34,8 +34,7 @@ export const buildGenerateRecipePrompt = (
         : ''}
     ${recipeUnitsInstructions}
     ${recipePantryMatchingInstruction(pantryItemNames)}
-    לכל מרכיב ציין אם הוא נמצא במזווה (inPantry).
-    לכל מרכיב ציין גם אם הוא אופציונלי (optional) - כלומר תוספת,
+    לכל מרכיב ציין אם הוא אופציונלי (optional) - כלומר תוספת,
     קישוט להגשה, או משהו שניתן להשמיט בלי לפגוע במתכון עצמו
     (למשל עשבי תיבול לקישוט, רוטב צד). מרכיבים ליבתיים למתכון
     הם optional: false.

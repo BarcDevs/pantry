@@ -10,11 +10,14 @@ import type {
 } from '@/types/enums'
 
 export type RecipeIngredient = {
+    /** Free-text display form shown in the recipe (AI-written, can include prep detail like "chopped"). */
+    label: string
+    /** Canonical identity used for pantry matching - always code-derived from label, never AI-supplied. */
     name: string
-    baseName: string
     category: FoodType
     quantity: number | string
     unit: CookingUnit
+    /** Always computed deterministically against the current pantry on every read - never AI-supplied or trusted from storage. */
     inPantry: boolean
     optional: boolean
     replacementName?: string

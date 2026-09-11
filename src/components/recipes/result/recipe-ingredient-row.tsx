@@ -58,7 +58,7 @@ export const RecipeIngredientRow = ({
                         {` ${recipesTexts.unitLabels[ingredient.unit]} `}
                     </span>
                     <span>
-                        {ingredient.name}
+                        {ingredient.label}
                     </span>
                 </span>
                 {ingredient.optional && (
