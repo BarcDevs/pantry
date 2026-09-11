@@ -102,6 +102,7 @@ export const RecipeDetailView = ({ recipe: initialRecipe }: RecipeDetailViewProp
                 onOpenChange={setConfirmDelete}
                 onConfirm={handleDelete}
                 isDeleting={isDeleting}
+                recipeName={recipe.title}
             />
         </div>
     )

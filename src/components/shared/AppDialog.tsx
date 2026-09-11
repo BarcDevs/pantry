@@ -57,7 +57,7 @@ export const AppDialog = ({
                         !isCentered && 'flex-row items-center justify-between gap-3 space-y-0 py-px'
                     )}
                 >
-                    <div className={cn(!isCentered && 'min-w-0')}>
+                    <div className={cn('flex flex-col gap-1.5', !isCentered && 'min-w-0')}>
                         {icon && (
                             <div className={'mx-auto mb-2 flex size-12 items-center justify-center rounded-full bg-destructive/10'}>
                                 {icon}
@@ -72,7 +72,7 @@ export const AppDialog = ({
                             {title}
                         </DialogTitle>
                         {description && (
-                            <DialogDescription className={cn(isCentered && 'text-center')}>
+                            <DialogDescription className={'text-start'}>
                                 {description}
                             </DialogDescription>
                         )}

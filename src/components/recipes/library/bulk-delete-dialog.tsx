@@ -3,26 +3,26 @@ import { Button } from '@/components/shared/Button'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
-type DeleteRecipeDialogProps = {
+type BulkDeleteDialogProps = {
     open: boolean
     onOpenChange: (open: boolean) => void
     onConfirm: () => void
     isDeleting: boolean
-    recipeName: string
+    count: number
 }
 
-export const DeleteRecipeDialog = ({
+export const BulkDeleteDialog = ({
     open,
     onOpenChange,
     onConfirm,
     isDeleting,
-    recipeName
-}: DeleteRecipeDialogProps) => (
+    count
+}: BulkDeleteDialogProps) => (
     <AppDialog
         open={open}
         onOpenChange={onOpenChange}
-        title={recipesTexts.deleteDialog.title}
-        description={recipesTexts.deleteDialog.description(recipeName)}
+        title={recipesTexts.bulkDeleteDialog.title}
+        description={recipesTexts.bulkDeleteDialog.description(count)}
         align={'center'}
         footer={(
             <>
@@ -30,7 +30,7 @@ export const DeleteRecipeDialog = ({
                     variant={'outline'}
                     onClick={() => onOpenChange(false)}
                 >
-                    {recipesTexts.deleteDialog.cancel}
+                    {recipesTexts.bulkDeleteDialog.cancel}
                 </Button>
                 <Button
                     variant={'destructive'}
@@ -39,7 +39,7 @@ export const DeleteRecipeDialog = ({
                 >
                     {isDeleting
                         ? recipesTexts.detail.deleting
-                        : recipesTexts.deleteDialog.confirm}
+                        : recipesTexts.bulkDeleteDialog.confirm}
                 </Button>
             </>
         )}

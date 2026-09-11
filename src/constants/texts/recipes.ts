@@ -137,7 +137,13 @@ export const recipesTexts = {
     },
     deleteDialog: {
         title: 'למחוק את המתכון?',
-        description: 'הפעולה תמחק את המתכון לצמיתות. לא ניתן לבטל.',
+        description: (recipeName: string) => `למחוק את המתכון "${recipeName}" מהרשימה? הפעולה לצמיתות ולא ניתן לבטל.`,
+        cancel: 'ביטול',
+        confirm: 'מחיקה'
+    },
+    bulkDeleteDialog: {
+        title: 'למחוק את המתכונים שנבחרו?',
+        description: (count: number) => `למחוק ${count} מתכונים מהרשימה? הפעולה לצמיתות ולא ניתן לבטל.`,
         cancel: 'ביטול',
         confirm: 'מחיקה'
     },
@@ -156,7 +162,13 @@ export const recipesTexts = {
         sortLabel: 'מיון',
         sortRecent: 'החדשים ביותר',
         sortRating: 'דירוג גבוה',
-        sortTitle: 'לפי שם (א-ב)'
+        sortTitle: 'לפי שם (א-ב)',
+        lastCooked: (relativeTime: string) => `בושל לאחרונה ${relativeTime}`,
+        selectButton: 'בחירה',
+        cancelSelect: 'ביטול',
+        selectedCount: (count: number) => `${count} נבחרו`,
+        deleteSelected: 'מחיקה',
+        bulkDeleteError: 'מחיקת המתכונים נכשלה, נסה שוב'
     },
     cook: {
         stepLabel: 'שלב',
