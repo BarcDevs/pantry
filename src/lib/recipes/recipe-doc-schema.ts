@@ -47,9 +47,9 @@ export const aiPromptContextSchema = z.object({
     pantrySnapshot: z.array(z.string())
 })
 
-export const httpUrlSchema = z.string().url().refine(
+export const httpUrlSchema = z.string().url('כתובת לא תקינה').refine(
     (url) => ['http:', 'https:'].includes(new URL(url).protocol),
-    'Only http/https URLs are allowed'
+    'יש להזין כתובת http/https בלבד'
 )
 
 export const recipeDocSchema = z.object({

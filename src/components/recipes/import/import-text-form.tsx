@@ -1,4 +1,5 @@
-import { Button } from '@/components/shared/Button'
+import { ImageIcon } from 'lucide-react'
+
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -9,32 +10,30 @@ type ImportTextFormProps = {
     onTextChange: (text: string) => void
     imageUrl: string
     onImageUrlChange: (imageUrl: string) => void
-    onSubmit: () => void
-    isSubmitting: boolean
-    error: string | null
 }
 
 export const ImportTextForm = ({
     text,
     onTextChange,
     imageUrl,
-    onImageUrlChange,
-    onSubmit,
-    isSubmitting,
-    error
+    onImageUrlChange
 }: ImportTextFormProps) => (
-    <div className={'flex flex-col gap-3 rounded-lg border border-border-2 bg-surface p-5'}>
-        <label className={'text-label font-bold text-ink'}>
+    <div>
+        <label className={'mb-1.75 block text-label font-semibold text-ink-2'}>
             {recipesTexts.import.textLabel}
         </label>
         <Textarea
             value={text}
             placeholder={recipesTexts.import.textPlaceholder}
             onChange={(e) => onTextChange(e.target.value)}
-            rows={8}
+            className={'min-h-37.5'}
         />
-        <label className={'text-label font-bold text-ink'}>
+        <label className={'mt-4 mb-1.75 flex items-center gap-1.5 text-label font-semibold text-ink-2'}>
+            <ImageIcon className={'size-3.75 text-ink-3'}/>
             {recipesTexts.import.textImageLabel}
+            <span className={'font-medium text-ink-4'}>
+                {`· ${recipesTexts.import.textImageOptional}`}
+            </span>
         </label>
         <Input
             dir={'ltr'}
@@ -42,19 +41,8 @@ export const ImportTextForm = ({
             placeholder={recipesTexts.result.imageUrlPlaceholder}
             onChange={(e) => onImageUrlChange(e.target.value)}
         />
-        <Button
-            type={'button'}
-            disabled={isSubmitting || text.trim().length === 0}
-            onClick={onSubmit}
-        >
-            {isSubmitting
-                ? recipesTexts.import.importing
-                : recipesTexts.import.textSubmit}
-        </Button>
-        {error && (
-            <span className={'text-label text-status-red-fg'}>
-                {error}
-            </span>
-        )}
+        <p className={'mt-2 text-caption text-ink-4'}>
+            {recipesTexts.import.textImageHint}
+        </p>
     </div>
 )

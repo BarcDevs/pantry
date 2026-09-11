@@ -16,7 +16,7 @@ describe('ImportSourceTabs', () => {
             />
         )
 
-        fireEvent.click(screen.getByText('טקסט'))
+        fireEvent.click(screen.getByText('📝 הדבקת טקסט'))
 
         expect(onChange).toHaveBeenCalledWith('text')
     })

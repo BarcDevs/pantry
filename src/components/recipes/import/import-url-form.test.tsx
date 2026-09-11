@@ -7,34 +7,17 @@ import {
 import { ImportUrlForm } from './import-url-form'
 
 describe('ImportUrlForm', () => {
-    it('calls onSubmit when the button is clicked with a non-empty url', () => {
-        const onSubmit = jest.fn()
+    it('calls onUrlChange when the input changes', () => {
+        const onUrlChange = jest.fn()
         render(
             <ImportUrlForm
-                url={'https://example.com/recipe'}
-                onUrlChange={jest.fn()}
-                onSubmit={onSubmit}
-                isSubmitting={false}
-                error={null}
+                url={''}
+                onUrlChange={onUrlChange}
             />
         )
 
-        fireEvent.click(screen.getByRole('button'))
+        fireEvent.change(screen.getByRole('textbox'), { target: { value: 'https://example.com/recipe' } })
 
-        expect(onSubmit).toHaveBeenCalled()
-    })
-
-    it('renders an error message when provided', () => {
-        render(
-            <ImportUrlForm
-                url={'https://example.com'}
-                onUrlChange={jest.fn()}
-                onSubmit={jest.fn()}
-                isSubmitting={false}
-                error={'הייבוא נכשל'}
-            />
-        )
-
-        expect(screen.getByText('הייבוא נכשל')).toBeInTheDocument()
+        expect(onUrlChange).toHaveBeenCalledWith('https://example.com/recipe')
     })
 })

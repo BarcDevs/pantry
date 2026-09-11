@@ -1,4 +1,3 @@
-import { Button } from '@/components/shared/Button'
 import { Input } from '@/components/ui/input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -6,20 +5,14 @@ import { recipesTexts } from '@/constants/texts/recipes'
 type ImportUrlFormProps = {
     url: string
     onUrlChange: (url: string) => void
-    onSubmit: () => void
-    isSubmitting: boolean
-    error: string | null
 }
 
 export const ImportUrlForm = ({
     url,
-    onUrlChange,
-    onSubmit,
-    isSubmitting,
-    error
+    onUrlChange
 }: ImportUrlFormProps) => (
-    <div className={'flex flex-col gap-3 rounded-lg border border-border-2 bg-surface p-5'}>
-        <label className={'text-label font-bold text-ink'}>
+    <div>
+        <label className={'mb-1.75 block text-label font-semibold text-ink-2'}>
             {recipesTexts.import.urlLabel}
         </label>
         <Input
@@ -29,19 +22,8 @@ export const ImportUrlForm = ({
             onChange={(e) => onUrlChange(e.target.value)}
             className={'text-left'}
         />
-        <Button
-            type={'button'}
-            disabled={isSubmitting || url.trim().length === 0}
-            onClick={onSubmit}
-        >
-            {isSubmitting
-                ? recipesTexts.import.importing
-                : recipesTexts.import.urlSubmit}
-        </Button>
-        {error && (
-            <span className={'text-label text-status-red-fg'}>
-                {error}
-            </span>
-        )}
+        <p className={'mt-2 text-caption text-ink-4'}>
+            {recipesTexts.import.urlHint}
+        </p>
     </div>
 )

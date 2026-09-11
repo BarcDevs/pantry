@@ -1,4 +1,6 @@
-import { SourceTabs } from '@/components/shared/SourceTabs'
+import { Button } from '@/components/shared/Button'
+
+import { cn } from '@/lib/utils'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -7,14 +9,33 @@ type ImportSourceTabsProps = {
     onChange: (tab: 'url' | 'text') => void
 }
 
+const segClass = (active: boolean) => cn(
+    'h-auto flex-1 rounded-md border py-3 shadow-none',
+    active
+        ? 'border-2 border-green bg-[#eef5ef] font-bold text-green-deep'
+        : 'border-border bg-surface font-medium text-ink-2'
+)
+
 export const ImportSourceTabs = ({
     tab,
     onChange
 }: ImportSourceTabsProps) => (
-    <SourceTabs
-        tab={tab}
-        urlLabel={recipesTexts.import.urlTab}
-        textLabel={recipesTexts.import.textTab}
-        onChange={onChange}
-    />
+    <div className={'mb-4.5 flex gap-2.25'}>
+        <Button
+            type={'button'}
+            variant={'outline'}
+            onClick={() => onChange('url')}
+            className={segClass(tab === 'url')}
+        >
+            {recipesTexts.import.urlTab}
+        </Button>
+        <Button
+            type={'button'}
+            variant={'outline'}
+            onClick={() => onChange('text')}
+            className={segClass(tab === 'text')}
+        >
+            {recipesTexts.import.textTab}
+        </Button>
+    </div>
 )
