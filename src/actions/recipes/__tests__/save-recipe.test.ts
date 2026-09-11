@@ -34,6 +34,7 @@ const recipe = {
     ingredients: [
         {
             name: 'עגבניה',
+            baseName: 'עגבניה',
             quantity: 2,
             unit: 'units' as const,
             inPantry: true,

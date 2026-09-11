@@ -85,6 +85,7 @@ export const recipesTexts = {
         ingredientsTitle: 'מצרכים',
         ingredientOptionalLabel: 'רשות',
         ingredientMissingLabel: 'חסר',
+        ingredientReplacementLabel: (name: string) => `תחליף זמין: ${name}`,
         stepsTitle: 'תקציר ההכנה',
         imageFieldTitle: 'תמונת המתכון',
         imageFieldOptional: '· אופציונלי',

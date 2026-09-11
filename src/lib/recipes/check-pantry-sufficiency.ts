@@ -56,6 +56,24 @@ export const findMatchingPantryItem = <T extends { name: string }>(
     return pantryItems.find((item) => normalizeItemName(item.name) === normalized)
 }
 
+const nameWords = (name: string): Set<string> => new Set(
+    normalizeItemName(name).split(/\s+/).filter((word) => word.length > 1)
+)
+
+export const findRelatedPantryItem = <T extends { name: string }>(
+    ingredientName: string,
+    pantryItems: T[]
+): T | undefined => {
+    const ingredientWords = nameWords(ingredientName)
+    return pantryItems.find((item) => {
+        const itemWords = nameWords(item.name)
+        for (const word of ingredientWords) {
+            if (itemWords.has(word)) return true
+        }
+        return false
+    })
+}
+
 export const hasEnoughPantryQuantity = (
     ingredientQuantity: number | string,
     ingredientUnit: CookingUnit,

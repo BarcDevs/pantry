@@ -17,6 +17,7 @@ export const importedRecipeSchema = z.object({
     emoji: z.string(),
     ingredients: z.array(z.object({
         name: z.string(),
+        baseName: z.string(),
         quantity: quantitySchema,
         unit: z.enum(COOKING_UNITS),
         optional: z.boolean().default(false)

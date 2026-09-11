@@ -17,10 +17,12 @@ export const quantitySchema = z.union([
 
 export const ingredientSchema = z.object({
     name: z.string(),
+    baseName: z.string(),
     quantity: quantitySchema,
     unit: z.enum(COOKING_UNITS),
     inPantry: z.boolean(),
-    optional: z.boolean().default(false)
+    optional: z.boolean().default(false),
+    replacementName: z.string().optional()
 })
 
 export const stepSchema = z.object({

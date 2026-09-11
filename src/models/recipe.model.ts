@@ -15,6 +15,10 @@ const recipeIngredientSchema = {
         type: String,
         required: true
     },
+    baseName: {
+        type: String,
+        required: true
+    },
     quantity: {
         type: mongoose.Schema.Types.Mixed,
         required: true,

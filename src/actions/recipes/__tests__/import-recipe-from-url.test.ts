@@ -46,6 +46,7 @@ const aiRecipe = {
     ingredients: [
         {
             name: 'פסטה',
+            baseName: 'פסטה',
             quantity: 250,
             unit: 'g'
         }

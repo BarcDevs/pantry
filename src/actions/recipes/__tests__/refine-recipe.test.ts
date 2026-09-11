@@ -28,6 +28,7 @@ const recipe = {
     ingredients: [
         {
             name: 'עגבניה',
+            baseName: 'עגבניה',
             quantity: 2,
             unit: 'units' as const,
             inPantry: true,
@@ -50,6 +51,7 @@ const refinedResponse = {
     ingredients: [
         {
             name: 'עגבניה',
+            baseName: 'עגבניה',
             quantity: 2,
             unit: 'units',
             inPantry: true,
@@ -57,6 +59,7 @@ const refinedResponse = {
         },
         {
             name: 'צ׳ילי',
+            baseName: 'צ׳ילי',
             quantity: 1,
             unit: 'units',
             inPantry: false,

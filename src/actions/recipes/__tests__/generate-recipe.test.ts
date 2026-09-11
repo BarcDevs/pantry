@@ -63,6 +63,7 @@ const aiResponse = {
     ingredients: [
         {
             name: 'עגבניה',
+            baseName: 'עגבניה',
             quantity: 2,
             unit: 'units',
             inPantry: true

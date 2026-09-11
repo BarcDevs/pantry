@@ -26,7 +26,11 @@ export const RecipeIngredientRow = ({
                     ingredient.inPantry ? 'text-ink-3' : 'font-bold text-status-amber-fg'
                 )}
             >
-                {!ingredient.inPantry && `${recipesTexts.result.ingredientMissingLabel} · `}
+                {!ingredient.inPantry && (
+                    ingredient.replacementName
+                        ? `${recipesTexts.result.ingredientReplacementLabel(ingredient.replacementName)} · `
+                        : `${recipesTexts.result.ingredientMissingLabel} · `
+                )}
                 <span
                     dir={'ltr'}
                     style={{ unicodeBidi: 'isolate' }}

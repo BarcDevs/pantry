@@ -10,10 +10,12 @@ import type {
 
 export type RecipeIngredient = {
     name: string
+    baseName: string
     quantity: number | string
     unit: CookingUnit
     inPantry: boolean
     optional: boolean
+    replacementName?: string
 }
 
 export type RecipeStep = {

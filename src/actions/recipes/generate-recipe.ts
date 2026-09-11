@@ -50,6 +50,7 @@ const aiRecipeSchema = z.object({
     emoji: z.string(),
     ingredients: z.array(z.object({
         name: z.string(),
+        baseName: z.string(),
         quantity: quantitySchema,
         unit: z.enum(COOKING_UNITS),
         inPantry: z.boolean(),
@@ -98,6 +99,7 @@ export const generateRecipe = async (
         emoji: '🍳',
         ingredients: pantryItemNames.slice(0, 3).map((name) => ({
             name,
+            baseName: name,
             quantity: 1,
             unit: CookingUnit.Units,
             inPantry: true,

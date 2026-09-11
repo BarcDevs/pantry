@@ -39,6 +39,7 @@ const aiRecipe = {
     ingredients: [
         {
             name: 'קמח',
+            baseName: 'קמח',
             quantity: 2,
             unit: 'units'
         }

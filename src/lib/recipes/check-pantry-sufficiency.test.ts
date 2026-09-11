@@ -1,5 +1,6 @@
 import {
     findMatchingPantryItem,
+    findRelatedPantryItem,
     hasEnoughPantryQuantity
 } from './check-pantry-sufficiency'
 
@@ -32,6 +33,23 @@ describe('findMatchingPantryItem', () => {
     it('returns undefined when nothing matches', () => {
         const items = [{ name: 'מלח' }]
         expect(findMatchingPantryItem('סוכר', items)).toBeUndefined()
+    })
+})
+
+describe('findRelatedPantryItem', () => {
+    it('suggests a related pantry item sharing a word (soy milk vs milk)', () => {
+        const items = [{ name: 'חלב' }]
+        expect(findRelatedPantryItem('חלב סויה', items)).toBe(items[0])
+    })
+
+    it('suggests a related pantry item sharing a word (olive oil vs oil)', () => {
+        const items = [{ name: 'שמן' }]
+        expect(findRelatedPantryItem('שמן זית', items)).toBe(items[0])
+    })
+
+    it('returns undefined when no words overlap', () => {
+        const items = [{ name: 'מלח' }]
+        expect(findRelatedPantryItem('סוכר', items)).toBeUndefined()
     })
 })
 
