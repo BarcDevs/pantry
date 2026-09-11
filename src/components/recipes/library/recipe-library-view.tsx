@@ -1,11 +1,15 @@
 'use client'
 
+import { useState } from 'react'
+
 import type { Recipe } from '@/types/recipe'
 
+import { BulkDeleteDialog } from '@/components/recipes/library/bulk-delete-dialog'
 import { RecipeFilterTabs } from '@/components/recipes/library/recipe-filter-tabs'
 import { RecipeGrid } from '@/components/recipes/library/recipe-grid'
 import { RecipeImportLink } from '@/components/recipes/library/recipe-import-link'
 import { RecipeSearchInput } from '@/components/recipes/library/recipe-search-input'
+import { RecipeSelectionBar } from '@/components/recipes/library/recipe-selection-bar'
 import { EmptyStateCard } from '@/components/shared/EmptyStateCard'
 import { SortSelect } from '@/components/shared/SortSelect'
 
@@ -19,6 +23,8 @@ type RecipeLibraryViewProps = {
 }
 
 export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [confirmBulkDelete, setConfirmBulkDelete] = useState(false)
     const {
         query,
         setQuery,
@@ -28,8 +34,23 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
         setSort,
         filteredRecipes,
         toggleFavorite,
-        deleteRecipe
+        deleteRecipe,
+        isSelecting,
+        selectedIds,
+        toggleSelectMode,
+        toggleSelected,
+        deleteSelected
     } = useRecipeLibrary(recipes)
+
+    const handleBulkDelete = async () => {
+        setIsDeleting(true)
+        try {
+            await deleteSelected()
+            setConfirmBulkDelete(false)
+        } catch {
+            setIsDeleting(false)
+        }
+    }
 
     if (recipes.length === 0) return (
         <EmptyStateCard
@@ -69,6 +90,12 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                     ]}
                 />
             </div>
+            <RecipeSelectionBar
+                isSelecting={isSelecting}
+                selectedCount={selectedIds.length}
+                onToggleSelectMode={toggleSelectMode}
+                onRequestDelete={() => setConfirmBulkDelete(true)}
+            />
             {filteredRecipes.length === 0 ? (
                 <p className={'py-10 text-center text-body text-ink-3'}>
                     {recipesTexts.library.noResults}
@@ -78,8 +105,18 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                     recipes={filteredRecipes}
                     onToggleFavorite={toggleFavorite}
                     onDelete={deleteRecipe}
+                    isSelecting={isSelecting}
+                    selectedIds={selectedIds}
+                    onToggleSelect={(recipe) => toggleSelected(recipe._id)}
                 />
             )}
+            <BulkDeleteDialog
+                open={confirmBulkDelete}
+                onOpenChange={setConfirmBulkDelete}
+                onConfirm={handleBulkDelete}
+                isDeleting={isDeleting}
+                count={selectedIds.length}
+            />
         </div>
     )
 }

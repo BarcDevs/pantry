@@ -32,6 +32,8 @@ export const useRecipeLibrary = (initialRecipes: Recipe[]) => {
     const [filter, setFilter] = useState<RecipeLibraryFilter>('all')
     const [sort, setSort] = useState<RecipeSortOption>('recent')
     const [, startToggling] = useTransition()
+    const [isSelecting, setIsSelecting] = useState(false)
+    const [selectedIds, setSelectedIds] = useState<string[]>([])
 
     const filteredRecipes = useMemo(() => {
         const trimmedQuery = normalizeName(query)
@@ -93,6 +95,32 @@ export const useRecipeLibrary = (initialRecipes: Recipe[]) => {
         }
     }
 
+    const toggleSelectMode = () => {
+        setIsSelecting((current) => !current)
+        setSelectedIds([])
+    }
+
+    const toggleSelected = (recipeId: string) => {
+        setSelectedIds((current) => (
+            current.includes(recipeId)
+                ? current.filter((id) => id !== recipeId)
+                : [...current, recipeId]
+        ))
+    }
+
+    const deleteSelected = async () => {
+        try {
+            await Promise.all(selectedIds.map((id) => deleteRecipeAction(id)))
+            setRecipes((current) => current.filter((item) => !selectedIds.includes(item._id)))
+            setIsSelecting(false)
+            setSelectedIds([])
+        } catch (error) {
+            console.error(error)
+            toast.error(recipesTexts.library.bulkDeleteError)
+            throw error
+        }
+    }
+
     return {
         query,
         setQuery,
@@ -102,6 +130,11 @@ export const useRecipeLibrary = (initialRecipes: Recipe[]) => {
         setSort,
         filteredRecipes,
         toggleFavorite,
-        deleteRecipe
+        deleteRecipe,
+        isSelecting,
+        selectedIds,
+        toggleSelectMode,
+        toggleSelected,
+        deleteSelected
     }
 }
