@@ -13,15 +13,22 @@ jest.mock('@/models/recipe.model', () => ({
         findOne: jest.fn()
     }
 }))
+jest.mock('@/models/pantry-item.model', () => ({
+    PantryItemModel: {
+        find: jest.fn()
+    }
+}))
 
 import { auth } from '@clerk/nextjs/server'
 
+import { PantryItemModel } from '@/models/pantry-item.model'
 import { RecipeModel } from '@/models/recipe.model'
 
 import { getRecipeById } from '../get-recipe-by-id'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockFindOne = RecipeModel.findOne as jest.Mock
+const mockFind = PantryItemModel.find as jest.Mock
 
 const leanChain = (result: unknown) => ({
     lean: jest.fn().mockResolvedValue(result)
@@ -30,7 +37,10 @@ const leanChain = (result: unknown) => ({
 const recipeId = '507f1f77bcf86cd799439011'
 
 describe('getRecipeById', () => {
-    beforeEach(() => jest.clearAllMocks())
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockFind.mockReturnValue(leanChain([]))
+    })
 
     it('returns null when unauthenticated', async () => {
         mockAuth.mockResolvedValue({ userId: null } as never)
@@ -48,12 +58,17 @@ describe('getRecipeById', () => {
         mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
         mockFindOne.mockReturnValue(leanChain({
             _id: { toString: () => recipeId },
-            title: 'פסטה'
+            title: 'פסטה',
+            ingredients: []
         }))
 
         const result = await getRecipeById(recipeId)
 
-        expect(result).toEqual({ _id: recipeId, title: 'פסטה' })
+        expect(result).toEqual({
+            _id: recipeId,
+            title: 'פסטה',
+            ingredients: []
+        })
         expect(mockFindOne).toHaveBeenCalledWith({
             _id: recipeId,
             userId: 'user_123'

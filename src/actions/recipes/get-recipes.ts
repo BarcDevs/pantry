@@ -7,7 +7,10 @@ import type { Recipe } from '@/types/recipe'
 
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
+import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
+import { resolveIngredientPantryStatus } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
+import { PantryItemModel } from '@/models/pantry-item.model'
 import { RecipeModel } from '@/models/recipe.model'
 
 type GetRecipesOptions = {
@@ -51,5 +54,18 @@ export const getRecipes = async (
         .sort({ createdAt: -1 })
         .lean()
 
-    return rawRecipes.map((doc) => toPlainDoc<Recipe>(doc))
+    const pantryItems = await PantryItemModel
+        .find({ userId })
+        .lean<MinimalPantryItem[]>()
+
+    return rawRecipes.map((doc) => {
+        const recipe = toPlainDoc<Recipe>(doc)
+        return {
+            ...recipe,
+            ingredients: resolveIngredientPantryStatus(
+                recipe.ingredients,
+                pantryItems
+            )
+        }
+    })
 }
