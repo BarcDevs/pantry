@@ -38,10 +38,11 @@ export const RecipeCard = ({
     }
 
     return (
-        <Link
-            href={routes.recipeDetail(recipe._id)}
-            className={'block overflow-hidden rounded-lg border border-border-2 bg-surface text-start shadow-sm'}
-        >
+        <>
+            <Link
+                href={routes.recipeDetail(recipe._id)}
+                className={'block overflow-hidden rounded-lg border border-border-2 bg-surface text-start shadow-sm'}
+            >
             <div
                 className={'relative h-30 bg-[image:var(--gradient-brand)] bg-cover bg-center'}
                 style={recipe.imageUrl ? { backgroundImage: `url(${recipe.imageUrl})` } : undefined}
@@ -103,12 +104,13 @@ export const RecipeCard = ({
                     </span>
                 )}
             </div>
+            </Link>
             <DeleteRecipeDialog
                 open={confirmDelete}
                 onOpenChange={setConfirmDelete}
                 onConfirm={handleDelete}
                 isDeleting={isDeleting}
             />
-        </Link>
+        </>
     )
 }

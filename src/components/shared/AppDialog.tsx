@@ -49,6 +49,7 @@ export const AppDialog = ({
         >
             <DialogContent
                 showCloseButton={false}
+                onClick={(e) => e.stopPropagation()}
                 className={cn('rounded-2xl bg-canvas p-5.5', contentClassName)}
             >
                 <DialogHeader
