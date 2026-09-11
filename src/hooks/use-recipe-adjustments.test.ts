@@ -41,7 +41,7 @@ describe('useRecipeAdjustments', () => {
             result.current.toggleReplacement('חלב סויה', 'חלב')
         })
 
-        expect(result.current.instruction).toBe('בלי בצל\nלהשתמש בחלב במקום חלב סויה')
+        expect(result.current.instruction).toBe('בלי בצל, להשתמש בחלב במקום חלב סויה')
     })
 
     it('resets instruction and replacement state', () => {
@@ -94,7 +94,7 @@ describe('useRecipeAdjustments', () => {
         })
 
         expect(result.current.instruction).toBe(
-            'להשתמש בחלב במקום חלב סויה\nבלי בזיליקום לקישוט'
+            'להשתמש בחלב במקום חלב סויה, בלי בזיליקום לקישוט'
         )
 
         act(() => {

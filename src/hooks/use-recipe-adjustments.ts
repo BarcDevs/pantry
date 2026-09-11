@@ -13,8 +13,8 @@ export const useRecipeAdjustments = () => {
     ) => {
         setInstruction((current) => (
             isOn
-                ? current.split('\n').filter((entry) => entry.trim() !== line).join('\n')
-                : (current ? `${current}\n${line}` : line)
+                ? current.split(', ').filter((entry) => entry.trim() !== line).join(', ')
+                : (current ? `${current}, ${line}` : line)
         ))
     }
 
