@@ -8,7 +8,7 @@ Two parallel trees, `decisions/` and `corrections/`, each with `index.md` (topic
 one-line-per-entry tables) and per-topic files with full entries. **Read both `index.md` files at
 the start of every new session** — load-bearing context, same tier as this file. **Write
 immediately, same turn as the correction/decision** — don't wait to be asked. Topic files and
-`archive/` are loaded on demand only, never routinely. Full spec: `~/Claude/work/projects/RULES.md`.
+`archive/` are loaded on demand only, never routinely.
 
 ## Model Selection
 
