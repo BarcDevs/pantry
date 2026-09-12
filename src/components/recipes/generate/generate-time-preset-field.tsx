@@ -6,13 +6,13 @@ import type {
     Path
 } from 'react-hook-form'
 
+import { Input } from '@/components/shared/Input'
 import { SelectableOption } from '@/components/shared/SelectableOption'
 import {
     FormField,
     FormItem,
     FormLabel
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 
 const TIME_PRESETS = [
     15,

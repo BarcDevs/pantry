@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -14,7 +14,7 @@ jest.mock('@/models/recipe.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { RecipeModel } from '@/models/recipe.model'
 
@@ -31,7 +31,7 @@ describe('getCookingHistory', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('returns an empty array when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
 
         const result = await getCookingHistory()
 
@@ -40,7 +40,7 @@ describe('getCookingHistory', () => {
     })
 
     it('queries only recipes with a non-empty history', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(chain([]))
 
         await getCookingHistory()
@@ -52,7 +52,7 @@ describe('getCookingHistory', () => {
     })
 
     it('returns an empty array when the user has no cooked recipes', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(chain([]))
 
         const result = await getCookingHistory()
@@ -61,7 +61,7 @@ describe('getCookingHistory', () => {
     })
 
     it('sorts recipes by their most recent history entry, descending', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(chain([
             {
                 _id: { toString: () => 'older' },

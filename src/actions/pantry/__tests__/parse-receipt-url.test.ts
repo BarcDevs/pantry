@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/ai/gemini', () => ({
@@ -13,9 +13,8 @@ jest.mock('node:dns/promises', () => ({
 
 import { lookup } from 'node:dns/promises'
 
-import { auth } from '@clerk/nextjs/server'
-
 import { generateStructured } from '@/lib/ai/gemini'
+import { auth } from '@/lib/auth'
 
 import { parseReceiptUrl } from '../parse-receipt-url'
 
@@ -82,7 +81,7 @@ describe('parseReceiptUrl', () => {
     })
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(
             parseReceiptUrl('https://example.com')
         ).rejects.toThrow()
@@ -90,7 +89,7 @@ describe('parseReceiptUrl', () => {
     })
 
     it('throws on an invalid url', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         await expect(
             parseReceiptUrl('not-a-url')
         ).rejects.toThrow()
@@ -98,7 +97,7 @@ describe('parseReceiptUrl', () => {
     })
 
     it('returns extracted items from the fetched page', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFetch.mockResolvedValue(
             makeResponse('<html><body>עגבניות 1kg</body></html>')
         )
@@ -116,7 +115,7 @@ describe('parseReceiptUrl', () => {
     })
 
     it('returns fallbackToManual when the fetch response is not ok', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFetch.mockResolvedValue(makeResponse('', { status: 500 }))
 
         const result = await parseReceiptUrl('https://example.com/receipt')
@@ -126,7 +125,7 @@ describe('parseReceiptUrl', () => {
     })
 
     it('returns fallbackToManual when fetch throws', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFetch.mockRejectedValue(new Error('network error'))
 
         const result = await parseReceiptUrl('https://example.com/receipt')
@@ -143,7 +142,7 @@ describe('parseReceiptUrl', () => {
     ])(
         'blocks SSRF-risky target %s without calling fetch',
         async (dangerousUrl) => {
-            mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+            mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
             mockLookup.mockResolvedValue([{ address: '169.254.169.254', family: 4 }])
 
             const result = await parseReceiptUrl(dangerousUrl)
@@ -155,7 +154,7 @@ describe('parseReceiptUrl', () => {
     )
 
     it('does not follow a redirect to a private address', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockLookup.mockImplementation(async (hostname: string) => (
             hostname === '169.254.169.254'
                 ? [{ address: '169.254.169.254', family: 4 }]
@@ -176,7 +175,7 @@ describe('parseReceiptUrl', () => {
     })
 
     it('rejects non-html/text content types', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFetch.mockResolvedValue(
             makeResponse('binary', { contentType: 'application/pdf' })
         )

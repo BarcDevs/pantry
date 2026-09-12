@@ -5,9 +5,12 @@ import type { UserDoc } from '@/types/user'
 
 const userSchema = new mongoose.Schema<UserDoc>(
     {
-        clerkId: { type: String, required: true, unique: true },
-        email: { type: String, required: true },
+        email: { type: String, required: true, unique: true },
         displayName: { type: String, required: true },
+        passwordHash: { type: String, default: null },
+        emailVerifiedAt: { type: Date, default: null },
+        verificationCode: { type: String, default: null },
+        verificationCodeExpiresAt: { type: Date, default: null },
         cookingLevel: { type: String, enum: DIFFICULTIES },
         householdSize: { type: Number },
         dietaryPreferences: { type: [String], default: [] },

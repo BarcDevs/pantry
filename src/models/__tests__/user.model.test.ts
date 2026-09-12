@@ -6,14 +6,13 @@ import { UserModel } from '../user.model'
 describe('UserModel schema', () => {
     it('defines required paths', () => {
         const { schema } = UserModel
-        expect(schema.path('clerkId')).toBeDefined()
         expect(schema.path('email')).toBeDefined()
         expect(schema.path('displayName')).toBeDefined()
+        expect(schema.path('passwordHash')).toBeDefined()
     })
 
     it('onboardingCompletedAt defaults to null', () => {
         const user = new UserModel({
-            clerkId: 'clerk_test',
             email: 'a@b.com',
             displayName: 'Test'
         })
@@ -22,7 +21,6 @@ describe('UserModel schema', () => {
 
     it('dietaryPreferences defaults to []', () => {
         const user = new UserModel({
-            clerkId: 'clerk_test',
             email: 'a@b.com',
             displayName: 'Test'
         })

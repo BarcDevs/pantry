@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -14,12 +14,12 @@ jest.mock('@/models/recipe.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
-
 import {
     CookingUnit,
     FoodType
 } from '@/types/enums'
+
+import { auth } from '@/lib/auth'
 
 import { RecipeModel } from '@/models/recipe.model'
 
@@ -60,13 +60,13 @@ describe('saveRecipe', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(saveRecipe(recipe)).rejects.toThrow()
         expect(mockCreate).not.toHaveBeenCalled()
     })
 
     it('stamps the recipe with the authenticated userId, ignoring the client-supplied one', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_456' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_456' } } as never)
         mockCreate.mockResolvedValue({
             toObject: () => ({
                 ...recipe,
@@ -83,7 +83,7 @@ describe('saveRecipe', () => {
     })
 
     it('persists the recipe scoped to the current user', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockCreate.mockResolvedValue({
             toObject: () => ({
                 ...recipe,

@@ -17,7 +17,7 @@ import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
 import { ReceiptRowEditDialog } from '@/components/pantry/receipt-row-edit-dialog'
 import { Button } from '@/components/shared/Button'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 import {
     Select,
     SelectContent,

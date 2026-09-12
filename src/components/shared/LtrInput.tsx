@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react'
 
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 
 import { cn } from '@/lib/utils'
 

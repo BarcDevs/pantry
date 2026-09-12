@@ -4,7 +4,7 @@ import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingred
 import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero'
 import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
 import { Button } from '@/components/shared/Button'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 

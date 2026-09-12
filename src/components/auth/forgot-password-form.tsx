@@ -16,6 +16,7 @@ export const ForgotPasswordForm = () => {
         requestForm,
         resetForm,
         pendingReset,
+        devCode,
         isRequesting,
         isResetting,
         handleRequest,
@@ -35,6 +36,7 @@ export const ForgotPasswordForm = () => {
                         form={resetForm}
                         isSubmitting={isResetting}
                         onSubmit={handleReset}
+                        devCode={devCode}
                     />
                 )
                 : (

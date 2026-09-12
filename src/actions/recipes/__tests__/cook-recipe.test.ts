@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -15,7 +15,7 @@ jest.mock('@/models/recipe.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { RecipeModel } from '@/models/recipe.model'
 
@@ -37,20 +37,20 @@ describe('cookRecipe', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(cookRecipe(recipeId, 5)).rejects.toThrow()
         expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
     })
 
     it('throws when the recipe is not found or not owned', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOne.mockReturnValue(leanChain(null))
 
         await expect(cookRecipe(recipeId, 5)).rejects.toThrow()
     })
 
     it('appends a history entry and recomputes the average rating', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOne.mockReturnValue(leanChain({
             _id: { toString: () => recipeId },
             userId: 'user_123',
@@ -90,7 +90,7 @@ describe('cookRecipe', () => {
     })
 
     it('saves without rating when rating is null and skips it from the average', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOne.mockReturnValue(leanChain({
             _id: { toString: () => recipeId },
             userId: 'user_123',

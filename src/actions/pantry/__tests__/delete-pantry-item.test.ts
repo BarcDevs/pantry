@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -14,7 +14,7 @@ jest.mock('@/models/pantry-item.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
@@ -29,13 +29,13 @@ describe('deletePantryItem', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(deletePantryItem(itemId)).rejects.toThrow()
         expect(mockFindOneAndDelete).not.toHaveBeenCalled()
     })
 
     it('deletes the item scoped to the current user', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndDelete.mockReturnValue({
             lean: jest.fn().mockResolvedValue({ _id: { toString: () => itemId } })
         })
@@ -46,7 +46,7 @@ describe('deletePantryItem', () => {
     })
 
     it('throws when the item does not exist for this user', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndDelete.mockReturnValue({
             lean: jest.fn().mockResolvedValue(null)
         })
@@ -55,7 +55,7 @@ describe('deletePantryItem', () => {
     })
 
     it('throws without querying when the id is not a valid ObjectId', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
 
         await expect(deletePantryItem('not-an-id')).rejects.toThrow()
         expect(mockFindOneAndDelete).not.toHaveBeenCalled()

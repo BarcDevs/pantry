@@ -1,9 +1,9 @@
 import appConfig from '@/config/app'
 
 type Env = {
-    clerkPublishableKey: string
-    clerkSecretKey: string
-    clerkWebhookSecret: string
+    authSecret: string
+    googleClientId: string
+    googleClientSecret: string
     mongodbUri: string
     geminiApiKey: string
     geminiModelId: string
@@ -15,15 +15,10 @@ const requireVar = (name: string, value: string | undefined) => {
     return value
 }
 
-// Exception to "never NEXT_PUBLIC_ prefix": Clerk's SDK requires this exact
-// name to read the publishable key client-side - there is no alternative.
 const env: Env = {
-    clerkPublishableKey: requireVar(
-        'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
-        process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-    ),
-    clerkSecretKey: requireVar('CLERK_SECRET_KEY', process.env.CLERK_SECRET_KEY),
-    clerkWebhookSecret: requireVar('CLERK_WEBHOOK_SECRET', process.env.CLERK_WEBHOOK_SECRET),
+    authSecret: requireVar('AUTH_SECRET', process.env.AUTH_SECRET),
+    googleClientId: requireVar('GOOGLE_CLIENT_ID', process.env.GOOGLE_CLIENT_ID),
+    googleClientSecret: requireVar('GOOGLE_CLIENT_SECRET', process.env.GOOGLE_CLIENT_SECRET),
     mongodbUri: requireVar('MONGODB_URI', process.env.MONGODB_URI),
     geminiApiKey: requireVar('GEMINI_API_KEY', process.env.GEMINI_API_KEY),
     geminiModelId: process.env.GEMINI_MODEL_ID ?? appConfig.defaultAiModelId,

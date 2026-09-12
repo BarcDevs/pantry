@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -22,14 +22,13 @@ jest.mock('@/models/pantry-item.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
-
 import {
     CookingUnit,
     FoodType
 } from '@/types/enums'
 
 import { generateStructured } from '@/lib/ai/gemini'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { RecipeModel } from '@/models/recipe.model'
@@ -89,7 +88,7 @@ describe('branchRecipe', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('creates a new recipe from the refined result instead of updating the original', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockGenerateStructured.mockResolvedValue(refinedResponse)
         mockFind.mockReturnValue(leanChain([]))
         mockCreate.mockResolvedValue({
@@ -112,7 +111,7 @@ describe('branchRecipe', () => {
     })
 
     it('resets rating, history, and favorite status on the branched recipe', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockGenerateStructured.mockResolvedValue(refinedResponse)
         mockFind.mockReturnValue(leanChain([]))
         mockCreate.mockResolvedValue({

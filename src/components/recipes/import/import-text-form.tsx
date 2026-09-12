@@ -1,6 +1,6 @@
 import { ImageIcon } from 'lucide-react'
 
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 import { Textarea } from '@/components/ui/textarea'
 
 import { recipesTexts } from '@/constants/texts/recipes'

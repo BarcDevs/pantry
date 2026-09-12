@@ -2,6 +2,7 @@
 
 import type { UseFormReturn } from 'react-hook-form'
 
+import { DevCodeHint } from '@/components/auth/dev-code-hint'
 import { OtpInput } from '@/components/auth/otp-input'
 import { PasswordInput } from '@/components/auth/password-input'
 import { Button } from '@/components/shared/Button'
@@ -17,14 +18,17 @@ type ForgotPasswordResetFieldsProps = {
     form: UseFormReturn<ResetFormValues>
     isSubmitting: boolean
     onSubmit: () => void
+    devCode?: string
 }
 
 export const ForgotPasswordResetFields = ({
     form,
     isSubmitting,
-    onSubmit
+    onSubmit,
+    devCode
 }: ForgotPasswordResetFieldsProps) => (
     <Form {...form}>
+        <DevCodeHint code={devCode}/>
         <form
             onSubmit={onSubmit}
             className={'mt-6 flex flex-col gap-4'}

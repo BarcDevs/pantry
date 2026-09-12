@@ -2,10 +2,9 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 import type { ReactNode } from 'react'
-
-import { useUser } from '@clerk/nextjs'
 
 import { GenerateIcon } from '@/components/icons/generate-icon'
 import { HistoryIcon } from '@/components/icons/history-icon'
@@ -62,11 +61,11 @@ const sidebarNavItems: SidebarNavItem[] = [
 
 export const Sidebar = () => {
     const pathname = usePathname()
-    const { user } = useUser()
+    const { data: session } = useSession()
     const isChromeHidden = useIsChromeHidden()
 
-    const displayName = user?.fullName
-        ?? user?.emailAddresses[0]?.emailAddress
+    const displayName = session?.user?.name
+        ?? session?.user?.email
         ?? ''
     const initial = displayName
         .charAt(0)

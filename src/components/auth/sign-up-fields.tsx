@@ -6,9 +6,9 @@ import { PasswordInput } from '@/components/auth/password-input'
 import { Button } from '@/components/shared/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
+import { Input } from '@/components/shared/Input'
 import { LtrInput } from '@/components/shared/LtrInput'
 import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 
 import { authTexts } from '@/constants/texts/auth'
 
@@ -62,7 +62,6 @@ export const SignUpFields = ({
                 {authTexts.passwordHint}
             </p>
             <FormError errors={form.formState.errors}/>
-            <div id={'clerk-captcha'}/>
             <Button
                 type={'submit'}
                 disabled={isSubmitting}

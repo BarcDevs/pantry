@@ -1,9 +1,8 @@
 'use server'
 
-import { auth } from '@clerk/nextjs/server'
-
 import type { Recipe } from '@/types/recipe'
 
+import { auth } from '@/lib/auth'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
 
@@ -22,7 +21,8 @@ const latestCookedAt = (recipe: Recipe): number => (
 
 export const getCookingHistory = async (
 ): Promise<Recipe[]> => {
-    const { userId } = await auth()
+    const session = await auth()
+    const userId = session?.user?.id
     if (!userId) return []
 
     await connectDB()

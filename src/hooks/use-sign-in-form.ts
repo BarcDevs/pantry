@@ -1,10 +1,10 @@
 import { useTransition } from 'react'
 
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 import { useForm } from 'react-hook-form'
 
-import { useSignIn } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { routes } from '@/constants/routes'
@@ -17,7 +17,6 @@ import {
 
 export const useSignInForm = () => {
     const router = useRouter()
-    const { signIn } = useSignIn()
 
     const form = useForm<SignInFormValues>({
         resolver: zodResolver(signInFormSchema),
@@ -32,19 +31,19 @@ export const useSignInForm = () => {
     const handleSubmit = form.handleSubmit((values) => {
         startSubmitting(async () => {
             try {
-                const { error } = await signIn.password({
-                    emailAddress: values.email,
-                    password: values.password
+                const result = await signIn('credentials', {
+                    email: values.email,
+                    password: values.password,
+                    redirect: false
                 })
 
-                if (error || signIn.status !== 'complete') {
+                if (result?.error) {
                     form.setError('root', {
                         message: authTexts.signInError
                     })
                     return
                 }
 
-                await signIn.finalize()
                 router.push(routes.pantry)
             } catch (error) {
                 console.error(error)

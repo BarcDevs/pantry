@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -19,7 +19,7 @@ jest.mock('@/models/pantry-item.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { RecipeModel } from '@/models/recipe.model'
@@ -43,13 +43,13 @@ describe('getRecipes', () => {
     })
 
     it('returns empty array when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         expect(await getRecipes()).toEqual([])
         expect(mockFind).not.toHaveBeenCalled()
     })
 
     it('queries recipes scoped to the current user', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         const docs = [{
             _id: { toString: () => 'r1' },
             title: 'a',
@@ -66,7 +66,7 @@ describe('getRecipes', () => {
     })
 
     it('filters by search, favorite, min rating, and source', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(chain([]))
 
         await getRecipes({

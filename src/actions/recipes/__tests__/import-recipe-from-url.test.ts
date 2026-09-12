@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -22,11 +22,10 @@ jest.mock('node:dns/promises', () => ({
 
 import { lookup } from 'node:dns/promises'
 
-import { auth } from '@clerk/nextjs/server'
-
 import { FoodType } from '@/types/enums'
 
 import { generateStructured } from '@/lib/ai/gemini'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
@@ -111,7 +110,7 @@ describe('importRecipeFromUrl', () => {
     })
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(
             importRecipeFromUrl('https://example.com/recipe')
         ).rejects.toThrow()
@@ -122,7 +121,7 @@ describe('importRecipeFromUrl', () => {
         'returns a structured recipe with source imported_url and sourceUrl set',
         async () => {
             mockAuth.mockResolvedValue(
-                { userId: 'user_123' } as never
+                { user: { id: 'user_123' } } as never
             )
             mockFetch.mockResolvedValue(
                 makeResponse(
@@ -149,7 +148,7 @@ describe('importRecipeFromUrl', () => {
         'flags an ingredient as in-pantry when it matches a pantry item with enough stock',
         async () => {
             mockAuth.mockResolvedValue(
-                { userId: 'user_123' } as never
+                { user: { id: 'user_123' } } as never
             )
             mockFetch.mockResolvedValue(
                 makeResponse(
@@ -179,7 +178,7 @@ describe('importRecipeFromUrl', () => {
         'extracts og:image when present in the page html',
         async () => {
             mockAuth.mockResolvedValue(
-                { userId: 'user_123' } as never
+                { user: { id: 'user_123' } } as never
             )
             mockFetch.mockResolvedValue(
                 makeResponse(
@@ -199,7 +198,7 @@ describe('importRecipeFromUrl', () => {
     )
 
     it('returns fallbackToManual on total fetch failure', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFetch.mockRejectedValue(new Error('network error'))
 
         const result = await importRecipeFromUrl(
@@ -217,7 +216,7 @@ describe('importRecipeFromUrl', () => {
         'blocks SSRF-risky targets without calling fetch',
         async () => {
             mockAuth.mockResolvedValue(
-                { userId: 'user_123' } as never
+                { user: { id: 'user_123' } } as never
             )
             mockLookup.mockResolvedValue([
                 {

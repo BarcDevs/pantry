@@ -6,7 +6,7 @@ import type { Control } from 'react-hook-form'
 import { SettingsProfileCard } from '@/components/settings/settings-profile-card'
 import { Button } from '@/components/shared/Button'
 import { FormInputField } from '@/components/shared/form/FormInputField'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 
 import type { SettingsFormValues } from '@/hooks/use-settings-form'
 

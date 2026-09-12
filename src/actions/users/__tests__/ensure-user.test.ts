@@ -1,9 +1,8 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
-    auth: jest.fn(),
-    clerkClient: jest.fn()
+jest.mock('@/lib/auth', () => ({
+    auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
     __esModule: true,
@@ -11,98 +10,53 @@ jest.mock('@/lib/mongodb', () => ({
 }))
 jest.mock('@/models/user.model', () => ({
     UserModel: {
-        findOne: jest.fn(),
-        create: jest.fn()
+        findById: jest.fn()
     }
 }))
 
-import { auth, clerkClient } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { UserModel } from '@/models/user.model'
 
 import { ensureUser } from '../ensure-user'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
-const mockClerkClient = clerkClient as jest.MockedFunction<
-    typeof clerkClient
->
-const mockFindOne = UserModel.findOne as jest.Mock
-const mockCreate = UserModel.create as jest.Mock
+const mockFindById = UserModel.findById as jest.Mock
 
 describe('ensureUser', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('returns null when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({
-            userId: null
-        } as never)
+        mockAuth.mockResolvedValue(null as never)
         expect(await ensureUser()).toBeNull()
-        expect(mockFindOne).not.toHaveBeenCalled()
+        expect(mockFindById).not.toHaveBeenCalled()
     })
 
-    it('returns existing user without hitting Clerk API', async () => {
+    it('returns the current user record', async () => {
         const user = {
             _id: { toString: () => 'obj_123' },
-            clerkId: 'user_123',
             email: 'a@b.com',
             displayName: 'Test'
         }
-        mockAuth.mockResolvedValue({
-            userId: 'user_123'
-        } as never)
-        mockFindOne.mockReturnValue({
+        mockAuth.mockResolvedValue({ user: { id: 'obj_123' } } as never)
+        mockFindById.mockReturnValue({
             lean: jest.fn().mockResolvedValue(user)
         })
 
         expect(await ensureUser()).toEqual({
             _id: 'obj_123',
-            clerkId: 'user_123',
             email: 'a@b.com',
             displayName: 'Test'
         })
-        expect(mockClerkClient).not.toHaveBeenCalled()
+        expect(mockFindById).toHaveBeenCalledWith('obj_123')
     })
 
-    it('creates user from Clerk when not found', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_456' } as never)
-        mockFindOne.mockReturnValue({
+    it('returns null when the user record is missing', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'obj_456' } } as never)
+        mockFindById.mockReturnValue({
             lean: jest.fn().mockResolvedValue(null)
         })
-        mockClerkClient.mockResolvedValue({
-            users: {
-                getUser: jest.fn().mockResolvedValue({
-                    emailAddresses: [{
-                        emailAddress: 'new@example.com'
-                    }],
-                    firstName: 'Noa',
-                    lastName: 'Levi'
-                })
-            }
-        } as never)
-        const created = {
-            _id: { toString: () => 'obj_456' },
-            clerkId: 'user_456',
-            email: 'new@example.com',
-            displayName: 'Noa Levi'
-        }
-        mockCreate.mockResolvedValue({
-            ...created,
-            toObject: jest.fn().mockReturnValue(created)
-        })
 
-        expect(await ensureUser()).toEqual({
-            _id: 'obj_456',
-            clerkId: 'user_456',
-            email: 'new@example.com',
-            displayName: 'Noa Levi'
-        })
-        expect(mockCreate).toHaveBeenCalledWith(
-            expect.objectContaining({
-                clerkId: 'user_456',
-                email: 'new@example.com',
-                displayName: 'Noa Levi',
-                onboardingCompletedAt: null
-            })
-        )
+        expect(await ensureUser()).toBeNull()
     })
 })

@@ -8,7 +8,7 @@ export const requestFormSchema = z.object({
 
 export const resetFormSchema = z.object({
     code: z.string().trim().length(6, { message: authTexts.codeTooShort }),
-    password: z.string().min(8)
+    password: z.string().min(8, { message: authTexts.passwordTooShort })
 })
 
 export type RequestFormValues = z.infer<typeof requestFormSchema>

@@ -9,13 +9,13 @@ import type { PantryUnit } from '@/types/enums'
 import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
 import { Button } from '@/components/shared/Button'
+import { Input } from '@/components/shared/Input'
 import {
     FormField,
     FormItem,
     FormLabel,
     FormMessage
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 
 import { quantityStepByUnit } from '@/lib/pantry/quantity-step-by-unit'
 

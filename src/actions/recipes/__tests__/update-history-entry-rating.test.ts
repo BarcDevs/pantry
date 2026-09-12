@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -15,7 +15,7 @@ jest.mock('@/models/recipe.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { RecipeModel } from '@/models/recipe.model'
 
@@ -37,7 +37,7 @@ describe('updateHistoryEntryRating', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(
             updateHistoryEntryRating(recipeId, 'e1', 5)
         ).rejects.toThrow()
@@ -45,7 +45,7 @@ describe('updateHistoryEntryRating', () => {
     })
 
     it('throws when the recipe is not found or not owned', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOne.mockReturnValue(leanChain(null))
 
         await expect(
@@ -54,7 +54,7 @@ describe('updateHistoryEntryRating', () => {
     })
 
     it('throws when the history entry does not exist', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOne.mockReturnValue(leanChain({
             _id: { toString: () => recipeId },
             userId: 'user_123',
@@ -70,7 +70,7 @@ describe('updateHistoryEntryRating', () => {
     })
 
     it('sets a rating on a previously-skipped entry and recomputes the average', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOne.mockReturnValue(leanChain({
             _id: { toString: () => recipeId },
             userId: 'user_123',
@@ -101,7 +101,7 @@ describe('updateHistoryEntryRating', () => {
     })
 
     it('changes an existing rating and recomputes the average', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOne.mockReturnValue(leanChain({
             _id: { toString: () => recipeId },
             userId: 'user_123',

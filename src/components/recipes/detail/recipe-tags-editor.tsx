@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { XIcon } from 'lucide-react'
 
 import { Button } from '@/components/shared/Button'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 

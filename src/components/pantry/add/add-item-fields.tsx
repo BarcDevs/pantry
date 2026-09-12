@@ -9,7 +9,7 @@ import { ExpiryDateField } from '@/components/pantry/add/expiry-date-field'
 import { QuantityField } from '@/components/pantry/add/quantity-field'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { FormSelectField } from '@/components/shared/form/FormSelectField'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 import { Textarea } from '@/components/ui/textarea'
 
 import { toSelectOptions } from '@/lib/select-options'

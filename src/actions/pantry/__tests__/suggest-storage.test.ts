@@ -1,16 +1,15 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/ai/gemini', () => ({
     generateStructured: jest.fn()
 }))
 
-import { auth } from '@clerk/nextjs/server'
-
 import { generateStructured } from '@/lib/ai/gemini'
+import { auth } from '@/lib/auth'
 
 import { suggestStorage } from '../suggest-storage'
 
@@ -32,13 +31,13 @@ describe('suggestStorage', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(suggestStorage('עגבניות')).rejects.toThrow()
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
 
     it('returns the AI-generated storage suggestion', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockGenerateStructured.mockResolvedValue(suggestion)
 
         const result = await suggestStorage('עגבניות')

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { useSignIn } from '@clerk/nextjs'
+import { signIn } from 'next-auth/react'
 
 import { GoogleIcon } from '@/components/icons/google-icon'
 import { Button } from '@/components/shared/Button'
@@ -14,17 +14,12 @@ type GoogleAuthButtonProps = {
 }
 
 export const GoogleAuthButton = ({ label }: GoogleAuthButtonProps) => {
-    const { signIn } = useSignIn()
     const [isRedirecting, setIsRedirecting] = useState(false)
 
     const handleClick = async () => {
         setIsRedirecting(true)
         try {
-            await signIn.sso({
-                strategy: 'oauth_google',
-                redirectUrl: routes.pantry,
-                redirectCallbackUrl: routes.ssoCallback
-            })
+            await signIn('google', { callbackUrl: routes.pantry })
         } catch (error) {
             console.error(error)
             setIsRedirecting(false)

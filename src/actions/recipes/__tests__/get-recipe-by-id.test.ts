@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -19,7 +19,7 @@ jest.mock('@/models/pantry-item.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { RecipeModel } from '@/models/recipe.model'
@@ -43,19 +43,19 @@ describe('getRecipeById', () => {
     })
 
     it('returns null when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         expect(await getRecipeById(recipeId)).toBeNull()
         expect(mockFindOne).not.toHaveBeenCalled()
     })
 
     it('returns null for an invalid id', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         expect(await getRecipeById('not-an-id')).toBeNull()
         expect(mockFindOne).not.toHaveBeenCalled()
     })
 
     it('returns the recipe scoped to the current user', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOne.mockReturnValue(leanChain({
             _id: { toString: () => recipeId },
             title: 'פסטה',
@@ -76,7 +76,7 @@ describe('getRecipeById', () => {
     })
 
     it('returns null when not found or not owned', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOne.mockReturnValue(leanChain(null))
 
         expect(await getRecipeById(recipeId)).toBeNull()

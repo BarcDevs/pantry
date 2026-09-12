@@ -1,10 +1,7 @@
 import { render, screen } from '@testing-library/react'
 
-jest.mock('@clerk/nextjs', () => ({
-    Show: () => null,
-    SignInButton: () => null,
-    SignUpButton: () => null,
-    UserButton: () => null
+jest.mock('next-auth/react', () => ({
+    useSession: () => ({ data: null, status: 'unauthenticated' })
 }))
 
 import Home from './page'

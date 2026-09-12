@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { AuthHeading } from '@/components/auth/auth-heading'
 import { GoogleAuthButton } from '@/components/auth/google-auth-button'
 import { SignUpFields } from '@/components/auth/sign-up-fields'
-import { VerifyEmailForm } from '@/components/auth/verify-email-form'
 
 import { useSignUpForm } from '@/hooks/use-sign-up-form'
 
@@ -15,23 +14,9 @@ import { authTexts } from '@/constants/texts/auth'
 export const SignUpForm = () => {
     const {
         form,
-        verifyForm,
-        pendingVerification,
         isSubmitting,
-        isVerifying,
-        handleSubmit,
-        handleVerify
+        handleSubmit
     } = useSignUpForm()
-
-    if (pendingVerification) {
-        return (
-            <VerifyEmailForm
-                form={verifyForm}
-                isSubmitting={isVerifying}
-                onSubmit={handleVerify}
-            />
-        )
-    }
 
     return (
         <div className={'w-full max-w-sm'}>

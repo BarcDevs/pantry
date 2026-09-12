@@ -2,7 +2,7 @@ import { SearchIcon } from 'lucide-react'
 
 import type { SetState } from '@/types/react'
 
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 

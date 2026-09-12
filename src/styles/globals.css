@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import '@clerk/ui/themes/shadcn.css';
 
 /* App is single-theme (light only) and never toggles a `.dark` class -
    scope `dark:` to that class instead of the OS `prefers-color-scheme`
@@ -184,10 +183,6 @@
 @layer utilities {
     .bg-brand-gradient {
         background: var(--gradient-brand);
-    }
-
-    .flex-panel {
-        flex: 1.1;
     }
 
     .font-weight-display {

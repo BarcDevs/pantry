@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -15,7 +15,7 @@ jest.mock('@/models/pantry-item.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
@@ -32,13 +32,13 @@ describe('deductPantryItems', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(deductPantryItems([{ id: itemId1, newQuantity: 1 }])).rejects.toThrow()
         expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
     })
 
     it('updates quantity scoped to the current user for kept edits', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndUpdate.mockReturnValue({ lean: jest.fn().mockResolvedValue({}) })
 
         await deductPantryItems([{ id: itemId1, newQuantity: 2 }])
@@ -52,7 +52,7 @@ describe('deductPantryItems', () => {
     })
 
     it('deletes the item scoped to the current user when remove is true', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndDelete.mockReturnValue({ lean: jest.fn().mockResolvedValue({}) })
 
         await deductPantryItems([{
@@ -66,7 +66,7 @@ describe('deductPantryItems', () => {
     })
 
     it('allows quantity 0 for kept-at-zero edits', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndUpdate.mockReturnValue({ lean: jest.fn().mockResolvedValue({}) })
 
         await deductPantryItems([{ id: itemId1, newQuantity: 0 }])
@@ -79,13 +79,13 @@ describe('deductPantryItems', () => {
     })
 
     it('rejects negative quantities', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         await expect(deductPantryItems([{ id: itemId1, newQuantity: -1 }])).rejects.toThrow()
         expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
     })
 
     it('rejects invalid ids without querying', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         await expect(deductPantryItems([{ id: 'not-an-id', newQuantity: 1 }])).rejects.toThrow()
         expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
     })

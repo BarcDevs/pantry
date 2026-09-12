@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -14,7 +14,7 @@ jest.mock('@/models/recipe.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { RecipeModel } from '@/models/recipe.model'
 
@@ -35,7 +35,7 @@ describe('updateRecipe', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(updateRecipe(recipeId, {
             isFavorite: true
         })).rejects.toThrow()
@@ -43,7 +43,7 @@ describe('updateRecipe', () => {
     })
 
     it('scopes the update to the recipe owner and never touches rating', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndUpdate.mockReturnValue(leanChain({
             _id: { toString: () => recipeId },
             title: 'עדכון',
@@ -70,7 +70,7 @@ describe('updateRecipe', () => {
     })
 
     it('throws when the recipe is not found or not owned', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndUpdate.mockReturnValue(leanChain(null))
 
         await expect(updateRecipe(recipeId, {

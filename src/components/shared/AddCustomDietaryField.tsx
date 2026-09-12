@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 import type { KeyboardEvent } from 'react'
 
+import { Input } from '@/components/shared/Input'
 import { SelectableOption } from '@/components/shared/SelectableOption'
-import { Input } from '@/components/ui/input'
 
 import { onboardingTexts } from '@/constants/texts/onboarding'
 

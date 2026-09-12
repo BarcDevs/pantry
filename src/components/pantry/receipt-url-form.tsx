@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { Button } from '@/components/shared/Button'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 
 import { routes } from '@/constants/routes'
 import { pantryTexts } from '@/constants/texts/pantry'

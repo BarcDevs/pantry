@@ -1,16 +1,15 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/ai/gemini', () => ({
     generateStructured: jest.fn()
 }))
 
-import { auth } from '@clerk/nextjs/server'
-
 import { generateStructured } from '@/lib/ai/gemini'
+import { auth } from '@/lib/auth'
 
 import { scanReceipt } from '../scan-receipt'
 
@@ -34,7 +33,7 @@ describe('scanReceipt', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(
             scanReceipt('aGVsbG8=', 'image/jpeg')
         ).rejects.toThrow()
@@ -42,13 +41,13 @@ describe('scanReceipt', () => {
     })
 
     it('throws on empty image data', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         await expect(scanReceipt('', 'image/jpeg')).rejects.toThrow()
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
 
     it('returns extracted items from the receipt image', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockGenerateStructured.mockResolvedValue({ items })
 
         const result = await scanReceipt('aGVsbG8=', 'image/jpeg')

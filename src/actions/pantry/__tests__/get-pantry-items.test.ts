@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -14,7 +14,7 @@ jest.mock('@/models/pantry-item.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
@@ -33,13 +33,13 @@ describe('getPantryItems', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('returns empty array when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         expect(await getPantryItems()).toEqual([])
         expect(mockFind).not.toHaveBeenCalled()
     })
 
     it('queries items scoped to the current user, sorted by expiry asc with nulls last', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         const items = [{ _id: { toString: () => 'obj_1' }, name: 'a' }]
         mockFind.mockReturnValue(chain(items))
 
@@ -50,7 +50,7 @@ describe('getPantryItems', () => {
     })
 
     it('filters by expiringWithinDays when provided', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(chain([]))
 
         await getPantryItems({ expiringWithinDays: 7 })

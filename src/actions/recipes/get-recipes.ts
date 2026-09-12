@@ -1,10 +1,9 @@
 'use server'
 
-import { auth } from '@clerk/nextjs/server'
-
 import type { RecipeSource } from '@/types/enums'
 import type { Recipe } from '@/types/recipe'
 
+import { auth } from '@/lib/auth'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
@@ -27,7 +26,8 @@ const escapeRegex = (value: string): string => (
 export const getRecipes = async (
     options: GetRecipesOptions = {}
 ): Promise<Recipe[]> => {
-    const { userId } = await auth()
+    const session = await auth()
+    const userId = session?.user?.id
     if (!userId) return []
 
     await connectDB()

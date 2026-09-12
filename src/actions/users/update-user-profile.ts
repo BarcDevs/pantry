@@ -2,10 +2,9 @@
 
 import { z } from 'zod'
 
-import { auth } from '@clerk/nextjs/server'
-
 import type { User, UserProfileInput } from '@/types/user'
 
+import { auth } from '@/lib/auth'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
 
@@ -19,15 +18,16 @@ const updateUserProfileSchema = userProfileFieldsSchema.extend({
 export const updateUserProfile = async (
     input: UserProfileInput
 ): Promise<User> => {
-    const { userId: clerkId } = await auth()
-    if (!clerkId) throw new Error('Unauthenticated')
+    const session = await auth()
+    const userId = session?.user?.id
+    if (!userId) throw new Error('Unauthenticated')
 
     const parsedInput = updateUserProfileSchema.parse(input)
 
     await connectDB()
 
-    const updated = await UserModel.findOneAndUpdate(
-        { clerkId },
+    const updated = await UserModel.findByIdAndUpdate(
+        userId,
         parsedInput,
         { returnDocument: 'after', runValidators: true }
     ).lean()

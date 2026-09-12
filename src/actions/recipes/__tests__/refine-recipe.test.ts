@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/ai/gemini', () => ({
@@ -17,14 +17,13 @@ jest.mock('@/models/pantry-item.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
-
 import {
     CookingUnit,
     FoodType
 } from '@/types/enums'
 
 import { generateStructured } from '@/lib/ai/gemini'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
@@ -102,7 +101,7 @@ describe('refineRecipe', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(refineRecipe({
             recipe,
             instruction: 'תוסיף חריפות'
@@ -111,7 +110,7 @@ describe('refineRecipe', () => {
     })
 
     it('sends the recipe and instruction to the AI and returns the refined recipe with pantry status resolved', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockGenerateStructured.mockResolvedValue(refinedResponse)
         mockFind.mockReturnValue(leanChain(pantryItems))
 
@@ -142,7 +141,7 @@ describe('refineRecipe', () => {
     })
 
     it('rejects refining a recipe owned by another user', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_456' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_456' } } as never)
         await expect(refineRecipe({
             recipe,
             instruction: 'תוסיף חריפות'

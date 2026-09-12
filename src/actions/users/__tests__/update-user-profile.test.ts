@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -10,34 +10,34 @@ jest.mock('@/lib/mongodb', () => ({
 }))
 jest.mock('@/models/user.model', () => ({
     UserModel: {
-        findOneAndUpdate: jest.fn()
+        findByIdAndUpdate: jest.fn()
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { UserModel } from '@/models/user.model'
 
 import { updateUserProfile } from '../update-user-profile'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
-const mockFindOneAndUpdate = UserModel.findOneAndUpdate as jest.Mock
+const mockFindByIdAndUpdate = UserModel.findByIdAndUpdate as jest.Mock
 
 describe('updateUserProfile', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(updateUserProfile({ displayName: 'שם' })).rejects.toThrow()
-        expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
+        expect(mockFindByIdAndUpdate).not.toHaveBeenCalled()
     })
 
     it('updates the profile scoped to the current user', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
-        mockFindOneAndUpdate.mockReturnValue({
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFindByIdAndUpdate.mockReturnValue({
             lean: jest.fn().mockResolvedValue({
                 _id: { toString: () => 'obj_1' },
-                clerkId: 'user_123',
+                email: 'a@b.com',
                 displayName: 'שם חדש',
                 cookingLevel: 'medium',
                 householdSize: 3,
@@ -52,8 +52,8 @@ describe('updateUserProfile', () => {
             dietaryPreferences: ['vegan']
         })
 
-        expect(mockFindOneAndUpdate).toHaveBeenCalledWith(
-            { clerkId: 'user_123' },
+        expect(mockFindByIdAndUpdate).toHaveBeenCalledWith(
+            'user_123',
             expect.objectContaining({
                 displayName: 'שם חדש',
                 cookingLevel: 'medium',
@@ -66,17 +66,17 @@ describe('updateUserProfile', () => {
     })
 
     it('rejects an invalid cookingLevel without hitting the DB', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
 
         await expect(updateUserProfile({
             cookingLevel: 'expert' as never
         })).rejects.toThrow()
-        expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
+        expect(mockFindByIdAndUpdate).not.toHaveBeenCalled()
     })
 
     it('throws when the user is not found', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
-        mockFindOneAndUpdate.mockReturnValue({
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFindByIdAndUpdate.mockReturnValue({
             lean: jest.fn().mockResolvedValue(null)
         })
 

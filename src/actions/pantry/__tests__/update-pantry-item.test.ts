@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -14,7 +14,7 @@ jest.mock('@/models/pantry-item.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
@@ -29,13 +29,13 @@ describe('updatePantryItem', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(updatePantryItem(itemId, { quantity: 2 })).rejects.toThrow()
         expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
     })
 
     it('updates the item scoped to the current user and returns the plain doc', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndUpdate.mockReturnValue({
             lean: jest.fn().mockResolvedValue({
                 _id: { toString: () => itemId },
@@ -56,7 +56,7 @@ describe('updatePantryItem', () => {
     })
 
     it('throws when the item does not exist for this user', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndUpdate.mockReturnValue({
             lean: jest.fn().mockResolvedValue(null)
         })
@@ -65,7 +65,7 @@ describe('updatePantryItem', () => {
     })
 
     it('throws without querying when the id is not a valid ObjectId', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
 
         await expect(updatePantryItem('not-an-id', { quantity: 1 })).rejects.toThrow()
         expect(mockFindOneAndUpdate).not.toHaveBeenCalled()

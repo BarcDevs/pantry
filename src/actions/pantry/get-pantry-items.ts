@@ -1,9 +1,8 @@
 'use server'
 
-import { auth } from '@clerk/nextjs/server'
-
 import type { PantryItem } from '@/types/pantry-item'
 
+import { auth } from '@/lib/auth'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
 
@@ -16,7 +15,8 @@ type GetPantryItemsOptions = {
 export const getPantryItems = async (
     options: GetPantryItemsOptions = {}
 ): Promise<PantryItem[]> => {
-    const { userId } = await auth()
+    const session = await auth()
+    const userId = session?.user?.id
     if (!userId) return []
 
     await connectDB()

@@ -10,8 +10,8 @@ import { SparsePantryWarning } from '@/components/recipes/generate/sparse-pantry
 import { Button } from '@/components/shared/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
+import { Input } from '@/components/shared/Input'
 import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 
 import { useGenerateRecipeForm } from '@/hooks/use-generate-recipe-form'
 

@@ -8,7 +8,7 @@ import { StorageSuggestionButton } from '@/components/pantry/edit/storage-sugges
 import { ReceiptRowExpiryField } from '@/components/pantry/receipt-row-expiry-field'
 import { AppDialog } from '@/components/shared/AppDialog'
 import { Button } from '@/components/shared/Button'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/shared/Input'
 import {
     Select,
     SelectContent,

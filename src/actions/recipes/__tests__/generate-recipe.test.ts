@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -22,14 +22,13 @@ jest.mock('@/lib/ai/gemini', () => ({
     generateStructured: jest.fn()
 }))
 
-import { auth } from '@clerk/nextjs/server'
-
 import {
     CookingUnit,
     FoodType
 } from '@/types/enums'
 
 import { generateStructured } from '@/lib/ai/gemini'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { UserModel } from '@/models/user.model'
@@ -90,13 +89,13 @@ describe('generateRecipe', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(generateRecipe(input)).rejects.toThrow()
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
 
     it('assembles prompt from pantry context and returns recipe with round-tripped ai_prompt_context', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(leanChain(pantryItems))
         mockFindOne.mockReturnValue(leanChain(null))
         mockGenerateStructured.mockResolvedValue(aiResponse)
@@ -130,7 +129,7 @@ describe('generateRecipe', () => {
     })
 
     it('scopes pantry context to selectedItemIds when provided', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(leanChain([pantryItems[0]]))
         mockFindOne.mockReturnValue(leanChain(null))
         mockGenerateStructured.mockResolvedValue(aiResponse)

@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -17,11 +17,10 @@ jest.mock('@/lib/ai/gemini', () => ({
     generateStructured: jest.fn()
 }))
 
-import { auth } from '@clerk/nextjs/server'
-
 import { FoodType } from '@/types/enums'
 
 import { generateStructured } from '@/lib/ai/gemini'
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
@@ -61,7 +60,7 @@ describe('importRecipeFromText', () => {
     })
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(
             importRecipeFromText('כמה קמח וסוכר...')
         ).rejects.toThrow()
@@ -71,7 +70,7 @@ describe('importRecipeFromText', () => {
         'returns a recipe with source imported_url and no sourceUrl/imageUrl',
         async () => {
             mockAuth.mockResolvedValue(
-                { userId: 'user_123' } as never
+                { user: { id: 'user_123' } } as never
             )
             mockGenerateStructured.mockResolvedValue(aiRecipe)
 
@@ -88,7 +87,7 @@ describe('importRecipeFromText', () => {
     )
 
     it('throws on empty text', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         await expect(importRecipeFromText('')).rejects.toThrow()
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })

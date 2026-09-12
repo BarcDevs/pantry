@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-jest.mock('@clerk/nextjs/server', () => ({
+jest.mock('@/lib/auth', () => ({
     auth: jest.fn()
 }))
 jest.mock('@/lib/mongodb', () => ({
@@ -17,9 +17,9 @@ jest.mock('@/models/pantry-item.model', () => ({
     }
 }))
 
-import { auth } from '@clerk/nextjs/server'
-
 import type { AddPantryItemInput } from '@/types/pantry-item'
+
+import { auth } from '@/lib/auth'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
@@ -49,13 +49,13 @@ describe('addPantryItems', () => {
     beforeEach(() => jest.clearAllMocks())
 
     it('throws when unauthenticated', async () => {
-        mockAuth.mockResolvedValue({ userId: null } as never)
+        mockAuth.mockResolvedValue(null as never)
         await expect(addPantryItems([baseInput])).rejects.toThrow()
         expect(mockFind).not.toHaveBeenCalled()
     })
 
     it('creates a new item when no duplicate exists', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(mockFindResult([]))
         mockCreate.mockResolvedValue({
             toObject: () => ({
@@ -77,7 +77,7 @@ describe('addPantryItems', () => {
     })
 
     it('returns a duplicate outcome instead of creating when normalized name matches', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(mockFindResult([
             { _id: 'existing_1', name: ' עגבניות ' }
         ]))
@@ -100,7 +100,7 @@ describe('addPantryItems', () => {
     })
 
     it('creates as a separate item when forceSeparate is set despite a name match', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(mockFindResult([
             { _id: 'existing_1', name: 'עגבניות' }
         ]))
@@ -121,7 +121,7 @@ describe('addPantryItems', () => {
     })
 
     it('merges quantity into an existing item when mergeWithId is set', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(mockFindResult([]))
         mockFindOneAndUpdate.mockReturnValue({
             lean: jest.fn().mockResolvedValue({
@@ -147,7 +147,7 @@ describe('addPantryItems', () => {
     })
 
     it('detects a duplicate against an item created earlier in the same batch', async () => {
-        mockAuth.mockResolvedValue({ userId: 'user_123' } as never)
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(mockFindResult([]))
         mockCreate.mockResolvedValue({
             toObject: () => ({

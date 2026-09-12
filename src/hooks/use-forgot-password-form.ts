@@ -1,15 +1,17 @@
 import { useState, useTransition } from 'react'
 
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 import { useForm } from 'react-hook-form'
 
-import { useSignIn } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { routes } from '@/constants/routes'
 import { authTexts } from '@/constants/texts/auth'
 
+import { forgotPasswordRequest } from '@/actions/users/forgot-password-request'
+import { forgotPasswordReset } from '@/actions/users/forgot-password-reset'
 import {
     requestFormSchema,
     type RequestFormValues,
@@ -19,8 +21,9 @@ import {
 
 export const useForgotPasswordForm = () => {
     const router = useRouter()
-    const { signIn } = useSignIn()
     const [pendingReset, setPendingReset] = useState(false)
+    const [devCode, setDevCode] = useState<string | undefined>(undefined)
+    const [pendingEmail, setPendingEmail] = useState<string | null>(null)
 
     const requestForm = useForm<RequestFormValues>({
         resolver: zodResolver(requestFormSchema),
@@ -41,24 +44,16 @@ export const useForgotPasswordForm = () => {
     const handleRequest = requestForm.handleSubmit((values) => {
         startRequesting(async () => {
             try {
-                const { error: createError } = await signIn.create({
-                    identifier: values.email
-                })
-                if (createError) {
+                const result = await forgotPasswordRequest(values.email)
+                if (!result.success) {
                     requestForm.setError('root', {
                         message: authTexts.forgotError
                     })
                     return
                 }
 
-                const { error } = await signIn.resetPasswordEmailCode.sendCode()
-                if (error) {
-                    requestForm.setError('root', {
-                        message: authTexts.forgotError
-                    })
-                    return
-                }
-
+                setPendingEmail(values.email)
+                setDevCode(result.devCode)
                 setPendingReset(true)
             } catch (error) {
                 console.error(error)
@@ -72,28 +67,32 @@ export const useForgotPasswordForm = () => {
     const handleReset = resetForm.handleSubmit((values) => {
         startResetting(async () => {
             try {
-                const { error: verifyError } = await signIn.resetPasswordEmailCode.verifyCode({
-                    code: values.code
-                })
-                if (verifyError) {
+                const email = pendingEmail
+                if (!email) {
                     resetForm.setError('root', {
                         message: authTexts.forgotError
                     })
                     return
                 }
 
-                const { error } = await signIn.resetPasswordEmailCode.submitPassword({
+                const success = await forgotPasswordReset({
+                    email,
+                    code: values.code,
                     password: values.password
                 })
 
-                if (error) {
+                if (!success) {
                     resetForm.setError('root', {
                         message: authTexts.forgotError
                     })
                     return
                 }
 
-                await signIn.finalize()
+                await signIn('credentials', {
+                    email,
+                    password: values.password,
+                    redirect: false
+                })
                 router.push(routes.pantry)
             } catch (error) {
                 console.error(error)
@@ -108,6 +107,7 @@ export const useForgotPasswordForm = () => {
         requestForm,
         resetForm,
         pendingReset,
+        devCode,
         isRequesting,
         isResetting,
         handleRequest,

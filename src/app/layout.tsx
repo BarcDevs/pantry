@@ -1,17 +1,14 @@
 import '@/lib/zod-locale'
 import { Direction } from 'radix-ui'
 
-import { heIL } from '@clerk/localizations'
-import { ClerkProvider } from '@clerk/nextjs'
-
 import type { LayoutProps } from '@/types/react'
 
 import { ServiceWorkerRegister }
     from '@/components/shell/service-worker-register'
+import { AppSessionProvider } from '@/components/shell/session-provider'
 
 import { cn } from '@/lib/utils'
 
-import { clerkAppearance } from '@/config/clerk'
 import {
     assistant,
     heebo,
@@ -26,10 +23,7 @@ export { metadata, viewport }
 const RootLayout = ({
     children
 }: Readonly<LayoutProps>) => (
-    <ClerkProvider
-        localization={heIL}
-        appearance={clerkAppearance}
-    >
+    <AppSessionProvider>
         <html
             lang={'he'}
             dir={'rtl'}
@@ -46,7 +40,7 @@ const RootLayout = ({
                 </Direction.DirectionProvider>
             </body>
         </html>
-    </ClerkProvider>
+    </AppSessionProvider>
 )
 
 export default RootLayout
