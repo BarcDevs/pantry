@@ -1,6 +1,8 @@
-# Workflows
+# Gotchas
 
-Recurring patterns for how to make a certain kind of change in this repo.
+A running log of accumulated debugging lessons and non-obvious gotchas found while working in this repo — not a
+scenario-recipe guide. For "how do I make change X" recipes (adding a route, a schema change, a form), see
+`workflow/`.
 
 ## Wrapping shadcn/ui components instead of editing them
 
