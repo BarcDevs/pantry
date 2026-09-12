@@ -2,6 +2,27 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Context Log (Decisions & Corrections)
+
+Alongside auto-memory (cross-session, not repo-visible), this repo tracks a repo-visible log any
+collaborator/agent can read: `context/log.md` — architecture/technical decisions and corrections
+given to Claude during sessions (problem, decision, why over alternatives, how to apply for
+decisions; shorter prose for corrections/preferences). Each entry opens with a one-line header:
+`## YYYY-MM-DD | kind:decision|correction|preference | scope:project|global | tags: ...`.
+
+**Read `context/log.md` at the start of every new session** (or `context/INDEX.md` if the log has
+since been split by subject) — it is load-bearing context, same tier as this file.
+
+**Write immediately, same turn as the correction/decision.** Any user correction, confirmed
+non-obvious choice, or technical decision → log it right then, don't wait for the user to ask
+"did you save that." Missing one is a bug.
+
+As `context/log.md` grows, split it **by subject** (not by kind) into `context/<subject>.md`
+files and leave a one-line-per-file index in `context/INDEX.md`. Superseded entries move to
+`context/outdated.md` (not read automatically) with an `outdated:` note explaining why, and the
+new entry gets a `supersedes:` back-pointer. Full pattern and rules:
+`~/Claude/work/projects/RULES.md`.
+
 ## Model Selection
 
 - **Haiku**: sub-agents, file lookups, search queries, simple edits (<50 lines), code explanation, formatting fixes, style enforcement
