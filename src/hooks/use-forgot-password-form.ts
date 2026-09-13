@@ -1,7 +1,6 @@
 import { useTransition } from 'react'
 
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
 
 import { useForm } from 'react-hook-form'
 
@@ -46,20 +45,7 @@ export const useForgotPasswordForm = () => {
                     return
                 }
 
-                const result = await signIn('credentials', {
-                    email: values.email,
-                    password: values.password,
-                    redirect: false
-                })
-
-                if (result?.error) {
-                    form.setError('root', {
-                        message: authTexts.forgotError
-                    })
-                    return
-                }
-
-                router.push(routes.pantry)
+                router.push(routes.signIn)
             } catch (error) {
                 console.error(error)
                 form.setError('root', {
