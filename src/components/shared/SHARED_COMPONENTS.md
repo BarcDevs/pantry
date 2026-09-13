@@ -2,15 +2,35 @@
 
 Reusable wrappers in `src/components/shared/`. Check here before creating new UI - after shadcn/ui itself, this is the next place to look (see `CORE_RULES.md`).
 
-## `Button`
+## `buttons/`
 
-Wraps `@/components/ui/button`, adding `cursor-pointer shadow-button active:scale-[.985]`.
+Purpose-made buttons live in `src/components/shared/buttons/`. Never import `@/components/ui/button` directly, and
+never a raw `<button>`.
 
-Always import this instead of `@/components/ui/button` directly, and never a raw `<button>`.
+### `Button`
+
+Base wrapper around `@/components/ui/button`, adding `cursor-pointer active:scale-[.985]` and (on the `default`
+variant only) `shadow-button`. **Base only - never import/use this directly at a call site.** Every purpose-made
+button below wraps it; if none of them fit a new shape, add a new purpose-made button here that wraps `Button`,
+rather than using `Button` directly or overriding it inline.
 
 ```tsx
-<Button variant={'outline'} onClick={...}>{label}</Button>
+// inside a purpose-made button, e.g. TextButton.tsx
+<Button variant={'ghost'} className={cn('h-auto w-fit p-0 font-bold', className)} {...props}/>
 ```
+
+### `TextButton`
+
+Colored, no-padding text-style action (e.g. a "select all" / "clear" / "edit" link inline with other content).
+Wraps `Button` with `variant={'ghost'} h-auto w-fit p-0 font-bold` plus a `tone` prop (`'green' | 'red' | 'muted' |
+'surface' | 'ink'`) for the text color - pass a `className` to adjust text size/layout, not to redo the base shape.
+
+```tsx
+<TextButton tone={'red'} onClick={onClearAll}>{label}</TextButton>
+```
+
+If a new recurring button shape shows up (checked against existing usages, not assumed), add another purpose-made
+button here instead of a one-off inline `className` override at the call site.
 
 ## `EmptyState`
 

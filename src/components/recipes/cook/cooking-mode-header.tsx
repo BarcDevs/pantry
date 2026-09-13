@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { ArrowRightIcon, CheckIcon } from 'lucide-react'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { routes } from '@/constants/routes'
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -24,7 +24,7 @@ export const CookingModeHeader = ({
         <Button
             asChild
             variant={'ghost'}
-            className={'shrink-0 p-0 text-surface shadow-none'}
+            className={'shrink-0 p-0 text-surface'}
         >
             <Link href={routes.recipes}>
                 <ArrowRightIcon size={24}/>

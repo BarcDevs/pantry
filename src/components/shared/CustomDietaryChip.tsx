@@ -1,6 +1,6 @@
 import { XIcon } from 'lucide-react'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { onboardingTexts } from '@/constants/texts/onboarding'
 
@@ -16,7 +16,6 @@ export const CustomDietaryChip = ({
     <span className={'flex items-center gap-1 rounded-full border border-green bg-green/10 py-1.5 pe-1.5 ps-4 text-label font-weight-label text-ink-green'}>
         {label}
         <Button
-            type={'button'}
             variant={'ghost'}
             size={'icon-xs'}
             aria-label={onboardingTexts.dietaryCustomRemove}

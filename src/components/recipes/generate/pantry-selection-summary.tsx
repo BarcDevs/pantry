@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -20,7 +20,6 @@ export const PantrySelectionSummary = ({
 
     return (
         <Button
-            type={'button'}
             variant={'ghost'}
             onClick={onEdit}
             className={'flex h-auto w-full items-center justify-between rounded-lg border border-border-2 bg-surface p-4 text-start'}

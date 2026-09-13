@@ -44,8 +44,10 @@ lands in exactly one place instead of being copy-pasted (and drifting) across ev
   `DialogClose`/`DialogFooter` from `ui/dialog`. Props: `title`, `description`, `icon`, `align` ('start' | 'center'),
   `footer`, `children`, `contentClassName`, `showCloseButton`. Fixed a systemic RTL bug (hardcoded `text-left`/
   `right-4` in the shadcn defaults) in one place instead of overriding it at each of 7 call sites.
-- **`Button`** (`src/components/shared/Button.tsx`) wraps `ui/button` to add `cursor-pointer shadow-button
-  active:scale-[.985]` app-wide.
+- **`Button`** (`src/components/shared/buttons/Button.tsx`) wraps `ui/button` to add `cursor-pointer
+  active:scale-[.985]` app-wide, plus `shadow-button` on the `default` variant only. It's a **base only** - never
+  used directly at a call site. Purpose-made buttons for recurring shapes (e.g. `TextButton`) live alongside it in
+  `src/components/shared/buttons/` and wrap it.
 - **`LtrInput`** (`src/components/shared/LtrInput.tsx`) wraps `ui/input` to bake in `dir="ltr"` + `text-left` for
   Latin-script fields (email, verification codes) inside the otherwise-RTL app - was copy-pasted across 5 auth forms
   before being extracted.
@@ -113,24 +115,27 @@ or bounding-rect check settles it, not judgment about how a CSS class merges.
 Fix per call site (wrapper level, e.g. `src/components/shared/SortSelect.tsx`): pass `position={'popper'}` explicitly,
 which anchors via floating-ui against the trigger rect and handles RTL correctly.
 
-### Search before building - a flat text-button ("link" variant) already exists as a pattern
+### Fixed: `Button` used to force `shadow-button` on every variant - use purpose-made buttons instead of copying inline overrides
 
-Before writing a new component for a UI pattern (a styled `Button` variant, a card layout, a row shape), grep the
-codebase for the classNames/shape you're about to write - it's very likely already been built inline somewhere and
-just never got extracted. Concretely: a flat, colored, no-background text button (`variant={'link'}`, `h-auto p-0
-font-bold shadow-none` + a color token) already appears in `PantryTypeRow`, `SettingsProfileCard`,
-`PantrySelectSheet`, and `PantryTypeFilter` - grep for `p-0 font-bold` + `shadow-none` before reaching for a new
-wrapper component or re-deriving the classNames from scratch.
+`Button` (`src/components/shared/buttons/Button.tsx`) used to apply `shadow-button` unconditionally regardless of
+`variant`, so every flat/ghost/link-style button needed a manual `shadow-none` override at the call site or it
+rendered with a visible box-shadow that didn't belong on a plain text link ("ghost shadow" report on the receipt
+review screen's select-all/clear-all buttons, and elsewhere). The fix was two-part, not just adding one override:
 
-This also explains a recurring bug: `Button` (`src/components/shared/Button.tsx`) always applies `shadow-button`
-regardless of `variant`, so every flat/link-style button needs an explicit `shadow-none` override or it renders with
-a visible box-shadow that doesn't belong on a plain text link. Forgetting this override is the actual root cause of
-the "ghost shadow" report on the receipt review screen's select-all/clear-all buttons - copy the existing pattern's
-full className (including `shadow-none`), don't just add `variant={'link'}` and assume it's flat.
+1. `Button` now only applies `shadow-button` when `variant === 'default'` - other variants get none, so per-usage
+   `shadow-none` overrides are gone (dead weight if you see one, remove it).
+2. The recurring flat/colored text-button shape (`h-auto w-fit p-0 font-bold` + a color) that used to be copy-pasted
+   inline across `PantryTypeRow`, `SettingsProfileCard`, `PantrySelectSheet`, `PantryTypeFilter`, and
+   `ReceiptSourceCard` is now `src/components/shared/buttons/TextButton.tsx` (`tone` prop for color).
 
-Do **not** default to extracting a new shared component just because the same classNames appear in 2+ places -
-`CORE_RULES.md`'s extraction bar (`SHARED_COMPONENTS.md`) still applies. Reuse the existing inline pattern (copy the
-proven className string) unless the user asks for a shared abstraction.
+Lesson: when the same non-trivial className shape shows up inline in 2+ places, that's the signal to extract a
+purpose-made button under `src/components/shared/buttons/`, not to keep copying the classNames - a shared base
+component whose per-usage callers all patch around its default styling is the anti-pattern that caused this bug in
+the first place. `Button` is a base only - it must never be used directly at a call site; every call site goes
+through a purpose-made button in `src/components/shared/buttons/` that wraps it (add a new one there if none fit,
+same as `TextButton` was added for the flat colored text-link shape). Only `outline`/`ghost`/`destructive`/default
+CTA usages elsewhere in the app still reach for `Button` directly and are pending the same treatment - don't take
+that as license to add a new one, and migrate one you touch to its own purpose-made button instead of leaving it bare.
 
 ### Verifying a CSS/positioning fix actually works - don't stop at unit-testing `cn()`
 

@@ -1,6 +1,6 @@
 import { SparklesIcon } from 'lucide-react'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -18,11 +18,10 @@ export const StorageSuggestionButton = ({
     label = pantryTexts.addForm.suggestionTitle
 }: StorageSuggestionButtonProps) => (
     <Button
-        type={'button'}
         variant={'outline'}
         disabled={disabled || isLoading}
         onClick={onClick}
-        className={'w-full justify-center border-dashed border-soft-green-border bg-soft-green-bg font-bold text-caption text-green shadow-none hover:bg-soft-green-bg'}
+        className={'w-full justify-center border-dashed border-soft-green-border bg-soft-green-bg font-bold text-caption text-green hover:bg-soft-green-bg'}
     >
         <SparklesIcon
             size={14}

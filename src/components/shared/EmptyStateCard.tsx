@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 type EmptyStateCardAction = {
     href: string

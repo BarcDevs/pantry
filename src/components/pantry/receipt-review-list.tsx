@@ -4,7 +4,7 @@ import type {
 } from '@/types/receipt-review-row'
 
 import { ReceiptReviewRow } from '@/components/pantry/receipt-review-row'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -42,7 +42,6 @@ export const ReceiptReviewList = ({
                 </div>
             )}
         <Button
-            type={'button'}
             disabled={isSubmitting || !rows.some((row) => row.included)}
             onClick={onConfirm}
             className={'w-full'}
@@ -50,7 +49,6 @@ export const ReceiptReviewList = ({
             {pantryTexts.receiptReview.confirmButton}
         </Button>
         <Button
-            type={'button'}
             variant={'ghost'}
             onClick={onCancel}
             className={'w-full'}

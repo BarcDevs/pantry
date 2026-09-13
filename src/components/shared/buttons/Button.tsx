@@ -8,11 +8,16 @@ type ButtonProps = ComponentProps<typeof UI.Button>
 
 export const Button = ({
     className,
+    variant = 'default',
+    type = 'button',
     ...props
 }: ButtonProps) => (
     <UI.Button
+        variant={variant}
+        type={type}
         className={cn(
-            'cursor-pointer shadow-button active:scale-[.985]',
+            'cursor-pointer active:scale-[.985]',
+            variant === 'default' && 'shadow-button',
             className
         )}
         {...props}

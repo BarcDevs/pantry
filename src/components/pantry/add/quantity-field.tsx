@@ -8,7 +8,7 @@ import type { PantryUnit } from '@/types/enums'
 
 import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { Input } from '@/components/shared/Input'
 import {
     FormField,
@@ -48,7 +48,6 @@ export const QuantityField = <T extends FieldValues>({
                         </FormLabel>
                         <div className={'flex items-center gap-1.5'}>
                             <Button
-                                type={'button'}
                                 variant={'outline'}
                                 size={'icon'}
                                 disabled={value <= step}
@@ -70,7 +69,6 @@ export const QuantityField = <T extends FieldValues>({
                                 }}
                             />
                             <Button
-                                type={'button'}
                                 variant={'outline'}
                                 size={'icon'}
                                 onClick={() => field.onChange(

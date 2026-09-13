@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { Input } from '@/components/shared/Input'
 
 import { routes } from '@/constants/routes'
@@ -33,7 +33,6 @@ export const ReceiptUrlForm = ({
             className={'text-left'}
         />
         <Button
-            type={'button'}
             disabled={isSubmitting || url.trim().length === 0}
             onClick={onSubmit}
         >

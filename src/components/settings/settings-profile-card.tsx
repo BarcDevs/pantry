@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/Button'
+import { TextButton } from '@/components/shared/buttons/TextButton'
 
 import { settingsTexts } from '@/constants/texts/settings'
 
@@ -28,13 +28,11 @@ export const SettingsProfileCard = ({
                 {email}
             </div>
         </div>
-        <Button
-            type={'button'}
-            variant={'ghost'}
+        <TextButton
             onClick={onEdit}
-            className={'h-auto shadow-none p-0 font-bold text-body text-green'}
+            className={'text-body'}
         >
             {settingsTexts.profileEdit}
-        </Button>
+        </TextButton>
     </div>
 )

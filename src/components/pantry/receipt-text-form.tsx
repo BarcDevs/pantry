@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { Textarea } from '@/components/ui/textarea'
 
 import { routes } from '@/constants/routes'
@@ -32,7 +32,6 @@ export const ReceiptTextForm = ({
             className={'min-h-40'}
         />
         <Button
-            type={'button'}
             disabled={isSubmitting || text.trim().length === 0}
             onClick={onSubmit}
         >

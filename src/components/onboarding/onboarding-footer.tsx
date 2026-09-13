@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { onboardingTexts } from '@/constants/texts/onboarding'
 

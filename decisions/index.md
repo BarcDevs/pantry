@@ -22,6 +22,13 @@ Configuration and design choices for the Gemini-backed AI suggestion/recipe feat
 | 25/07/2026 | Gemini model id made configurable via env var, with a default in `src/config/env.ts` |
 | 11/09/2026 | Ingredient-substitution UI reuses existing status colors (red/amber/green) instead of a new palette |
 
+## UI Components — [[decisions/ui-components]]
+Reusable component conventions (buttons, wrappers) surfaced during pantry sessions.
+
+| Date | Entry |
+|---|---|
+| 13/09/2026 | `Button` is a base-only wrapper; every call site uses a purpose-made button (e.g. `TextButton`) instead |
+
 ## Tooling & Skills — [[decisions/tooling-and-skills]]
 Decisions about shared Claude Code skills/workflow surfaced during pantry sessions.
 

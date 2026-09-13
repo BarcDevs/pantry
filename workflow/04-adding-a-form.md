@@ -23,7 +23,9 @@ sign-up/sign-in, forgot-password, generate-recipe.
   `if (!value)` checks duplicating what the schema already enforces.
 - Submit handler in the hook calls the server action directly (no fetch/axios) and surfaces thrown errors into
   form-level error state — don't let the action's rejection go unhandled.
-- Buttons use the shared `Button` (`src/components/shared/Button`), never a raw shadcn `Button` import.
+- Buttons use the shared `Button` (`src/components/shared/buttons/Button`), never a raw shadcn `Button` import. For a
+  colored, no-padding text-style action, use `TextButton` (`src/components/shared/buttons/TextButton`) instead of
+  reaching for one-off `className` overrides.
 
 ## References
 - `src/schemas/add-item-form.ts` + `src/hooks/use-add-item-form.ts` + `src/components/pantry/add/add-item-form.tsx`

@@ -1,7 +1,7 @@
 import type { SetState } from '@/types/react'
 import type { RecipeLibraryFilter } from '@/types/recipe'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { cn } from '@/lib/utils'
 

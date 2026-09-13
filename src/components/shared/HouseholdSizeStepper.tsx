@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { MAX_HOUSEHOLD_SIZE, MIN_HOUSEHOLD_SIZE } from '@/constants/onboarding'
 import { onboardingTexts } from '@/constants/texts/onboarding'
@@ -23,7 +23,6 @@ export const HouseholdSizeStepper = ({
             {title}
             <div className={'flex items-center justify-center gap-6.5 rounded-lg border border-border-2 bg-surface px-6 py-7.5'}>
                 <Button
-                    type={'button'}
                     variant={'outline'}
                     disabled={size <= MIN_HOUSEHOLD_SIZE}
                     onClick={() => onChange(size - 1)}
@@ -42,7 +41,6 @@ export const HouseholdSizeStepper = ({
                     </div>
                 </div>
                 <Button
-                    type={'button'}
                     variant={'outline'}
                     disabled={size >= MAX_HOUSEHOLD_SIZE}
                     onClick={() => onChange(size + 1)}

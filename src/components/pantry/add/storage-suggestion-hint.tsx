@@ -3,7 +3,7 @@ import { CheckIcon, SparklesIcon } from 'lucide-react'
 import type { StorageLocation } from '@/types/enums'
 import type { StorageSuggestion } from '@/types/pantry-item'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 import { dayInMs } from '@/constants/time'
@@ -60,7 +60,6 @@ export const StorageSuggestionHint = ({
                         {pantryTexts.addForm.suggestionError}
                     </span>
                     <Button
-                        type={'button'}
                         variant={'outline'}
                         onClick={onRetry}
                         className={'h-auto shrink-0 border-soft-green-border px-3.5 py-2 text-caption'}
@@ -98,7 +97,6 @@ export const StorageSuggestionHint = ({
                                     {pantryTexts.addForm.suggestionMismatchTitle(pantryTexts.storageLabels[suggestion.suggestedStorage])}
                                 </span>
                                 <Button
-                                    type={'button'}
                                     variant={'outline'}
                                     onClick={onSelectRecommended}
                                     className={'h-auto shrink-0 border-soft-green-border px-3.5 py-2 text-caption'}
@@ -135,7 +133,6 @@ export const StorageSuggestionHint = ({
                             </div>
                         </div>
                         <Button
-                            type={'button'}
                             onClick={onApplyExpiry}
                             className={'h-auto shrink-0 bg-green px-3.5 py-2 text-caption text-surface hover:bg-green/90'}
                         >

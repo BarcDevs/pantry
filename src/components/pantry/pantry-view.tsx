@@ -140,8 +140,7 @@ export const PantryView = ({
                     <p className={'py-10 text-center text-body text-ink-3'}>
                         {pantryTexts.noResults}
                     </p>
-                )
-                : (
+                ) : (
                     <PantryGrid
                         items={filteredItems}
                         onEditItem={setEditingItem}

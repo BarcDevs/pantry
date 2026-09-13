@@ -23,14 +23,14 @@ export const useRecipeAdjustments = () => {
         ingredientLabel: string,
         replacementName: string
     ) => {
-        const isOn = !!usedReplacements[ingredientName]
+        const isOn = usedReplacements[ingredientName]
 
         setUsedReplacements((current) => ({ ...current, [ingredientName]: !isOn }))
         toggleLine(recipesTexts.result.replacementAdjustmentLine(replacementName, ingredientLabel), isOn)
     }
 
     const toggleRemoval = (ingredientName: string, ingredientLabel: string) => {
-        const isOn = !!usedRemovals[ingredientName]
+        const isOn = usedRemovals[ingredientName]
 
         setUsedRemovals((current) => ({ ...current, [ingredientName]: !isOn }))
         toggleLine(recipesTexts.result.removalAdjustmentLine(ingredientLabel), isOn)

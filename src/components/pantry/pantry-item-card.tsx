@@ -1,7 +1,7 @@
 import type { PantryItem } from '@/types/pantry-item'
 
 import { PantryExpiryChip } from '@/components/pantry/pantry-expiry-chip'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { getExpiryStatus } from '@/lib/pantry/expiry-status'
 import { getFoodTypeIcon } from '@/lib/pantry/food-type-icon'

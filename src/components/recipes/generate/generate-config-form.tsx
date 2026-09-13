@@ -7,7 +7,7 @@ import { GenerateSourceGroup } from '@/components/recipes/generate/generate-sour
 import { PantrySelectSheet } from '@/components/recipes/generate/pantry-select-sheet'
 import { PantrySelectionSummary } from '@/components/recipes/generate/pantry-selection-summary'
 import { SparsePantryWarning } from '@/components/recipes/generate/sparse-pantry-warning'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Input } from '@/components/shared/Input'

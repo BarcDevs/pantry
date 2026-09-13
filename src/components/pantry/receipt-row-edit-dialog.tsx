@@ -7,7 +7,7 @@ import { StorageSuggestionHint } from '@/components/pantry/add/storage-suggestio
 import { StorageSuggestionButton } from '@/components/pantry/edit/storage-suggestion-button'
 import { ReceiptRowExpiryField } from '@/components/pantry/receipt-row-expiry-field'
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { Input } from '@/components/shared/Input'
 import {
     Select,
@@ -47,7 +47,6 @@ export const ReceiptRowEditDialog = ({
             title={pantryTexts.receiptReview.editRowTitle}
             footer={(
                 <Button
-                    type={'button'}
                     onClick={() => {
                         onSave(productEdit.buildPatch())
                         onOpenChange(false)

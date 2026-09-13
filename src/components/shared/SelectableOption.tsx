@@ -1,6 +1,6 @@
 import type { SelectableOptionProps } from '@/types/shared'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { cn } from '@/lib/utils'
 
@@ -56,7 +56,6 @@ export const SelectableOption = ({
     onSelect
 }: SelectableOptionProps) => (
     <Button
-        type={'button'}
         variant={'ghost'}
         aria-pressed={isSelected}
         onClick={onSelect}

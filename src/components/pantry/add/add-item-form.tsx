@@ -5,7 +5,7 @@ import { DuplicateItemDialog } from '@/components/pantry/add/duplicate-item-dial
 import { PantryTypeRow } from '@/components/pantry/add/pantry-type-row'
 import { StorageSuggestionHint } from '@/components/pantry/add/storage-suggestion-hint'
 import { TypePickerDialog } from '@/components/pantry/add/type-picker-dialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { Form } from '@/components/ui/form'
 

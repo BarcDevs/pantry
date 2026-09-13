@@ -3,7 +3,7 @@
 import type { RecipeDoc } from '@/types/recipe'
 
 import { RecipeFavoriteButton } from '@/components/recipes/shared/recipe-favorite-button'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 

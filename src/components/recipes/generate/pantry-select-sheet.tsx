@@ -4,7 +4,8 @@ import type { PantryItem } from '@/types/pantry-item'
 
 import { PantrySelectRow } from '@/components/recipes/generate/pantry-select-row'
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
+import { TextButton } from '@/components/shared/buttons/TextButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -39,14 +40,12 @@ export const PantrySelectSheet = ({
                 <span className={'text-caption text-ink-3'}>
                     {texts.subtitle(selectedItemIds.length, items.length)}
                 </span>
-                <Button
-                    type={'button'}
-                    variant={'ghost'}
+                <TextButton
                     onClick={onToggleAll}
-                    className={'h-auto shrink-0 p-0 font-bold text-caption text-green shadow-none'}
+                    className={'shrink-0 text-caption'}
                 >
                     {texts.toggleAll(allSelected)}
-                </Button>
+                </TextButton>
             </div>
             <div className={'flex flex-1 flex-col gap-2.25 overflow-y-auto'}>
                 {items.map((item) => (

@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { XIcon } from 'lucide-react'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { Input } from '@/components/shared/Input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -45,7 +45,6 @@ export const RecipeTagsEditor = ({
                     >
                         {tag}
                         <Button
-                            type={'button'}
                             variant={'ghost'}
                             aria-label={tag}
                             className={'size-auto p-0.5 text-ink-3'}
@@ -69,7 +68,6 @@ export const RecipeTagsEditor = ({
                     placeholder={texts.tagsPlaceholder}
                 />
                 <Button
-                    type={'button'}
                     variant={'outline'}
                     onClick={addTag}
                 >

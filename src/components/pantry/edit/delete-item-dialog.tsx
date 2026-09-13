@@ -1,5 +1,5 @@
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 

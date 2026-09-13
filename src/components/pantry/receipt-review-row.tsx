@@ -16,7 +16,7 @@ import type {
 import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
 import { ReceiptRowEditDialog } from '@/components/pantry/receipt-row-edit-dialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { Input } from '@/components/shared/Input'
 import {
     Select,
@@ -70,7 +70,6 @@ export const ReceiptReviewRow = ({
     return (
         <div className={'flex items-center gap-2.5 rounded-lg border border-border-2 bg-surface p-3'}>
             <button
-                type={'button'}
                 onClick={() => onToggle(row.id)}
                 aria-label={row.name}
                 aria-pressed={row.included}
@@ -99,7 +98,6 @@ export const ReceiptReviewRow = ({
                 )}
             </span>
             <Button
-                type={'button'}
                 variant={'outline'}
                 size={'icon'}
                 onClick={() => setIsEditOpen(true)}
@@ -108,7 +106,6 @@ export const ReceiptReviewRow = ({
             </Button>
             <div className={'flex shrink-0 items-center overflow-hidden rounded-lg border border-border'}>
                 <Button
-                    type={'button'}
                     variant={'ghost'}
                     size={'icon'}
                     disabled={row.quantity <= step}
@@ -131,7 +128,6 @@ export const ReceiptReviewRow = ({
                     className={'h-9 w-14 shrink-0 border-none text-center shadow-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'}
                 />
                 <Button
-                    type={'button'}
                     variant={'ghost'}
                     size={'icon'}
                     onClick={() => onQuantityChange(
@@ -165,7 +161,6 @@ export const ReceiptReviewRow = ({
                 </SelectContent>
             </Select>
             <Button
-                type={'button'}
                 variant={'outline'}
                 size={'icon'}
                 onClick={() => onRemove(row.id)}

@@ -2,7 +2,7 @@ import type { PantryItem }
     from '@/types/pantry-item'
 
 import { Button }
-    from '@/components/shared/Button'
+    from '@/components/shared/buttons/Button'
 
 import { recipesTexts }
     from '@/constants/texts/recipes'

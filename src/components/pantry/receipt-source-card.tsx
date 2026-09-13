@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/Button'
+import { TextButton } from '@/components/shared/buttons/TextButton'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -32,24 +32,21 @@ export const ReceiptSourceCard = ({
             </div>
         </div>
         <div className={'flex shrink-0 flex-col items-start gap-1.75'}>
-            <Button
-                type={'button'}
-                variant={'link'}
+            <TextButton
                 onClick={onToggleAll}
-                className={'h-auto p-0 text-label font-bold text-green shadow-none'}
+                className={'text-label'}
             >
                 {allSelected
                     ? pantryTexts.receiptReview.deselectAll
                     : pantryTexts.receiptReview.selectAll}
-            </Button>
-            <Button
-                type={'button'}
-                variant={'link'}
+            </TextButton>
+            <TextButton
+                tone={'red'}
                 onClick={onClearAll}
-                className={'h-auto p-0 text-label font-bold text-status-red-fg shadow-none'}
+                className={'text-label'}
             >
                 {pantryTexts.receiptReview.clearAll}
-            </Button>
+            </TextButton>
         </div>
     </div>
 )

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { format, parseISO } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { Calendar } from '@/components/ui/calendar'
 import {
     Popover,
@@ -34,7 +34,6 @@ export const ReceiptRowExpiryField = ({
         >
             <PopoverTrigger asChild>
                 <Button
-                    type={'button'}
                     variant={'outline'}
                     className={cn(
                         'w-full justify-start font-normal',

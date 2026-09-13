@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { HistoryIcon } from '@/components/icons/history-icon'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { routes } from '@/constants/routes'
 import { pantryTexts } from '@/constants/texts/pantry'
@@ -36,8 +36,7 @@ export const PantryHeader = ({
                     >
                         <HistoryIcon size={21}/>
                     </Link>
-                )
-                : (
+                ) : (
                     <div
                         aria-disabled
                         className={'flex size-11 shrink-0 items-center justify-center rounded-md border border-border bg-surface text-ink-2 opacity-50'}

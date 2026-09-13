@@ -3,7 +3,7 @@ import { STORAGE_LOCATIONS } from '@/types/enums'
 import type { SetState } from '@/types/react'
 
 import { PantryTypeFilter } from '@/components/pantry/pantry-type-filter'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { cn } from '@/lib/utils'
 

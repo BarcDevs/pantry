@@ -5,7 +5,7 @@ import Link from 'next/link'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { PasswordInput } from '@/components/auth/password-input'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { LtrInput } from '@/components/shared/LtrInput'

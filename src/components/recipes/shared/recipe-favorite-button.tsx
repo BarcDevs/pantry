@@ -1,7 +1,7 @@
 import type { ClassName } from '@/types/react'
 import type { RecipeDoc } from '@/types/recipe'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { cn } from '@/lib/utils'
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { GenerateDietaryDialog }
     from '@/components/recipes/generate/generate-dietary-dialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { onboardingTexts } from '@/constants/texts/onboarding'
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -32,10 +32,9 @@ export const GenerateDietarySummary = ({
     return (
         <>
             <Button
-                type={'button'}
                 variant={'ghost'}
                 onClick={() => setIsOpen(true)}
-                className={'flex h-auto w-full items-center justify-between rounded-lg border border-border-2 bg-surface p-4 font-normal shadow-none'}
+                className={'flex h-auto w-full items-center justify-between rounded-lg border border-border-2 bg-surface p-4 font-normal'}
             >
                 <div className={'flex flex-col items-start gap-1'}>
                     <span className={'font-bold text-body text-ink'}>

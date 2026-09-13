@@ -1,7 +1,7 @@
 import { Trash2Icon } from 'lucide-react'
 
 import { RecipeHeartToggle } from '@/components/recipes/shared/recipe-heart-toggle'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { recipesTexts } from '@/constants/texts/recipes'

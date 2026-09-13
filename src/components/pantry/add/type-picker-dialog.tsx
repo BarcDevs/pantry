@@ -2,7 +2,7 @@ import type { FoodType } from '@/types/enums'
 import { FOOD_TYPES } from '@/types/enums'
 
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { cn } from '@/lib/utils'
 
@@ -33,7 +33,6 @@ export const TypePickerDialog = ({
             {FOOD_TYPES.map((type) => (
                 <Button
                     key={type}
-                    type={'button'}
                     variant={'ghost'}
                     onClick={() => {
                         onSelect(type)
@@ -55,7 +54,6 @@ export const TypePickerDialog = ({
         </div>
         {onSkip && (
             <Button
-                type={'button'}
                 variant={'ghost'}
                 onClick={() => {
                     onSkip()

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import type { FoodType } from '@/types/enums'
 
 import { TypePickerDialog } from '@/components/pantry/add/type-picker-dialog'
-import { Button } from '@/components/shared/Button'
+import { TextButton } from '@/components/shared/buttons/TextButton'
 
 import { foodTypeEmoji } from '@/constants/food-type-emoji'
 import { pantryTexts } from '@/constants/texts/pantry'
@@ -32,24 +32,21 @@ export const PantryTypeRow = ({
                             {foodTypeEmoji[value]}
                         </span>
                     </span>
-                    <Button
-                        type={'button'}
-                        variant={'ghost'}
+                    <TextButton
                         onClick={() => setIsPickerOpen(true)}
-                        className={'ms-auto h-auto shrink-0 gap-1 p-0 font-bold text-caption text-green shadow-none'}
+                        className={'ms-auto shrink-0 gap-1 text-caption'}
                     >
                         {pantryTexts.addForm.typeRowChange}
-                    </Button>
+                    </TextButton>
                 </div>
             ) : (
-                <Button
-                    type={'button'}
-                    variant={'ghost'}
+                <TextButton
+                    tone={'muted'}
                     onClick={() => setIsPickerOpen(true)}
-                    className={'h-auto w-fit p-0 font-bold text-caption text-ink-3 shadow-none'}
+                    className={'text-caption'}
                 >
                     {pantryTexts.addForm.typeRowAdd}
-                </Button>
+                </TextButton>
             )}
             <TypePickerDialog
                 open={isPickerOpen}

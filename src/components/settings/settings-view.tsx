@@ -7,7 +7,7 @@ import { SettingsCookingLevelField } from '@/components/settings/settings-cookin
 import { SettingsDietaryPreferencesField } from '@/components/settings/settings-dietary-preferences-field'
 import { SettingsHouseholdSizeField } from '@/components/settings/settings-household-size-field'
 import { SettingsProfileSection } from '@/components/settings/settings-profile-section'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { Form } from '@/components/ui/form'
 

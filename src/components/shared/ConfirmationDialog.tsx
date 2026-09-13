@@ -5,7 +5,7 @@ import {
 import type { MouseEvent } from 'react'
 
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 type ConfirmationDialogProps = {
     open: boolean

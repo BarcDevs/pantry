@@ -1,6 +1,6 @@
 import type { RecipeIngredient } from '@/types/recipe'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { formatQuantity } from '@/lib/recipes/format-quantity'
 import { cn } from '@/lib/utils'
@@ -83,7 +83,6 @@ export const RecipeIngredientRow = ({
                 <div className={'me-4.5 mt-1.5 flex flex-wrap gap-1.5'}>
                     {hasReplacement && onToggleReplacement && (
                         <Button
-                            type={'button'}
                             variant={'ghost'}
                             size={'xs'}
                             onClick={onToggleReplacement}
@@ -101,7 +100,6 @@ export const RecipeIngredientRow = ({
                     )}
                     {ingredient.optional && onToggleRemoval && (
                         <Button
-                            type={'button'}
                             variant={'ghost'}
                             size={'xs'}
                             onClick={onToggleRemoval}

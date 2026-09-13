@@ -8,7 +8,7 @@ import type {
     Path
 } from 'react-hook-form'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { Calendar } from '@/components/ui/calendar'
 import {
     FormField,
@@ -57,7 +57,6 @@ export const ExpiryDateField = <T extends FieldValues>({
                         >
                             <PopoverTrigger asChild>
                                 <Button
-                                    type={'button'}
                                     variant={'outline'}
                                     className={cn(
                                         'w-full justify-start font-normal',

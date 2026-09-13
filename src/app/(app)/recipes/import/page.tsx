@@ -6,7 +6,7 @@ import { ImportRecipeReview } from '@/components/recipes/import/import-recipe-re
 import { ImportSourceTabs } from '@/components/recipes/import/import-source-tabs'
 import { ImportTextForm } from '@/components/recipes/import/import-text-form'
 import { ImportUrlForm } from '@/components/recipes/import/import-url-form'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { PageHeader } from '@/components/shared/PageHeader'
 
 import { useRecipeImport } from '@/hooks/use-recipe-import'
@@ -52,8 +52,7 @@ const ImportRecipePage = () => {
                         onTitleChange={setTitle}
                         onSave={save}
                     />
-                )
-                : (
+                ) : (
                     <>
                         <p className={'mb-5.5 text-body text-ink-3'}>
                             {recipesTexts.import.subtitle}

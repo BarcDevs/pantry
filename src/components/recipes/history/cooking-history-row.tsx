@@ -42,7 +42,6 @@ export const CookingHistoryRowItem = ({
                 <RecipeHeartToggle
                     isFavorite={row.isFavorite}
                     onToggle={onToggleFavorite}
-                    className={'shadow-none'}
                 />
             </div>
             <div className={'mt-1.75 flex flex-wrap items-center gap-2.5'}>

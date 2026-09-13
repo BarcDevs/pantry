@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 
 import { cn } from '@/lib/utils'
 
@@ -22,7 +22,6 @@ export const ImportSourceTabs = ({
 }: ImportSourceTabsProps) => (
     <div className={'mb-4.5 flex gap-2.25'}>
         <Button
-            type={'button'}
             variant={'outline'}
             onClick={() => onChange('url')}
             className={segClass(tab === 'url')}
@@ -30,7 +29,6 @@ export const ImportSourceTabs = ({
             {recipesTexts.import.urlTab}
         </Button>
         <Button
-            type={'button'}
             variant={'outline'}
             onClick={() => onChange('text')}
             className={segClass(tab === 'text')}

@@ -6,7 +6,7 @@ import type {
 
 import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import {
     FormField,
     FormItem,
@@ -38,7 +38,6 @@ export const GenerateCountStepperField = <T extends FieldValues>({
                 </FormLabel>
                 <div className={'flex w-fit items-center gap-4'}>
                     <Button
-                        type={'button'}
                         variant={'ghost'}
                         size={'icon'}
                         className={'rounded-full border border-border bg-canvas'}
@@ -56,7 +55,6 @@ export const GenerateCountStepperField = <T extends FieldValues>({
                         </span>
                     </div>
                     <Button
-                        type={'button'}
                         variant={'ghost'}
                         size={'icon'}
                         className={'rounded-full bg-green text-surface'}

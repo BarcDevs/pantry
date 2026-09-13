@@ -4,7 +4,8 @@ import type { FoodType } from '@/types/enums'
 import { FOOD_TYPES } from '@/types/enums'
 import type { SetState } from '@/types/react'
 
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
+import { TextButton } from '@/components/shared/buttons/TextButton'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
     Popover,
@@ -38,7 +39,7 @@ export const PantryTypeFilter = ({
                 <Button
                     variant={'ghost'}
                     className={cn(
-                        'h-auto cursor-pointer gap-1.5 rounded-full border px-3.5 py-2 text-label font-semibold shadow-none',
+                        'h-auto cursor-pointer gap-1.5 rounded-full border px-3.5 py-2 text-label font-semibold',
                         value.length > 0
                             ? 'border-green bg-green text-white'
                             : 'border-border bg-surface text-ink-2'
@@ -70,13 +71,13 @@ export const PantryTypeFilter = ({
                         </label>
                     ))}
                     {value.length > 0 && (
-                        <Button
-                            variant={'ghost'}
+                        <TextButton
+                            tone={'muted'}
                             onClick={() => onChange([])}
-                            className={'h-auto w-fit p-0 font-bold text-caption text-ink-3 shadow-none'}
+                            className={'text-caption'}
                         >
                             {pantryTexts.typeFilterClear}
-                        </Button>
+                        </TextButton>
                     )}
                 </div>
             </PopoverContent>

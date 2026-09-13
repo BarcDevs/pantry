@@ -13,7 +13,7 @@ import { DeleteItemDialog }
 import { StorageSuggestionButton }
     from '@/components/pantry/edit/storage-suggestion-button'
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { Form } from '@/components/ui/form'
 
@@ -110,7 +110,6 @@ export const EditItemDialog = ({
                             : pantryTexts.editForm.submit}
                     </Button>
                     <Button
-                        type={'button'}
                         variant={'destructive'}
                         className={'w-full'}
                         onClick={() => setConfirmDelete(true)}

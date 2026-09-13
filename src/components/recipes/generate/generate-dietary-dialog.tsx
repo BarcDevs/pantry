@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/Button'
+import { Button } from '@/components/shared/buttons/Button'
 import { DietaryPreferencesPicker } from '@/components/shared/DietaryPreferencesPicker'
 import { LabeledCheckbox } from '@/components/shared/LabeledCheckbox'
 

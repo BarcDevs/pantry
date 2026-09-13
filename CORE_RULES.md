@@ -39,7 +39,13 @@
 - Extract reusable logic
 - Use reusable components from shadcn/ui
 - Before building new UI: check shadcn/ui first, then `src/components/shared/` - see `src/components/shared/SHARED_COMPONENTS.md` for what's already there (`Button`, `FormInputField`, `FormSelectField`) and when to extract a new one
-- Buttons: always import from `@/components/shared/Button` (wraps shadcn's with `cursor-pointer`, shadow, press-scale) - never `@/components/ui/button` directly, never a raw `<button>`
+- Buttons: never `@/components/ui/button` directly, never a raw `<button>`. `@/components/shared/buttons/Button`
+  (wraps shadcn's with `cursor-pointer`, press-scale, and a shadow only on the `default` variant) is a **base only**
+  - it must NEVER be imported/used directly at a call site. Every call site uses a purpose-made button from
+  `src/components/shared/buttons/` that wraps `Button` (e.g. `TextButton` for a colored, no-padding text-style
+  action like delete/edit/select-all links). If no existing purpose-made button fits the shape needed, add a new one
+  in `src/components/shared/buttons/` that wraps `Button` - never a one-off inline `className` override at the call
+  site, and never the base `Button` directly.
 - Every clickable element (including non-Button custom elements: chips, cards, option rows) must have `cursor-pointer` in its className
 - No hardcoded values - use constants or config
 - Time values: Always use `src/constants/time` (minuteInMs, hourInMs, etc.) instead of hardcoding milliseconds
