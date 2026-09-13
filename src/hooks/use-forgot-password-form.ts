@@ -1,4 +1,4 @@
-import { useState, useTransition } from 'react'
+import { useTransition } from 'react'
 
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -10,93 +10,59 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { routes } from '@/constants/routes'
 import { authTexts } from '@/constants/texts/auth'
 
-import { forgotPasswordRequest } from '@/actions/users/forgot-password-request'
 import { forgotPasswordReset } from '@/actions/users/forgot-password-reset'
 import {
-    requestFormSchema,
-    type RequestFormValues,
-    resetFormSchema,
-    type ResetFormValues
+    forgotPasswordFormSchema,
+    type ForgotPasswordFormValues
 } from '@/schemas/forgot-password-form'
 
 export const useForgotPasswordForm = () => {
     const router = useRouter()
-    const [pendingReset, setPendingReset] = useState(false)
-    const [devCode, setDevCode] = useState<string | undefined>(undefined)
-    const [pendingEmail, setPendingEmail] = useState<string | null>(null)
 
-    const requestForm = useForm<RequestFormValues>({
-        resolver: zodResolver(requestFormSchema),
-        defaultValues: { email: '' }
-    })
-
-    const resetForm = useForm<ResetFormValues>({
-        resolver: zodResolver(resetFormSchema),
+    const form = useForm<ForgotPasswordFormValues>({
+        resolver: zodResolver(forgotPasswordFormSchema),
+        mode: 'onChange',
         defaultValues: {
-            code: '',
-            password: ''
+            email: '',
+            password: '',
+            confirmPassword: ''
         }
     })
 
-    const [isRequesting, startRequesting] = useTransition()
-    const [isResetting, startResetting] = useTransition()
+    const [isSubmitting, startSubmitting] = useTransition()
 
-    const handleRequest = requestForm.handleSubmit((values) => {
-        startRequesting(async () => {
+    const handleSubmit = form.handleSubmit((values) => {
+        startSubmitting(async () => {
             try {
-                const result = await forgotPasswordRequest(values.email)
-                if (!result.success) {
-                    requestForm.setError('root', {
-                        message: authTexts.forgotError
-                    })
-                    return
-                }
-
-                setPendingEmail(values.email)
-                setDevCode(result.devCode)
-                setPendingReset(true)
-            } catch (error) {
-                console.error(error)
-                requestForm.setError('root', {
-                    message: authTexts.forgotError
-                })
-            }
-        })
-    })
-
-    const handleReset = resetForm.handleSubmit((values) => {
-        startResetting(async () => {
-            try {
-                const email = pendingEmail
-                if (!email) {
-                    resetForm.setError('root', {
-                        message: authTexts.forgotError
-                    })
-                    return
-                }
-
                 const success = await forgotPasswordReset({
-                    email,
-                    code: values.code,
+                    email: values.email,
                     password: values.password
                 })
 
                 if (!success) {
-                    resetForm.setError('root', {
+                    form.setError('root', {
                         message: authTexts.forgotError
                     })
                     return
                 }
 
-                await signIn('credentials', {
-                    email,
+                const result = await signIn('credentials', {
+                    email: values.email,
                     password: values.password,
                     redirect: false
                 })
+
+                if (result?.error) {
+                    form.setError('root', {
+                        message: authTexts.forgotError
+                    })
+                    return
+                }
+
                 router.push(routes.pantry)
             } catch (error) {
                 console.error(error)
-                resetForm.setError('root', {
+                form.setError('root', {
                     message: authTexts.forgotError
                 })
             }
@@ -104,13 +70,8 @@ export const useForgotPasswordForm = () => {
     })
 
     return {
-        requestForm,
-        resetForm,
-        pendingReset,
-        devCode,
-        isRequesting,
-        isResetting,
-        handleRequest,
-        handleReset
+        form,
+        isSubmitting,
+        handleSubmit
     }
 }

@@ -2,14 +2,13 @@ import { z } from 'zod'
 
 import { authTexts } from '@/constants/texts/auth'
 
-export const requestFormSchema = z.object({
-    email: z.string().trim().email()
+export const forgotPasswordFormSchema = z.object({
+    email: z.string().trim().email(),
+    password: z.string().min(8, { message: authTexts.passwordTooShort }),
+    confirmPassword: z.string()
+}).refine((values) => values.password === values.confirmPassword, {
+    message: authTexts.passwordMismatch,
+    path: ['confirmPassword']
 })
 
-export const resetFormSchema = z.object({
-    code: z.string().trim().length(6, { message: authTexts.codeTooShort }),
-    password: z.string().min(8, { message: authTexts.passwordTooShort })
-})
-
-export type RequestFormValues = z.infer<typeof requestFormSchema>
-export type ResetFormValues = z.infer<typeof resetFormSchema>
+export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordFormSchema>

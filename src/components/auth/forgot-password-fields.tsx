@@ -2,6 +2,7 @@
 
 import type { UseFormReturn } from 'react-hook-form'
 
+import { PasswordInput } from '@/components/auth/password-input'
 import { Button } from '@/components/shared/Button'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
@@ -10,19 +11,19 @@ import { Form } from '@/components/ui/form'
 
 import { authTexts } from '@/constants/texts/auth'
 
-import type { RequestFormValues } from '@/schemas/forgot-password-form'
+import type { ForgotPasswordFormValues } from '@/schemas/forgot-password-form'
 
-type ForgotPasswordRequestFieldsProps = {
-    form: UseFormReturn<RequestFormValues>
+type ForgotPasswordFieldsProps = {
+    form: UseFormReturn<ForgotPasswordFormValues>
     isSubmitting: boolean
     onSubmit: () => void
 }
 
-export const ForgotPasswordRequestFields = ({
+export const ForgotPasswordFields = ({
     form,
     isSubmitting,
     onSubmit
-}: ForgotPasswordRequestFieldsProps) => (
+}: ForgotPasswordFieldsProps) => (
     <Form {...form}>
         <form
             onSubmit={onSubmit}
@@ -39,13 +40,25 @@ export const ForgotPasswordRequestFields = ({
                     />
                 )}
             />
+            <FormInputField
+                control={form.control}
+                name={'password'}
+                label={authTexts.newPassword}
+                render={(field) => <PasswordInput {...field}/>}
+            />
+            <FormInputField
+                control={form.control}
+                name={'confirmPassword'}
+                label={authTexts.confirmNewPassword}
+                render={(field) => <PasswordInput {...field}/>}
+            />
             <FormError errors={form.formState.errors}/>
             <Button
                 type={'submit'}
                 disabled={isSubmitting}
                 className={'w-full'}
             >
-                {authTexts.forgotRequestSubmit}
+                {authTexts.forgotResetSubmit}
             </Button>
         </form>
     </Form>

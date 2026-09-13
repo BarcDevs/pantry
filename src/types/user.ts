@@ -6,8 +6,6 @@ export type UserDoc = {
     displayName: string
     passwordHash: string | null
     emailVerifiedAt: Date | null
-    verificationCode: string | null
-    verificationCodeExpiresAt: Date | null
     cookingLevel?: Difficulty
     householdSize?: number
     dietaryPreferences: string[]

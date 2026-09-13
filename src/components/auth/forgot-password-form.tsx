@@ -3,8 +3,7 @@
 import Link from 'next/link'
 
 import { AuthHeading } from '@/components/auth/auth-heading'
-import { ForgotPasswordRequestFields } from '@/components/auth/forgot-password-request-fields'
-import { ForgotPasswordResetFields } from '@/components/auth/forgot-password-reset-fields'
+import { ForgotPasswordFields } from '@/components/auth/forgot-password-fields'
 
 import { useForgotPasswordForm } from '@/hooks/use-forgot-password-form'
 
@@ -13,14 +12,9 @@ import { authTexts } from '@/constants/texts/auth'
 
 export const ForgotPasswordForm = () => {
     const {
-        requestForm,
-        resetForm,
-        pendingReset,
-        devCode,
-        isRequesting,
-        isResetting,
-        handleRequest,
-        handleReset
+        form,
+        isSubmitting,
+        handleSubmit
     } = useForgotPasswordForm()
 
     return (
@@ -30,22 +24,11 @@ export const ForgotPasswordForm = () => {
                 subtitle={authTexts.forgotSub}
             />
 
-            {pendingReset
-                ? (
-                    <ForgotPasswordResetFields
-                        form={resetForm}
-                        isSubmitting={isResetting}
-                        onSubmit={handleReset}
-                        devCode={devCode}
-                    />
-                )
-                : (
-                    <ForgotPasswordRequestFields
-                        form={requestForm}
-                        isSubmitting={isRequesting}
-                        onSubmit={handleRequest}
-                    />
-                )}
+            <ForgotPasswordFields
+                form={form}
+                isSubmitting={isSubmitting}
+                onSubmit={handleSubmit}
+            />
 
             <p className={'mt-5 text-center text-body text-ink-3'}>
                 <Link
