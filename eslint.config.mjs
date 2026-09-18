@@ -27,6 +27,7 @@ const config = [
             'node_modules',
             'dist',
             '.next',
+            '.next-e2e',
             '.idea',
             'eslint.config.mjs',
             'postcss.config.mjs',
@@ -167,6 +168,7 @@ const config = [
         ignores: [
             // Default ignores of eslint-config-next:
             '.next/**',
+            '.next-e2e/**',
             'out/**',
             'build/**',
             'next-env.d.ts',

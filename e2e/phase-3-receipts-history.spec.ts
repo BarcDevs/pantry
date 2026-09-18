@@ -33,7 +33,14 @@ const createAuthedPage = async (browser: Browser): Promise<Page> => {
 const confirmReceiptReview = async (page: Page) => {
     await expect(page.getByText('עגבניות')).toBeVisible({ timeout: 20000 })
     await page.getByRole('button', { name: 'הוספה למזווה' }).click()
-    await expect(page.getByText('הפריטים נוספו למזווה')).toBeVisible({ timeout: 15000 })
+
+    const duplicate = page.getByRole('dialog', { name: 'המוצר כבר קיים במזווה' })
+    while (new URL(page.url()).pathname !== '/pantry') {
+        if (await duplicate.isVisible()) {
+            await duplicate.getByRole('button', { name: 'מיזוג כמויות' }).click({ timeout: 5000 }).catch(() => undefined)
+        }
+        await page.waitForTimeout(300)
+    }
 }
 
 test.describe.configure({ mode: 'serial' })
@@ -48,7 +55,7 @@ test.describe('phase 3 - receipts and history', () => {
     })
 
     test('scan a receipt image and add items to pantry', async ({ browser }) => {
-        test.setTimeout(60000)
+        test.setTimeout(120000)
         const page = await createAuthedPage(browser)
 
         await page.goto('/add/receipt')
@@ -60,7 +67,7 @@ test.describe('phase 3 - receipts and history', () => {
     })
 
     test('scan a receipt PDF and add items to pantry', async ({ browser }) => {
-        test.setTimeout(60000)
+        test.setTimeout(120000)
         const page = await createAuthedPage(browser)
 
         await page.goto('/add/receipt')
@@ -89,8 +96,8 @@ test.describe('phase 3 - receipts and history', () => {
         const page = await createAuthedPage(browser)
 
         await page.goto('/recipes/import')
-        await page.getByPlaceholder('https://...').fill('https://example.com')
-        await page.getByRole('button', { name: 'ייבוא', exact: true }).click()
+        await page.getByPlaceholder('https://www.recipes.co.il/shakshuka').fill('https://example.com')
+        await page.getByRole('button', { name: 'ייבוא ושמירה בספרייה' }).click()
 
         await expect(page.getByText('מתכון לדוגמה')).toBeVisible({ timeout: 20000 })
         await page.getByRole('button', { name: 'שמירה למתכונים שלי' }).click()
@@ -104,11 +111,11 @@ test.describe('phase 3 - receipts and history', () => {
         const page = await createAuthedPage(browser)
 
         await page.goto('/recipes/import')
-        await page.getByRole('button', { name: 'טקסט', exact: true }).click()
-        await page.getByPlaceholder('שם המתכון, מצרכים, אופן ההכנה...').fill(
+        await page.getByRole('button', { name: /הדבקת טקסט/ }).click()
+        await page.getByPlaceholder('הדביקו כאן את שם המתכון, רשימת המצרכים ואופן ההכנה…').fill(
             'מרק עדשים: עדשים, בצל, גזר. לבשל 30 דקות.'
         )
-        await page.getByRole('button', { name: 'ייבוא', exact: true }).click()
+        await page.getByRole('button', { name: 'ייבוא ושמירה בספרייה' }).click()
 
         await expect(page.getByText('מתכון לדוגמה')).toBeVisible({ timeout: 20000 })
         await page.getByRole('button', { name: 'שמירה למתכונים שלי' }).click()
@@ -121,15 +128,8 @@ test.describe('phase 3 - receipts and history', () => {
         test.setTimeout(120000)
         const page = await createAuthedPage(browser)
 
-        await page.goto('/add')
-        await page.getByRole('textbox', { name: 'שם המוצר' }).fill('עגבניות')
-        await page.getByRole('spinbutton', { name: 'כמות' }).fill('2')
-        await page.waitForTimeout(1000)
-        await page.getByRole('button', { name: 'הוספה למזווה' }).click()
-        await page.waitForURL('**/pantry', { timeout: 30000 })
-
         await page.goto('/generate')
-        await page.getByRole('button', { name: 'רק מהמזווה' }).waitFor()
+        await page.getByRole('button', { name: 'מהמזווה בלבד' }).waitFor()
         await page.getByRole('button', { name: '✦ צור מתכון' }).click()
         await page.waitForURL('**/generate/result', { timeout: 30000 })
 

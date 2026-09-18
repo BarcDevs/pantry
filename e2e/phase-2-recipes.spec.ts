@@ -16,6 +16,7 @@ const addPantryItem = async (page: Page, name: string) => {
     await page.getByRole('spinbutton', { name: 'כמות' }).fill('2')
     await page.waitForTimeout(1000)
     await page.getByRole('button', { name: 'הוספה למזווה' }).click()
+    await page.getByRole('dialog', { name: 'מה סוג המוצר?' }).getByRole('button', { name: 'דלג' }).click()
     await page.waitForURL('**/pantry', { timeout: 30000 })
 }
 
@@ -25,7 +26,7 @@ const seedPantry = async (page: Page) => {
     }
 }
 
-// Signing up hits Clerk's rate-limited dev instance, so the whole suite
+// Signing up per test is slow, so the whole suite
 // shares one authenticated session (via storageState) instead of one
 // sign-up per test.
 let sharedStorageState: Awaited<ReturnType<BrowserContext['storageState']>> | undefined
@@ -54,7 +55,7 @@ test.describe('phase 2 - recipes', () => {
         const page = await createAuthedPage(browser)
 
         await page.goto('/generate')
-        await page.getByRole('button', { name: 'רק מהמזווה' }).waitFor()
+        await page.getByRole('button', { name: 'מהמזווה בלבד' }).waitFor()
         await page.getByRole('button', { name: '✦ צור מתכון' }).click()
 
         await page.waitForURL('**/generate/result', { timeout: 30000 })
@@ -87,7 +88,7 @@ test.describe('phase 2 - recipes', () => {
         await expect(page.getByText('לא נמצאו מתכונים תואמים')).toBeVisible()
         await page.getByPlaceholder('חיפוש מתכון...').fill('')
 
-        await page.getByRole('button', { name: 'בושלו' }).click()
+        await page.getByRole('button', { name: 'ניתן לבשל עכשיו' }).click()
         await expect(page.getByText('לא נמצאו מתכונים תואמים')).not.toBeVisible()
 
         await page.getByRole('button', { name: 'מועדפים', exact: true }).click()
@@ -103,7 +104,7 @@ test.describe('phase 2 - recipes', () => {
     })
 
     for (const [scopeLabel, scopeName] of [
-        ['בעיקר מהמזווה', 'pantry-first'],
+        ['קודם מהמזווה', 'pantry-first'],
         ['פתוח', 'open']
     ] as const) {
         test(`generate config accepts "${scopeName}" scope and reaches result`, async ({ browser }) => {
@@ -111,7 +112,7 @@ test.describe('phase 2 - recipes', () => {
             const page = await createAuthedPage(browser)
 
             await page.goto('/generate')
-            await page.getByRole('button', { name: 'רק מהמזווה' }).waitFor()
+            await page.getByRole('button', { name: 'מהמזווה בלבד' }).waitFor()
             await page.getByRole('button', { name: scopeLabel }).click()
             await page.getByRole('button', { name: '✦ צור מתכון' }).click()
 

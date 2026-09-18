@@ -11,6 +11,7 @@ import { PlusIcon } from '@/components/icons/plus-icon'
 import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 import { Input } from '@/components/shared/Input'
 import {
+    FormControl,
     FormField,
     FormItem,
     FormLabel,
@@ -56,17 +57,19 @@ export const QuantityField = <T extends FieldValues>({
                             >
                                 <MinusIcon/>
                             </SecondaryButton>
-                            <Input
-                                {...field}
-                                type={'number'}
-                                min={step}
-                                step={step}
-                                className={'text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'}
-                                onChange={(e) => {
-                                    const next = Number(e.target.value)
-                                    field.onChange(Number.isNaN(next) ? 0 : next)
-                                }}
-                            />
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    type={'number'}
+                                    min={step}
+                                    step={step}
+                                    className={'text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'}
+                                    onChange={(e) => {
+                                        const next = Number(e.target.value)
+                                        field.onChange(Number.isNaN(next) ? 0 : next)
+                                    }}
+                                />
+                            </FormControl>
                             <SecondaryButton
                                 size={'icon'}
                                 onClick={() => field.onChange(
