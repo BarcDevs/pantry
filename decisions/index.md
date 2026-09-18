@@ -29,6 +29,13 @@ Reusable component conventions (buttons, wrappers) surfaced during pantry sessio
 |---|---|
 | 13/09/2026 | `Button` is a base-only wrapper; every call site uses a purpose-made button (e.g. `TextButton`) instead |
 
+## Git & Deploy — [[decisions/git-and-deploy]]
+Branching and deployment workflow.
+
+| Date | Entry |
+|---|---|
+| 18/09/2026 | `main` is the trunk; no `dev` branch until the app is published |
+
 ## Tooling & Skills — [[decisions/tooling-and-skills]]
 Decisions about shared Claude Code skills/workflow surfaced during pantry sessions.
 
