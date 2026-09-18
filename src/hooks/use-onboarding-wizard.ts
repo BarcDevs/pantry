@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import type { SetState } from '@/types/react'
 
+import { ONBOARDING_STEP_COUNT } from '@/constants/onboarding'
 import { routes } from '@/constants/routes'
 import { onboardingTexts } from '@/constants/texts/onboarding'
 
@@ -17,8 +18,6 @@ import {
     onboardingFormSchema,
     OnboardingFormValues
 } from '@/schemas/onboarding-form'
-
-const STEP_COUNT = onboardingTexts.stepLabels.length
 
 const OnboardingField = {
     cookingLevel: 'cookingLevel',
@@ -43,7 +42,7 @@ export const useOnboardingWizard = () => {
     const [step, setStep] = useState(0)
     const [isSubmitting, startSubmitting] = useTransition()
 
-    const isLastStep = step === STEP_COUNT - 1
+    const isLastStep = step === ONBOARDING_STEP_COUNT - 1
 
     const finish = (values: OnboardingFormValues) => {
         startSubmitting(async () => {

@@ -1,4 +1,8 @@
-import { dayInMs } from '@/constants/time'
+import { EXPIRY_SOON_THRESHOLD_DAYS } from '@/constants/pantry'
+import {
+    dayInMs,
+    JERUSALEM_TIME_ZONE
+} from '@/constants/time'
 
 export type ExpiryTone = 'none' | 'green' | 'amber' | 'red'
 
@@ -6,9 +10,6 @@ export type ExpiryStatus = {
     tone: ExpiryTone
     daysLeft: number | null
 }
-
-const JERUSALEM_TIME_ZONE = 'Asia/Jerusalem'
-export const EXPIRY_SOON_THRESHOLD_DAYS = 7
 
 // Product is Israel-market-only, single timezone - anchor "today" and the
 // target date to Asia/Jerusalem's calendar day, not the runtime's local time,

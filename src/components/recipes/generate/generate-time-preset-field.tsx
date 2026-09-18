@@ -14,11 +14,7 @@ import {
     FormLabel
 } from '@/components/ui/form'
 
-const TIME_PRESETS = [
-    15,
-    30,
-    60
-] as const
+import { TIME_PRESETS } from '@/constants/recipes'
 
 type GenerateTimePresetFieldProps<T extends FieldValues> = {
     control: Control<T>

@@ -6,6 +6,8 @@ import {
     InputOTPSlot
 } from '@/components/ui/input-otp'
 
+import { OTP_LENGTH } from '@/constants/auth'
+
 type OtpInputProps = {
     value: string
     onChange: (value: string) => void
@@ -13,8 +15,6 @@ type OtpInputProps = {
     name?: string
     ref?: Ref<HTMLInputElement>
 }
-
-const OTP_LENGTH = 6
 
 export const OtpInput = ({
     ...props

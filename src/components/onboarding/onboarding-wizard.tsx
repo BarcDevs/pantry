@@ -9,9 +9,8 @@ import { StepHouseholdSize } from '@/components/onboarding/step-household-size'
 
 import { useOnboardingWizard } from '@/hooks/use-onboarding-wizard'
 
+import { ONBOARDING_STEP_COUNT } from '@/constants/onboarding'
 import { onboardingTexts } from '@/constants/texts/onboarding'
-
-const STEP_COUNT = onboardingTexts.stepLabels.length
 
 export const OnboardingWizard = () => {
     const {
@@ -34,7 +33,7 @@ export const OnboardingWizard = () => {
             <OnboardingHeader onSkipAll={skipAll}/>
             <OnboardingProgress
                 step={step}
-                stepCount={STEP_COUNT}
+                stepCount={ONBOARDING_STEP_COUNT}
                 stepLabel={onboardingTexts.stepLabels[step]}
             />
             <div className={'mx-auto flex w-full max-w-140 flex-1 flex-col justify-center gap-6 px-6 py-8'}>

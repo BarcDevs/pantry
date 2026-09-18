@@ -4,17 +4,14 @@ import {
     TooltipTrigger
 } from '@/components/ui/tooltip'
 
-import { EXPIRY_SOON_THRESHOLD_DAYS, type ExpiryStatus } from '@/lib/pantry/expiry-status'
+import type { ExpiryStatus } from '@/lib/pantry/expiry-status'
 import { cn } from '@/lib/utils'
 
+import {
+    EXPIRY_SOON_THRESHOLD_DAYS,
+    EXPIRY_TONE_CLASSES
+} from '@/constants/pantry'
 import { pantryTexts } from '@/constants/texts/pantry'
-
-const TONE_CLASSES = {
-    none: 'bg-track text-ink-3',
-    green: 'bg-status-green-bg text-status-green-fg',
-    amber: 'bg-status-amber-bg text-status-amber-fg',
-    red: 'bg-status-red-bg text-status-red-fg'
-} as const
 
 const daysLabel = (status: ExpiryStatus) => {
     if (status.daysLeft === null) return pantryTexts.noExpiryLabel
@@ -32,7 +29,7 @@ const daysTooltip = (status: ExpiryStatus) => (
 
 export const PantryExpiryChip = ({ status }: { status: ExpiryStatus }) => {
     const chip = (
-        <span className={cn('rounded-full px-2.5 py-1 text-caption font-bold', TONE_CLASSES[status.tone])}>
+        <span className={cn('rounded-full px-2.5 py-1 text-caption font-bold', EXPIRY_TONE_CLASSES[status.tone])}>
             {daysLabel(status)}
         </span>
     )
