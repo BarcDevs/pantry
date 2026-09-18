@@ -7,7 +7,7 @@ import { SettingsCookingLevelField } from '@/components/settings/settings-cookin
 import { SettingsDietaryPreferencesField } from '@/components/settings/settings-dietary-preferences-field'
 import { SettingsHouseholdSizeField } from '@/components/settings/settings-household-size-field'
 import { SettingsProfileSection } from '@/components/settings/settings-profile-section'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { FormError } from '@/components/shared/form/FormError'
 import { Form } from '@/components/ui/form'
 
@@ -57,7 +57,7 @@ export const SettingsView = ({ user }: SettingsViewProps) => {
                     </div>
                 </div>
                 <FormError errors={form.formState.errors}/>
-                <Button
+                <PrimaryButton
                     type={'submit'}
                     disabled={isSubmitting}
                     className={'w-full'}
@@ -65,7 +65,7 @@ export const SettingsView = ({ user }: SettingsViewProps) => {
                     {isSubmitting
                         ? settingsTexts.submitting
                         : settingsTexts.submit}
-                </Button>
+                </PrimaryButton>
                 <LogoutButton/>
             </form>
         </Form>

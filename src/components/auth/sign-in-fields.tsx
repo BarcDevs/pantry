@@ -5,7 +5,7 @@ import Link from 'next/link'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { PasswordInput } from '@/components/auth/password-input'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { LtrInput } from '@/components/shared/LtrInput'
@@ -56,13 +56,13 @@ export const SignInFields = ({
                 {authTexts.forgotPassword}
             </Link>
             <FormError errors={form.formState.errors}/>
-            <Button
+            <PrimaryButton
                 type={'submit'}
                 disabled={isSubmitting}
                 className={'w-full'}
             >
                 {authTexts.signInBtn}
-            </Button>
+            </PrimaryButton>
         </form>
     </Form>
 )

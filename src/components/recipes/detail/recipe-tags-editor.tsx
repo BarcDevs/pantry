@@ -4,7 +4,8 @@ import { useState } from 'react'
 
 import { XIcon } from 'lucide-react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { IconButton } from '@/components/shared/buttons/IconButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 import { Input } from '@/components/shared/Input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -44,14 +45,13 @@ export const RecipeTagsEditor = ({
                         className={'flex items-center gap-1.5 rounded-full bg-border-3 px-3 py-1.5 text-caption font-semibold text-ink-2'}
                     >
                         {tag}
-                        <Button
-                            variant={'ghost'}
+                        <IconButton
                             aria-label={tag}
                             className={'size-auto p-0.5 text-ink-3'}
                             onClick={() => removeTag(tag)}
                         >
                             <XIcon size={13}/>
-                        </Button>
+                        </IconButton>
                     </span>
                 ))}
             </div>
@@ -67,12 +67,9 @@ export const RecipeTagsEditor = ({
                     }}
                     placeholder={texts.tagsPlaceholder}
                 />
-                <Button
-                    variant={'outline'}
-                    onClick={addTag}
-                >
+                <SecondaryButton onClick={addTag}>
                     {'+'}
-                </Button>
+                </SecondaryButton>
             </div>
         </div>
     )

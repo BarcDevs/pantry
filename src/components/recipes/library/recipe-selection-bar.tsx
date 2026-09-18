@@ -1,6 +1,7 @@
 import { Trash2Icon } from 'lucide-react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { DestructiveButton } from '@/components/shared/buttons/DestructiveButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -23,29 +24,24 @@ export const RecipeSelectionBar = ({
                 {recipesTexts.library.selectedCount(selectedCount)}
             </span>
             <div className={'flex items-center gap-2'}>
-                <Button
-                    variant={'outline'}
-                    onClick={onToggleSelectMode}
-                >
+                <SecondaryButton onClick={onToggleSelectMode}>
                     {recipesTexts.library.cancelSelect}
-                </Button>
-                <Button
-                    variant={'destructive'}
+                </SecondaryButton>
+                <DestructiveButton
                     disabled={selectedCount === 0}
                     onClick={onRequestDelete}
                 >
                     <Trash2Icon size={16}/>
                     {recipesTexts.library.deleteSelected}
-                </Button>
+                </DestructiveButton>
             </div>
         </div>
     ) : (
-        <Button
-            variant={'outline'}
+        <SecondaryButton
             onClick={onToggleSelectMode}
             className={'mb-4.5'}
         >
             {recipesTexts.library.selectButton}
-        </Button>
+        </SecondaryButton>
     )
 )

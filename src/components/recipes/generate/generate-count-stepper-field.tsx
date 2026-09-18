@@ -6,7 +6,7 @@ import type {
 
 import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
-import { Button } from '@/components/shared/buttons/Button'
+import { IconButton } from '@/components/shared/buttons/IconButton'
 import {
     FormField,
     FormItem,
@@ -37,15 +37,13 @@ export const GenerateCountStepperField = <T extends FieldValues>({
                     {label}
                 </FormLabel>
                 <div className={'flex w-fit items-center gap-4'}>
-                    <Button
-                        variant={'ghost'}
-                        size={'icon'}
-                        className={'rounded-full border border-border bg-canvas'}
+                    <IconButton
+                        className={'border border-border bg-canvas'}
                         disabled={(field.value as number) <= min}
                         onClick={() => field.onChange((field.value as number) - 1)}
                     >
                         <MinusIcon/>
-                    </Button>
+                    </IconButton>
                     <div className={'flex flex-col items-center gap-1'}>
                         <span className={'font-display text-title font-bold text-ink'}>
                             {field.value as number}
@@ -54,14 +52,12 @@ export const GenerateCountStepperField = <T extends FieldValues>({
                             {unitLabel}
                         </span>
                     </div>
-                    <Button
-                        variant={'ghost'}
-                        size={'icon'}
-                        className={'rounded-full bg-green text-surface'}
+                    <IconButton
+                        className={'bg-green text-surface'}
                         onClick={() => field.onChange((field.value as number) + 1)}
                     >
                         <PlusIcon/>
-                    </Button>
+                    </IconButton>
                 </div>
             </FormItem>
         )}

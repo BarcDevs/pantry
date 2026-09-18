@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { Input } from '@/components/shared/Input'
 
 import { routes } from '@/constants/routes'
@@ -32,14 +32,14 @@ export const ReceiptUrlForm = ({
             onChange={(e) => onUrlChange(e.target.value)}
             className={'text-left'}
         />
-        <Button
+        <PrimaryButton
             disabled={isSubmitting || url.trim().length === 0}
             onClick={onSubmit}
         >
             {isSubmitting
                 ? pantryTexts.receiptReview.scanning
                 : pantryTexts.receiptReview.urlSubmit}
-        </Button>
+        </PrimaryButton>
         {error && (
             <div className={'flex flex-col gap-2 text-label text-status-red-fg'}>
                 <span>{error}</span>

@@ -1,11 +1,12 @@
 import type { SelectableOptionProps } from '@/types/shared'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { ChipButton } from '@/components/shared/buttons/ChipButton'
+import { SurfaceButton } from '@/components/shared/buttons/SurfaceButton'
 
 import { cn } from '@/lib/utils'
 
-const cardClass = 'h-auto w-full justify-start gap-3.5 rounded-lg border-2 px-4 py-4 text-start'
-const chipClass = 'h-auto gap-2 rounded-full border px-4 py-2.75 text-label font-weight-label shadow-chip'
+const cardClass = 'gap-3.5 rounded-lg border-2 px-4 py-4'
+const chipClass = 'text-label font-weight-label shadow-chip'
 
 const CardContent = ({
     emoji,
@@ -55,29 +56,36 @@ export const SelectableOption = ({
     isSelected,
     onSelect
 }: SelectableOptionProps) => (
-    <Button
-        variant={'ghost'}
-        aria-pressed={isSelected}
-        onClick={onSelect}
-        className={cn(
-            variant === 'card' ? cardClass : chipClass,
-            variant === 'card'
-                ? (isSelected ? 'border-green bg-green/10' : 'border-border bg-surface')
-                : (isSelected ? 'border-green bg-green/10 text-ink-green' : 'border-border text-ink-2')
-        )}
-    >
-        {variant === 'card' ? (
+    variant === 'card' ? (
+        <SurfaceButton
+            aria-pressed={isSelected}
+            onClick={onSelect}
+            className={cn(
+                cardClass,
+                isSelected ? 'border-green bg-green/10' : 'border-border bg-surface'
+            )}
+        >
             <CardContent
                 emoji={emoji}
                 label={label}
                 description={description}
                 isSelected={isSelected}
             />
-        ) : (
+        </SurfaceButton>
+    ) : (
+        <ChipButton
+            isSelected={isSelected}
+            aria-pressed={isSelected}
+            onClick={onSelect}
+            className={cn(
+                chipClass,
+                isSelected ? 'border-green bg-green/10 text-ink-green' : 'border-border text-ink-2'
+            )}
+        >
             <ChipContent
                 emoji={emoji}
                 label={label}
             />
-        )}
-    </Button>
+        </ChipButton>
+    )
 )

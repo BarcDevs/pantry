@@ -16,7 +16,8 @@ import type {
 import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
 import { ReceiptRowEditDialog } from '@/components/pantry/receipt-row-edit-dialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { IconButton } from '@/components/shared/buttons/IconButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 import { Input } from '@/components/shared/Input'
 import {
     Select,
@@ -97,26 +98,23 @@ export const ReceiptReviewRow = ({
                     </span>
                 )}
             </span>
-            <Button
-                variant={'outline'}
+            <SecondaryButton
                 size={'icon'}
                 onClick={() => setIsEditOpen(true)}
             >
                 <PencilIcon size={16}/>
-            </Button>
+            </SecondaryButton>
             <div className={'flex shrink-0 items-center overflow-hidden rounded-lg border border-border'}>
-                <Button
-                    variant={'ghost'}
-                    size={'icon'}
+                <IconButton
                     disabled={row.quantity <= step}
                     onClick={() => onQuantityChange(
                         row.id,
                         Math.round((row.quantity - step) * 100) / 100
                     )}
-                    className={'cursor-pointer rounded-none text-green'}
+                    className={'rounded-none text-green'}
                 >
                     <MinusIcon size={16}/>
-                </Button>
+                </IconButton>
                 <Input
                     type={'number'}
                     value={row.quantity}
@@ -127,17 +125,15 @@ export const ReceiptReviewRow = ({
                     )}
                     className={'h-9 w-14 shrink-0 border-none text-center shadow-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'}
                 />
-                <Button
-                    variant={'ghost'}
-                    size={'icon'}
+                <IconButton
                     onClick={() => onQuantityChange(
                         row.id,
                         Math.round((row.quantity + step) * 100) / 100
                     )}
-                    className={'cursor-pointer rounded-none text-green'}
+                    className={'rounded-none text-green'}
                 >
                     <PlusIcon size={16}/>
-                </Button>
+                </IconButton>
             </div>
             <Select
                 value={row.unit}
@@ -160,13 +156,12 @@ export const ReceiptReviewRow = ({
                     ))}
                 </SelectContent>
             </Select>
-            <Button
-                variant={'outline'}
+            <SecondaryButton
                 size={'icon'}
                 onClick={() => onRemove(row.id)}
             >
                 <XIcon size={16}/>
-            </Button>
+            </SecondaryButton>
             {isEditOpen && (
                 <ReceiptRowEditDialog
                     row={row}

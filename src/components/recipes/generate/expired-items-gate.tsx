@@ -1,8 +1,8 @@
 import type { PantryItem }
     from '@/types/pantry-item'
 
-import { Button }
-    from '@/components/shared/buttons/Button'
+import { SecondaryButton }
+    from '@/components/shared/buttons/SecondaryButton'
 
 import { recipesTexts }
     from '@/constants/texts/recipes'
@@ -29,20 +29,18 @@ export const ExpiredItemsGate = ({
             {recipesTexts.generate.expiredGateDescription}
         </p>
         <div className={'flex gap-2'}>
-            <Button
-                variant={'ghost'}
+            <SecondaryButton
                 onClick={onRemoveExpired}
-                className={'flex-1 rounded-md border border-border-2 bg-surface shadow-card'}
+                className={'flex-1 rounded-md border-border-2 bg-surface shadow-card'}
             >
                 {recipesTexts.generate.expiredGateRemove}
-            </Button>
-            <Button
-                variant={'ghost'}
+            </SecondaryButton>
+            <SecondaryButton
                 onClick={onContinueAnyway}
-                className={'flex-1 rounded-md border border-border-2 bg-surface shadow-card'}
+                className={'flex-1 rounded-md border-border-2 bg-surface shadow-card'}
             >
                 {recipesTexts.generate.expiredGateContinue}
-            </Button>
+            </SecondaryButton>
         </div>
     </div>
 )

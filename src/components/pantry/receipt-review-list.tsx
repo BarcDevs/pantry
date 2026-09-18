@@ -4,7 +4,8 @@ import type {
 } from '@/types/receipt-review-row'
 
 import { ReceiptReviewRow } from '@/components/pantry/receipt-review-row'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { TextButton } from '@/components/shared/buttons/TextButton'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -41,19 +42,19 @@ export const ReceiptReviewList = ({
                     ))}
                 </div>
             )}
-        <Button
+        <PrimaryButton
             disabled={isSubmitting || !rows.some((row) => row.included)}
             onClick={onConfirm}
             className={'w-full'}
         >
             {pantryTexts.receiptReview.confirmButton}
-        </Button>
-        <Button
-            variant={'ghost'}
+        </PrimaryButton>
+        <TextButton
+            tone={'ink'}
             onClick={onCancel}
-            className={'w-full'}
+            className={'w-full justify-center'}
         >
             {pantryTexts.receiptReview.cancelButton}
-        </Button>
+        </TextButton>
     </div>
 )

@@ -3,7 +3,8 @@
 import type { RecipeDoc } from '@/types/recipe'
 
 import { RecipeFavoriteButton } from '@/components/recipes/shared/recipe-favorite-button'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -34,8 +35,7 @@ export const RecipeResultActions = ({
                     onToggle={onToggleFavorite}
                     className={'flex-1'}
                 />
-                <Button
-                    variant={'outline'}
+                <SecondaryButton
                     onClick={onSave}
                     disabled={isSaving || isSaved}
                     className={'flex-1'}
@@ -45,15 +45,15 @@ export const RecipeResultActions = ({
                         : isSaving
                             ? texts.saving
                             : texts.save}
-                </Button>
+                </SecondaryButton>
             </div>
-            <Button
+            <PrimaryButton
                 onClick={onStartCooking}
                 disabled={isSaving}
                 className={'w-full'}
             >
                 {texts.startCooking}
-            </Button>
+            </PrimaryButton>
         </div>
     )
 }

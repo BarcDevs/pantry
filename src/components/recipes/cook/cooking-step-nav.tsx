@@ -1,4 +1,5 @@
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -16,19 +17,18 @@ export const CookingStepNav = ({
     onNext
 }: CookingStepNavProps) => (
     <div className={'mt-9 flex gap-3'}>
-        <Button
-            variant={'outline'}
+        <SecondaryButton
             onClick={onPrev}
             disabled={stepIndex === 0}
             className={'flex-1 border-surface/25 bg-transparent text-surface'}
         >
             {recipesTexts.cook.previous}
-        </Button>
-        <Button
+        </SecondaryButton>
+        <PrimaryButton
             onClick={onNext}
             className={'flex-[2] bg-ember text-surface'}
         >
             {isLastStep ? recipesTexts.cook.finish : recipesTexts.cook.next}
-        </Button>
+        </PrimaryButton>
     </div>
 )

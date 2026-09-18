@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/buttons/Button'
+import { LinkButton } from '@/components/shared/buttons/LinkButton'
 
 import { commonTexts } from '@/constants/texts/common'
 import { onboardingTexts } from '@/constants/texts/onboarding'
@@ -14,12 +14,11 @@ export const OnboardingHeader = ({
         <span className={'font-display text-heading font-weight-heading text-ink'}>
             {commonTexts.appName}
         </span>
-        <Button
-            variant={'ghost'}
+        <LinkButton
             onClick={onSkipAll}
-            className={'h-auto p-0 text-label font-weight-label text-ink-3 shadow-none'}
+            className={'text-label font-weight-label'}
         >
             {onboardingTexts.skipAll}
-        </Button>
+        </LinkButton>
     </div>
 )

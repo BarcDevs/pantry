@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { routes } from '@/constants/routes'
 import { authTexts } from '@/constants/texts/auth'
@@ -21,17 +22,16 @@ export const AuthHeader = () => {
                 </Link>
             ) : (
                 <>
-                    <Button asChild
-                            variant={'outline'}>
+                    <SecondaryButton asChild>
                         <Link href={routes.signIn}>
                             {authTexts.signInBtn}
                         </Link>
-                    </Button>
-                    <Button asChild>
+                    </SecondaryButton>
+                    <PrimaryButton asChild>
                         <Link href={routes.signUp}>
                             {authTexts.signUpBtn}
                         </Link>
-                    </Button>
+                    </PrimaryButton>
                 </>
             )}
         </header>

@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/buttons/Button'
+import { SurfaceButton } from '@/components/shared/buttons/SurfaceButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -19,10 +19,9 @@ export const PantrySelectionSummary = ({
         : texts.pantrySelectionPartial(selectedCount, totalCount)
 
     return (
-        <Button
-            variant={'ghost'}
+        <SurfaceButton
             onClick={onEdit}
-            className={'flex h-auto w-full items-center justify-between rounded-lg border border-border-2 bg-surface p-4 text-start'}
+            className={'flex items-center justify-between rounded-lg border border-border-2 bg-surface p-4'}
         >
             <div className={'flex flex-col gap-0.5'}>
                 <span className={'font-bold text-body text-ink'}>
@@ -35,6 +34,6 @@ export const PantrySelectionSummary = ({
             <span className={'font-semibold text-body text-green'}>
                 {texts.pantrySelectionEdit}
             </span>
-        </Button>
+        </SurfaceButton>
     )
 }

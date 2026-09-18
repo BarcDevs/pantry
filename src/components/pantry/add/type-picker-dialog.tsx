@@ -2,7 +2,8 @@ import type { FoodType } from '@/types/enums'
 import { FOOD_TYPES } from '@/types/enums'
 
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { ChipButton } from '@/components/shared/buttons/ChipButton'
+import { TextButton } from '@/components/shared/buttons/TextButton'
 
 import { cn } from '@/lib/utils'
 
@@ -31,38 +32,36 @@ export const TypePickerDialog = ({
     >
         <div className={'flex flex-wrap gap-2'}>
             {FOOD_TYPES.map((type) => (
-                <Button
+                <ChipButton
                     key={type}
-                    variant={'ghost'}
+                    isSelected={value === type}
                     onClick={() => {
                         onSelect(type)
                         onOpenChange(false)
                     }}
                     className={cn(
-                        'h-auto gap-1.5 rounded-full border px-3.5 py-2 text-label',
-                        value === type
-                            ? 'border-green bg-soft-green-bg text-green'
-                            : 'border-border-2 bg-surface text-ink-2'
+                        'border-border-2',
+                        value === type && 'border-green bg-soft-green-bg text-green'
                     )}
                 >
                     {pantryTexts.foodTypeLabels[type]}
                     <span>
                         {foodTypeEmoji[type]}
                     </span>
-                </Button>
+                </ChipButton>
             ))}
         </div>
         {onSkip && (
-            <Button
-                variant={'ghost'}
+            <TextButton
+                tone={'muted'}
                 onClick={() => {
                     onSkip()
                     onOpenChange(false)
                 }}
-                className={'h-auto w-full font-bold text-body text-ink-3'}
+                className={'w-full text-body'}
             >
                 {pantryTexts.addForm.typePickerSkip}
-            </Button>
+            </TextButton>
         )}
     </AppDialog>
 )

@@ -8,7 +8,7 @@ import type { PantryUnit } from '@/types/enums'
 
 import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
-import { Button } from '@/components/shared/buttons/Button'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 import { Input } from '@/components/shared/Input'
 import {
     FormField,
@@ -47,8 +47,7 @@ export const QuantityField = <T extends FieldValues>({
                             {pantryTexts.addForm.quantityLabel}
                         </FormLabel>
                         <div className={'flex items-center gap-1.5'}>
-                            <Button
-                                variant={'outline'}
+                            <SecondaryButton
                                 size={'icon'}
                                 disabled={value <= step}
                                 onClick={() => field.onChange(
@@ -56,7 +55,7 @@ export const QuantityField = <T extends FieldValues>({
                                 )}
                             >
                                 <MinusIcon/>
-                            </Button>
+                            </SecondaryButton>
                             <Input
                                 {...field}
                                 type={'number'}
@@ -68,15 +67,14 @@ export const QuantityField = <T extends FieldValues>({
                                     field.onChange(Number.isNaN(next) ? 0 : next)
                                 }}
                             />
-                            <Button
-                                variant={'outline'}
+                            <SecondaryButton
                                 size={'icon'}
                                 onClick={() => field.onChange(
                                     Math.round((value + step) * 100) / 100
                                 )}
                             >
                                 <PlusIcon/>
-                            </Button>
+                            </SecondaryButton>
                         </div>
                         <FormMessage/>
                     </FormItem>

@@ -4,7 +4,7 @@ import type { PantryItem } from '@/types/pantry-item'
 
 import { PantrySelectRow } from '@/components/recipes/generate/pantry-select-row'
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { TextButton } from '@/components/shared/buttons/TextButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -57,12 +57,12 @@ export const PantrySelectSheet = ({
                     />
                 ))}
             </div>
-            <Button
+            <PrimaryButton
                 onClick={() => onOpenChange(false)}
                 className={'mt-4.5'}
             >
                 {texts.confirm}
-            </Button>
+            </PrimaryButton>
         </AppDialog>
     )
 }

@@ -5,7 +5,8 @@ import {
 import type { MouseEvent } from 'react'
 
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { DestructiveButton } from '@/components/shared/buttons/DestructiveButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 type ConfirmationDialogProps = {
     open: boolean
@@ -73,20 +74,18 @@ export const ConfirmationDialog = ({
             contentClassName={'max-w-sm'}
             footer={(
                 <>
-                    <Button
-                        variant={'outline'}
+                    <SecondaryButton
                         disabled={isLoading}
                         onClick={handleCancel}
                     >
                         {cancelLabel}
-                    </Button>
-                    <Button
-                        variant={'destructive'}
+                    </SecondaryButton>
+                    <DestructiveButton
                         disabled={isLoading}
                         onClick={handleConfirm}
                     >
                         {label}
-                    </Button>
+                    </DestructiveButton>
                 </>
             )}
         />

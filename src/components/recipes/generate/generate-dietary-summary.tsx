@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { GenerateDietaryDialog }
     from '@/components/recipes/generate/generate-dietary-dialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { SurfaceButton } from '@/components/shared/buttons/SurfaceButton'
 
 import { onboardingTexts } from '@/constants/texts/onboarding'
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -31,10 +31,9 @@ export const GenerateDietarySummary = ({
 
     return (
         <>
-            <Button
-                variant={'ghost'}
+            <SurfaceButton
                 onClick={() => setIsOpen(true)}
-                className={'flex h-auto w-full items-center justify-between rounded-lg border border-border-2 bg-surface p-4 font-normal'}
+                className={'flex items-center justify-between rounded-lg border border-border-2 bg-surface p-4'}
             >
                 <div className={'flex flex-col items-start gap-1'}>
                     <span className={'font-bold text-body text-ink'}>
@@ -47,7 +46,7 @@ export const GenerateDietarySummary = ({
                 <span className={'font-semibold text-body text-green'}>
                     {texts.dietaryPreferencesEdit}
                 </span>
-            </Button>
+            </SurfaceButton>
             <GenerateDietaryDialog
                 open={isOpen}
                 onOpenChange={setIsOpen}

@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { TextButton } from '@/components/shared/buttons/TextButton'
 import { Input } from '@/components/shared/Input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -40,21 +41,21 @@ export const RecipeImageUrlField = ({
                     placeholder={texts.imageUrlPlaceholder}
                     className={'min-w-50 flex-1'}
                 />
-                <Button onClick={() => onChange(draft)}>
+                <PrimaryButton onClick={() => onChange(draft)}>
                     {texts.applyImage}
-                </Button>
+                </PrimaryButton>
             </div>
             {imageUrl && (
-                <Button
-                    variant={'ghost'}
+                <TextButton
+                    tone={'red'}
                     onClick={() => {
                         setDraft('')
                         onChange('')
                     }}
-                    className={'mt-2.75 text-status-red-fg'}
+                    className={'mt-2.75'}
                 >
                     {texts.removeImage}
-                </Button>
+                </TextButton>
             )}
         </div>
     )

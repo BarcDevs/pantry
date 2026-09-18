@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 
 import { GoogleIcon } from '@/components/icons/google-icon'
-import { Button } from '@/components/shared/buttons/Button'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { routes } from '@/constants/routes'
 
@@ -27,14 +27,13 @@ export const GoogleAuthButton = ({ label }: GoogleAuthButtonProps) => {
     }
 
     return (
-        <Button
-            variant={'outline'}
+        <SecondaryButton
             disabled={isRedirecting}
             className={'w-full justify-center gap-2.5 border-border font-semibold'}
             onClick={handleClick}
         >
             <GoogleIcon/>
             {label}
-        </Button>
+        </SecondaryButton>
     )
 }

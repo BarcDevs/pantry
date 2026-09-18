@@ -6,7 +6,7 @@ import { ImportRecipeReview } from '@/components/recipes/import/import-recipe-re
 import { ImportSourceTabs } from '@/components/recipes/import/import-source-tabs'
 import { ImportTextForm } from '@/components/recipes/import/import-text-form'
 import { ImportUrlForm } from '@/components/recipes/import/import-url-form'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { PageHeader } from '@/components/shared/PageHeader'
 
 import { useRecipeImport } from '@/hooks/use-recipe-import'
@@ -78,8 +78,7 @@ const ImportRecipePage = () => {
                                     />
                                 )}
                         </div>
-                        <Button
-                            type={'button'}
+                        <PrimaryButton
                             disabled={isSubmitDisabled}
                             onClick={handleSubmit}
                             className={'w-full'}
@@ -87,7 +86,7 @@ const ImportRecipePage = () => {
                             {isImporting
                                 ? recipesTexts.import.importing
                                 : recipesTexts.import.submit}
-                        </Button>
+                        </PrimaryButton>
                         {error && (
                             <p className={'mt-3 text-label text-status-red-fg'}>
                                 {error}

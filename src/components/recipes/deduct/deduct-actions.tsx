@@ -1,4 +1,5 @@
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { TextButton } from '@/components/shared/buttons/TextButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -14,20 +15,20 @@ export const DeductActions = ({
     onSkip
 }: DeductActionsProps) => (
     <div>
-        <Button
+        <PrimaryButton
             onClick={onConfirm}
             disabled={isSubmitting}
             className={'w-full cursor-pointer bg-green text-body font-bold text-surface hover:bg-green/90'}
         >
             {recipesTexts.deduct.confirm}
-        </Button>
-        <Button
-            variant={'ghost'}
+        </PrimaryButton>
+        <TextButton
+            tone={'muted'}
             onClick={onSkip}
             disabled={isSubmitting}
-            className={'w-full cursor-pointer text-body font-semibold text-ink-3'}
+            className={'w-full font-semibold text-body'}
         >
             {recipesTexts.deduct.skip}
-        </Button>
+        </TextButton>
     </div>
 )

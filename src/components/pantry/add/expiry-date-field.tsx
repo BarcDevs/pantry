@@ -8,7 +8,7 @@ import type {
     Path
 } from 'react-hook-form'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 import { Calendar } from '@/components/ui/calendar'
 import {
     FormField,
@@ -56,8 +56,7 @@ export const ExpiryDateField = <T extends FieldValues>({
                             onOpenChange={setIsOpen}
                         >
                             <PopoverTrigger asChild>
-                                <Button
-                                    variant={'outline'}
+                                <SecondaryButton
                                     className={cn(
                                         'w-full justify-start font-normal',
                                         !selectedDate && 'text-ink-4'
@@ -67,7 +66,7 @@ export const ExpiryDateField = <T extends FieldValues>({
                                     {selectedDate
                                         ? format(selectedDate, 'dd/MM/yyyy')
                                         : pantryTexts.addForm.expiryPlaceholder}
-                                </Button>
+                                </SecondaryButton>
                             </PopoverTrigger>
                             <PopoverContent
                                 align={'start'}

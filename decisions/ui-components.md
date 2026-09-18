@@ -30,9 +30,8 @@ future style change for a given button "type" is one edit, not N edits across ev
 used the inline pattern - the exact scattered-override problem that caused the shadow bug.
 
 **How to apply:** when adding or touching UI with a button, check `src/components/shared/buttons/`
-for an existing purpose-made component first. Only `TextButton` exists as of this decision -
-`outline`/`ghost`/`destructive`/default CTA usages elsewhere in the app still reach for `Button`
-directly and are pending the same treatment; migrate one you touch to its own purpose-made button
-rather than leaving it bare, but don't treat that backlog as license to add `Button` usages of your
-own. See `CORE_RULES.md`, `src/components/shared/SHARED_COMPONENTS.md`, and `GOTCHAS.md` for the
+for an existing purpose-made component first. All existing call sites were migrated (follow-up
+round, 18/09/2026) onto `PrimaryButton`, `SecondaryButton`, `DestructiveButton`, `TextButton`,
+`IconButton`, `SurfaceButton`, `ChipButton`, `LinkButton` and `ToggleTextButton` - a bare `Button`
+import outside `shared/buttons/` is a regression. See `CORE_RULES.md`, `src/components/shared/SHARED_COMPONENTS.md`, and `GOTCHAS.md` for the
 full rule text.

@@ -1,4 +1,5 @@
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { onboardingTexts } from '@/constants/texts/onboarding'
 
@@ -21,27 +22,25 @@ export const OnboardingFooter = ({
 }: OnboardingFooterProps) => (
     <div className={'mx-auto flex w-full max-w-140 items-center gap-3 px-6 py-7'}>
         {showBack && (
-            <Button
-                variant={'outline'}
+            <SecondaryButton
                 disabled={disabled}
                 onClick={onBack}
             >
                 {onboardingTexts.back}
-            </Button>
+            </SecondaryButton>
         )}
-        <Button
-            variant={'ghost'}
+        <SecondaryButton
             disabled={disabled}
             onClick={onSkip}
         >
             {onboardingTexts.skip}
-        </Button>
-        <Button
+        </SecondaryButton>
+        <PrimaryButton
             disabled={disabled}
             onClick={onNext}
             className={'flex-1'}
         >
             {isLastStep ? onboardingTexts.finish : onboardingTexts.next}
-        </Button>
+        </PrimaryButton>
     </div>
 )

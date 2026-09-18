@@ -1,9 +1,7 @@
 import type { SetState } from '@/types/react'
 import type { RecipeLibraryFilter } from '@/types/recipe'
 
-import { Button } from '@/components/shared/buttons/Button'
-
-import { cn } from '@/lib/utils'
+import { ChipButton } from '@/components/shared/buttons/ChipButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -21,27 +19,20 @@ const tabs: Array<{
     { key: 'favorites', label: recipesTexts.library.filterFavorites }
 ]
 
-const chipClassName = (isActive: boolean) => cn(
-    'h-auto rounded-full border px-3.5 py-2 text-label font-semibold',
-    isActive
-        ? 'border-ink bg-ink text-white'
-        : 'border-border bg-surface text-ink-2'
-)
-
 export const RecipeFilterTabs = ({
     value,
     onChange
 }: RecipeFilterTabsProps) => (
     <div className={'flex flex-wrap gap-2'}>
         {tabs.map((tab) => (
-            <Button
+            <ChipButton
                 key={tab.key}
-                variant={'ghost'}
+                isSelected={value === tab.key}
                 onClick={() => onChange(tab.key)}
-                className={chipClassName(value === tab.key)}
+                className={value === tab.key ? 'border-ink bg-ink text-white' : ''}
             >
                 {tab.label}
-            </Button>
+            </ChipButton>
         ))}
     </div>
 )

@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -13,11 +13,11 @@ export const RateFinishButton = ({
     isSubmitting,
     onClick
 }: RateFinishButtonProps) => (
-    <Button
+    <PrimaryButton
         onClick={onClick}
         disabled={isSubmitting}
         className={'w-full cursor-pointer bg-green text-body font-bold text-surface hover:bg-green/90'}
     >
         {rating > 0 ? recipesTexts.rate.finishWithRating : recipesTexts.rate.finishWithoutRating}
-    </Button>
+    </PrimaryButton>
 )

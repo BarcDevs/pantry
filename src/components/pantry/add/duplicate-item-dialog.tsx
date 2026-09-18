@@ -1,5 +1,6 @@
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -23,15 +24,12 @@ export const DuplicateItemDialog = ({
         description={pantryTexts.duplicateDialog.description}
         footer={(
             <>
-                <Button
-                    variant={'outline'}
-                    onClick={onKeepSeparate}
-                >
+                <SecondaryButton onClick={onKeepSeparate}>
                     {pantryTexts.duplicateDialog.keepSeparate}
-                </Button>
-                <Button onClick={onMerge}>
+                </SecondaryButton>
+                <PrimaryButton onClick={onMerge}>
                     {pantryTexts.duplicateDialog.merge}
-                </Button>
+                </PrimaryButton>
             </>
         )}
     />

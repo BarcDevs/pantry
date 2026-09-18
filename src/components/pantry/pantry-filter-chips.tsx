@@ -3,9 +3,7 @@ import { STORAGE_LOCATIONS } from '@/types/enums'
 import type { SetState } from '@/types/react'
 
 import { PantryTypeFilter } from '@/components/pantry/pantry-type-filter'
-import { Button } from '@/components/shared/buttons/Button'
-
-import { cn } from '@/lib/utils'
+import { ChipButton } from '@/components/shared/buttons/ChipButton'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -18,13 +16,6 @@ type PantryFilterChipsProps = {
     onTypeFilterChange: SetState<FoodType[]>
 }
 
-const chipClassName = (isActive: boolean) => cn(
-    'h-auto rounded-full border px-3.5 py-2 text-label font-semibold',
-    isActive
-        ? 'border-green bg-green text-white'
-        : 'border-border bg-surface text-ink-2'
-)
-
 export const PantryFilterChips = ({
     value,
     onChange,
@@ -32,22 +23,20 @@ export const PantryFilterChips = ({
     onTypeFilterChange
 }: PantryFilterChipsProps) => (
     <div className={'mb-4.5 flex flex-wrap items-center gap-2'}>
-        <Button
-            variant={'ghost'}
+        <ChipButton
+            isSelected={value === 'all'}
             onClick={() => onChange('all')}
-            className={chipClassName(value === 'all')}
         >
             {pantryTexts.filterAll}
-        </Button>
+        </ChipButton>
         {STORAGE_LOCATIONS.map((location) => (
-            <Button
+            <ChipButton
                 key={location}
-                variant={'ghost'}
+                isSelected={value === location}
                 onClick={() => onChange(location)}
-                className={chipClassName(value === location)}
             >
                 {pantryTexts.storageLabels[location]}
-            </Button>
+            </ChipButton>
         ))}
         <PantryTypeFilter
             value={typeFilterValue}

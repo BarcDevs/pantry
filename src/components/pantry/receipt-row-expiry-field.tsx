@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { format, parseISO } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 import { Calendar } from '@/components/ui/calendar'
 import {
     Popover,
@@ -33,8 +33,7 @@ export const ReceiptRowExpiryField = ({
             onOpenChange={setIsOpen}
         >
             <PopoverTrigger asChild>
-                <Button
-                    variant={'outline'}
+                <SecondaryButton
                     className={cn(
                         'w-full justify-start font-normal',
                         !selectedDate && 'text-ink-4'
@@ -44,7 +43,7 @@ export const ReceiptRowExpiryField = ({
                     {selectedDate
                         ? format(selectedDate, 'dd/MM/yyyy')
                         : pantryTexts.addForm.expiryPlaceholder}
-                </Button>
+                </SecondaryButton>
             </PopoverTrigger>
             <PopoverContent
                 align={'start'}

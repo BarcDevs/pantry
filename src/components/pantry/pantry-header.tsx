@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { HistoryIcon } from '@/components/icons/history-icon'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 
 import { routes } from '@/constants/routes'
 import { pantryTexts } from '@/constants/texts/pantry'
@@ -44,14 +44,14 @@ export const PantryHeader = ({
                         <HistoryIcon size={21}/>
                     </div>
                 )}
-            <Button
+            <PrimaryButton
                 asChild
                 className={'h-11 w-fit shrink-0 bg-ember text-surface shadow-button-ember hover:bg-ember/90'}
             >
                 <Link href={routes.generate}>
                     {pantryTexts.generateRecipe}
                 </Link>
-            </Button>
+            </PrimaryButton>
         </div>
     </div>
 )

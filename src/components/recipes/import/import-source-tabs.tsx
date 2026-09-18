@@ -1,4 +1,4 @@
-import { Button } from '@/components/shared/buttons/Button'
+import { ChipButton } from '@/components/shared/buttons/ChipButton'
 
 import { cn } from '@/lib/utils'
 
@@ -10,7 +10,7 @@ type ImportSourceTabsProps = {
 }
 
 const segClass = (active: boolean) => cn(
-    'h-auto flex-1 rounded-md border py-3 shadow-none',
+    'flex-1 rounded-md border py-3',
     active
         ? 'border-2 border-green bg-[#eef5ef] font-bold text-green-deep'
         : 'border-border bg-surface font-medium text-ink-2'
@@ -21,19 +21,19 @@ export const ImportSourceTabs = ({
     onChange
 }: ImportSourceTabsProps) => (
     <div className={'mb-4.5 flex gap-2.25'}>
-        <Button
-            variant={'outline'}
+        <ChipButton
+            isSelected={tab === 'url'}
             onClick={() => onChange('url')}
             className={segClass(tab === 'url')}
         >
             {recipesTexts.import.urlTab}
-        </Button>
-        <Button
-            variant={'outline'}
+        </ChipButton>
+        <ChipButton
+            isSelected={tab === 'text'}
             onClick={() => onChange('text')}
             className={segClass(tab === 'text')}
         >
             {recipesTexts.import.textTab}
-        </Button>
+        </ChipButton>
     </div>
 )

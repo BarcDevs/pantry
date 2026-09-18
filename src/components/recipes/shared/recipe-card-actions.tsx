@@ -1,7 +1,7 @@
 import { Trash2Icon } from 'lucide-react'
 
 import { RecipeHeartToggle } from '@/components/recipes/shared/recipe-heart-toggle'
-import { Button } from '@/components/shared/buttons/Button'
+import { IconButton } from '@/components/shared/buttons/IconButton'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -37,20 +37,19 @@ export const RecipeCardActions = ({
                 onToggle={onToggleFavorite}
                 className={'bg-surface/90'}
             />
-            <Button
-                variant={'ghost'}
+            <IconButton
                 aria-label={recipesTexts.detail.deleteButton}
                 onClick={(e) => {
                     e.preventDefault()
                     onRequestDelete()
                 }}
-                className={'flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-surface/90 p-0'}
+                className={'size-8 bg-surface/90'}
             >
                 <Trash2Icon
                     size={17}
                     className={'stroke-status-red-fg'}
                 />
-            </Button>
+            </IconButton>
         </div>
     )
 )

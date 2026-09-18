@@ -3,7 +3,7 @@ import { CheckIcon } from 'lucide-react'
 import type { PantryItem } from '@/types/pantry-item'
 
 import { PantryExpiryChip } from '@/components/pantry/pantry-expiry-chip'
-import { Button } from '@/components/shared/buttons/Button'
+import { SurfaceButton } from '@/components/shared/buttons/SurfaceButton'
 
 import { getExpiryStatus } from '@/lib/pantry/expiry-status'
 import { getFoodTypeIcon } from '@/lib/pantry/food-type-icon'
@@ -22,11 +22,10 @@ export const PantrySelectRow = ({
     isSelected,
     onToggle
 }: PantrySelectRowProps) => (
-    <Button
-        variant={'ghost'}
+    <SurfaceButton
         onClick={onToggle}
         className={cn(
-            'h-auto w-full items-center justify-start gap-3 rounded-lg border p-3 text-start font-normal',
+            'items-center gap-3 rounded-lg border p-3',
             isSelected
                 ? 'border-soft-green-border bg-soft-green-bg'
                 : 'border-border-2 bg-surface'
@@ -57,5 +56,5 @@ export const PantrySelectRow = ({
             </span>
         </span>
         <PantryExpiryChip status={getExpiryStatus(item.expiryDate)}/>
-    </Button>
+    </SurfaceButton>
 )

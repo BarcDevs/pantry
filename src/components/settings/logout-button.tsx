@@ -2,17 +2,16 @@
 
 import { signOut } from 'next-auth/react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { routes } from '@/constants/routes'
 import { settingsTexts } from '@/constants/texts/settings'
 
 export const LogoutButton = () => (
-    <Button
-        variant={'outline'}
+    <SecondaryButton
         className={'w-full border-warning-border text-warning-fg'}
         onClick={() => signOut({ callbackUrl: routes.landing })}
     >
         {settingsTexts.logout}
-    </Button>
+    </SecondaryButton>
 )

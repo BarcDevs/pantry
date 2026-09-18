@@ -3,7 +3,8 @@
 import type { RecipeDoc } from '@/types/recipe'
 
 import { RecipeFavoriteButton } from '@/components/recipes/shared/recipe-favorite-button'
-import { Button } from '@/components/shared/buttons/Button'
+import { DestructiveButton } from '@/components/shared/buttons/DestructiveButton'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -27,18 +28,15 @@ export const RecipeDetailActions = ({
                 onToggle={onToggleFavorite}
                 className={'shrink-0'}
             />
-            <Button
+            <PrimaryButton
                 onClick={onStartCooking}
                 className={'flex-1'}
             >
                 {recipesTexts.detail.startCooking}
-            </Button>
+            </PrimaryButton>
         </div>
-        <Button
-            variant={'destructive'}
-            onClick={onRequestDelete}
-        >
+        <DestructiveButton onClick={onRequestDelete}>
             {recipesTexts.detail.deleteButton}
-        </Button>
+        </DestructiveButton>
     </div>
 )

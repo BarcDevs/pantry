@@ -3,7 +3,7 @@ import type { RecipeDoc } from '@/types/recipe'
 import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingredients-list'
 import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero'
 import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { Input } from '@/components/shared/Input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -34,13 +34,13 @@ export const ImportRecipeReview = ({
         </div>
         <RecipeIngredientsList ingredients={recipe.ingredients}/>
         <RecipeStepsList steps={recipe.steps}/>
-        <Button
+        <PrimaryButton
             disabled={isSaving}
             onClick={onSave}
         >
             {isSaving
                 ? recipesTexts.import.importing
                 : recipesTexts.import.save}
-        </Button>
+        </PrimaryButton>
     </div>
 )

@@ -1,6 +1,6 @@
 import { TriangleAlertIcon } from 'lucide-react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { cn } from '@/lib/utils'
 
@@ -23,8 +23,7 @@ export const DeductZeroWarning = ({
             {recipesTexts.deduct.zeroWarning}
         </div>
         <div className={'flex gap-2'}>
-            <Button
-                variant={'outline'}
+            <SecondaryButton
                 onClick={onKeep}
                 className={cn(
                     'flex-1 cursor-pointer text-caption font-bold',
@@ -32,9 +31,8 @@ export const DeductZeroWarning = ({
                 )}
             >
                 {recipesTexts.deduct.keepAtZero}
-            </Button>
-            <Button
-                variant={'outline'}
+            </SecondaryButton>
+            <SecondaryButton
                 onClick={onDelete}
                 className={cn(
                     'flex-1 cursor-pointer text-caption font-bold',
@@ -42,7 +40,7 @@ export const DeductZeroWarning = ({
                 )}
             >
                 {recipesTexts.deduct.deleteFromPantry}
-            </Button>
+            </SecondaryButton>
         </div>
     </div>
 )

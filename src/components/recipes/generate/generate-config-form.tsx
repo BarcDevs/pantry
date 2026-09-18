@@ -7,7 +7,7 @@ import { GenerateSourceGroup } from '@/components/recipes/generate/generate-sour
 import { PantrySelectSheet } from '@/components/recipes/generate/pantry-select-sheet'
 import { PantrySelectionSummary } from '@/components/recipes/generate/pantry-selection-summary'
 import { SparsePantryWarning } from '@/components/recipes/generate/sparse-pantry-warning'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { Input } from '@/components/shared/Input'
@@ -83,13 +83,13 @@ export const GenerateConfigForm = ({
                     )}
                 />
                 <FormError errors={form.formState.errors}/>
-                <Button
+                <PrimaryButton
                     type={'submit'}
                     disabled={isSubmitting || isExpiredGateOpen || isLoadingPantry}
                     className={'w-full'}
                 >
                     {isSubmitting ? texts.submitting : texts.submit}
-                </Button>
+                </PrimaryButton>
                 <PantrySelectSheet
                     open={isPantrySheetOpen}
                     onOpenChange={setIsPantrySheetOpen}

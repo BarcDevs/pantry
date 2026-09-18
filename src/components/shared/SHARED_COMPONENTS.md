@@ -29,6 +29,80 @@ Wraps `Button` with `variant={'ghost'} h-auto w-fit p-0 font-bold` plus a `tone`
 <TextButton tone={'red'} onClick={onClearAll}>{label}</TextButton>
 ```
 
+### `PrimaryButton`
+
+Solid CTA - the main/submit action. Wraps `Button` with `variant={'default'}` (this is also `Button`'s own default
+variant, so this component exists purely so call sites never import the base `Button`).
+
+```tsx
+<PrimaryButton type={'submit'} disabled={isSubmitting}>{label}</PrimaryButton>
+```
+
+### `SecondaryButton`
+
+Bordered, non-destructive secondary action (cancel, back, a dialog's non-primary action). Wraps `Button` with
+`variant={'outline'}`.
+
+```tsx
+<SecondaryButton onClick={onCancel}>{label}</SecondaryButton>
+```
+
+### `DestructiveButton`
+
+Confirms a destructive action (delete/remove). Wraps `Button` with `variant={'destructive'}`.
+
+```tsx
+<DestructiveButton onClick={onDelete}>{label}</DestructiveButton>
+```
+
+### `IconButton`
+
+Small icon-only control (chevron nav, close `X`, stepper +/-, favorite toggle). Wraps `Button` with
+`variant={'ghost'}`, `size={'icon'}` by default (pass `size` for `icon-sm`/`icon-lg`/`icon-xs`), `rounded-full`.
+
+```tsx
+<IconButton size={'icon-lg'} onClick={onPlus}><PlusIcon/></IconButton>
+```
+
+### `SurfaceButton`
+
+A block-level clickable card/row surface (e.g. a pantry item card, a tappable summary row) - the whole surface is
+the button, not just a label. Wraps `Button` with `variant={'ghost'}`, `h-auto w-full justify-start text-start
+font-normal` so the button behaves like a block container instead of an inline pill.
+
+```tsx
+<SurfaceButton onClick={onEdit} className={'rounded-lg border p-4'}>{children}</SurfaceButton>
+```
+
+### `ChipButton`
+
+A pill-shaped, selectable filter/option chip. Wraps `Button` with `variant={'ghost'}` and an `isSelected` prop that
+switches the filled/outlined look.
+
+```tsx
+<ChipButton isSelected={value.length > 0} onClick={onToggle}>{label}</ChipButton>
+```
+
+### `LinkButton`
+
+An underlined, inline text link that triggers an action (not a colored action link - see `TextButton` for that).
+Wraps `Button` with `variant={'link'}`.
+
+```tsx
+<LinkButton onClick={onSkipAll}>{label}</LinkButton>
+```
+
+### `ToggleTextButton`
+
+A small, compact ghost toggle whose look flips between an "off" state (dashed amber border, amber text - inviting
+an action) and an "on" state (underlined muted text - action already applied), e.g. `RecipeIngredientRow`'s
+add/remove-adjustment toggles. Wraps `Button` with `variant={'ghost'}`, `size={'xs'}` by default, and an `isActive`
+prop driving the two looks.
+
+```tsx
+<ToggleTextButton isActive={isAdded} onClick={onToggle}>{label}</ToggleTextButton>
+```
+
 If a new recurring button shape shows up (checked against existing usages, not assumed), add another purpose-made
 button here instead of a one-off inline `className` override at the call site.
 

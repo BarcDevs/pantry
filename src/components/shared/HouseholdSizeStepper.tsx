@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { MAX_HOUSEHOLD_SIZE, MIN_HOUSEHOLD_SIZE } from '@/constants/onboarding'
 import { onboardingTexts } from '@/constants/texts/onboarding'
@@ -22,14 +22,13 @@ export const HouseholdSizeStepper = ({
         <div className={'flex flex-col gap-2'}>
             {title}
             <div className={'flex items-center justify-center gap-6.5 rounded-lg border border-border-2 bg-surface px-6 py-7.5'}>
-                <Button
-                    variant={'outline'}
+                <SecondaryButton
                     disabled={size <= MIN_HOUSEHOLD_SIZE}
                     onClick={() => onChange(size - 1)}
                     className={'size-13 shrink-0 rounded-full text-heading'}
                 >
                     −
-                </Button>
+                </SecondaryButton>
                 <div className={'min-w-24 text-center'}>
                     <div className={'font-display text-display font-weight-display text-green'}>
                         {size}
@@ -40,14 +39,13 @@ export const HouseholdSizeStepper = ({
                             : `${size} ${onboardingTexts.householdSizePlural}`}
                     </div>
                 </div>
-                <Button
-                    variant={'outline'}
+                <SecondaryButton
                     disabled={size >= MAX_HOUSEHOLD_SIZE}
                     onClick={() => onChange(size + 1)}
                     className={'size-13 shrink-0 rounded-full text-heading'}
                 >
                     +
-                </Button>
+                </SecondaryButton>
             </div>
         </div>
     )

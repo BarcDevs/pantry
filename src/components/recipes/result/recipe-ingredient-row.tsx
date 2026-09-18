@@ -1,6 +1,6 @@
 import type { RecipeIngredient } from '@/types/recipe'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { ToggleTextButton } from '@/components/shared/buttons/ToggleTextButton'
 
 import { formatQuantity } from '@/lib/recipes/format-quantity'
 import { cn } from '@/lib/utils'
@@ -82,38 +82,24 @@ export const RecipeIngredientRow = ({
             {(hasReplacement || ingredient.optional) && (
                 <div className={'me-4.5 mt-1.5 flex flex-wrap gap-1.5'}>
                     {hasReplacement && onToggleReplacement && (
-                        <Button
-                            variant={'ghost'}
-                            size={'xs'}
+                        <ToggleTextButton
+                            isActive={isReplacementAdded}
                             onClick={onToggleReplacement}
-                            className={cn(
-                                'h-auto shadow-none',
-                                isReplacementAdded
-                                    ? 'text-ink-3 underline'
-                                    : 'border border-dashed border-warning-border text-status-amber-fg'
-                            )}
                         >
                             {isReplacementAdded
                                 ? recipesTexts.result.removeFromAdjustments
                                 : recipesTexts.result.addToAdjustments}
-                        </Button>
+                        </ToggleTextButton>
                     )}
                     {ingredient.optional && onToggleRemoval && (
-                        <Button
-                            variant={'ghost'}
-                            size={'xs'}
+                        <ToggleTextButton
+                            isActive={isRemovalAdded}
                             onClick={onToggleRemoval}
-                            className={cn(
-                                'h-auto shadow-none',
-                                isRemovalAdded
-                                    ? 'text-ink-3 underline'
-                                    : 'border border-dashed border-warning-border text-status-amber-fg'
-                            )}
                         >
                             {isRemovalAdded
                                 ? recipesTexts.result.removeFromAdjustments
                                 : recipesTexts.result.removeIngredientButton}
-                        </Button>
+                        </ToggleTextButton>
                     )}
                 </div>
             )}

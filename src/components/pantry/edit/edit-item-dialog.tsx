@@ -13,7 +13,8 @@ import { DeleteItemDialog }
 import { StorageSuggestionButton }
     from '@/components/pantry/edit/storage-suggestion-button'
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { DestructiveButton } from '@/components/shared/buttons/DestructiveButton'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { FormError } from '@/components/shared/form/FormError'
 import { Form } from '@/components/ui/form'
 
@@ -100,7 +101,7 @@ export const EditItemDialog = ({
                         onChange={(type) => form.setValue('type', type)}
                     />
                     <FormError errors={form.formState.errors}/>
-                    <Button
+                    <PrimaryButton
                         type={'submit'}
                         disabled={isSubmitting}
                         className={'w-full'}
@@ -108,14 +109,13 @@ export const EditItemDialog = ({
                         {isSubmitting
                             ? pantryTexts.editForm.submitting
                             : pantryTexts.editForm.submit}
-                    </Button>
-                    <Button
-                        variant={'destructive'}
+                    </PrimaryButton>
+                    <DestructiveButton
                         className={'w-full'}
                         onClick={() => setConfirmDelete(true)}
                     >
                         {pantryTexts.editForm.deleteButton}
-                    </Button>
+                    </DestructiveButton>
                 </form>
             </Form>
             <DeleteItemDialog

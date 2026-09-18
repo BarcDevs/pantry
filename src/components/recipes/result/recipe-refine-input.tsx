@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { Input } from '@/components/shared/Input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -37,12 +37,12 @@ export const RecipeRefineInput = ({
                 placeholder={placeholder}
                 className={'min-w-50 flex-1'}
             />
-            <Button
+            <PrimaryButton
                 onClick={onSubmit}
                 disabled={isRefining || !value.trim()}
             >
                 {isRefining ? loadingLabel : submitLabel}
-            </Button>
+            </PrimaryButton>
         </div>
     </div>
 )

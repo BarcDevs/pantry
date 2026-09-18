@@ -1,5 +1,6 @@
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { DestructiveButton } from '@/components/shared/buttons/DestructiveButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -26,21 +27,17 @@ export const BulkDeleteDialog = ({
         align={'center'}
         footer={(
             <>
-                <Button
-                    variant={'outline'}
-                    onClick={() => onOpenChange(false)}
-                >
+                <SecondaryButton onClick={() => onOpenChange(false)}>
                     {recipesTexts.bulkDeleteDialog.cancel}
-                </Button>
-                <Button
-                    variant={'destructive'}
+                </SecondaryButton>
+                <DestructiveButton
                     disabled={isDeleting}
                     onClick={onConfirm}
                 >
                     {isDeleting
                         ? recipesTexts.detail.deleting
                         : recipesTexts.bulkDeleteDialog.confirm}
-                </Button>
+                </DestructiveButton>
             </>
         )}
     />

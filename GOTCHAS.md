@@ -133,9 +133,9 @@ purpose-made button under `src/components/shared/buttons/`, not to keep copying 
 component whose per-usage callers all patch around its default styling is the anti-pattern that caused this bug in
 the first place. `Button` is a base only - it must never be used directly at a call site; every call site goes
 through a purpose-made button in `src/components/shared/buttons/` that wraps it (add a new one there if none fit,
-same as `TextButton` was added for the flat colored text-link shape). Only `outline`/`ghost`/`destructive`/default
-CTA usages elsewhere in the app still reach for `Button` directly and are pending the same treatment - don't take
-that as license to add a new one, and migrate one you touch to its own purpose-made button instead of leaving it bare.
+same as `TextButton` was added for the flat colored text-link shape). Every existing call site has been migrated
+(`PrimaryButton`, `SecondaryButton`, `DestructiveButton`, `TextButton`, `IconButton`, `SurfaceButton`, `ChipButton`,
+`LinkButton`, `ToggleTextButton`) - a bare `Button` import outside `shared/buttons/` is a regression.
 
 ### Verifying a CSS/positioning fix actually works - don't stop at unit-testing `cn()`
 

@@ -3,7 +3,8 @@ import { CheckIcon, SparklesIcon } from 'lucide-react'
 import type { StorageLocation } from '@/types/enums'
 import type { StorageSuggestion } from '@/types/pantry-item'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 import { dayInMs } from '@/constants/time'
@@ -59,13 +60,12 @@ export const StorageSuggestionHint = ({
                     <span className={'text-caption text-ink-3'}>
                         {pantryTexts.addForm.suggestionError}
                     </span>
-                    <Button
-                        variant={'outline'}
+                    <SecondaryButton
                         onClick={onRetry}
                         className={'h-auto shrink-0 border-soft-green-border px-3.5 py-2 text-caption'}
                     >
                         {pantryTexts.addForm.suggestionRetry}
-                    </Button>
+                    </SecondaryButton>
                 </div>
             )}
             {suggestion && !suggestion.recognized && !isLoading && (
@@ -96,13 +96,12 @@ export const StorageSuggestionHint = ({
                                 <span className={'font-bold text-label text-ink'}>
                                     {pantryTexts.addForm.suggestionMismatchTitle(pantryTexts.storageLabels[suggestion.suggestedStorage])}
                                 </span>
-                                <Button
-                                    variant={'outline'}
+                                <SecondaryButton
                                     onClick={onSelectRecommended}
                                     className={'h-auto shrink-0 border-soft-green-border px-3.5 py-2 text-caption'}
                                 >
                                     {pantryTexts.addForm.selectRecommended}
-                                </Button>
+                                </SecondaryButton>
                             </div>
                             <div className={'rounded-md border border-warning-border bg-warning-bg p-2.25'}>
                                 <div className={'font-bold text-caption text-warning-fg'}>
@@ -132,12 +131,12 @@ export const StorageSuggestionHint = ({
                                 {current.reason}
                             </div>
                         </div>
-                        <Button
+                        <PrimaryButton
                             onClick={onApplyExpiry}
                             className={'h-auto shrink-0 bg-green px-3.5 py-2 text-caption text-surface hover:bg-green/90'}
                         >
                             {pantryTexts.addForm.applyExpiry}
-                        </Button>
+                        </PrimaryButton>
                     </div>
                 </div>
             )}

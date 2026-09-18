@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 import { AppDialog } from '@/components/shared/AppDialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { DietaryPreferencesPicker } from '@/components/shared/DietaryPreferencesPicker'
 import { LabeledCheckbox } from '@/components/shared/LabeledCheckbox'
 
@@ -69,7 +69,7 @@ export const GenerateDietaryDialog = ({
                 onCheckedChange={setSaveToProfile}
                 label={texts.dietaryPreferencesSaveToProfile}
             />
-            <Button
+            <PrimaryButton
                 disabled={isSaving}
                 onClick={handleSave}
                 className={'w-full'}
@@ -77,7 +77,7 @@ export const GenerateDietaryDialog = ({
                 {isSaving
                     ? settingsTexts.submitting
                     : texts.dietaryPreferencesSave}
-            </Button>
+            </PrimaryButton>
         </AppDialog>
     )
 }

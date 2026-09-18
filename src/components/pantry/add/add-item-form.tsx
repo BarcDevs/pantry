@@ -5,7 +5,7 @@ import { DuplicateItemDialog } from '@/components/pantry/add/duplicate-item-dial
 import { PantryTypeRow } from '@/components/pantry/add/pantry-type-row'
 import { StorageSuggestionHint } from '@/components/pantry/add/storage-suggestion-hint'
 import { TypePickerDialog } from '@/components/pantry/add/type-picker-dialog'
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { FormError } from '@/components/shared/form/FormError'
 import { Form } from '@/components/ui/form'
 
@@ -66,7 +66,7 @@ export const AddItemForm = () => {
                     onChange={(type) => form.setValue('type', type)}
                 />
                 <FormError errors={form.formState.errors}/>
-                <Button
+                <PrimaryButton
                     type={'submit'}
                     disabled={isSubmitting}
                     className={'w-full'}
@@ -74,7 +74,7 @@ export const AddItemForm = () => {
                     {isSubmitting
                         ? pantryTexts.addForm.submitting
                         : pantryTexts.addForm.submit}
-                </Button>
+                </PrimaryButton>
                 <DuplicateItemDialog
                     open={duplicate !== null}
                     onOpenChange={(open) => { if (!open) setDuplicate(null) }}

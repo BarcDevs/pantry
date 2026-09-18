@@ -1,7 +1,7 @@
 import type { ClassName } from '@/types/react'
 import type { RecipeDoc } from '@/types/recipe'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 import { cn } from '@/lib/utils'
 
@@ -21,8 +21,7 @@ export const RecipeFavoriteButton = ({
     const texts = recipesTexts.result
 
     return (
-        <Button
-            variant={'outline'}
+        <SecondaryButton
             onClick={onToggle}
             className={cn(
                 className,
@@ -30,6 +29,6 @@ export const RecipeFavoriteButton = ({
             )}
         >
             {recipe.isFavorite ? texts.favoriteOn : texts.favoriteOff}
-        </Button>
+        </SecondaryButton>
     )
 }

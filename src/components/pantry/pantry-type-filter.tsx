@@ -4,7 +4,7 @@ import type { FoodType } from '@/types/enums'
 import { FOOD_TYPES } from '@/types/enums'
 import type { SetState } from '@/types/react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { ChipButton } from '@/components/shared/buttons/ChipButton'
 import { TextButton } from '@/components/shared/buttons/TextButton'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -12,8 +12,6 @@ import {
     PopoverContent,
     PopoverTrigger
 } from '@/components/ui/popover'
-
-import { cn } from '@/lib/utils'
 
 import { foodTypeEmoji } from '@/constants/food-type-emoji'
 import { pantryTexts } from '@/constants/texts/pantry'
@@ -36,19 +34,14 @@ export const PantryTypeFilter = ({
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button
-                    variant={'ghost'}
-                    className={cn(
-                        'h-auto cursor-pointer gap-1.5 rounded-full border px-3.5 py-2 text-label font-semibold',
-                        value.length > 0
-                            ? 'border-green bg-green text-white'
-                            : 'border-border bg-surface text-ink-2'
-                    )}
+                <ChipButton
+                    isSelected={value.length > 0}
+                    className={'cursor-pointer'}
                 >
                     <ListFilterIcon size={14}/>
                     {pantryTexts.typeFilterLabel}
                     {value.length > 0 && ` (${value.length})`}
-                </Button>
+                </ChipButton>
             </PopoverTrigger>
             <PopoverContent className={'w-64'}>
                 <div className={'flex flex-col gap-2.5'}>

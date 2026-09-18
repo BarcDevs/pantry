@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
 type EmptyStateCardAction = {
     href: string
@@ -36,23 +37,22 @@ export const EmptyStateCard = ({
                 {subtitle}
             </div>
         </div>
-        <Button asChild>
+        <PrimaryButton asChild>
             <Link href={ctaHref}>
                 {ctaLabel}
             </Link>
-        </Button>
+        </PrimaryButton>
         {secondaryActions && secondaryActions.length > 0 && (
             <div className={'flex gap-3'}>
                 {secondaryActions.map((action) => (
-                    <Button
+                    <SecondaryButton
                         key={action.href}
                         asChild
-                        variant={'outline'}
                     >
                         <Link href={action.href}>
                             {action.label}
                         </Link>
-                    </Button>
+                    </SecondaryButton>
                 ))}
             </div>
         )}

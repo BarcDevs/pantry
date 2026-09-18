@@ -6,7 +6,7 @@ import { ArrowRightIcon } from 'lucide-react'
 
 import type { ClassName } from '@/types/react'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { IconButton } from '@/components/shared/buttons/IconButton'
 
 import { cn } from '@/lib/utils'
 
@@ -20,14 +20,12 @@ export const PageHeader = ({ title, className }: PageHeaderProps) => {
 
     return (
         <div className={cn('mb-5 flex items-center gap-3.25', className)}>
-            <Button
-                variant={'ghost'}
-                size={'icon'}
+            <IconButton
                 onClick={() => router.back()}
-                className={'shrink-0 p-0 text-ink'}
+                className={'p-0 text-ink'}
             >
                 <ArrowRightIcon className={'size-6'}/>
-            </Button>
+            </IconButton>
             {title && (
                 <h1 className={'font-display text-title font-weight-title text-ink'}>
                     {title}

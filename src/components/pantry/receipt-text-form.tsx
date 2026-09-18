@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Button } from '@/components/shared/buttons/Button'
+import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { Textarea } from '@/components/ui/textarea'
 
 import { routes } from '@/constants/routes'
@@ -31,14 +31,14 @@ export const ReceiptTextForm = ({
             onChange={(e) => onTextChange(e.target.value)}
             className={'min-h-40'}
         />
-        <Button
+        <PrimaryButton
             disabled={isSubmitting || text.trim().length === 0}
             onClick={onSubmit}
         >
             {isSubmitting
                 ? pantryTexts.receiptReview.scanning
                 : pantryTexts.receiptReview.pasteSubmit}
-        </Button>
+        </PrimaryButton>
         {error && (
             <div className={'flex flex-col gap-2 text-label text-status-red-fg'}>
                 <span>{error}</span>
