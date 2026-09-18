@@ -219,6 +219,14 @@ Renders a form-level (`errors.root.message`) error string, e.g. for a failed ser
 <FormError errors={form.formState.errors}/>
 ```
 
+### `StarRating`
+
+Five-star rating. Static (display) when `onRate` is omitted, otherwise each star is a button (`onRate`, optional `onHover`/`onHoverEnd`). `rating` is `number | null`; `size` is the icon px size; `className`/`buttonClassName` adjust gap/alignment and per-star padding. Star values come from `STAR_VALUES` in `@/constants/rating`.
+
+```tsx
+<StarRating rating={row.rating} size={17} onRate={onRate}/>
+```
+
 ## When to add a new shared component
 
 Extract here when the same Label+Input/Select-style boilerplate (or similar shadcn composition) shows up in 2+ places, or when a single component's field list would otherwise violate the 5+ grouped-props rule in `CORE_RULES.md` and a generic field renderer removes the duplication instead of just moving it around.

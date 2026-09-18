@@ -191,6 +191,8 @@ export const recipesTexts = {
     },
     rate: {
         title: 'איך יצא?',
+        starLabel: (value: number) => `${value} כוכבים`,
+        starLabelSelected: (value: number) => `${value} כוכבים, נבחר`,
         descriptionPrefix: 'דרגו את',
         descriptionSuffix: '- נשמור אותו בהיסטוריית הבישול שלכם.',
         ratingLabels: [

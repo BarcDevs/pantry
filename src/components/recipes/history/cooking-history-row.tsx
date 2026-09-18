@@ -1,20 +1,15 @@
 import Link from 'next/link'
 
-import {
-    PencilIcon,
-    StarIcon
-} from 'lucide-react'
+import { PencilIcon } from 'lucide-react'
 
 import { RecipeHeartToggle } from '@/components/recipes/shared/recipe-heart-toggle'
+import { StarRating } from '@/components/shared/StarRating'
 
 import type { CookingHistoryRow } from '@/hooks/use-cooking-history'
 
 import { formatCookedAt } from '@/lib/recipes/format-cooked-at'
-import { cn } from '@/lib/utils'
 
 import { routes } from '@/constants/routes'
-
-const STAR_VALUES = [1, 2, 3, 4, 5]
 
 type CookingHistoryRowProps = {
     row: CookingHistoryRow
@@ -46,29 +41,13 @@ export const CookingHistoryRowItem = ({
             </div>
             <div className={'mt-1.75 flex flex-wrap items-center gap-2.5'}>
                 <div className={'flex items-center gap-0.5 rounded-full border border-border-2 bg-canvas px-2.25 py-0.75'}>
-                    {STAR_VALUES.map((value) => (
-                        <button
-                            key={value}
-                            type={'button'}
-                            aria-label={row.rating === value
-                                ? `${value} כוכבים, נבחר`
-                                : `${value} כוכבים`}
-                            onClick={(e) => {
-                                e.preventDefault()
-                                onRate(value)
-                            }}
-                            className={'cursor-pointer p-0.5'}
-                        >
-                            <StarIcon
-                                size={17}
-                                className={cn(
-                                    row.rating !== null && value <= row.rating
-                                        ? 'fill-status-amber-fg text-status-amber-fg'
-                                        : 'fill-none text-border'
-                                )}
-                            />
-                        </button>
-                    ))}
+                    <StarRating
+                        rating={row.rating}
+                        size={17}
+                        onRate={onRate}
+                        className={'items-center gap-0.5'}
+                        buttonClassName={'p-0.5'}
+                    />
                     <PencilIcon
                         aria-hidden={'true'}
                         size={13}

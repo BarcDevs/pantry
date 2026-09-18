@@ -1,6 +1,4 @@
-import { StarIcon } from 'lucide-react'
-
-import { cn } from '@/lib/utils'
+import { StarRating } from '@/components/shared/StarRating'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -8,8 +6,6 @@ type RecipeRatingDisplayProps = {
     rating: number | null
     cookCount: number
 }
-
-const STAR_VALUES = [1, 2, 3, 4, 5]
 
 export const RecipeRatingDisplay = ({
     rating,
@@ -31,19 +27,11 @@ export const RecipeRatingDisplay = ({
                 </div>
             </div>
             <div className={'flex items-center gap-2.5'}>
-                <div className={'flex gap-0.5'}>
-                    {STAR_VALUES.map((value) => (
-                        <StarIcon
-                            key={value}
-                            size={22}
-                            className={cn(
-                                value <= roundedRating
-                                    ? 'fill-status-amber-fg text-status-amber-fg'
-                                    : 'fill-none text-border'
-                            )}
-                        />
-                    ))}
-                </div>
+                <StarRating
+                    rating={roundedRating}
+                    size={22}
+                    className={'gap-0.5'}
+                />
                 <span className={'min-w-[2rem] text-center font-display text-heading font-weight-heading text-ink'}>
                     {rating !== null ? rating.toFixed(1) : '-'}
                 </span>
