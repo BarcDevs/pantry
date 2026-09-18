@@ -1,12 +1,13 @@
 import type { RecipeDoc } from '@/types/recipe'
 
-import type { ImportedRecipe } from '@/lib/recipes/imported-recipe-schema'
 import {
     normalizeIngredientFractions,
     normalizeStepFractions
 } from '@/lib/recipes/normalize-fraction-words'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 import { resolveIngredientPantryStatus } from '@/lib/recipes/resolve-ingredient-pantry-status'
+
+import type { ImportedRecipe } from '@/schemas/imported-recipe-schema'
 
 export const buildImportedRecipeDoc = (
     userId: string,

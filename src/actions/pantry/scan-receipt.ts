@@ -7,8 +7,9 @@ import type { ScannedReceiptItem } from '@/types/receipt'
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import { mockReceiptItems } from '@/lib/pantry/mock-receipt-items'
-import { receiptItemsSchema } from '@/lib/pantry/receipt-item-schema'
 import { buildScanReceiptPrompt } from '@/lib/prompts/scan-receipt-prompt'
+
+import { receiptItemsSchema } from '@/schemas/receipt-item-schema'
 
 const maxBase64Length = 10_000_000
 const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'] as const

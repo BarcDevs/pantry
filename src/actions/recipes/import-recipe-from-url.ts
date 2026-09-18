@@ -11,10 +11,10 @@ import { buildImportRecipeFromUrlPrompt } from '@/lib/prompts/import-recipe-from
 import { buildImportedRecipeDoc } from '@/lib/recipes/build-imported-recipe-doc'
 import { extractOgImage } from '@/lib/recipes/extract-og-image'
 import { importedRecipeFallback } from '@/lib/recipes/imported-recipe-fallback'
-import { importedRecipeSchema } from '@/lib/recipes/imported-recipe-schema'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
+import { importedRecipeSchema } from '@/schemas/imported-recipe-schema'
 
 export const importRecipeFromUrl = async (
     url: string

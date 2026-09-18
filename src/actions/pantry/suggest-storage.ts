@@ -1,7 +1,5 @@
 'use server'
 
-import { z } from 'zod'
-
 import type { StorageSuggestion } from '@/types/pantry-item'
 
 import { generateStructured } from '@/lib/ai/gemini'
@@ -11,14 +9,16 @@ import {
     getCachedSuggestion,
     setCachedSuggestion
 } from '@/lib/pantry/storage-suggestion-cache'
-import { storageSuggestionShape } from '@/lib/pantry/storage-suggestion-schema'
 import { buildSuggestStoragePrompt } from '@/lib/prompts/suggest-storage-prompt'
+
+import { pantryItemNameSchema } from '@/schemas/pantry-item-fields'
+import { storageSuggestionShape } from '@/schemas/storage-suggestion-schema'
 
 export const suggestStorage = async (
     name: string
 ): Promise<StorageSuggestion> => {
     await requireUserId()
-    const parsedName = z.string().trim().min(1).max(100).parse(name)
+    const parsedName = pantryItemNameSchema.parse(name)
     const cached = getCachedSuggestion(parsedName)
     if (cached) return cached
 

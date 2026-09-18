@@ -8,10 +8,12 @@ import type { Recipe, RecipeHistoryEntry }
 import { requireUserId } from '@/lib/auth/require-user-id'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
-import { objectIdSchema } from '@/lib/object-id-schema'
 import { computeAverageRating } from '@/lib/recipes/compute-average-rating'
 
+import { ActionError } from '@/constants/errors'
+
 import { RecipeModel } from '@/models/recipe.model'
+import { objectIdSchema } from '@/schemas/object-id-schema'
 
 const ratingSchema = z.number().min(1).max(5).nullable()
 
@@ -31,7 +33,7 @@ export const updateHistoryEntryRating = async (
         _id: recipeId,
         userId
     }).lean<{ history: RecipeHistoryEntry[] } | null>()
-    if (!recipe) throw new Error('Recipe not found')
+    if (!recipe) throw new Error(ActionError.RecipeNotFound)
 
     const entryExists = recipe.history.some(
         (entry) => entry.entryId === parsedEntryId
@@ -51,7 +53,7 @@ export const updateHistoryEntryRating = async (
         { history, rating: computeAverageRating(history) },
         { returnDocument: 'after', runValidators: true }
     ).lean()
-    if (!updated) throw new Error('Recipe not found')
+    if (!updated) throw new Error(ActionError.RecipeNotFound)
 
     return toPlainDoc<Recipe>(updated)
 }

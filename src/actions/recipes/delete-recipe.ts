@@ -2,9 +2,11 @@
 
 import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
-import { objectIdSchema } from '@/lib/object-id-schema'
+
+import { ActionError } from '@/constants/errors'
 
 import { RecipeModel } from '@/models/recipe.model'
+import { objectIdSchema } from '@/schemas/object-id-schema'
 
 export const deleteRecipe = async (id: string): Promise<void> => {
     const userId = await requireUserId()
@@ -16,5 +18,5 @@ export const deleteRecipe = async (id: string): Promise<void> => {
         .findOneAndDelete({ _id: recipeId, userId })
         .lean()
 
-    if (!deleted) throw new Error('Recipe not found')
+    if (!deleted) throw new Error(ActionError.RecipeNotFound)
 }

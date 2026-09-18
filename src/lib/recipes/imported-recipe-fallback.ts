@@ -5,7 +5,7 @@ import {
     MealType
 } from '@/types/enums'
 
-import type { ImportedRecipe } from '@/lib/recipes/imported-recipe-schema'
+import type { ImportedRecipe } from '@/schemas/imported-recipe-schema'
 
 export const importedRecipeFallback = (): ImportedRecipe => ({
     title: 'מתכון לדוגמה',

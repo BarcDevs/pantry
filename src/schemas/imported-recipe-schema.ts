@@ -7,7 +7,7 @@ import {
     MEAL_TYPES
 } from '@/types/enums'
 
-import { quantitySchema } from '@/lib/recipes/recipe-doc-schema'
+import { quantitySchema } from '@/schemas/recipe-doc-schema'
 
 export const importedRecipeSchema = z.object({
     title: z.string(),

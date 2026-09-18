@@ -8,6 +8,8 @@ import { auth } from '@/lib/auth'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
 
+import { ActionError } from '@/constants/errors'
+
 import { UserModel } from '@/models/user.model'
 import { userProfileFieldsSchema } from '@/schemas/user-profile'
 
@@ -20,7 +22,7 @@ export const updateUserProfile = async (
 ): Promise<User> => {
     const session = await auth()
     const userId = session?.user?.id
-    if (!userId) throw new Error('Unauthenticated')
+    if (!userId) throw new Error(ActionError.Unauthenticated)
 
     const parsedInput = updateUserProfileSchema.parse(input)
 

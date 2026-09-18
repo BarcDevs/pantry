@@ -2,7 +2,6 @@
 
 import { z } from 'zod'
 
-import { DIFFICULTIES } from '@/types/enums'
 import type {
     RecipeDoc,
     RefineRecipeInput
@@ -16,23 +15,14 @@ import {
     normalizeIngredientFractions,
     normalizeStepFractions
 } from '@/lib/recipes/normalize-fraction-words'
-import {
-    aiIngredientSchema,
-    recipeDocSchema,
-    stepSchema
-} from '@/lib/recipes/recipe-doc-schema'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 import { resolveIngredientPantryStatus } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
-import { PantryItemModel } from '@/models/pantry-item.model'
+import { ActionError } from '@/constants/errors'
 
-const refinedRecipeSchema = z.object({
-    title: z.string(),
-    difficulty: z.enum(DIFFICULTIES),
-    emoji: z.string(),
-    ingredients: z.array(aiIngredientSchema),
-    steps: z.array(stepSchema)
-})
+import { PantryItemModel } from '@/models/pantry-item.model'
+import { aiRecipeSchema } from '@/schemas/ai-recipe-schema'
+import { recipeDocSchema } from '@/schemas/recipe-doc-schema'
 
 export const refineRecipe = async (
     input: RefineRecipeInput
@@ -40,7 +30,7 @@ export const refineRecipe = async (
     const userId = await requireUserId()
     const recipe = recipeDocSchema.parse(input.recipe)
     if (recipe.userId !== userId) {
-        throw new Error('Forbidden')
+        throw new Error(ActionError.Forbidden)
     }
     const instruction = z.string().trim()
         .min(1).max(500).parse(input.instruction)
@@ -48,7 +38,7 @@ export const refineRecipe = async (
     const prompt = buildRefineRecipePrompt(recipe, instruction)
     const refined = await generateStructured(
         prompt,
-        refinedRecipeSchema,
+        aiRecipeSchema,
         () => ({
             title: `${recipe.title} (מעודכן)`,
             difficulty: recipe.difficulty,

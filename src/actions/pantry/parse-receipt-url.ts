@@ -7,8 +7,9 @@ import { requireUserId } from '@/lib/auth/require-user-id'
 import { fetchPageText } from '@/lib/network/fetch-page-text'
 import { parseUrlInput } from '@/lib/network/parse-url-input'
 import { mockReceiptItems } from '@/lib/pantry/mock-receipt-items'
-import { receiptItemsSchema } from '@/lib/pantry/receipt-item-schema'
 import { buildParseReceiptUrlPrompt } from '@/lib/prompts/parse-receipt-url-prompt'
+
+import { receiptItemsSchema } from '@/schemas/receipt-item-schema'
 
 export const parseReceiptUrl = async (
     url: string

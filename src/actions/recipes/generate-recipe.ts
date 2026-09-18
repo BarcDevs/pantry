@@ -3,11 +3,8 @@
 import { z } from 'zod'
 
 import {
-    COOKING_UNITS,
     CookingUnit,
-    DIFFICULTIES,
     Difficulty,
-    FOOD_TYPES,
     FoodType,
     MATCH_STRICTNESSES,
     MEAL_TYPES,
@@ -22,18 +19,18 @@ import type { RecipePromptUserContext } from '@/types/user'
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
-import { objectIdSchema } from '@/lib/object-id-schema'
 import { buildGenerateRecipePrompt } from '@/lib/prompts/generate-recipe-prompt'
 import {
     normalizeIngredientFractions,
     normalizeStepFractions
 } from '@/lib/recipes/normalize-fraction-words'
-import { quantitySchema } from '@/lib/recipes/recipe-doc-schema'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 import { resolveIngredientPantryStatus } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { UserModel } from '@/models/user.model'
+import { aiRecipeSchema } from '@/schemas/ai-recipe-schema'
+import { objectIdSchema } from '@/schemas/object-id-schema'
 
 const generateRecipeSchema = z.object({
     mealCount: z.number().int().positive(),
@@ -44,23 +41,6 @@ const generateRecipeSchema = z.object({
     allowAiGeneration: z.boolean(),
     matchStrictness: z.enum(MATCH_STRICTNESSES),
     customInstructions: z.string().max(500).optional()
-})
-
-const aiRecipeSchema = z.object({
-    title: z.string(),
-    difficulty: z.enum(DIFFICULTIES),
-    emoji: z.string(),
-    ingredients: z.array(z.object({
-        label: z.string(),
-        category: z.enum(FOOD_TYPES),
-        quantity: quantitySchema,
-        unit: z.enum(COOKING_UNITS),
-        optional: z.boolean().default(false)
-    })),
-    steps: z.array(z.object({
-        order: z.number(),
-        description: z.string()
-    }))
 })
 
 export const generateRecipe = async (

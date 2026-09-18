@@ -1,12 +1,5 @@
 'use server'
 
-import { isValidObjectId } from 'mongoose'
-import { z } from 'zod'
-
-import {
-    FOOD_TYPES,
-    PANTRY_UNITS,
-    STORAGE_LOCATIONS } from '@/types/enums'
 import type {
     PantryItem,
     UpdatePantryItemInput
@@ -15,28 +8,21 @@ import type {
 import { requireUserId } from '@/lib/auth/require-user-id'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
-import { storageSuggestionSchema } from '@/lib/pantry/storage-suggestion-schema'
+
+import { ActionError } from '@/constants/errors'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
+import { objectIdSchema } from '@/schemas/object-id-schema'
+import { pantryItemBaseSchema } from '@/schemas/pantry-item-fields'
 
-const updatePantryItemSchema = z.object({
-    name: z.string().trim().min(1).max(100).optional(),
-    emoji: z.string().max(8).optional(),
-    storage: z.enum(STORAGE_LOCATIONS).optional(),
-    type: z.enum(FOOD_TYPES).nullable().optional(),
-    quantity: z.number().positive().optional(),
-    unit: z.enum(PANTRY_UNITS).optional(),
-    expiryDate: z.date().optional(),
-    notes: z.string().max(500).optional(),
-    storageSuggestion: storageSuggestionSchema
-})
+const updatePantryItemSchema = pantryItemBaseSchema.partial()
 
 export const updatePantryItem = async (
     id: string,
     input: UpdatePantryItemInput
 ): Promise<PantryItem> => {
     const userId = await requireUserId()
-    if (!isValidObjectId(id)) throw new Error('Item not found')
+    if (!objectIdSchema.safeParse(id).success) throw new Error(ActionError.ItemNotFound)
     const parsedInput = updatePantryItemSchema.parse(input)
 
     await connectDB()
@@ -47,6 +33,6 @@ export const updatePantryItem = async (
         { returnDocument: 'after', runValidators: true }
     ).lean()
 
-    if (!updated) throw new Error('Item not found')
+    if (!updated) throw new Error(ActionError.ItemNotFound)
     return toPlainDoc<PantryItem>(updated)
 }

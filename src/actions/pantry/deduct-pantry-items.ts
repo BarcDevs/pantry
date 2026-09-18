@@ -6,9 +6,9 @@ import type { DeductPantryItemEdit } from '@/types/pantry-item'
 
 import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
-import { objectIdSchema } from '@/lib/object-id-schema'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
+import { objectIdSchema } from '@/schemas/object-id-schema'
 
 const deductEditSchema = z.object({
     id: objectIdSchema,

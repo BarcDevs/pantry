@@ -11,10 +11,12 @@ import {
     getCachedSuggestion,
     setCachedSuggestion
 } from '@/lib/pantry/storage-suggestion-cache'
-import { storageSuggestionBatchSchema } from '@/lib/pantry/storage-suggestion-schema'
 import { buildSuggestStorageBatchPrompt } from '@/lib/prompts/suggest-storage-prompt'
 
-const namesSchema = z.array(z.string().trim().min(1).max(100)).max(200)
+import { pantryItemNameSchema } from '@/schemas/pantry-item-fields'
+import { storageSuggestionBatchSchema } from '@/schemas/storage-suggestion-schema'
+
+const namesSchema = z.array(pantryItemNameSchema).max(200)
 
 export const suggestStorageBatch = async (
     names: string[]

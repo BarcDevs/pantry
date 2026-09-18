@@ -10,11 +10,11 @@ import connectDB from '@/lib/mongodb'
 import { buildImportRecipeFromTextPrompt } from '@/lib/prompts/import-recipe-from-text-prompt'
 import { buildImportedRecipeDoc } from '@/lib/recipes/build-imported-recipe-doc'
 import { importedRecipeFallback } from '@/lib/recipes/imported-recipe-fallback'
-import { importedRecipeSchema } from '@/lib/recipes/imported-recipe-schema'
-import { httpUrlSchema } from '@/lib/recipes/recipe-doc-schema'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
+import { importedRecipeSchema } from '@/schemas/imported-recipe-schema'
+import { httpUrlSchema } from '@/schemas/recipe-doc-schema'
 
 export const importRecipeFromText = async (
     text: string,

@@ -7,13 +7,15 @@ import type { Recipe, UpdateRecipeInput } from '@/types/recipe'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
-import { objectIdSchema } from '@/lib/object-id-schema'
+
+import { ActionError } from '@/constants/errors'
+
+import { RecipeModel } from '@/models/recipe.model'
+import { objectIdSchema } from '@/schemas/object-id-schema'
 import {
     ingredientSchema,
     stepSchema
-} from '@/lib/recipes/recipe-doc-schema'
-
-import { RecipeModel } from '@/models/recipe.model'
+} from '@/schemas/recipe-doc-schema'
 
 const updateRecipeSchema = z.object({
     title: z.string().trim().min(1).max(200).optional(),
@@ -40,7 +42,7 @@ export const updateRecipe = async (
         { returnDocument: 'after', runValidators: true }
     ).lean()
 
-    if (!updated) throw new Error('Recipe not found')
+    if (!updated) throw new Error(ActionError.RecipeNotFound)
 
     return toPlainDoc<Recipe>(updated)
 }

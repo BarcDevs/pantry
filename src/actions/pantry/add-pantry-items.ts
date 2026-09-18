@@ -2,11 +2,7 @@
 
 import { z } from 'zod'
 
-import {
-    FOOD_TYPES,
-    ITEM_SOURCES,
-    PANTRY_UNITS,
-    STORAGE_LOCATIONS } from '@/types/enums'
+import { ITEM_SOURCES } from '@/types/enums'
 import type {
     AddPantryItemInput,
     AddPantryItemOutcome,
@@ -19,22 +15,14 @@ import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
 import { normalizeName }
     from '@/lib/normalize-name'
-import { storageSuggestionSchema }
-    from '@/lib/pantry/storage-suggestion-schema'
+
+import { ActionError } from '@/constants/errors'
 
 import { PantryItemModel }
     from '@/models/pantry-item.model'
+import { pantryItemBaseSchema } from '@/schemas/pantry-item-fields'
 
-const addPantryItemSchema = z.object({
-    name: z.string().trim().min(1).max(100),
-    emoji: z.string().max(8).optional(),
-    storage: z.enum(STORAGE_LOCATIONS),
-    type: z.enum(FOOD_TYPES).nullable(),
-    quantity: z.number().positive(),
-    unit: z.enum(PANTRY_UNITS),
-    expiryDate: z.date().optional(),
-    notes: z.string().max(500).optional(),
-    storageSuggestion: storageSuggestionSchema,
+const addPantryItemSchema = pantryItemBaseSchema.extend({
     source: z.enum(ITEM_SOURCES).optional(),
     mergeWithId: z.string().optional(),
     forceSeparate: z.boolean().optional()
@@ -79,7 +67,7 @@ export const addPantryItems = async (
                     }
                 ).lean()
             )
-            if (!updated) throw new Error('Item not found')
+            if (!updated) throw new Error(ActionError.ItemNotFound)
 
             const item = toPlainDoc<PantryItem>(updated)
             outcomes.push({ status: 'created', item })
@@ -103,7 +91,7 @@ export const addPantryItems = async (
             const existing = await PantryItemModel
                 .findOne({ _id: duplicateMatch._id, userId })
                 .lean()
-            if (!existing) throw new Error('Item not found')
+            if (!existing) throw new Error(ActionError.ItemNotFound)
 
             outcomes.push({
                 status: 'duplicate',

@@ -7,8 +7,9 @@ import type { ParseReceiptUrlResult } from '@/types/receipt'
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import { mockReceiptItems } from '@/lib/pantry/mock-receipt-items'
-import { receiptItemsSchema } from '@/lib/pantry/receipt-item-schema'
 import { buildParseReceiptTextPrompt } from '@/lib/prompts/parse-receipt-text-prompt'
+
+import { receiptItemsSchema } from '@/schemas/receipt-item-schema'
 
 export const parseReceiptText = async (
     text: string
