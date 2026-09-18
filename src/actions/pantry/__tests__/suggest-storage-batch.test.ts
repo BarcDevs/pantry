@@ -1,9 +1,6 @@
 /**
  * @jest-environment node
  */
-jest.mock('@/lib/auth', () => ({
-    auth: jest.fn()
-}))
 jest.mock('@/lib/ai/gemini', () => ({
     generateStructured: jest.fn()
 }))

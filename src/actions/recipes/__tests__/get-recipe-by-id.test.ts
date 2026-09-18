@@ -1,13 +1,6 @@
 /**
  * @jest-environment node
  */
-jest.mock('@/lib/auth', () => ({
-    auth: jest.fn()
-}))
-jest.mock('@/lib/mongodb', () => ({
-    __esModule: true,
-    default: jest.fn()
-}))
 jest.mock('@/models/recipe.model', () => ({
     RecipeModel: {
         findOne: jest.fn()
