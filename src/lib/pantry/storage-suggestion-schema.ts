@@ -23,3 +23,7 @@ export const storageSuggestionShape = z.object({
 })
 
 export const storageSuggestionSchema = storageSuggestionShape.nullish()
+
+export const storageSuggestionBatchSchema = z.object({
+    suggestions: z.array(storageSuggestionShape.extend({ name: z.string() }))
+})

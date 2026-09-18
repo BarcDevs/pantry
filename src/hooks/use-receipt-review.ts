@@ -6,7 +6,11 @@ import { toast } from 'sonner'
 
 import type { PantryUnit } from '@/types/enums'
 import { ItemSource, StorageLocation } from '@/types/enums'
-import type { AddPantryItemInput, AddPantryItemOutcome } from '@/types/pantry-item'
+import type {
+    AddPantryItemInput,
+    AddPantryItemOutcome,
+    StorageSuggestion
+} from '@/types/pantry-item'
 import type { ScannedReceiptItem } from '@/types/receipt'
 import type {
     ReceiptReviewRow,
@@ -18,7 +22,7 @@ import { routes } from '@/constants/routes'
 import { pantryTexts } from '@/constants/texts/pantry'
 
 import { addPantryItems } from '@/actions/pantry/add-pantry-items'
-import { suggestStorage } from '@/actions/pantry/suggest-storage'
+import { suggestStorageBatch } from '@/actions/pantry/suggest-storage-batch'
 
 type DuplicateOutcome = Extract<
     AddPantryItemOutcome,
@@ -50,29 +54,34 @@ export const useReceiptReview = (
     const [duplicates, setDuplicates] = useState<PendingDuplicate[]>([])
     const [isSubmitting, startSubmitting] = useTransition()
 
-    const withSuggestion = async (row: ReceiptReviewRow): Promise<ReceiptReviewRow> => {
-        try {
-            const result = await suggestStorage(row.name)
-            if (!result.recognized) return row
-            const entry = result.expiryByStorage[result.suggestedStorage]
-            return {
-                ...row,
-                storage: result.suggestedStorage,
-                type: result.suggestedType ?? row.type,
-                expiryDate: entry?.date ?? row.expiryDate,
-                storageSuggestion: result
-            }
-        } catch (error) {
-            console.error(error)
-            return row
+    const applySuggestion = (
+        row: ReceiptReviewRow,
+        suggestion: StorageSuggestion | null
+    ): ReceiptReviewRow => {
+        if (!suggestion?.recognized) return row
+        const entry = suggestion.expiryByStorage[suggestion.suggestedStorage]
+        return {
+            ...row,
+            storage: suggestion.suggestedStorage,
+            type: suggestion.suggestedType ?? row.type,
+            expiryDate: entry?.date ?? row.expiryDate,
+            storageSuggestion: suggestion
         }
     }
 
-    // Suggestions are fetched for every row up front, before the rows are ever
-    // shown - no per-row loading state or separate "suggest all" step on screen.
+    // One batched suggestion call for every row up front, before the rows are
+    // ever shown - no per-row loading state or separate "suggest all" step.
     const setScannedItems = async (items: ScannedReceiptItem[]) => {
-        const suggestedRows = await Promise.all(items.map(toRow).map(withSuggestion))
-        setRows(suggestedRows)
+        const baseRows = items.map(toRow)
+        try {
+            const suggestions = await suggestStorageBatch(
+                baseRows.map((row) => row.name)
+            )
+            setRows(baseRows.map((row, index) => applySuggestion(row, suggestions[index])))
+        } catch (error) {
+            console.error(error)
+            setRows(baseRows)
+        }
     }
 
     const toggleRow = (id: string) => setRows((prev) => prev.map(

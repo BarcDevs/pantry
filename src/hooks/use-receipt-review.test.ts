@@ -12,8 +12,8 @@ jest.mock('sonner', () => ({
 jest.mock('@/actions/pantry/add-pantry-items', () => ({
     addPantryItems: jest.fn()
 }))
-jest.mock('@/actions/pantry/suggest-storage', () => ({
-    suggestStorage: jest.fn().mockResolvedValue({ recognized: false })
+jest.mock('@/actions/pantry/suggest-storage-batch', () => ({
+    suggestStorageBatch: jest.fn().mockImplementation(async (names: string[]) => names.map(() => null))
 }))
 
 import { useRouter } from 'next/navigation'
