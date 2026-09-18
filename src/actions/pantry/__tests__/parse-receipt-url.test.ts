@@ -88,12 +88,24 @@ describe('parseReceiptUrl', () => {
         expect(mockFetch).not.toHaveBeenCalled()
     })
 
-    it('throws on an invalid url', async () => {
+    it('falls back to manual entry on an invalid url', async () => {
         mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
-        await expect(
-            parseReceiptUrl('not-a-url')
-        ).rejects.toThrow()
+        const result = await parseReceiptUrl('not-a-url')
+        expect(result).toEqual({ items: [], fallbackToManual: true })
         expect(mockFetch).not.toHaveBeenCalled()
+    })
+
+    it('treats a url without a scheme as https', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFetch.mockResolvedValue(
+            makeResponse('<html><body>עגבניות 1kg</body></html>')
+        )
+        mockGenerateStructured.mockResolvedValue({ items })
+        await parseReceiptUrl('example.com/receipt')
+        expect(mockFetch).toHaveBeenCalledWith(
+            'https://example.com/receipt',
+            expect.anything()
+        )
     })
 
     it('returns extracted items from the fetched page', async () => {

@@ -143,6 +143,7 @@ export const pantryTexts = {
         urlLabel: 'קישור לקבלה או לעמוד הקנייה',
         urlPlaceholder: 'https://...',
         urlSubmit: 'ייבוא',
+        urlInvalid: 'כתובת רשת לא תקינה',
         urlError: 'לא הצלחנו לחלץ פריטים מהקישור',
         urlFallback: 'ניתן להזין את הפריטים ידנית במקום',
         manualEntryLink: 'הוספה ידנית',
