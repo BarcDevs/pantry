@@ -43,7 +43,7 @@ export const ReceiptTextForm = ({
             <div className={'flex flex-col gap-2 text-label text-status-red-fg'}>
                 <span>{error}</span>
                 <span>
-                    {pantryTexts.receiptReview.urlFallback}
+                    {pantryTexts.receiptReview.textFallback}
                 </span>
                 <Link
                     href={routes.add}

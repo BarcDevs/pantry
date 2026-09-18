@@ -28,6 +28,7 @@ const AddPastePage = () => {
             title={isTextMode
                 ? pantryTexts.addForm.pasteTextPageTitle
                 : pantryTexts.addForm.pasteLinkTileTitle}
+            isText={isTextMode}
             source={ItemSource.ReceiptUrl}
         >
             {({ onScanned }) => {

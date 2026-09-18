@@ -16,14 +16,38 @@ import { pantryTexts } from '@/constants/texts/pantry'
 
 type ReceiptReviewShellProps = {
     title: string
+    isText?: boolean
     source: typeof ItemSource.ReceiptScan | typeof ItemSource.ReceiptUrl
     children: (props: {
         onScanned: (items: ScannedReceiptItem[]) => Promise<void>
     }) => ReactNode
 }
 
+const getReviewLabels = (isScan: boolean, isText: boolean) => {
+    if (isScan) {
+        return {
+            reviewTitle: pantryTexts.receiptReview.scanTitle,
+            sourceLabel: pantryTexts.receiptReview.scanSourceLabel,
+            sourceIcon: '🧾'
+        }
+    }
+    if (isText) {
+        return {
+            reviewTitle: pantryTexts.receiptReview.textTitle,
+            sourceLabel: pantryTexts.receiptReview.textSourceLabel,
+            sourceIcon: '📋'
+        }
+    }
+    return {
+        reviewTitle: pantryTexts.receiptReview.urlTitle,
+        sourceLabel: pantryTexts.receiptReview.urlSourceLabel,
+        sourceIcon: '🔗'
+    }
+}
+
 export const ReceiptReviewShell = ({
     title,
+    isText = false,
     source,
     children
 }: ReceiptReviewShellProps) => {
@@ -31,13 +55,16 @@ export const ReceiptReviewShell = ({
     const duplicate = receiptReview.duplicates[0] ?? null
     const hasRows = receiptReview.rows.length > 0
     const isScan = source === ItemSource.ReceiptScan
+    const {
+        reviewTitle,
+        sourceLabel,
+        sourceIcon
+    } = getReviewLabels(isScan, isText)
 
     return (
         <main className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
             <PageHeader
-                title={hasRows
-                    ? (isScan ? pantryTexts.receiptReview.scanTitle : pantryTexts.receiptReview.urlTitle)
-                    : title}
+                title={hasRows ? reviewTitle : title}
                 className={hasRows ? 'mb-1.5' : undefined}
             />
             {hasRows && (
@@ -46,10 +73,8 @@ export const ReceiptReviewShell = ({
                         {pantryTexts.receiptReview.subtitle}
                     </p>
                     <ReceiptSourceCard
-                        icon={isScan ? '🧾' : '🔗'}
-                        label={isScan
-                            ? pantryTexts.receiptReview.scanSourceLabel
-                            : pantryTexts.receiptReview.urlSourceLabel}
+                        icon={sourceIcon}
+                        label={sourceLabel}
                         itemCount={receiptReview.rows.length}
                         allSelected={receiptReview.rows.every((row) => row.included)}
                         onToggleAll={receiptReview.toggleAll}
