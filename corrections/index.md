@@ -30,3 +30,10 @@ shadcn/ui component boundaries, Tailwind/twMerge conflicts, and RTL/layout verif
 | 04/09/2026 | Never hand-edit `src/components/ui/*` (shadcn) directly — wrap it in `src/components/shared/` |
 | 05/09/2026 | Extend `tailwind-merge` only with the specific token proven to conflict, not the whole theme |
 | 11/09/2026 | Never claim an RTL/layout fix is verified without checking real computed styles in a real browser |
+
+## Git & Deploy — [[corrections/git-and-deploy]]
+Branch, push and merge discipline.
+
+| Date | Entry |
+|---|---|
+| 19/09/2026 | Never commit directly to `main`, never push unprompted — work on a branch, state it, ask if the request doesn't match reality |
