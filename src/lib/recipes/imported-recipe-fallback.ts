@@ -1,4 +1,9 @@
-import { Difficulty, MealType } from '@/types/enums'
+import {
+    CookingUnit,
+    Difficulty,
+    FoodType,
+    MealType
+} from '@/types/enums'
 
 import type { ImportedRecipe } from '@/lib/recipes/imported-recipe-schema'
 
@@ -9,6 +14,19 @@ export const importedRecipeFallback = (): ImportedRecipe => ({
     mealCount: 2,
     maxTime: 30,
     emoji: '🍽️',
-    ingredients: [],
-    steps: []
+    ingredients: [
+        {
+            label: 'פסטה',
+            category: FoodType.Grains,
+            quantity: 250,
+            unit: CookingUnit.G,
+            optional: false
+        }
+    ],
+    steps: [
+        {
+            order: 1,
+            description: 'מבשלים את הפסטה'
+        }
+    ]
 })

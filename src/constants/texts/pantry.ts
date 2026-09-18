@@ -144,7 +144,7 @@ export const pantryTexts = {
         urlPlaceholder: 'https://...',
         urlSubmit: 'ייבוא',
         urlError: 'לא הצלחנו לחלץ פריטים מהקישור',
-        urlFallback: 'ניתן להזין את הפריטים ידנית במקום',
+        urlFallback: 'ניתן להזין את הפריטים ידנית במקום או לנסות קישור אחר',
         manualEntryLink: 'הוספה ידנית',
         pasteLinkSubtitle: 'הדביקו קישור לקבלה דיגיטלית - נזהה את המוצרים אוטומטית.',
         pasteTextSubtitle: 'הדביקו את שורות הקבלה - נזהה מוצרים, כמויות ומיקום.',

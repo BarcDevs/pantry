@@ -197,6 +197,26 @@ describe('importRecipeFromUrl', () => {
         }
     )
 
+    it.each([
+        ['ingredients', { ingredients: [] }],
+        ['steps', { steps: [] }]
+    ])('returns fallbackToManual when the page has no %s', async (_name, override) => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFetch.mockResolvedValue(
+            makeResponse('<html><body>not a recipe</body></html>')
+        )
+        mockGenerateStructured.mockResolvedValue({ ...aiRecipe, ...override })
+
+        const result = await importRecipeFromUrl(
+            'https://example.com/recipe'
+        )
+
+        expect(result).toEqual({
+            recipe: null,
+            fallbackToManual: true
+        })
+    })
+
     it('returns fallbackToManual on total fetch failure', async () => {
         mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFetch.mockRejectedValue(new Error('network error'))

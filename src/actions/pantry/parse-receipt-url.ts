@@ -31,6 +31,6 @@ export const parseReceiptUrl = async (
     )
     return {
         items,
-        fallbackToManual: false
+        fallbackToManual: items.length === 0
     }
 }

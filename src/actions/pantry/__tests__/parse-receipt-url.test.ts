@@ -126,6 +126,18 @@ describe('parseReceiptUrl', () => {
         )
     })
 
+    it('returns fallbackToManual when the page has no items', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFetch.mockResolvedValue(
+            makeResponse('<html><body>hello</body></html>')
+        )
+        mockGenerateStructured.mockResolvedValue({ items: [] })
+
+        const result = await parseReceiptUrl('https://example.com/receipt')
+
+        expect(result).toEqual({ items: [], fallbackToManual: true })
+    })
+
     it('returns fallbackToManual when the fetch response is not ok', async () => {
         mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFetch.mockResolvedValue(makeResponse('', { status: 500 }))

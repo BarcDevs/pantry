@@ -44,6 +44,13 @@ export const importRecipeFromUrl = async (
         0
     )
 
+    if (generated.ingredients.length === 0 || generated.steps.length === 0) {
+        return {
+            recipe: null,
+            fallbackToManual: true
+        }
+    }
+
     const recipe = buildImportedRecipeDoc(userId, generated, pantryItems, {
         sourceUrl: parsedUrl,
         imageUrl: extractOgImage(fetched.html)
