@@ -69,7 +69,7 @@ export const ReceiptReviewRow = ({
     )
 
     return (
-        <div className={'flex items-center gap-2.5 rounded-lg border border-border-2 bg-surface p-3'}>
+        <div className={'flex flex-wrap items-center gap-2.5 rounded-lg border border-border-2 bg-surface p-3 md:flex-nowrap'}>
             <button
                 onClick={() => onToggle(row.id)}
                 aria-label={row.name}
@@ -104,6 +104,7 @@ export const ReceiptReviewRow = ({
             >
                 <PencilIcon size={16}/>
             </SecondaryButton>
+            <div className={'order-last flex w-full items-center gap-2.5 md:order-none md:w-auto'}>
             <div className={'flex shrink-0 items-center overflow-hidden rounded-lg border border-border'}>
                 <IconButton
                     disabled={row.quantity <= step}
@@ -156,6 +157,7 @@ export const ReceiptReviewRow = ({
                     ))}
                 </SelectContent>
             </Select>
+            </div>
             <SecondaryButton
                 size={'icon'}
                 onClick={() => onRemove(row.id)}
