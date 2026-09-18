@@ -21,6 +21,7 @@ export const ReceiptPasteView = () => {
     const [url, setUrl] = useState('')
     const [text, setText] = useState('')
     const [error, setError] = useState<string | null>(null)
+    const [isBlocked, setIsBlocked] = useState(false)
     const [isParsing, startParsing] = useTransition()
 
     return (
@@ -34,9 +35,11 @@ export const ReceiptPasteView = () => {
             {({ onScanned }) => {
                 const handleSubmitUrl = () => {
                     setError(null)
+                    setIsBlocked(false)
                     startParsing(async () => {
                         const result = await parseReceiptUrl(url.trim())
                         if (result.fallbackToManual) {
+                            setIsBlocked(result.isBlocked)
                             setError(pantryTexts.receiptReview.urlError)
                             return
                         }
@@ -80,6 +83,7 @@ export const ReceiptPasteView = () => {
                                     onSubmit={handleSubmitUrl}
                                     isSubmitting={isParsing}
                                     error={error}
+                                    isBlocked={isBlocked}
                                 />
                             )}
                     </div>

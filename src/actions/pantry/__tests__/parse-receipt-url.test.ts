@@ -88,7 +88,11 @@ describe('parseReceiptUrl', () => {
     it('falls back to manual entry on an invalid url', async () => {
         mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         const result = await parseReceiptUrl('not-a-url')
-        expect(result).toEqual({ items: [], fallbackToManual: true })
+        expect(result).toEqual({
+            items: [],
+            fallbackToManual: true,
+            isBlocked: false
+        })
         expect(mockFetch).not.toHaveBeenCalled()
     })
 
@@ -114,7 +118,11 @@ describe('parseReceiptUrl', () => {
 
         const result = await parseReceiptUrl('https://example.com/receipt')
 
-        expect(result).toEqual({ items, fallbackToManual: false })
+        expect(result).toEqual({
+            items,
+            fallbackToManual: false,
+            isBlocked: false
+        })
         expect(mockGenerateStructured).toHaveBeenCalledWith(
             expect.stringContaining('עגבניות 1kg'),
             expect.anything(),
@@ -132,7 +140,11 @@ describe('parseReceiptUrl', () => {
 
         const result = await parseReceiptUrl('https://example.com/receipt')
 
-        expect(result).toEqual({ items: [], fallbackToManual: true })
+        expect(result).toEqual({
+            items: [],
+            fallbackToManual: true,
+            isBlocked: false
+        })
     })
 
     it('returns fallbackToManual when the fetch response is not ok', async () => {
@@ -141,8 +153,47 @@ describe('parseReceiptUrl', () => {
 
         const result = await parseReceiptUrl('https://example.com/receipt')
 
-        expect(result).toEqual({ items: [], fallbackToManual: true })
+        expect(result).toEqual({
+            items: [],
+            fallbackToManual: true,
+            isBlocked: false
+        })
         expect(mockGenerateStructured).not.toHaveBeenCalled()
+    })
+
+    it.each([
+        401,
+        403,
+        429
+    ])('flags the result as blocked on HTTP %i', async (status) => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFetch.mockResolvedValue(makeResponse('', { status }))
+
+        const result = await parseReceiptUrl('https://example.com/receipt')
+
+        expect(result).toEqual({
+            items: [],
+            fallbackToManual: true,
+            isBlocked: true
+        })
+        expect(mockGenerateStructured).not.toHaveBeenCalled()
+    })
+
+    it('sends browser-like request headers', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFetch.mockResolvedValue(makeResponse('<p>x</p>'))
+        mockGenerateStructured.mockResolvedValue({ items })
+
+        await parseReceiptUrl('https://example.com/receipt')
+
+        expect(mockFetch).toHaveBeenCalledWith(
+            'https://example.com/receipt',
+            expect.objectContaining({
+                headers: expect.objectContaining({
+                    'User-Agent': expect.stringContaining('Mozilla/5.0')
+                })
+            })
+        )
     })
 
     it('returns fallbackToManual when fetch throws', async () => {
@@ -151,7 +202,11 @@ describe('parseReceiptUrl', () => {
 
         const result = await parseReceiptUrl('https://example.com/receipt')
 
-        expect(result).toEqual({ items: [], fallbackToManual: true })
+        expect(result).toEqual({
+            items: [],
+            fallbackToManual: true,
+            isBlocked: false
+        })
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
 
@@ -168,7 +223,11 @@ describe('parseReceiptUrl', () => {
 
             const result = await parseReceiptUrl(dangerousUrl)
 
-            expect(result).toEqual({ items: [], fallbackToManual: true })
+            expect(result).toEqual({
+            items: [],
+            fallbackToManual: true,
+            isBlocked: false
+        })
             expect(mockFetch).not.toHaveBeenCalled()
             expect(mockGenerateStructured).not.toHaveBeenCalled()
         }
@@ -190,7 +249,11 @@ describe('parseReceiptUrl', () => {
 
         const result = await parseReceiptUrl('https://example.com/redirect')
 
-        expect(result).toEqual({ items: [], fallbackToManual: true })
+        expect(result).toEqual({
+            items: [],
+            fallbackToManual: true,
+            isBlocked: false
+        })
         expect(mockFetch).toHaveBeenCalledTimes(1)
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
@@ -203,7 +266,11 @@ describe('parseReceiptUrl', () => {
 
         const result = await parseReceiptUrl('https://example.com/receipt')
 
-        expect(result).toEqual({ items: [], fallbackToManual: true })
+        expect(result).toEqual({
+            items: [],
+            fallbackToManual: true,
+            isBlocked: false
+        })
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
 })

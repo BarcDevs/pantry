@@ -14,4 +14,5 @@ export type ImageInput = {
 export type ParseReceiptUrlResult = {
     items: ScannedReceiptItem[]
     fallbackToManual: boolean
+    isBlocked: boolean
 }

@@ -17,10 +17,11 @@ export const parseReceiptUrl = async (
     await requireUserId()
     const parsedUrl = parseUrlInput(url)
     const fetched = parsedUrl === null ? null : await fetchPageText(parsedUrl)
-    if (fetched === null) {
+    if (fetched?.status !== 'ok') {
         return {
             items: [],
-            fallbackToManual: true
+            fallbackToManual: true,
+            isBlocked: fetched?.status === 'blocked'
         }
     }
 
@@ -35,6 +36,7 @@ export const parseReceiptUrl = async (
     })
     return {
         items,
-        fallbackToManual: items.length === 0
+        fallbackToManual: items.length === 0,
+        isBlocked: false
     }
 }

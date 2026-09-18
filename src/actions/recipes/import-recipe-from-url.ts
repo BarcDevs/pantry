@@ -22,7 +22,7 @@ export const importRecipeFromUrl = async (
     const userId = await requireUserId()
     const parsedUrl = parseUrlInput(url)
     const fetched = parsedUrl === null ? null : await fetchPageText(parsedUrl)
-    if (parsedUrl === null || fetched === null) {
+    if (parsedUrl === null || fetched?.status !== 'ok') {
         return {
             recipe: null,
             fallbackToManual: true

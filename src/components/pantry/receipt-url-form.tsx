@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { ReceiptUrlBlockedNotice } from '@/components/pantry/receipt-url-blocked-notice'
 import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { UrlInput } from '@/components/shared/UrlInput'
 
@@ -14,6 +15,7 @@ type ReceiptUrlFormProps = {
     onSubmit: () => void
     isSubmitting: boolean
     error: string | null
+    isBlocked?: boolean
 }
 
 export const ReceiptUrlForm = ({
@@ -21,7 +23,8 @@ export const ReceiptUrlForm = ({
     onUrlChange,
     onSubmit,
     isSubmitting,
-    error
+    error,
+    isBlocked = false
 }: ReceiptUrlFormProps) => {
     const isEmpty = url.trim().length === 0
     const canSubmit = !isSubmitting && !isEmpty && !isUrlInputInvalid(url)
@@ -45,7 +48,8 @@ export const ReceiptUrlForm = ({
                     ? pantryTexts.receiptReview.scanning
                     : pantryTexts.receiptReview.urlSubmit}
             </PrimaryButton>
-            {error && (
+            {error && isBlocked && <ReceiptUrlBlockedNotice/>}
+            {error && !isBlocked && (
                 <div className={'flex flex-col gap-2 text-label text-status-red-fg'}>
                     <span>{error}</span>
                     <span>

@@ -7,6 +7,16 @@ import { secondInMs } from '@/constants/time'
 
 const maxRedirects = 3
 const fetchTimeoutMs = 5 * secondInMs
+const browserHeaders = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'he-IL,he;q=0.9,en;q=0.8'
+}
+const blockedStatuses = new Set([
+    401,
+    403,
+    429
+])
 const allowedProtocols = new Set([
     'http:',
     'https:'
@@ -87,6 +97,8 @@ const readBoundedBody = async (
     return text
 }
 
+export class FetchBlockedError extends Error {}
+
 export type FetchSafeUrlOptions = {
     maxBytes: number
     allowedContentTypes: string[]
@@ -107,6 +119,7 @@ export const fetchSafeUrl = async (
         try {
             response = await fetch(currentUrl, {
                 redirect: 'manual',
+                headers: browserHeaders,
                 signal: AbortSignal.timeout(fetchTimeoutMs),
                 dispatcher: pinnedDispatcher(
                     safeAddress.address,
@@ -133,6 +146,9 @@ export const fetchSafeUrl = async (
         }
         if (!response.ok) {
             logFetchFailure(currentUrl, `HTTP ${response.status}`)
+            if (blockedStatuses.has(response.status)) {
+                throw new FetchBlockedError(`HTTP ${response.status}`)
+            }
             return null
         }
         const contentType = response.headers.get('content-type') ?? ''

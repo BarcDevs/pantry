@@ -26,6 +26,7 @@ export const parseReceiptText = async (
 
     return {
         items,
-        fallbackToManual: false
+        fallbackToManual: false,
+        isBlocked: false
     }
 }
