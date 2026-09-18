@@ -16,7 +16,7 @@ const AppLayout = async ({ children }: LayoutProps) => {
         redirect(routes.onboarding)
 
     return (
-        <div className={'flex min-h-screen flex-col md:flex-row'}>
+        <div className={'flex min-h-screen shrink-0 flex-col md:flex-row'}>
             <Sidebar/>
             <div className={'flex min-w-0 flex-1 flex-col'}>
                 <div className={'flex flex-1 flex-col'}>

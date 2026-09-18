@@ -138,6 +138,8 @@ persistently. Assume it's already up at `http://localhost:3000` and just navigat
 say so and ask the user to start it - don't launch one in the background. If you ever do start one for any
 reason, kill it (and confirm it's dead) before finishing the task - don't leave an orphaned process behind.
 
+Login-gated pages: sign in at `/sign-in` with the test account in `.env.local` (`TEST_USER_EMAIL` / `TEST_USER_PASSWORD`) - read it from there, never hardcode it in tracked files.
+
 Prefer `snapshot` over `screenshot` - returns element refs for interaction, not pixels. Use `console` after interactions to catch JS errors.
 
 ## graphify
