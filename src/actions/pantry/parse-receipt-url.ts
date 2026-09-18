@@ -29,7 +29,10 @@ export const parseReceiptUrl = async (
         receiptItemsSchema,
         mockReceiptItems,
         0
-    )
+    ).catch((error: unknown) => {
+        console.error(`[parseReceiptUrl] AI extraction failed: ${String(error)}`)
+        throw error
+    })
     return {
         items,
         fallbackToManual: items.length === 0

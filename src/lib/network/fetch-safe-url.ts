@@ -12,6 +12,18 @@ const allowedProtocols = new Set([
     'https:'
 ])
 
+const hostnameOf = (url: string): string => {
+    try {
+        return new URL(url).hostname
+    } catch {
+        return 'invalid-url'
+    }
+}
+
+const logFetchFailure = (url: string, reason: string): void => {
+    console.error(`[fetchSafeUrl] ${hostnameOf(url)}: ${reason}`)
+}
+
 const resolveSafeAddress = async (
     candidateUrl: string
 ): Promise<{ address: string, family: number } | null> => {
@@ -87,33 +99,52 @@ export const fetchSafeUrl = async (
     let currentUrl = startUrl
     for (let hop = 0; hop <= maxRedirects; hop += 1) {
         const safeAddress = await resolveSafeAddress(currentUrl)
-        if (!safeAddress) return null
-        const response = await fetch(currentUrl, {
-            redirect: 'manual',
-            signal: AbortSignal.timeout(fetchTimeoutMs),
-            dispatcher: pinnedDispatcher(
-                safeAddress.address,
-                safeAddress.family
-            )
-        } as RequestInit)
+        if (!safeAddress) {
+            logFetchFailure(currentUrl, 'blocked or unresolvable address')
+            return null
+        }
+        let response: Response
+        try {
+            response = await fetch(currentUrl, {
+                redirect: 'manual',
+                signal: AbortSignal.timeout(fetchTimeoutMs),
+                dispatcher: pinnedDispatcher(
+                    safeAddress.address,
+                    safeAddress.family
+                )
+            } as RequestInit)
+        } catch (error) {
+            logFetchFailure(currentUrl, `request failed: ${String(error)}`)
+            throw error
+        }
         const isRedirect = response.status >= 300
             && response.status < 400
         if (isRedirect) {
             const location = response.headers.get('location')
-            if (!location) return null
+            if (!location) {
+                logFetchFailure(currentUrl, 'redirect without location')
+                return null
+            }
             currentUrl = new URL(
                 location,
                 currentUrl
             ).toString()
             continue
         }
-        if (!response.ok) return null
+        if (!response.ok) {
+            logFetchFailure(currentUrl, `HTTP ${response.status}`)
+            return null
+        }
         const contentType = response.headers.get('content-type') ?? ''
         const isAllowedType = options.allowedContentTypes.some(
             (allowed) => contentType.includes(allowed)
         )
-        if (!isAllowedType) return null
+        if (!isAllowedType) {
+            logFetchFailure(currentUrl, `content-type "${contentType}" not allowed`)
+            return null
+        }
         return readBoundedBody(response, options.maxBytes)
     }
+    logFetchFailure(currentUrl, 'too many redirects')
     return null
 }
