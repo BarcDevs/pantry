@@ -1,5 +1,6 @@
 import type { RecipeDoc } from '@/types/recipe'
 
+import { RecipeBodyGrid } from '@/components/recipes/result/recipe-body-grid'
 import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingredients-list'
 import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero'
 import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
@@ -33,8 +34,10 @@ export const ImportRecipeReview = ({
                 onEnter={isSaving ? undefined : onSave}
             />
         </div>
-        <RecipeIngredientsList ingredients={recipe.ingredients}/>
-        <RecipeStepsList steps={recipe.steps}/>
+        <RecipeBodyGrid>
+            <RecipeIngredientsList ingredients={recipe.ingredients}/>
+            <RecipeStepsList steps={recipe.steps}/>
+        </RecipeBodyGrid>
         <PrimaryButton
             disabled={isSaving}
             onClick={onSave}

@@ -2,6 +2,7 @@
 
 import { RECIPE_SOURCES } from '@/types/enums'
 
+import { RecipeBodyGrid } from '@/components/recipes/result/recipe-body-grid'
 import { RecipeImageUrlField } from '@/components/recipes/result/recipe-image-url-field'
 import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingredients-list'
 import { RecipeRefineInput } from '@/components/recipes/result/recipe-refine-input'
@@ -47,7 +48,7 @@ export const RecipeResultView = () => {
                     onChange={setManualImageUrl}
                 />
             )}
-            <div className={'grid grid-cols-1 gap-5.5 md:grid-cols-2'}>
+            <RecipeBodyGrid>
                 <RecipeIngredientsList
                     ingredients={recipe.ingredients}
                     usedReplacements={usedReplacements}
@@ -56,7 +57,7 @@ export const RecipeResultView = () => {
                     onToggleRemoval={toggleRemoval}
                 />
                 <RecipeStepsList steps={recipe.steps}/>
-            </div>
+            </RecipeBodyGrid>
             <RecipeRefineInput
                 value={refineInstruction}
                 onChange={setRefineInstruction}

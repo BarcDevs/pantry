@@ -6,6 +6,7 @@ import type { Recipe } from '@/types/recipe'
 import { RecipeDetailActions } from '@/components/recipes/detail/recipe-detail-actions'
 import { RecipeRatingDisplay } from '@/components/recipes/detail/recipe-rating-display'
 import { RecipeTagsEditor } from '@/components/recipes/detail/recipe-tags-editor'
+import { RecipeBodyGrid } from '@/components/recipes/result/recipe-body-grid'
 import { RecipeImageUrlField } from '@/components/recipes/result/recipe-image-url-field'
 import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingredients-list'
 import { RecipeRefineInput } from '@/components/recipes/result/recipe-refine-input'
@@ -63,7 +64,7 @@ export const RecipeDetailView = ({ recipe: initialRecipe }: RecipeDetailViewProp
                     onChange={updateImageUrl}
                 />
             )}
-            <div className={'grid grid-cols-1 gap-5.5 md:grid-cols-2'}>
+            <RecipeBodyGrid>
                 <RecipeIngredientsList
                     ingredients={recipe.ingredients}
                     usedReplacements={usedReplacements}
@@ -72,7 +73,7 @@ export const RecipeDetailView = ({ recipe: initialRecipe }: RecipeDetailViewProp
                     onToggleRemoval={toggleRemoval}
                 />
                 <RecipeStepsList steps={recipe.steps}/>
-            </div>
+            </RecipeBodyGrid>
             <RecipeRefineInput
                 value={adjustInstruction}
                 onChange={setAdjustInstruction}
