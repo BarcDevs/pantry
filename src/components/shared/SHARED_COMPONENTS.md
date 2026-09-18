@@ -106,6 +106,21 @@ prop driving the two looks.
 If a new recurring button shape shows up (checked against existing usages, not assumed), add another purpose-made
 button here instead of a one-off inline `className` override at the call site.
 
+## `UrlInput`
+
+Controlled LTR input for any URL field. Validates as you type (shows an inline "invalid URL" message) and accepts
+scheme-less input like `google.com`. **Use it for every URL field - never a raw `Input` + `dir={'ltr'}`.** Two rules
+for callers: disable submit with `isUrlInputInvalid(value)` from `@/lib/network/parse-url-input`, and send
+`parseUrlInput(value)` (adds `https://`, returns `null` when invalid) to the server/action, not the raw string.
+
+```tsx
+<UrlInput
+    value={url}
+    placeholder={texts.urlPlaceholder}
+    onChange={(e) => onUrlChange(e.target.value)}
+/>
+```
+
 ## `EmptyState`
 
 Centered icon + message for empty lists/collections. `message` accepts a string or a custom `ReactNode`.

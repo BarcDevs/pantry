@@ -11,6 +11,8 @@ import { PageHeader } from '@/components/shared/PageHeader'
 
 import { useRecipeImport } from '@/hooks/use-recipe-import'
 
+import { isUrlInputInvalid, parseUrlInput } from '@/lib/network/parse-url-input'
+
 import { recipesTexts } from '@/constants/texts/recipes'
 
 const ImportRecipePage = () => {
@@ -31,11 +33,13 @@ const ImportRecipePage = () => {
     } = useRecipeImport()
 
     const isUrlTab = tab === 'url'
-    const isSubmitDisabled = isImporting || (isUrlTab ? url.trim().length === 0 : text.trim().length === 0)
+    const isSubmitDisabled = isImporting || (isUrlTab
+        ? url.trim().length === 0 || isUrlInputInvalid(url)
+        : text.trim().length === 0 || isUrlInputInvalid(textImageUrl))
 
     const handleSubmit = () => {
         if (isUrlTab) importFromUrl(url.trim())
-        else importFromText(text.trim(), textImageUrl.trim() || undefined)
+        else importFromText(text.trim(), parseUrlInput(textImageUrl) ?? undefined)
     }
 
     return (

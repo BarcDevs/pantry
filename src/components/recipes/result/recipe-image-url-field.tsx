@@ -4,7 +4,9 @@ import { useState } from 'react'
 
 import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { TextButton } from '@/components/shared/buttons/TextButton'
-import { Input } from '@/components/shared/Input'
+import { UrlInput } from '@/components/shared/UrlInput'
+
+import { isUrlInputInvalid, parseUrlInput } from '@/lib/network/parse-url-input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -34,14 +36,16 @@ export const RecipeImageUrlField = ({
                 {texts.imageFieldDescription}
             </p>
             <div className={'flex flex-wrap gap-2.25'}>
-                <Input
-                    dir={'ltr'}
+                <UrlInput
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
                     placeholder={texts.imageUrlPlaceholder}
                     className={'min-w-50 flex-1'}
                 />
-                <PrimaryButton onClick={() => onChange(draft)}>
+                <PrimaryButton
+                    disabled={isUrlInputInvalid(draft)}
+                    onClick={() => onChange(parseUrlInput(draft) ?? '')}
+                >
                     {texts.applyImage}
                 </PrimaryButton>
             </div>

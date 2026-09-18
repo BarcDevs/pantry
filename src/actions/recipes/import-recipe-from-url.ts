@@ -1,13 +1,12 @@
 'use server'
 
-import { z } from 'zod'
-
 import type { RecipeImportResult } from '@/types/recipe'
 
 import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
 import { fetchPageText } from '@/lib/network/fetch-page-text'
+import { parseUrlInput } from '@/lib/network/parse-url-input'
 import { buildImportRecipeFromUrlPrompt } from '@/lib/prompts/import-recipe-from-url-prompt'
 import { buildImportedRecipeDoc } from '@/lib/recipes/build-imported-recipe-doc'
 import { extractOgImage } from '@/lib/recipes/extract-og-image'
@@ -21,10 +20,9 @@ export const importRecipeFromUrl = async (
     url: string
 ): Promise<RecipeImportResult> => {
     const userId = await requireUserId()
-    const parsedUrl = z.string().url().parse(url)
-
-    const fetched = await fetchPageText(parsedUrl)
-    if (fetched === null) {
+    const parsedUrl = parseUrlInput(url)
+    const fetched = parsedUrl === null ? null : await fetchPageText(parsedUrl)
+    if (parsedUrl === null || fetched === null) {
         return {
             recipe: null,
             fallbackToManual: true

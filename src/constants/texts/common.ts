@@ -7,6 +7,7 @@ export const commonTexts = {
     close: 'סגירה',
     confirm: 'אישור',
     skip: 'דילוג',
+    urlInvalid: 'כתובת רשת לא תקינה',
     selectAll: 'בחירת הכל',
     deselectAll: 'ביטול הכל',
     navHome: 'מזווה',

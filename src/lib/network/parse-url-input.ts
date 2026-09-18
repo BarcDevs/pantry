@@ -19,3 +19,7 @@ export const parseUrlInput = (input: string): string | null => {
         return null
     }
 }
+
+export const isUrlInputInvalid = (input: string): boolean => (
+    input.trim().length > 0 && parseUrlInput(input) === null
+)

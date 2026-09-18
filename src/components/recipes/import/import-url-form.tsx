@@ -1,4 +1,4 @@
-import { Input } from '@/components/shared/Input'
+import { UrlInput } from '@/components/shared/UrlInput'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -15,12 +15,10 @@ export const ImportUrlForm = ({
         <label className={'mb-1.75 block text-label font-semibold text-ink-2'}>
             {recipesTexts.import.urlLabel}
         </label>
-        <Input
-            dir={'ltr'}
+        <UrlInput
             value={url}
             placeholder={recipesTexts.import.urlPlaceholder}
             onChange={(e) => onUrlChange(e.target.value)}
-            className={'text-left'}
         />
         <p className={'mt-2 text-caption text-ink-4'}>
             {recipesTexts.import.urlHint}

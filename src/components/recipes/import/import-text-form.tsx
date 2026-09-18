@@ -1,6 +1,6 @@
 import { ImageIcon } from 'lucide-react'
 
-import { Input } from '@/components/shared/Input'
+import { UrlInput } from '@/components/shared/UrlInput'
 import { Textarea } from '@/components/ui/textarea'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -35,8 +35,7 @@ export const ImportTextForm = ({
                 {`· ${recipesTexts.import.textImageOptional}`}
             </span>
         </label>
-        <Input
-            dir={'ltr'}
+        <UrlInput
             value={imageUrl}
             placeholder={recipesTexts.result.imageUrlPlaceholder}
             onChange={(e) => onImageUrlChange(e.target.value)}
