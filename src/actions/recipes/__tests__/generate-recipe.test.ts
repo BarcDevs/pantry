@@ -8,7 +8,7 @@ jest.mock('@/models/pantry-item.model', () => ({
 }))
 jest.mock('@/models/user.model', () => ({
     UserModel: {
-        findOne: jest.fn()
+        findById: jest.fn()
     }
 }))
 jest.mock('@/lib/ai/gemini', () => ({
@@ -30,7 +30,7 @@ import { generateRecipe } from '../generate-recipe'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockFind = PantryItemModel.find as jest.Mock
-const mockFindOne = UserModel.findOne as jest.Mock
+const mockFindById = UserModel.findById as jest.Mock
 const mockGenerateStructured = generateStructured as jest.Mock
 
 const leanChain = (result: unknown) => ({
@@ -90,7 +90,7 @@ describe('generateRecipe', () => {
     it('assembles prompt from pantry context and returns recipe with round-tripped ai_prompt_context', async () => {
         mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(leanChain(pantryItems))
-        mockFindOne.mockReturnValue(leanChain(null))
+        mockFindById.mockReturnValue(leanChain(null))
         mockGenerateStructured.mockResolvedValue(aiResponse)
 
         const result = await generateRecipe(input)
@@ -124,7 +124,7 @@ describe('generateRecipe', () => {
     it('scopes pantry context to selectedItemIds when provided', async () => {
         mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFind.mockReturnValue(leanChain([pantryItems[0]]))
-        mockFindOne.mockReturnValue(leanChain(null))
+        mockFindById.mockReturnValue(leanChain(null))
         mockGenerateStructured.mockResolvedValue(aiResponse)
 
         await generateRecipe({

@@ -1,5 +1,7 @@
 # Pantry - Product Blueprint v3
 
+> **Auth note:** this PRD was written for Clerk. Auth is now Auth.js (NextAuth v5) with Credentials + Google and JWT sessions - no webhooks, no `clerk_id`, users keyed by `_id`/`email`. Read Clerk mentions below as historical; see `docs/architecture.md`.
+
 ## Product Overview
 
   Pantry is a mobile-first PWA that helps home cooks manage their pantry and fridge inventory, and generates personalized recipes based on what they already have. The core loop is: **add items → generate recipe → cook → update inventory**.

@@ -10,7 +10,7 @@ Hebrew-language, Israel-market MVP. Single household, personal use.
 
 - **Next.js 16** (App Router, TypeScript) - deployed to Vercel
 - **MongoDB + Mongoose** - schema-first models
-- **Clerk** - Google OAuth + email/password auth
+- **Auth.js (NextAuth v5)** - Google OAuth + email/password, JWT sessions
 - **Gemini Flash** (Vercel AI SDK) - recipe generation, receipt vision, URL/text parsing
 - **Tailwind v4 + shadcn/ui** - CSS-only config
 - **PWA** - installable, offline shell via custom service worker
@@ -28,9 +28,9 @@ npm run dev
 
 See `.env.local.example`. Required:
 
-- **Clerk** - `CLERK_SECRET_KEY`, `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_WEBHOOK_SECRET`
+- **Auth** - `AUTH_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
 - **MongoDB** - `MONGODB_URI`
-- **Gemini** - `GOOGLE_GENERATIVE_AI_API_KEY`
+- **Gemini** - `GEMINI_API_KEY`
 
 ## Commands
 
@@ -43,7 +43,6 @@ See `.env.local.example`. Required:
 | `npm run lint:fix` | ESLint autofix |
 | `npm run test` | Jest (unit/component) |
 | `npm run test:e2e` | Playwright (e2e) |
-| `npm run tunnel` | ngrok tunnel for Clerk webhooks |
 
 ## Features (MVP)
 

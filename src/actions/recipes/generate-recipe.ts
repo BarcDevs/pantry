@@ -65,7 +65,7 @@ export const generateRecipe = async (
     const pantryItemNames = selectedPantryItems.map((item) => item.name)
 
     const user = await UserModel
-        .findOne({ clerkId: userId })
+        .findById(userId)
         .lean<RecipePromptUserContext | null>()
 
     const prompt = buildGenerateRecipePrompt(parsedInput, pantryItemNames, {

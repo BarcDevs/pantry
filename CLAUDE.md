@@ -35,7 +35,7 @@ immediately, same turn as the correction/decision** — don't wait to be asked. 
 
 ## Project status
 
-Phase 0 scaffold complete (Next.js 16.2.9, Tailwind v4 CSS-only config, Clerk, Mongoose, Vercel AI SDK, Jest, Playwright). Phases 1-3 (pantry CRUD, recipes, receipts) per `docs/plans/gentle-watching-giraffe.md`.
+Phase 0 scaffold complete (Next.js 16.2.9, Tailwind v4 CSS-only config, Auth.js (NextAuth v5), Mongoose, Vercel AI SDK, Jest, Playwright). Phases 1-3 (pantry CRUD, recipes, receipts) per `docs/plans/gentle-watching-giraffe.md`.
 
 Commands:
 - `npm run dev` - dev server
@@ -45,7 +45,7 @@ Commands:
 - `npm run test` - Jest (unit/component)
 - `npm run test:e2e` - Playwright (end-to-end)
 
-Requires `.env.local` (see `.env.local.example`) with Clerk, MongoDB, and Gemini credentials - app will not boot without them (env validated at import of `src/config/env.ts`).
+Requires `.env.local` (see `.env.local.example`) with Auth.js, Google OAuth, MongoDB, and Gemini credentials - app will not boot without them (env validated at import of `src/config/env.ts`).
 
 ## Product
 

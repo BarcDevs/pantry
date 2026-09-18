@@ -6,7 +6,7 @@ Distilled from `docs/pantry-prd.md`. Read that file for full acceptance criteria
 
 - **Next.js 15 App Router (TypeScript)** - single codebase, UI + API routes, deployed to Vercel.
 - **MongoDB + Mongoose** - schema-first models; TypeScript enums must mirror DB enums.
-- **Clerk** - auth (Google OAuth + email/password). User sync to MongoDB via Clerk webhooks (`user.created`/`user.updated`) at `/api/users/sync` - must stay idempotent.
+- **Auth.js (NextAuth v5)** - auth (Google OAuth + email/password Credentials), JWT sessions. Users live in MongoDB keyed by `_id`/`email`; created inline on sign-up / first Google sign-in. No webhooks.
 - **Gemini Flash (Google AI SDK)** - all recipe generation, receipt vision, and URL/text parsing. Server-side only, never exposed to client. Put AI calls behind a service abstraction layer so the model can be swapped.
 - **Tailwind + shadcn/ui** - components are copy-owned, not a runtime dependency.
 - **next-pwa** - installable PWA, offline shell.
@@ -25,14 +25,14 @@ Distilled from `docs/pantry-prd.md`. Read that file for full acceptance criteria
 
 ## Deviations from this PRD (deliberate, see `CLAUDE.md` plan reference)
 
-- **No guest mode.** The PRD's localStorage-backed guest entry (§ "Guest mode") conflicts with the Server Actions + SSR architecture actually built, which assumes an authenticated session end-to-end everywhere. Clerk auth is required from first open; there is no guest entry point, migration endpoint, or localStorage data path anywhere in the codebase.
+- **No guest mode.** The PRD's localStorage-backed guest entry (§ "Guest mode") conflicts with the Server Actions + SSR architecture actually built, which assumes an authenticated session end-to-end everywhere. Auth is required from first open; there is no guest entry point, migration endpoint, or localStorage data path anywhere in the codebase.
 - **`custom_instructions` field added to recipe generation**, beyond the PRD's `RecipeGenerationRequest`. Free-text field on the Generation Config screen, appended verbatim into the Gemini prompt and persisted into `recipes.ai_prompt_context.custom_instructions` for reproducibility.
-- **Server Actions instead of Next.js API Routes** for all app mutations/queries (`src/actions/<domain>/<verb-noun>.ts`, one per file). Only the Clerk webhook (`/api/users/sync`) stays a route handler, since webhooks require a real HTTP endpoint.
+- **Server Actions instead of Next.js API Routes** for all app mutations/queries (`src/actions/<domain>/<verb-noun>.ts`, one per file). The only route handler is the Auth.js catch-all (`/api/auth/[...nextauth]`).
 - **AI calls go through the Vercel AI SDK** (`ai` + `@ai-sdk/google`) via a factory in `src/lib/ai/factory.ts`, not the raw `@google/generative-ai` SDK - keeps provider swapping to one file.
 - **PWA implemented without `next-pwa`.** `next-pwa` is a webpack-only plugin and Next.js 16 defaults to Turbopack, which it doesn't support. Used instead: `public/manifest.json` + a hand-written `public/sw.js` (cache-first shell) registered from a small client component (`src/components/shell/service-worker-register.tsx`). Same installable-PWA outcome, no incompatible dependency.
 - **`users` gets `onboarding_completed_at: Date | null`**, not in the PRD's field list, so the app knows not to re-show the skippable 3-step onboarding on later logins.
-- **Landing page added (Phase 1).** `src/app/(public)/` is a public route group (no Clerk auth gate) with its own standalone layout. It is a marketing/entry surface - not part of the authenticated app shell. Clerk middleware explicitly lists `/(public)(.*)` as public.
-- **Premium feature flag**: `NEXT_PUBLIC_SHOW_PREMIUM=true` enables premium-tier copy on the landing page (FAQ answer, plan comparison). Default `false`. The paywall, plan management, and generation-count enforcement are not built in this MVP - only the server-side `generation_count` field on `user.model.ts` is in scope, ready for when the flag is turned on and the paywall UI is built. This is the second documented `NEXT_PUBLIC_` exception alongside `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`; read only via `src/config/env.ts`.
+- **Landing page added (Phase 1).** `src/app/(public)/` is a public route group (no auth gate) with its own standalone layout. It is a marketing/entry surface - not part of the authenticated app shell. The auth proxy (`src/proxy.ts`) explicitly lists `/(public)(.*)` as public.
+- **Premium feature flag**: `NEXT_PUBLIC_SHOW_PREMIUM=true` enables premium-tier copy on the landing page (FAQ answer, plan comparison). Default `false`. The paywall, plan management, and generation-count enforcement are not built in this MVP - only the server-side `generation_count` field on `user.model.ts` is in scope, ready for when the flag is turned on and the paywall UI is built. This is the only documented `NEXT_PUBLIC_` exception; read only via `src/config/env.ts`.
 
 ## Enums (must stay identical between TS and DB)
 

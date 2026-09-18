@@ -1,30 +1,13 @@
 # Testing Credentials
 
-## Clerk Test Users
+Auth is Auth.js (NextAuth v5) with email/password + Google. No email verification on sign-up, so any fresh email works.
 
-| Email | Password |
-|-------|----------|
-| `testuser+clerk_test@example.com` | `TestPassword123!` |
+## Browser verification
 
-Add more rows as needed - any `+clerk_test` suffix works.
-
-## How It Works
-
-- `+clerk_test` suffix → skips email verification (no real email sent)
-- OTP/magic link code → always `424242`
-- Test phone numbers → `+12015550100` through `+12015550199`, code `424242`
-- Dev instance only - test mode is automatic, no config needed
-
-## ngrok static domain
-
-| Field | Value |
-|---|---|
-| Static domain | _(fill in after `ngrok config add-authtoken` + reserve a free domain)_ |
-| Webhook endpoint (Clerk dashboard) | `https://<static>.ngrok-free.app/api/users/sync` |
-| Dev tunnel command | `npm run tunnel` |
+Sign in at `/sign-in` with `TEST_USER_EMAIL` / `TEST_USER_PASSWORD` from `.env.local` - never commit real values here.
 
 ## E2E Tests
 
-Call `setupClerkTestingToken()` before navigating to auth pages - bypasses bot detection.
+`e2e/helpers/auth.ts` signs up a fresh `testuser+<timestamp>@example.com` through the real UI and completes onboarding. No bot-detection bypass or test tokens needed.
 
 Seeded fixtures and per-step test data will be appended here as each Playwright spec is added.

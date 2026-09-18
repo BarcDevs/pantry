@@ -1,6 +1,6 @@
 {
   "name": "pantry",
-  "version": "0.53.15",
+  "version": "0.53.16",
   "private": true,
   "scripts": {
     "postinstall": "git config core.hooksPath .husky",
@@ -12,8 +12,7 @@
     "lint:fix": "eslint --fix",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "test:e2e": "playwright test",
-    "tunnel": "ngrok http 3000"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.83",
