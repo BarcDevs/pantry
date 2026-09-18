@@ -59,12 +59,7 @@ export const RecipeTagsEditor = ({
                 <Input
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            e.preventDefault()
-                            addTag()
-                        }
-                    }}
+                    onEnter={addTag}
                     placeholder={texts.tagsPlaceholder}
                 />
                 <SecondaryButton onClick={addTag}>

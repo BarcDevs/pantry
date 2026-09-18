@@ -30,6 +30,7 @@ export const ImportRecipeReview = ({
             <Input
                 value={recipe.title}
                 onChange={(e) => onTitleChange(e.target.value)}
+                onEnter={isSaving ? undefined : onSave}
             />
         </div>
         <RecipeIngredientsList ingredients={recipe.ingredients}/>

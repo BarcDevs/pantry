@@ -10,13 +10,15 @@ type ImportTextFormProps = {
     onTextChange: (text: string) => void
     imageUrl: string
     onImageUrlChange: (imageUrl: string) => void
+    onEnter?: () => void
 }
 
 export const ImportTextForm = ({
     text,
     onTextChange,
     imageUrl,
-    onImageUrlChange
+    onImageUrlChange,
+    onEnter
 }: ImportTextFormProps) => (
     <div>
         <label className={'mb-1.75 block text-label font-semibold text-ink-2'}>
@@ -39,6 +41,7 @@ export const ImportTextForm = ({
             value={imageUrl}
             placeholder={recipesTexts.result.imageUrlPlaceholder}
             onChange={(e) => onImageUrlChange(e.target.value)}
+            onEnter={onEnter}
         />
         <p className={'mt-2 text-caption text-ink-4'}>
             {recipesTexts.import.textImageHint}

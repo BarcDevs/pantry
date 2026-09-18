@@ -106,6 +106,18 @@ prop driving the two looks.
 If a new recurring button shape shows up (checked against existing usages, not assumed), add another purpose-made
 button here instead of a one-off inline `className` override at the call site.
 
+## `Input`
+
+Wrapper around shadcn `Input` (`LtrInput` and `UrlInput` build on it, so they inherit this). Optional `onEnter` fires on Enter (skipped during IME composition, default prevented). **Any field with a submittable value that is not inside a `<form>` should pass `onEnter`** - pass `undefined` while the submit is disabled so Enter can't bypass the button's rules. Fields inside a real `<form>` already submit natively; don't add it there. Textareas keep Enter as newline.
+
+```tsx
+<Input
+    value={draft}
+    onChange={(e) => setDraft(e.target.value)}
+    onEnter={canSubmit ? onSubmit : undefined}
+/>
+```
+
 ## `UrlInput`
 
 Controlled LTR input for any URL field. Validates as you type (shows an inline "invalid URL" message) and accepts

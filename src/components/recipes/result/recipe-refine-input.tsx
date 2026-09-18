@@ -34,6 +34,7 @@ export const RecipeRefineInput = ({
             <Input
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
+                onEnter={isRefining || !value.trim() ? undefined : onSubmit}
                 placeholder={placeholder}
                 className={'min-w-50 flex-1'}
             />

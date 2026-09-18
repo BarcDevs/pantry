@@ -24,6 +24,7 @@ export const ReceiptUrlForm = ({
     error
 }: ReceiptUrlFormProps) => {
     const isEmpty = url.trim().length === 0
+    const canSubmit = !isSubmitting && !isEmpty && !isUrlInputInvalid(url)
 
     return (
         <div className={'flex flex-col gap-3 rounded-lg border border-border-2 bg-surface p-5'}>
@@ -34,9 +35,10 @@ export const ReceiptUrlForm = ({
                 value={url}
                 placeholder={pantryTexts.receiptReview.urlPlaceholder}
                 onChange={(e) => onUrlChange(e.target.value)}
+                onEnter={canSubmit ? onSubmit : undefined}
             />
             <PrimaryButton
-                disabled={isSubmitting || isEmpty || isUrlInputInvalid(url)}
+                disabled={!canSubmit}
                 onClick={onSubmit}
             >
                 {isSubmitting

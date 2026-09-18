@@ -21,6 +21,8 @@ export const RecipeImageUrlField = ({
 }: RecipeImageUrlFieldProps) => {
     const [draft, setDraft] = useState(imageUrl ?? '')
     const texts = recipesTexts.result
+    const isInvalid = isUrlInputInvalid(draft)
+    const applyImage = () => onChange(parseUrlInput(draft) ?? '')
 
     return (
         <div className={'mb-5 rounded-lg border border-border bg-surface p-4'}>
@@ -39,12 +41,13 @@ export const RecipeImageUrlField = ({
                 <UrlInput
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
+                    onEnter={isInvalid ? undefined : applyImage}
                     placeholder={texts.imageUrlPlaceholder}
                     className={'min-w-50 flex-1'}
                 />
                 <PrimaryButton
-                    disabled={isUrlInputInvalid(draft)}
-                    onClick={() => onChange(parseUrlInput(draft) ?? '')}
+                    disabled={isInvalid}
+                    onClick={applyImage}
                 >
                     {texts.applyImage}
                 </PrimaryButton>

@@ -42,6 +42,8 @@ const ImportRecipePage = () => {
         else importFromText(text.trim(), parseUrlInput(textImageUrl) ?? undefined)
     }
 
+    const onEnter = isSubmitDisabled ? undefined : handleSubmit
+
     return (
         <main className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
             <PageHeader
@@ -71,6 +73,7 @@ const ImportRecipePage = () => {
                                     <ImportUrlForm
                                         url={url}
                                         onUrlChange={setUrl}
+                                        onEnter={onEnter}
                                     />
                                 )
                                 : (
@@ -79,6 +82,7 @@ const ImportRecipePage = () => {
                                         onTextChange={setText}
                                         imageUrl={textImageUrl}
                                         onImageUrlChange={setTextImageUrl}
+                                        onEnter={onEnter}
                                     />
                                 )}
                         </div>

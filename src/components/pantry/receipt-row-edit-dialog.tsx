@@ -40,6 +40,11 @@ export const ReceiptRowEditDialog = ({
 }: ReceiptRowEditDialogProps) => {
     const productEdit = useReceiptRowEdit(row)
 
+    const handleDone = () => {
+        onSave(productEdit.buildPatch())
+        onOpenChange(false)
+    }
+
     return (
         <AppDialog
             open={open}
@@ -47,10 +52,7 @@ export const ReceiptRowEditDialog = ({
             title={pantryTexts.receiptReview.editRowTitle}
             footer={(
                 <PrimaryButton
-                    onClick={() => {
-                        onSave(productEdit.buildPatch())
-                        onOpenChange(false)
-                    }}
+                    onClick={handleDone}
                     className={'w-full'}
                 >
                     {pantryTexts.receiptReview.editRowDone}
@@ -65,6 +67,7 @@ export const ReceiptRowEditDialog = ({
                     <Input
                         value={productEdit.name}
                         onChange={(e) => productEdit.setName(e.target.value)}
+                        onEnter={handleDone}
                     />
                 </div>
                 <div className={'grid grid-cols-2 gap-3'}>
