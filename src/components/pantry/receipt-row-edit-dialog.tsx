@@ -118,6 +118,7 @@ export const ReceiptRowEditDialog = ({
                         onSelectRecommended={productEdit.applySuggestedStorage}
                         onApplyExpiry={productEdit.applySuggestedExpiry}
                         onRetry={productEdit.requestSuggestion}
+                        onRefresh={productEdit.refreshSuggestion}
                     />
                 ) : (
                     <StorageSuggestionButton

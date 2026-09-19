@@ -15,13 +15,13 @@ export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
     const [suggestionFailed, setSuggestionFailed] = useState(false)
     const [isSuggesting, startSuggesting] = useTransition()
 
-    const requestSuggestion = () => {
+    const fetchSuggestion = (fresh: boolean) => {
         const trimmedName = name.trim()
         if (trimmedName.length < 2) return
 
         startSuggesting(async () => {
             try {
-                const result = await suggestStorage(trimmedName)
+                const result = await suggestStorage(trimmedName, { fresh })
                 setSuggestion(result)
                 setSuggestionFailed(false)
                 if (result.suggestedType && !type) {
@@ -34,6 +34,9 @@ export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
             }
         })
     }
+
+    const requestSuggestion = () => fetchSuggestion(false)
+    const refreshSuggestion = () => fetchSuggestion(true)
 
     const applySuggestedStorage = () => {
         if (suggestion) setStorage(suggestion.suggestedStorage)
@@ -65,6 +68,7 @@ export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
         isSuggesting,
         suggestionFailed,
         requestSuggestion,
+        refreshSuggestion,
         applySuggestedStorage,
         applySuggestedExpiry,
         buildPatch

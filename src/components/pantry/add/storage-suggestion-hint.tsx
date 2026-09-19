@@ -1,8 +1,13 @@
-import { CheckIcon, SparklesIcon } from 'lucide-react'
+import {
+    CheckIcon,
+    RefreshCwIcon,
+    SparklesIcon
+} from 'lucide-react'
 
 import type { StorageLocation } from '@/types/enums'
 import type { StorageSuggestion } from '@/types/pantry-item'
 
+import { IconButton } from '@/components/shared/buttons/IconButton'
 import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
@@ -22,6 +27,7 @@ type StorageSuggestionHintProps = {
     onSelectRecommended: () => void
     onApplyExpiry: () => void
     onRetry: () => void
+    onRefresh: () => void
 }
 
 export const StorageSuggestionHint = ({
@@ -31,7 +37,8 @@ export const StorageSuggestionHint = ({
     currentStorage,
     onSelectRecommended,
     onApplyExpiry,
-    onRetry
+    onRetry,
+    onRefresh
 }: StorageSuggestionHintProps) => {
     const isMatch = suggestion
         ? currentStorage === suggestion.suggestedStorage
@@ -53,6 +60,16 @@ export const StorageSuggestionHint = ({
                 </span>
                 {isLoading && (
                     <span className={'size-3.25 animate-spin rounded-full border-2 border-soft-green-border border-t-green'}/>
+                )}
+                {suggestion && !isLoading && (
+                    <IconButton
+                        aria-label={pantryTexts.addForm.suggestionRefresh}
+                        title={pantryTexts.addForm.suggestionRefresh}
+                        onClick={onRefresh}
+                        className={'ms-auto size-6 text-green'}
+                    >
+                        <RefreshCwIcon size={13}/>
+                    </IconButton>
                 )}
             </div>
             {suggestionFailed && !isLoading && (

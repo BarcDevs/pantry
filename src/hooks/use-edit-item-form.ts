@@ -95,13 +95,13 @@ export const useEditItemForm = ({
         setSuggestionFailed(false)
     })
 
-    const requestSuggestion = () => {
+    const fetchSuggestion = (fresh: boolean) => {
         const trimmedName = name.trim()
         if (trimmedName.length < minNameLengthForSuggestion) return
 
         startSuggesting(async () => {
             try {
-                const result = await suggestStorage(trimmedName)
+                const result = await suggestStorage(trimmedName, { fresh })
                 setSuggestion(result)
                 setSuggestionFailed(false)
                 if (result.suggestedType && !form.getValues('type')) {
@@ -114,6 +114,9 @@ export const useEditItemForm = ({
             }
         })
     }
+
+    const requestSuggestion = () => fetchSuggestion(false)
+    const refreshSuggestion = () => fetchSuggestion(true)
 
     const handleSubmit = form.handleSubmit((values) => {
         startSubmitting(async () => {
@@ -166,6 +169,7 @@ export const useEditItemForm = ({
         confirmDelete,
         setConfirmDelete,
         requestSuggestion,
+        refreshSuggestion,
         handleSubmit,
         handleDelete,
         applySuggestedStorage: () => {

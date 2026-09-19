@@ -15,11 +15,12 @@ import { pantryItemNameSchema } from '@/schemas/pantry-item-fields'
 import { storageSuggestionShape } from '@/schemas/storage-suggestion-schema'
 
 export const suggestStorage = async (
-    name: string
+    name: string,
+    options: { fresh?: boolean } = {}
 ): Promise<StorageSuggestion> => {
     await requireUserId()
     const parsedName = pantryItemNameSchema.parse(name)
-    const cached = getCachedSuggestion(parsedName)
+    const cached = options.fresh ? null : getCachedSuggestion(parsedName)
     if (cached) return cached
 
     const today = new Date().toISOString().slice(0, 10)

@@ -47,4 +47,16 @@ describe('suggestStorage', () => {
             0
         )
     })
+
+    it('serves a repeated name from the cache unless a fresh suggestion is requested', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockGenerateStructured.mockResolvedValue(suggestion)
+
+        await suggestStorage('גזר-מטמון')
+        await suggestStorage('גזר-מטמון')
+        expect(mockGenerateStructured).toHaveBeenCalledTimes(1)
+
+        await suggestStorage('גזר-מטמון', { fresh: true })
+        expect(mockGenerateStructured).toHaveBeenCalledTimes(2)
+    })
 })

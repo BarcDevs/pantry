@@ -70,6 +70,7 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     })
 
     const isStorageChosenRef = useRef(false)
+    const isFreshRequestedRef = useRef(false)
     const [suggestion, setSuggestion] = useState<
         StorageSuggestion | null
     >(null)
@@ -115,10 +116,13 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         }
 
         let cancelled = false
+        const fresh = isFreshRequestedRef.current
+        isFreshRequestedRef.current = false
         startSuggesting(async () => {
             try {
                 const result = await suggestStorage(
-                    debouncedName
+                    debouncedName,
+                    { fresh }
                 )
                 if (cancelled) return
                 setSuggestion(result)
@@ -227,7 +231,10 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         suggestion: effectiveSuggestion,
         isSuggesting: isPendingSuggestion,
         suggestionFailed,
-        retrySuggestion: () => setRetryToken((token) => token + 1),
+        retrySuggestion: () => {
+            isFreshRequestedRef.current = true
+            setRetryToken((token) => token + 1)
+        },
         isSubmitting,
         duplicate,
         setDuplicate,

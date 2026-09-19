@@ -45,6 +45,7 @@ export const EditItemDialog = ({
         confirmDelete,
         setConfirmDelete,
         requestSuggestion,
+        refreshSuggestion,
         handleSubmit,
         handleDelete,
         applySuggestedStorage,
@@ -88,6 +89,7 @@ export const EditItemDialog = ({
                             onSelectRecommended={applySuggestedStorage}
                             onApplyExpiry={applySuggestedExpiry}
                             onRetry={requestSuggestion}
+                            onRefresh={refreshSuggestion}
                         />
                     ) : (
                         <StorageSuggestionButton

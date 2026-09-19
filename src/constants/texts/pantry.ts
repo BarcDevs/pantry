@@ -75,6 +75,7 @@ export const pantryTexts = {
         suggestionError: 'לא הצלחנו לקבל הצעה',
         suggestionNotRecognized: 'לא זיהינו מוצר מזון בשם הזה',
         suggestionRetry: 'נסה שוב',
+        suggestionRefresh: 'רענון ההצעה',
         notesLabel: 'הערות (אופציונלי)',
         submit: 'הוספה למזווה',
         submitting: 'מוסיף...',
