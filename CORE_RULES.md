@@ -20,6 +20,7 @@
 - Don't make line-breaking too strict
 - Always provide informative and self-explanatory filenames and variable names
 - Components with 5+ related props (e.g. a form's field values, or their change handlers): group into a single object prop (e.g. `values`, `handlers`) instead of listing each field individually. Use `group.field` directly at the usage site - don't destructure the group back into individual local names
+- Hooks that return 5+ values (e.g. a form hook returning its form, handlers and dialog state): keep the return value as one object named after the feature (`const addItem = useAddItemForm()`) and use `addItem.field` at the usage site - don't destructure the whole return into individual local names. Destructure only 1-4 values you genuinely need, or nested helpers such as `form`
 
 ## Language & Format
 - Quotes: Single quotes (') for all strings, imports, JSX props, backtick allowed for template strings
