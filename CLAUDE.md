@@ -54,6 +54,14 @@ Pantry is a mobile-first PWA: track pantry/fridge inventory, generate AI recipes
 - Full spec (acceptance criteria, screens, API contracts, data model, risks): `docs/pantry-prd.md` - read the relevant section before implementing a feature rather than re-deriving requirements.
 - Condensed architecture decisions, planned stack, and shared enums: `docs/architecture.md` - read this before touching pantry items, recipes, or the AI suggestion flow.
 
+## Keep the PRD in sync
+
+Whenever you add a feature or tweak that isn't already described in `docs/pantry-prd.md`, or change
+behavior it does describe, update the PRD in the same change - don't wait to be asked. Add or edit the
+relevant acceptance criteria, Screen Map row, data model or API entry, and keep the wording aligned with
+what the code now does (including defaults, limits and edge rules). Include the PRD edit in the same
+commit as the feature.
+
 ## Design Files
 
 `.claude/design/` - JSX design files from Claude Design (reference when building UI).
