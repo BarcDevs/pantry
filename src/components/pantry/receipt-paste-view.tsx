@@ -10,6 +10,8 @@ import { ReceiptReviewShell } from '@/components/pantry/receipt-review-shell'
 import { ReceiptTextForm } from '@/components/pantry/receipt-text-form'
 import { ReceiptUrlForm } from '@/components/pantry/receipt-url-form'
 
+import { useResetOnChange } from '@/hooks/use-reset-on-change'
+
 import { pantryTexts } from '@/constants/texts/pantry'
 
 import { parseReceiptText } from '@/actions/pantry/parse-receipt-text'
@@ -23,6 +25,11 @@ export const ReceiptPasteView = () => {
     const [error, setError] = useState<string | null>(null)
     const [isBlocked, setIsBlocked] = useState(false)
     const [isParsing, startParsing] = useTransition()
+
+    useResetOnChange(isTextMode, () => {
+        setError(null)
+        setIsBlocked(false)
+    })
 
     return (
         <ReceiptReviewShell
