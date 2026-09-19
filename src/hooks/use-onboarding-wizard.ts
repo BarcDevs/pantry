@@ -111,17 +111,25 @@ export const useOnboardingWizard = () => {
     }
 
     return {
-        step,
-        isLastStep,
-        isSubmitting,
-        advance,
-        goBack,
-        skipAll,
-        cookingLevel,
-        setCookingLevel,
-        dietaryPreferences,
-        setDietaryPreferences,
-        householdSize,
-        setHouseholdSize
+        step: {
+            index: step,
+            isLast: isLastStep,
+            advance,
+            goBack
+        },
+        values: {
+            cookingLevel,
+            dietaryPreferences,
+            householdSize
+        },
+        setters: {
+            cookingLevel: setCookingLevel,
+            dietaryPreferences: setDietaryPreferences,
+            householdSize: setHouseholdSize
+        },
+        submission: {
+            isSubmitting,
+            skipAll
+        }
     }
 }
