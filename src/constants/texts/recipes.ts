@@ -15,6 +15,7 @@ export const recipesTexts = {
         bundle: 'צרור'
     },
     generate: {
+        draftBannerLabel: 'מתכון שלא נשמר',
         title: 'יצירת מתכון',
         subtitle: 'בחרו אילו פריטים מהמזווה ייכנסו ליצירה הזו, וכוונו את ההעדפות.',
         mealCountLabel: 'כמות סועדים',

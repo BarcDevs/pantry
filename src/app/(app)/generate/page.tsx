@@ -1,4 +1,5 @@
 import { GenerateConfigForm } from '@/components/recipes/generate/generate-config-form'
+import { RecipeDraftBanners } from '@/components/recipes/generate/recipe-draft-banners'
 import { RecipeImportLink } from '@/components/recipes/library/recipe-import-link'
 import { PageHeader } from '@/components/shared/PageHeader'
 
@@ -18,6 +19,7 @@ const GeneratePage = async () => {
                 </p>
                 <RecipeImportLink/>
             </div>
+            <RecipeDraftBanners/>
             <GenerateConfigForm dietaryPreferences={user?.dietaryPreferences ?? []}/>
         </main>
     )

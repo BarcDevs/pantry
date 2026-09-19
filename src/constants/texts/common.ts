@@ -6,6 +6,7 @@ export const commonTexts = {
     edit: 'עריכה',
     close: 'סגירה',
     confirm: 'אישור',
+    continue: 'המשך',
     skip: 'דילוג',
     urlInvalid: 'כתובת רשת לא תקינה',
     selectAll: 'בחירת הכל',
