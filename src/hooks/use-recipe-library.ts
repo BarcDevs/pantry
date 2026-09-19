@@ -26,38 +26,54 @@ const ingredientMatches = (recipe: Recipe, query: string) => (
     recipe.ingredients.some((ingredient) => normalizeName(ingredient.label).includes(query))
 )
 
+type LibraryValues = {
+    query: string
+    filter: RecipeLibraryFilter
+    sort: RecipeSortOption
+}
+
 export const useRecipeLibrary = (initialRecipes: Recipe[]) => {
     const [recipes, setRecipes] = useState(initialRecipes)
-    const [query, setQuery] = useState('')
-    const [filter, setFilter] = useState<RecipeLibraryFilter>('all')
-    const [sort, setSort] = useState<RecipeSortOption>('recent')
+    const [values, setValues] = useState<LibraryValues>({
+        query: '',
+        filter: 'all',
+        sort: 'recent'
+    })
     const [, startToggling] = useTransition()
     const [isSelecting, setIsSelecting] = useState(false)
     const [selectedIds, setSelectedIds] = useState<string[]>([])
 
+    const setField = <Key extends keyof LibraryValues>(
+        key: Key,
+        value: LibraryValues[Key]
+    ) => setValues((current) => ({
+        ...current,
+        [key]: value
+    }))
+
     const filteredRecipes = useMemo(() => {
-        const trimmedQuery = normalizeName(query)
+        const trimmedQuery = normalizeName(values.query)
         const tabFiltered = recipes.filter((recipe) => {
-            if (filter === 'can-cook') {
+            if (values.filter === 'can-cook') {
                 return recipe.ingredients
                     .filter((ingredient) => !ingredient.optional)
                     .every((ingredient) => ingredient.inPantry)
             }
-            if (filter === 'favorites') return recipe.isFavorite
+            if (values.filter === 'favorites') return recipe.isFavorite
             return true
         })
 
-        if (!trimmedQuery) return [...tabFiltered].sort(sortComparators[sort])
+        if (!trimmedQuery) return [...tabFiltered].sort(sortComparators[values.sort])
 
         const byTitle = tabFiltered
             .filter((recipe) => titleMatches(recipe, trimmedQuery))
-            .sort(sortComparators[sort])
+            .sort(sortComparators[values.sort])
         const byIngredientOnly = tabFiltered
             .filter((recipe) => !titleMatches(recipe, trimmedQuery) && ingredientMatches(recipe, trimmedQuery))
-            .sort(sortComparators[sort])
+            .sort(sortComparators[values.sort])
 
         return [...byTitle, ...byIngredientOnly]
-    }, [recipes, filter, query, sort])
+    }, [recipes, values])
 
     const toggleFavorite = (recipe: Recipe) => {
         const nextIsFavorite = !recipe.isFavorite
@@ -122,19 +138,19 @@ export const useRecipeLibrary = (initialRecipes: Recipe[]) => {
     }
 
     return {
-        query,
-        setQuery,
-        filter,
-        setFilter,
-        sort,
-        setSort,
-        filteredRecipes,
-        toggleFavorite,
-        deleteRecipe,
-        isSelecting,
-        selectedIds,
-        toggleSelectMode,
-        toggleSelected,
-        deleteSelected
+        values,
+        setField,
+        recipes: {
+            filtered: filteredRecipes,
+            toggleFavorite,
+            remove: deleteRecipe
+        },
+        selection: {
+            isSelecting,
+            selectedIds,
+            toggleMode: toggleSelectMode,
+            toggle: toggleSelected,
+            deleteSelected
+        }
     }
 }

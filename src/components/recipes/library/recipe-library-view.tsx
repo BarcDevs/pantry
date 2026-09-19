@@ -30,7 +30,7 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
     const handleBulkDelete = async () => {
         setIsDeleting(true)
         try {
-            await recipeLibrary.deleteSelected()
+            await recipeLibrary.selection.deleteSelected()
             setConfirmBulkDelete(false)
         } catch {
             setIsDeleting(false)
@@ -56,17 +56,17 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                 <RecipeImportLink/>
             </div>
             <RecipeSearchInput
-                value={recipeLibrary.query}
-                onChange={recipeLibrary.setQuery}
+                value={recipeLibrary.values.query}
+                onChange={(value) => recipeLibrary.setField('query', value)}
             />
             <div className={'mb-4.5 flex flex-wrap items-center justify-between gap-2'}>
                 <RecipeFilterTabs
-                    value={recipeLibrary.filter}
-                    onChange={recipeLibrary.setFilter}
+                    value={recipeLibrary.values.filter}
+                    onChange={(value) => recipeLibrary.setField('filter', value)}
                 />
                 <SortSelect
-                    value={recipeLibrary.sort}
-                    onChange={recipeLibrary.setSort}
+                    value={recipeLibrary.values.sort}
+                    onChange={(value) => recipeLibrary.setField('sort', value)}
                     label={recipesTexts.library.sortLabel}
                     options={[
                         { value: 'recent', label: recipesTexts.library.sortRecent },
@@ -76,24 +76,24 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                 />
             </div>
             <RecipeSelectionBar
-                isSelecting={recipeLibrary.isSelecting}
-                selectedCount={recipeLibrary.selectedIds.length}
-                onToggleSelectMode={recipeLibrary.toggleSelectMode}
+                isSelecting={recipeLibrary.selection.isSelecting}
+                selectedCount={recipeLibrary.selection.selectedIds.length}
+                onToggleSelectMode={recipeLibrary.selection.toggleMode}
                 onRequestDelete={() => setConfirmBulkDelete(true)}
             />
-            {recipeLibrary.filteredRecipes.length === 0 ? (
+            {recipeLibrary.recipes.filtered.length === 0 ? (
                 <p className={'py-10 text-center text-body text-ink-3'}>
                     {recipesTexts.library.noResults}
                 </p>
             ) : (
                 <RecipeGrid
-                    recipes={recipeLibrary.filteredRecipes}
-                    onToggleFavorite={recipeLibrary.toggleFavorite}
-                    onDelete={recipeLibrary.deleteRecipe}
-                    isSelecting={recipeLibrary.isSelecting}
-                    selectedIds={recipeLibrary.selectedIds}
+                    recipes={recipeLibrary.recipes.filtered}
+                    onToggleFavorite={recipeLibrary.recipes.toggleFavorite}
+                    onDelete={recipeLibrary.recipes.remove}
+                    isSelecting={recipeLibrary.selection.isSelecting}
+                    selectedIds={recipeLibrary.selection.selectedIds}
                     onToggleSelect={(recipe) => (
-                        recipeLibrary.toggleSelected(recipe._id)
+                        recipeLibrary.selection.toggle(recipe._id)
                     )}
                 />
             )}
@@ -102,7 +102,7 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                 onOpenChange={setConfirmBulkDelete}
                 onConfirm={handleBulkDelete}
                 isDeleting={isDeleting}
-                count={recipeLibrary.selectedIds.length}
+                count={recipeLibrary.selection.selectedIds.length}
             />
         </div>
     )

@@ -1,4 +1,3 @@
-import type { SetState } from '@/types/react'
 import type { RecipeLibraryFilter } from '@/types/recipe'
 
 import { ChipButton } from '@/components/shared/buttons/ChipButton'
@@ -7,7 +6,7 @@ import { recipesTexts } from '@/constants/texts/recipes'
 
 type RecipeFilterTabsProps = {
     value: RecipeLibraryFilter
-    onChange: SetState<RecipeLibraryFilter>
+    onChange: (value: RecipeLibraryFilter) => void
 }
 
 const tabs: Array<{
