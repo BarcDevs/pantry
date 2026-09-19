@@ -131,8 +131,8 @@ export const fetchSafeUrl = async (
             logFetchFailure(currentUrl, `request failed: ${String(error)}`)
             throw error
         }
-        const isRedirect = response.status >= 300
-            && response.status < 400
+        const isRedirect = response.status >= HttpStatusCodes.MULTIPLE_CHOICES
+            && response.status < HttpStatusCodes.BAD_REQUEST
         if (isRedirect) {
             const location = response.headers.get('location')
             if (!location) {
