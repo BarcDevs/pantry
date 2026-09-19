@@ -6,3 +6,5 @@ export const EXPIRY_TONE_CLASSES = {
     amber: 'bg-status-amber-bg text-status-amber-fg',
     red: 'bg-status-red-bg text-status-red-fg'
 } as const
+
+export const minNameLengthForSuggestion = 2

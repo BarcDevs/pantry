@@ -1,42 +1,32 @@
-import { useState, useTransition } from 'react'
+import { useState } from 'react'
 
 import { FoodType, StorageLocation } from '@/types/enums'
 import type { StorageSuggestion } from '@/types/pantry-item'
 import type { ReceiptReviewRow, ReceiptReviewRowEditPatch } from '@/types/receipt-review-row'
 
-import { suggestStorage } from '@/actions/pantry/suggest-storage'
+import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
     const [name, setName] = useState(row.name)
     const [storage, setStorage] = useState<StorageLocation>(row.storage)
     const [type, setType] = useState<FoodType | null>(row.type)
     const [expiryDate, setExpiryDate] = useState(row.expiryDate)
-    const [suggestion, setSuggestion] = useState<StorageSuggestion | null>(row.storageSuggestion)
-    const [suggestionFailed, setSuggestionFailed] = useState(false)
-    const [isSuggesting, startSuggesting] = useTransition()
+    const {
+        suggestion,
+        suggestionFailed,
+        isSuggesting,
+        request
+    } = useStorageSuggestion(row.storageSuggestion)
 
-    const fetchSuggestion = (fresh: boolean) => {
-        const trimmedName = name.trim()
-        if (trimmedName.length < 2) return
-
-        startSuggesting(async () => {
-            try {
-                const result = await suggestStorage(trimmedName, { fresh })
-                setSuggestion(result)
-                setSuggestionFailed(false)
-                if (result.suggestedType && !type) {
-                    setType(result.suggestedType)
-                }
-            } catch (error) {
-                console.error(error)
-                setSuggestion(null)
-                setSuggestionFailed(true)
-            }
-        })
+    const applySuggestedType = (result: StorageSuggestion) => {
+        if (result.suggestedType && !type) setType(result.suggestedType)
     }
 
-    const requestSuggestion = () => fetchSuggestion(false)
-    const refreshSuggestion = () => fetchSuggestion(true)
+    const requestSuggestion = () => request(name, { onSuggested: applySuggestedType })
+    const refreshSuggestion = () => request(name, {
+        fresh: true,
+        onSuggested: applySuggestedType
+    })
 
     const applySuggestedStorage = () => {
         if (suggestion) setStorage(suggestion.suggestedStorage)

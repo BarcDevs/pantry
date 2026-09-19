@@ -13,6 +13,7 @@ import type {
 
 import { useResetOnChange }
     from '@/hooks/use-reset-on-change'
+import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { applySuggestedExpiry }
     from '@/lib/pantry/apply-suggested-expiry'
@@ -22,16 +23,12 @@ import { pantryTexts }
 
 import { deletePantryItem }
     from '@/actions/pantry/delete-pantry-item'
-import { suggestStorage }
-    from '@/actions/pantry/suggest-storage'
 import { updatePantryItem }
     from '@/actions/pantry/update-pantry-item'
 import {
     addItemFormSchema,
     type AddItemFormValues
 } from '@/schemas/add-item-form'
-
-const minNameLengthForSuggestion = 2
 
 const toDateInputValue = (
     date?: Date
@@ -72,13 +69,13 @@ export const useEditItemForm = ({
         defaultValues: toFormValues(item)
     })
 
-    const [suggestion, setSuggestion] = useState<
-        StorageSuggestion | null
-    >(item.storageSuggestion)
-    const [suggestionFailed, setSuggestionFailed] = useState(false)
-    const [isSuggesting, startSuggesting] = (
-        useTransition()
-    )
+    const {
+        suggestion,
+        suggestionFailed,
+        isSuggesting,
+        request,
+        clear: clearSuggestion
+    } = useStorageSuggestion(item.storageSuggestion)
     const [isSubmitting, startSubmitting] = (
         useTransition()
     )
@@ -90,33 +87,19 @@ export const useEditItemForm = ({
         name: 'name'
     })
 
-    useResetOnChange(name, () => {
-        setSuggestion(null)
-        setSuggestionFailed(false)
-    })
+    useResetOnChange(name, clearSuggestion)
 
-    const fetchSuggestion = (fresh: boolean) => {
-        const trimmedName = name.trim()
-        if (trimmedName.length < minNameLengthForSuggestion) return
-
-        startSuggesting(async () => {
-            try {
-                const result = await suggestStorage(trimmedName, { fresh })
-                setSuggestion(result)
-                setSuggestionFailed(false)
-                if (result.suggestedType && !form.getValues('type')) {
-                    form.setValue('type', result.suggestedType)
-                }
-            } catch (error) {
-                console.error(error)
-                setSuggestion(null)
-                setSuggestionFailed(true)
-            }
-        })
+    const applySuggestedType = (result: StorageSuggestion) => {
+        if (result.suggestedType && !form.getValues('type')) {
+            form.setValue('type', result.suggestedType)
+        }
     }
 
-    const requestSuggestion = () => fetchSuggestion(false)
-    const refreshSuggestion = () => fetchSuggestion(true)
+    const requestSuggestion = () => request(name, { onSuggested: applySuggestedType })
+    const refreshSuggestion = () => request(name, {
+        fresh: true,
+        onSuggested: applySuggestedType
+    })
 
     const handleSubmit = form.handleSubmit((values) => {
         startSubmitting(async () => {

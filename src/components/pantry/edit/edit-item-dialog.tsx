@@ -20,6 +20,7 @@ import { Form } from '@/components/ui/form'
 
 import { useEditItemForm } from '@/hooks/use-edit-item-form'
 
+import { minNameLengthForSuggestion } from '@/constants/pantry'
 import { pantryTexts } from '@/constants/texts/pantry'
 
 type EditItemDialogProps = {
@@ -59,7 +60,7 @@ export const EditItemDialog = ({
     const currentStorage = form.watch('storage')
     const currentType = form.watch('type')
     const name = form.watch('name')
-    const canSuggest = name.trim().length >= 2
+    const canSuggest = name.trim().length >= minNameLengthForSuggestion
 
     return (
         <AppDialog

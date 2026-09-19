@@ -21,9 +21,13 @@ import { useReceiptRowEdit } from '@/hooks/use-receipt-row-edit'
 
 import { toSelectOptions } from '@/lib/select-options'
 
+import { minNameLengthForSuggestion } from '@/constants/pantry'
 import { pantryTexts } from '@/constants/texts/pantry'
 
-const storageOptions = toSelectOptions(STORAGE_LOCATIONS, pantryTexts.storageLabels)
+const storageOptions = toSelectOptions(
+    STORAGE_LOCATIONS,
+    pantryTexts.storageLabels
+)
 
 type ReceiptRowEditDialogProps = {
     row: ReceiptReviewRow
@@ -122,7 +126,7 @@ export const ReceiptRowEditDialog = ({
                     />
                 ) : (
                     <StorageSuggestionButton
-                        disabled={productEdit.name.trim().length < 2}
+                        disabled={productEdit.name.trim().length < minNameLengthForSuggestion}
                         isLoading={productEdit.isSuggesting}
                         onClick={productEdit.requestSuggestion}
                     />

@@ -18,19 +18,20 @@ import {
     StorageLocation } from '@/types/enums'
 import type {
     AddPantryItemInput,
-    AddPantryItemOutcome,
-    StorageSuggestion
+    AddPantryItemOutcome
 } from '@/types/pantry-item'
 
 import { useDebouncedValue }
     from '@/hooks/use-debounced-value'
 import { useResetOnChange }
     from '@/hooks/use-reset-on-change'
+import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { applySuggestedExpiry }
     from '@/lib/pantry/apply-suggested-expiry'
 import type { AddItemPrefill } from '@/lib/pantry/parse-add-item-prefill'
 
+import { minNameLengthForSuggestion } from '@/constants/pantry'
 import { routes }
     from '@/constants/routes'
 import { pantryTexts }
@@ -38,8 +39,6 @@ import { pantryTexts }
 
 import { addPantryItems }
     from '@/actions/pantry/add-pantry-items'
-import { suggestStorage }
-    from '@/actions/pantry/suggest-storage'
 import {
     addItemFormSchema,
     type AddItemFormValues
@@ -51,7 +50,6 @@ type DuplicateOutcome = Extract<
 >
 
 const nameDebounceMs = 500
-const minNameLengthForSuggestion = 2
 
 export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     const router = useRouter()
@@ -71,12 +69,14 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
 
     const isStorageChosenRef = useRef(false)
     const isFreshRequestedRef = useRef(false)
-    const [suggestion, setSuggestion] = useState<
-        StorageSuggestion | null
-    >(null)
-    const [suggestionFailed, setSuggestionFailed] = useState(false)
+    const {
+        suggestion,
+        suggestionFailed,
+        isSuggesting,
+        request: requestSuggestion,
+        clear: clearSuggestion
+    } = useStorageSuggestion()
     const [retryToken, setRetryToken] = useState(0)
-    const [isSuggesting, startSuggesting] = useTransition()
     const [isSubmitting, startSubmitting] = useTransition()
     const [duplicate, setDuplicate] = useState<
         DuplicateOutcome | null
@@ -103,56 +103,25 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         }
     }), [form])
 
-    useResetOnChange(name, () => {
-        setSuggestion(null)
-        setSuggestionFailed(false)
-    })
+    useResetOnChange(name, clearSuggestion)
 
     useEffect(() => {
-        if (debouncedName.length < (
-            minNameLengthForSuggestion
-        )) {
-            return
-        }
+        if (debouncedName.length < minNameLengthForSuggestion) return
 
-        let cancelled = false
         const fresh = isFreshRequestedRef.current
         isFreshRequestedRef.current = false
-        startSuggesting(async () => {
-            try {
-                const result = await suggestStorage(
-                    debouncedName,
-                    { fresh }
-                )
-                if (cancelled) return
-                setSuggestion(result)
-                setSuggestionFailed(false)
+        requestSuggestion(debouncedName, {
+            fresh,
+            onSuggested: (result) => {
                 if (!isStorageChosenRef.current) {
-                    form.setValue(
-                        'storage',
-                        result.suggestedStorage
-                    )
+                    form.setValue('storage', result.suggestedStorage)
                 }
-                if (
-                    result.suggestedType
-                    && !form.getValues('type')
-                ) {
-                    form.setValue(
-                        'type',
-                        result.suggestedType
-                    )
-                }
-            } catch (error) {
-                console.error(error)
-                if (!cancelled) {
-                    setSuggestion(null)
-                    setSuggestionFailed(true)
+                if (result.suggestedType && !form.getValues('type')) {
+                    form.setValue('type', result.suggestedType)
                 }
             }
         })
-
-        return () => { cancelled = true }
-    }, [debouncedName, retryToken, form])
+    }, [debouncedName, retryToken, form, requestSuggestion])
 
     const isNameLongEnough = (
         name.trim().length >= minNameLengthForSuggestion
