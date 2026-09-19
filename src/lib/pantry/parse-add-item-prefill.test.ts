@@ -31,5 +31,7 @@ describe('parseAddItemPrefill', () => {
             .toBeUndefined()
         expect(parseAddItemPrefill({ returnTo: 'https://evil.com' }).returnTo)
             .toBeUndefined()
+        expect(parseAddItemPrefill({ returnTo: '/\\evil.com' }).returnTo)
+            .toBeUndefined()
     })
 })

@@ -1,6 +1,8 @@
 import type { PantryUnit } from '@/types/enums'
 import { PANTRY_UNITS } from '@/types/enums'
 
+import { parseInternalPath } from '@/lib/network/parse-internal-path'
+
 export type AddItemPrefill = {
     name?: string
     quantity?: number
@@ -21,11 +23,10 @@ export const parseAddItemPrefill = (
     const quantity = Number(firstValue(params.quantity))
     const unit = PANTRY_UNITS.find((option) => option === firstValue(params.unit))
 
-    const returnTo = firstValue(params.returnTo)
-    const isInternalPath = !!returnTo?.startsWith('/') && !returnTo.startsWith('//')
+    const returnTo = parseInternalPath(firstValue(params.returnTo))
 
     return {
-        returnTo: isInternalPath ? returnTo : undefined,
+        returnTo,
         name: name || undefined,
         quantity: unit && quantity > 0 ? quantity : undefined,
         unit
