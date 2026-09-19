@@ -35,3 +35,23 @@ round, 18/09/2026) onto `PrimaryButton`, `SecondaryButton`, `DestructiveButton`,
 `IconButton`, `SurfaceButton`, `ChipButton`, `LinkButton` and `ToggleTextButton` - a bare `Button`
 import outside `shared/buttons/` is a regression. See `CORE_RULES.md`, `src/components/shared/SHARED_COMPONENTS.md`, and `GOTCHAS.md` for the
 full rule text.
+
+---
+
+## 19/09/2026 — Expiry picker is the shadcn Calendar with month/year dropdowns
+
+**Problem:** the expiry calendar only had month arrows, so picking a date years ahead took dozens of
+clicks that one misclick could reset.
+
+**Decision:** use the shadcn Calendar's dropdown caption layout (month and year selects) with the
+Hebrew locale (Sunday-first) and RTL direction, a year range from the current year to +20, and past
+dates disabled (today allowed). One shared `ExpiryCalendar` serves the add-item form and the
+receipt-row editor; the unstyled dropdown parts are styled via `classNames` from that wrapper
+because `ui/calendar.tsx` is read-only.
+
+**Why over alternatives:** a native `<input type="date">` (segmented dd/mm/yyyy) was built and
+dropped, since the user pointed to the shadcn calendar-with-dropdowns pattern; plain month arrows
+were the original problem.
+
+**How to apply:** date fields reuse `ExpiryCalendar`; an initial search that misses a shadcn
+option (here `captionLayout`) should check the component's props and docs, not only the registry.

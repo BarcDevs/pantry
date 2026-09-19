@@ -21,3 +21,18 @@ commit and create/switch to a feature/fix branch first. Never push (any branch) 
 told to. Before pushing or merging, state the current branch and what will go where, and if the
 plan differs from what was asked (e.g. nothing to merge because you're already on `main`), stop
 and ask instead of picking the closest action.
+
+---
+
+## 19/09/2026 — Land the feature commit before the refactor commit
+
+**What was wrong:** the refresh button was built and centralized into one hook in a single working
+tree, so a single commit would have mixed the new feature with the refactor. User: "commit it first
+so the centralisation would be a separate commit".
+
+**Correct fact:** a feature and the refactor that tidies it are separate commits, feature first
+(`feat`), refactor second (`rfc`), each passing lint, typecheck and tests on its own.
+
+**Lesson:** if a refactor grows out of a feature, rebuild the plain feature state, commit it, then
+apply the refactor on top and commit that. Back up the finished tree first so nothing is lost while
+rebuilding the intermediate state.

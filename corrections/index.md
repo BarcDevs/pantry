@@ -14,6 +14,8 @@ Naming and file-organization conventions caught or confirmed mid-session.
 |---|---|
 | 11/07/2026 | `.model.ts` filename suffix is an Angular-ism — model files named plainly (global) |
 | 24/07/2026 | Zod/validation schemas live at `src/schemas/`, not `src/lib/schemas/` |
+| 19/09/2026 | Break long lines (conditions, arrow bodies, handler props) and drop braces on one-statement blocks - lint does not catch either |
+| 19/09/2026 | Centralize logic repeated across hooks first; hooks returning 5+ values are used as one `obj.field` object |
 
 ## Tooling — [[corrections/tooling]]
 When to use graphify vs. plain search tools.
@@ -37,3 +39,4 @@ Branch, push and merge discipline.
 | Date | Entry |
 |---|---|
 | 19/09/2026 | Never commit directly to `main`, never push unprompted — work on a branch, state it, ask if the request doesn't match reality |
+| 19/09/2026 | Commit the feature first, then the refactor as its own commit |

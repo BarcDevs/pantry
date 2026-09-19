@@ -42,3 +42,41 @@ Note: this decision followed real breakage during dev — user reported that a s
 (green pepper) still wasn't surfacing an optional red-pepper substitute; the substitution-detection
 logic itself needed a real fix (not just the color mapping) before the new color scheme had
 anything correct to render.
+
+---
+
+## 19/09/2026 — Add Item storage defaults to pantry and takes the AI suggestion automatically
+
+**Problem:** the storage location defaulted to the fridge, so most items needed a manual switch, and
+the AI's better suggestion was only offered as a hint.
+
+**Decision:** storage defaults to pantry; when the AI suggestion arrives it is applied to the field
+automatically, and the user can still change it. Once the user has picked a location themselves,
+later suggestions (e.g. after editing the name) never override it - detected from the form's
+`change` events, not from the value.
+
+**Why over alternatives:** defaulting to pantry and silently applying the suggestion removes the
+common manual step, while tracking the user's own choice keeps the "no override of explicit input"
+rule (AC-1.11).
+
+**How to apply:** any new auto-fill from an AI suggestion must skip fields the user set themselves.
+Recorded in the PRD as AC-1.8.
+
+---
+
+## 19/09/2026 — Suggestion refresh bypasses the cache and replaces the type
+
+**Problem:** repeated names were served from a 24-hour server cache, so a poor suggestion could not
+be redone, and the panel only offered "retry" after a failure.
+
+**Decision:** every suggestion panel (Add Item, Edit Item, receipt row editor) has a refresh button
+that calls `suggestStorage(name, { fresh: true })`, which skips the cache. An explicit refresh also
+replaces the product type with the new `suggested_type`; the automatic suggestion still fills the
+type only when it is empty. All three screens share one `useStorageSuggestion` hook.
+
+**Why over alternatives:** the refresh is an explicit user request to redo the suggestion, so
+overriding the type is expected; not overriding a manually chosen type on refresh was considered
+and left as an open follow-up.
+
+**How to apply:** new suggestion surfaces reuse `useStorageSuggestion` and pass `fresh` for a
+user-triggered refresh. Recorded in the PRD as AC-1.8.

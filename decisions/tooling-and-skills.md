@@ -38,3 +38,20 @@ pressure.
 
 **How to apply:** invoke `/match-design` when building or auditing any screen against a `.dc.html`
 design.
+
+---
+
+## 19/09/2026 — The PRD is updated in the same change as any feature or tweak
+
+**Problem:** several features and tweaks landed in code without being written into
+`docs/pantry-prd.md`, so the PRD drifted from what the app does.
+
+**Decision:** a "Keep the PRD in sync" section in `CLAUDE.md`: any feature or tweak that is not
+already described, or that changes described behavior, updates the PRD (acceptance criteria, Screen
+Map row, data model or API) in the same change and the same commit, without being asked.
+
+**Why over alternatives:** a separate "update the docs later" pass was the pattern that caused the
+drift.
+
+**How to apply:** when finishing a feature, edit the matching AC or add the next AC number in the
+same commit.
