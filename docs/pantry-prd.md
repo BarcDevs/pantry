@@ -201,7 +201,7 @@
 
       - AC-3.6Editing ingredients or instructions saves as the same record (no versioning at MVP). Exception: the adjustments field on the detail screen (AC-3.13) - submitting it creates a new record rather than editing this one.
 
-      - AC-3.7Recipe cards display a visual identifier: AI-generated recipes show a single AI-selected emoji on a colored gradient background (no image search or generation). Imported (`imported_url`) recipes show the source page's `og:image` when available, falling back to the same emoji + gradient treatment when no image exists.
+      - AC-3.7Recipe cards display a visual identifier: AI-generated recipes show a single AI-selected emoji on a colored gradient background (no image search or generation). Imported (`imported_url`) recipes show the source page's `og:image` when available, falling back to the same emoji + gradient treatment when no image exists. The image is taken from the page `<head>` (`og:image`, `og:image:secure_url`, then `twitter:image`; HTML entities decoded, relative and protocol-relative URLs resolved against the page URL, http/https only, max 2000 characters). Images render as an `<img>` (no referrer, cover-fit) so any valid URL works, and if the image fails to load the card/hero falls back to the emoji + gradient.
 
       - AC-3.8The `emoji` field is returned by the AI as part of the same generation/import response - no separate API call is made to select a card visual.
 

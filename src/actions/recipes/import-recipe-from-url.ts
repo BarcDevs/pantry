@@ -55,7 +55,7 @@ export const importRecipeFromUrl = async (
 
     const recipe = buildImportedRecipeDoc(userId, generated, pantryItems, {
         sourceUrl: parsedUrl,
-        imageUrl: extractOgImage(fetched.html)
+        imageUrl: extractOgImage(fetched.html, parsedUrl)
     })
 
     return {
