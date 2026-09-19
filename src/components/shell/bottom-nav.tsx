@@ -3,10 +3,10 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import { ChefHatIcon, RefrigeratorIcon } from 'lucide-react'
+
 import { CameraIcon } from '@/components/icons/camera-icon'
-import { HomeIcon } from '@/components/icons/home-icon'
 import { LibraryIcon } from '@/components/icons/library-icon'
-import { PlusIcon } from '@/components/icons/plus-icon'
 import { ProfileIcon } from '@/components/icons/profile-icon'
 import { NavButton } from '@/components/shell/nav-button'
 
@@ -26,7 +26,7 @@ export const BottomNav = () => {
             <NavButton
                 href={routes.pantry}
                 label={commonTexts.navHome}
-                icon={<HomeIcon size={23}/>}
+                icon={<RefrigeratorIcon size={23}/>}
                 active={pathname === routes.pantry}
             />
             <NavButton
@@ -40,7 +40,7 @@ export const BottomNav = () => {
                 aria-label={commonTexts.navGenerate}
                 className={'-mt-nav-fab-lift flex size-nav-fab items-center justify-center rounded-full bg-green text-surface shadow-button'}
             >
-                <PlusIcon size={24}/>
+                <ChefHatIcon size={24}/>
             </Link>
             <NavButton
                 href={routes.add}
