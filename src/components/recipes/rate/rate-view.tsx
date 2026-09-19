@@ -23,17 +23,17 @@ export const RateView = ({ recipe }: RateViewProps) => {
                 title={recipe.title}
             />
             <RateStars
-                rating={rateRecipe.rating}
-                hoverRating={rateRecipe.hoverRating}
-                onRate={rateRecipe.setRating}
-                onHover={rateRecipe.setHoverRating}
-                onHoverEnd={() => rateRecipe.setHoverRating(0)}
+                rating={rateRecipe.values.rating}
+                hoverRating={rateRecipe.values.hoverRating}
+                onRate={(value) => rateRecipe.setField('rating', value)}
+                onHover={(value) => rateRecipe.setField('hoverRating', value)}
+                onHoverEnd={() => rateRecipe.setField('hoverRating', 0)}
             />
             <RateAutoSaveNote/>
             <RateFinishButton
-                rating={rateRecipe.rating}
-                isSubmitting={rateRecipe.isSubmitting}
-                onClick={rateRecipe.finishRate}
+                rating={rateRecipe.values.rating}
+                isSubmitting={rateRecipe.submission.isSubmitting}
+                onClick={rateRecipe.submission.finish}
             />
         </div>
     )
