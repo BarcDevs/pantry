@@ -129,6 +129,8 @@
 
       - AC-1.16Each storage option's `reason` in the `expiry_by_storage` map is written to be meaningful standalone - not just "X days" but a short rationale (e.g. fridge: "preserves taste and freshness" vs freezer: "halts spoilage but degrades texture") - since both the recommended and the currently-selected option's reasons are shown together in the mismatch state.
 
+      - AC-1.17On the Add Item screen, while the user types a name that matches an item already in the pantry (same normalized name and the same unit, checked after the same debounce as the suggestion), an inline notice reads "הפריט כבר קיים במזווה" with a "מיזוג" (merge) button. Pressing it switches the notice to "כעת ממזג: <existing> + <added> = <total> <unit>", which updates live as the quantity changes, with a cancel control; submitting in that state adds the entered quantity to the existing item (no second item is created, and the type picker is skipped). If the user does not press merge, submitting works as before: the server still detects the duplicate and shows the duplicate dialog with "merge quantities" / "keep as a separate item". No inline notice is shown when the existing item uses a different unit; that case is handled only by the duplicate dialog at submit.
+
     
   
 

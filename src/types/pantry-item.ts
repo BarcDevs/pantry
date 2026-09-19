@@ -88,3 +88,10 @@ export type AddPantryItemOutcome =
         existing: PantryItem
         incoming: AddPantryItemInput
     }
+
+export type ExistingPantryItem = {
+    _id: string
+    name: string
+    quantity: number
+    unit: PantryUnit
+}

@@ -2,6 +2,7 @@
 
 import { AddItemFields } from '@/components/pantry/add/add-item-fields'
 import { DuplicateItemDialog } from '@/components/pantry/add/duplicate-item-dialog'
+import { ExistingItemPrompt } from '@/components/pantry/add/existing-item-prompt'
 import { PantryTypeRow } from '@/components/pantry/add/pantry-type-row'
 import { StorageSuggestionHint } from '@/components/pantry/add/storage-suggestion-hint'
 import { TypePickerDialog } from '@/components/pantry/add/type-picker-dialog'
@@ -13,6 +14,7 @@ import { useAddItemForm } from '@/hooks/use-add-item-form'
 
 import type { AddItemPrefill } from '@/lib/pantry/parse-add-item-prefill'
 
+import { minNameLengthForSuggestion } from '@/constants/pantry'
 import { pantryTexts } from '@/constants/texts/pantry'
 
 type AddItemFormProps = {
@@ -20,80 +22,69 @@ type AddItemFormProps = {
 }
 
 export const AddItemForm = ({ prefill }: AddItemFormProps) => {
-    const {
-        form,
-        suggestion,
-        isSuggesting,
-        suggestionFailed,
-        retrySuggestion,
-        isSubmitting,
-        duplicate,
-        setDuplicate,
-        isTypePickerOpen,
-        setIsTypePickerOpen,
-        handleSubmit,
-        handleMerge,
-        handleKeepSeparate,
-        applySuggestedStorage,
-        applySuggestedExpiry,
-        selectPendingType,
-        skipPendingType
-    } = useAddItemForm(prefill)
+    const addItem = useAddItemForm(prefill)
 
-    const currentStorage = form.watch('storage')
-    const currentType = form.watch('type')
-    const name = form.watch('name')
-    const showSuggestionPanel = name.trim().length >= 2
+    const currentStorage = addItem.form.watch('storage')
+    const currentType = addItem.form.watch('type')
+    const name = addItem.form.watch('name')
+    const showSuggestionPanel = name.trim().length >= minNameLengthForSuggestion
 
     return (
-        <Form {...form}>
+        <Form {...addItem.form}>
             <form
                 noValidate
-                onSubmit={handleSubmit}
+                onSubmit={addItem.handleSubmit}
                 className={'flex flex-col gap-4 rounded-lg border border-border-2 bg-surface p-5'}
             >
                 <span className={'font-bold text-body text-ink'}>
                     {pantryTexts.addForm.manualEntryTitle}
                 </span>
-                <AddItemFields control={form.control}/>
+                <AddItemFields control={addItem.form.control}/>
+                {addItem.mergePrompt && (
+                    <ExistingItemPrompt
+                        prompt={addItem.mergePrompt}
+                        onMerge={addItem.startMerge}
+                        onCancel={addItem.cancelMerge}
+                    />
+                )}
                 {showSuggestionPanel && (
                     <StorageSuggestionHint
-                        isLoading={isSuggesting}
-                        suggestion={suggestion}
-                        suggestionFailed={suggestionFailed}
+                        isLoading={addItem.isSuggesting}
+                        suggestion={addItem.suggestion}
+                        suggestionFailed={addItem.suggestionFailed}
                         currentStorage={currentStorage}
-                        onSelectRecommended={applySuggestedStorage}
-                        onApplyExpiry={applySuggestedExpiry}
-                        onRetry={retrySuggestion}
-                        onRefresh={retrySuggestion}
+                        onSelectRecommended={addItem.applySuggestedStorage}
+                        onApplyExpiry={addItem.applySuggestedExpiry}
+                        onRetry={addItem.retrySuggestion}
+                        onRefresh={addItem.retrySuggestion}
                     />
                 )}
                 <PantryTypeRow
                     value={currentType}
-                    onChange={(type) => form.setValue('type', type)}
+                    onChange={(type) => addItem.form.setValue('type', type)}
                 />
-                <FormError errors={form.formState.errors}/>
+                <FormError errors={addItem.form.formState.errors}/>
                 <PrimaryButton
                     type={'submit'}
-                    disabled={isSubmitting}
+                    disabled={addItem.isSubmitting}
                     className={'w-full'}
                 >
-                    {isSubmitting
+                    {addItem.isSubmitting
                         ? pantryTexts.addForm.submitting
                         : pantryTexts.addForm.submit}
                 </PrimaryButton>
                 <DuplicateItemDialog
-                    open={duplicate !== null}
-                    onOpenChange={(open) => { if (!open) setDuplicate(null) }}
-                    onMerge={handleMerge}
-                    onKeepSeparate={handleKeepSeparate}
+                    open={addItem.duplicate !== null}
+                    onOpenChange={(open) => { if (!open) addItem.setDuplicate(null) }}
+                    onMerge={addItem.handleMerge}
+                    onKeepSeparate={addItem.handleKeepSeparate}
                 />
                 <TypePickerDialog
-                    open={isTypePickerOpen}
-                    onOpenChange={setIsTypePickerOpen}
+                    open={addItem.isTypePickerOpen}
+                    onOpenChange={addItem.setIsTypePickerOpen}
                     value={currentType}
-                    onSelect={selectPendingType}
-                    onSkip={skipPendingType}
+                    onSelect={addItem.selectPendingType}
+                    onSkip={addItem.skipPendingType}
                 />
             </form>
         </Form>

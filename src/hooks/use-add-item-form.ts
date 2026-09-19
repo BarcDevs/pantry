@@ -18,11 +18,13 @@ import {
     StorageLocation } from '@/types/enums'
 import type {
     AddPantryItemInput,
-    AddPantryItemOutcome
+    AddPantryItemOutcome,
+    ExistingPantryItem
 } from '@/types/pantry-item'
 
 import { useDebouncedValue }
     from '@/hooks/use-debounced-value'
+import { useExistingPantryItem } from '@/hooks/use-existing-pantry-item'
 import { useResetOnChange }
     from '@/hooks/use-reset-on-change'
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
@@ -43,6 +45,13 @@ import {
     addItemFormSchema,
     type AddItemFormValues
 } from '@/schemas/add-item-form'
+
+export type MergePrompt = {
+    existing: ExistingPantryItem
+    isMerging: boolean
+    addedQuantity: number
+    total: number
+}
 
 type DuplicateOutcome = Extract<
     AddPantryItemOutcome,
@@ -103,7 +112,21 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         }
     }), [form])
 
-    useResetOnChange(name, clearSuggestion)
+    const unit = useWatch({
+        control: form.control,
+        name: 'unit'
+    })
+    const quantity = useWatch({
+        control: form.control,
+        name: 'quantity'
+    })
+    const existingItem = useExistingPantryItem(debouncedName)
+    const [isMergeRequested, setIsMergeRequested] = useState(false)
+
+    useResetOnChange(name, () => {
+        clearSuggestion()
+        setIsMergeRequested(false)
+    })
 
     useEffect(() => {
         if (debouncedName.length < minNameLengthForSuggestion) return
@@ -131,6 +154,22 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     )
     const effectiveSuggestion = isNameLongEnough
         ? suggestion
+        : null
+
+    const mergeCandidate = (
+        existingItem
+        && debouncedName === name.trim()
+        && existingItem.unit === unit
+    ) ? existingItem : null
+    const isMerging = isMergeRequested && mergeCandidate !== null
+    const addedQuantity = Number(quantity) || 0
+    const mergePrompt: MergePrompt | null = mergeCandidate
+        ? {
+            existing: mergeCandidate,
+            isMerging,
+            addedQuantity,
+            total: Math.round((mergeCandidate.quantity + addedQuantity) * 100) / 100
+        }
         : null
 
     const buildInput = (
@@ -197,6 +236,9 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
 
     return {
         form,
+        mergePrompt,
+        startMerge: () => setIsMergeRequested(true),
+        cancelMerge: () => setIsMergeRequested(false),
         suggestion: effectiveSuggestion,
         isSuggesting: isPendingSuggestion,
         suggestionFailed,
@@ -210,6 +252,10 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         isTypePickerOpen,
         setIsTypePickerOpen,
         handleSubmit: form.handleSubmit((values) => {
+            if (isMerging && mergeCandidate) {
+                submit(values, { mergeWithId: mergeCandidate._id })
+                return
+            }
             if (!values.type) {
                 setPendingValues(values)
                 setIsTypePickerOpen(true)

@@ -75,6 +75,14 @@ export const pantryTexts = {
         suggestionError: 'לא הצלחנו לקבל הצעה',
         suggestionNotRecognized: 'לא זיהינו מוצר מזון בשם הזה',
         suggestionRetry: 'נסה שוב',
+        existingItemNotice: 'הפריט כבר קיים במזווה',
+        mergeButton: 'מיזוג',
+        mergingNotice: (
+            existing: number,
+            added: number,
+            total: number,
+            unit: string
+        ) => `כעת ממזג: ${existing} + ${added} = ${total} ${unit}`,
         suggestionRefresh: 'רענון ההצעה',
         notesLabel: 'הערות (אופציונלי)',
         submit: 'הוספה למזווה',
