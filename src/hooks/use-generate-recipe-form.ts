@@ -141,21 +141,27 @@ export const useGenerateRecipeForm = () => {
 
     return {
         form,
-        pantryItems,
-        isLoadingPantry,
-        selectedItemIds,
-        toggleItem,
-        toggleAllItems,
-        isPantrySheetOpen,
-        setIsPantrySheetOpen,
-        isSparsePantry,
-        isExpiredGateOpen,
-        expiredSelectedItems,
-        removeExpiredFromSelection,
-        acknowledgeExpired: () => setAcknowledgedExpiredIds(
-            expiredSelectedItems.map((item) => item._id)
-        ),
-        isSubmitting,
-        submit
+        pantry: {
+            items: pantryItems,
+            isLoading: isLoadingPantry,
+            selectedIds: selectedItemIds,
+            isSparse: isSparsePantry,
+            toggleItem,
+            toggleAll: toggleAllItems,
+            isSheetOpen: isPantrySheetOpen,
+            setIsSheetOpen: setIsPantrySheetOpen
+        },
+        expired: {
+            items: expiredSelectedItems,
+            isGateOpen: isExpiredGateOpen,
+            removeFromSelection: removeExpiredFromSelection,
+            acknowledge: () => setAcknowledgedExpiredIds(
+                expiredSelectedItems.map((item) => item._id)
+            )
+        },
+        submission: {
+            isSubmitting,
+            submit
+        }
     }
 }

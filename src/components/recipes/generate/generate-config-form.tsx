@@ -32,22 +32,22 @@ export const GenerateConfigForm = ({
     return (
         <Form {...generateRecipe.form}>
             <form
-                onSubmit={generateRecipe.submit}
+                onSubmit={generateRecipe.submission.submit}
                 className={'flex flex-col gap-4'}
             >
                 <GenerateConfigFields control={generateRecipe.form.control}/>
                 <PantrySelectionSummary
-                    selectedCount={generateRecipe.selectedItemIds.length}
-                    totalCount={generateRecipe.pantryItems.length}
-                    onEdit={() => generateRecipe.setIsPantrySheetOpen(true)}
+                    selectedCount={generateRecipe.pantry.selectedIds.length}
+                    totalCount={generateRecipe.pantry.items.length}
+                    onEdit={() => generateRecipe.pantry.setIsSheetOpen(true)}
                 />
-                {generateRecipe.isSparsePantry && scope !== 'open'
+                {generateRecipe.pantry.isSparse && scope !== 'open'
                     && <SparsePantryWarning/>}
-                {generateRecipe.isExpiredGateOpen && (
+                {generateRecipe.expired.isGateOpen && (
                     <ExpiredItemsGate
-                        expiredItems={generateRecipe.expiredSelectedItems}
-                        onRemoveExpired={generateRecipe.removeExpiredFromSelection}
-                        onContinueAnyway={generateRecipe.acknowledgeExpired}
+                        expiredItems={generateRecipe.expired.items}
+                        onRemoveExpired={generateRecipe.expired.removeFromSelection}
+                        onContinueAnyway={generateRecipe.expired.acknowledge}
                     />
                 )}
                 <GenerateSourceGroup control={generateRecipe.form.control}/>
@@ -70,20 +70,20 @@ export const GenerateConfigForm = ({
                 <FormError errors={generateRecipe.form.formState.errors}/>
                 <PrimaryButton
                     type={'submit'}
-                    disabled={generateRecipe.isSubmitting
-                        || generateRecipe.isExpiredGateOpen
-                        || generateRecipe.isLoadingPantry}
+                    disabled={generateRecipe.submission.isSubmitting
+                        || generateRecipe.expired.isGateOpen
+                        || generateRecipe.pantry.isLoading}
                     className={'w-full'}
                 >
-                    {generateRecipe.isSubmitting ? texts.submitting : texts.submit}
+                    {generateRecipe.submission.isSubmitting ? texts.submitting : texts.submit}
                 </PrimaryButton>
                 <PantrySelectSheet
-                    open={generateRecipe.isPantrySheetOpen}
-                    onOpenChange={generateRecipe.setIsPantrySheetOpen}
-                    items={generateRecipe.pantryItems}
-                    selectedItemIds={generateRecipe.selectedItemIds}
-                    onToggleItem={generateRecipe.toggleItem}
-                    onToggleAll={generateRecipe.toggleAllItems}
+                    open={generateRecipe.pantry.isSheetOpen}
+                    onOpenChange={generateRecipe.pantry.setIsSheetOpen}
+                    items={generateRecipe.pantry.items}
+                    selectedItemIds={generateRecipe.pantry.selectedIds}
+                    onToggleItem={generateRecipe.pantry.toggleItem}
+                    onToggleAll={generateRecipe.pantry.toggleAll}
                 />
             </form>
         </Form>
