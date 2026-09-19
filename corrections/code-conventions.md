@@ -71,3 +71,20 @@ in `CORE_RULES.md`, copied into the other frontend projects' rule files and the 
 **Lesson:** when a feature is about to be added to the second copy of the same logic, stop and
 centralize first (as its own `rfc` commit) instead of duplicating it again. The existing 5+ value
 destructures were converted in a separate `rfc(hooks)` commit.
+
+---
+
+## 19/09/2026 - Imports: break at 2+ named imports or 100+ chars
+
+**What was wrong:** a code review flagged a two-name `import type { A, B } from '...'` that was
+split one name per line as a violation and it was folded back to one line. User: "why did you fold
+it back to original?" and "rule says `100 chars OR multiple imports`".
+
+**Correct fact:** the old `CORE_RULES.md` wording "don't break single imports" is about a single named
+import. An import with 2+ named imports breaks to one name per line even when short; a single named
+import breaks only past about 100 characters (then before `from`).
+
+`CORE_RULES.md` now spells both cases out.
+
+**Lesson:** a review finding is a claim, not a rule - check it against the rule text and the
+surrounding code before undoing existing formatting.

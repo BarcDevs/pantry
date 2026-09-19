@@ -16,6 +16,7 @@ Naming and file-organization conventions caught or confirmed mid-session.
 | 24/07/2026 | Zod/validation schemas live at `src/schemas/`, not `src/lib/schemas/` |
 | 19/09/2026 | Break long lines (conditions, arrow bodies, handler props) and drop braces on one-statement blocks - lint does not catch either |
 | 19/09/2026 | Centralize logic repeated across hooks first; hooks returning 5+ values are used as one `obj.field` object |
+| 19/09/2026 | Imports break at 2+ named imports or 100+ chars; a review finding is a claim, check it against the rule |
 
 ## Tooling — [[corrections/tooling]]
 When to use graphify vs. plain search tools.
