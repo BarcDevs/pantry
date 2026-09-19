@@ -8,10 +8,7 @@ import { useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
 
-import type {
-    RecipeDoc,
-    UpdateRecipeInput
-} from '@/types/recipe'
+import type { RecipeDoc } from '@/types/recipe'
 
 import { useRecipeAdjustments } from '@/hooks/use-recipe-adjustments'
 import { useRefreshPantryStatus } from '@/hooks/use-refresh-pantry-status'
@@ -57,7 +54,7 @@ export const useRecipeResult = () => {
     }
 
     const updateRecipeFields = (
-        changes: Pick<UpdateRecipeInput, 'isFavorite' | 'imageUrl'>
+        changes: Partial<Pick<RecipeDoc, 'isFavorite' | 'imageUrl'>>
     ) => {
         if (!recipe) return
         if (!savedRecipeId) {
@@ -65,7 +62,11 @@ export const useRecipeResult = () => {
             return
         }
         setRecipe({ ...recipe, ...changes })
-        updateSavedRecipe(savedRecipeId, changes).catch((error: unknown) => {
+        const savedChanges = {
+            ...changes,
+            ...('imageUrl' in changes && { imageUrl: changes.imageUrl ?? null })
+        }
+        updateSavedRecipe(savedRecipeId, savedChanges).catch((error: unknown) => {
             console.error(error)
             toast.error(recipesTexts.result.saveError)
         })

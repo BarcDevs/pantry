@@ -26,7 +26,11 @@ const updateRecipeSchema = z.object({
     tags: z.array(z.string()).optional(),
     ingredients: z.array(ingredientSchema).optional(),
     steps: z.array(stepSchema).optional(),
-    imageUrl: z.string().url().optional()
+    imageUrl: z.union([
+        z.string().url(),
+        z.literal(''),
+        z.null()
+    ]).optional()
 })
 
 export const updateRecipe = async (
@@ -35,13 +39,18 @@ export const updateRecipe = async (
 ): Promise<Recipe> => {
     const userId = await requireUserId()
     const recipeId = objectIdSchema.parse(id)
-    const changes = updateRecipeSchema.parse(input)
+    const { imageUrl, ...changes } = updateRecipeSchema.parse(input)
+    const shouldClearImage = imageUrl === null || imageUrl === ''
 
     await connectDB()
 
     const updated = await RecipeModel.findOneAndUpdate(
         { _id: recipeId, userId },
-        changes,
+        {
+            ...changes,
+            ...(imageUrl && { imageUrl }),
+            ...(shouldClearImage && { $unset: { imageUrl: 1 } })
+        },
         { returnDocument: 'after', runValidators: true }
     ).lean()
 

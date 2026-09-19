@@ -82,7 +82,7 @@ export type UpdateRecipeInput = Partial<{
     tags: string[]
     ingredients: RecipeIngredient[]
     steps: RecipeStep[]
-    imageUrl: string
+    imageUrl: string | null
 }>
 
 export type RecipeImportResult = {

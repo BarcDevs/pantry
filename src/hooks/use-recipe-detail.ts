@@ -28,7 +28,7 @@ export const useRecipeDetail = (initialRecipe: Recipe) => {
         const previousValue = recipe[key]
         setRecipe((current) => ({ ...current, [key]: value }))
         try {
-            await updateRecipe(recipe._id, { [key]: value })
+            await updateRecipe(recipe._id, { [key]: value ?? null })
         } catch (error) {
             console.error(error)
             setRecipe((current) => ({ ...current, [key]: previousValue }))

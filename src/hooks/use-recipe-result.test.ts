@@ -88,4 +88,17 @@ describe('useRecipeResult favorite and image edits', () => {
         expect(result.current.status.savedRecipeId).toBe('saved1')
         expect(result.current.recipe?.isFavorite).toBe(true)
     })
+
+    it('sends null to unset the image of a saved recipe when the URL is cleared', async () => {
+        const { result } = renderHook(() => useRecipeResult())
+        await waitFor(() => expect(result.current.recipe).not.toBeNull())
+        await act(async () => {
+            await result.current.actions.save()
+        })
+
+        act(() => result.current.actions.setManualImageUrl(''))
+
+        expect(mockUpdateRecipe).toHaveBeenCalledWith('saved1', { imageUrl: null })
+        expect(result.current.recipe?.imageUrl).toBeUndefined()
+    })
 })
