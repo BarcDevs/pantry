@@ -72,6 +72,11 @@ in `CORE_RULES.md`, copied into the other frontend projects' rule files and the 
 centralize first (as its own `rfc` commit) instead of duplicating it again. The existing 5+ value
 destructures were converted in a separate `rfc(hooks)` commit.
 
+**Follow-up (19/09/2026):** a flat return of 5+ keys is itself the problem, not only destructuring it.
+User: "is there a way to avoid that huge export on hooks?". Such hooks return a few nested,
+feature-named groups, and field-only state is one `values` object with `setField`. Rule extended in
+`CORE_RULES.md`; also applied to `.sources` and `pulse`.
+
 ---
 
 ## 19/09/2026 - Imports: break at 2+ named imports or 100+ chars
