@@ -5,7 +5,10 @@ import { DietaryPreferenceChip } from '@/components/onboarding/dietary-preferenc
 import { AddCustomDietaryField } from '@/components/shared/AddCustomDietaryField'
 import { CustomDietaryChip } from '@/components/shared/CustomDietaryChip'
 
-import { dietaryOptionKeys, toggleDietaryPreference } from '@/lib/dietary-preferences'
+import {
+    dietaryOptionKeys,
+    toggleDietaryPreference
+} from '@/lib/dietary-preferences'
 
 const maxDietaryPreferences = 10
 

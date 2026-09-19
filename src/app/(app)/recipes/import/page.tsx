@@ -11,7 +11,10 @@ import { PageHeader } from '@/components/shared/PageHeader'
 
 import { useRecipeImport } from '@/hooks/use-recipe-import'
 
-import { isUrlInputInvalid, parseUrlInput } from '@/lib/network/parse-url-input'
+import {
+    isUrlInputInvalid,
+    parseUrlInput
+} from '@/lib/network/parse-url-input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 

@@ -1,6 +1,9 @@
 import { useState } from 'react'
 
-import { format, parseISO } from 'date-fns'
+import {
+    format,
+    parseISO
+} from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 
 import { ExpiryCalendar } from '@/components/pantry/expiry-calendar'

@@ -6,7 +6,10 @@ import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { TextButton } from '@/components/shared/buttons/TextButton'
 import { UrlInput } from '@/components/shared/UrlInput'
 
-import { isUrlInputInvalid, parseUrlInput } from '@/lib/network/parse-url-input'
+import {
+    isUrlInputInvalid,
+    parseUrlInput
+} from '@/lib/network/parse-url-input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 

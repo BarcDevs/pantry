@@ -1,4 +1,7 @@
-import type { ComponentProps, KeyboardEvent } from 'react'
+import type {
+    ComponentProps,
+    KeyboardEvent
+} from 'react'
 
 import { Input as UiInput } from '@/components/ui/input'
 

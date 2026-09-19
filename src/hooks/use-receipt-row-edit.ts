@@ -1,6 +1,9 @@
 import { useState } from 'react'
 
-import { FoodType, StorageLocation } from '@/types/enums'
+import {
+    FoodType,
+    StorageLocation
+} from '@/types/enums'
 import type { StorageSuggestion } from '@/types/pantry-item'
 import type {
     ReceiptReviewRow,

@@ -4,7 +4,10 @@ import {
     screen
 } from '@testing-library/react'
 
-import { CookingUnit, FoodType } from '@/types/enums'
+import {
+    CookingUnit,
+    FoodType
+} from '@/types/enums'
 
 jest.mock('next/navigation', () => ({
     usePathname: () => '/generate/result'

@@ -1,11 +1,16 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import {
+    useMemo,
+    useState
+} from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import type { FoodType, StorageLocation }
-    from '@/types/enums'
+import type {
+    FoodType,
+    StorageLocation
+} from '@/types/enums'
 import type { PantryItem }
     from '@/types/pantry-item'
 

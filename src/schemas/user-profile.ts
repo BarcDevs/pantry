@@ -2,7 +2,10 @@ import { z } from 'zod'
 
 import { DIFFICULTIES } from '@/types/enums'
 
-import { MAX_HOUSEHOLD_SIZE, MIN_HOUSEHOLD_SIZE } from '@/constants/onboarding'
+import {
+    MAX_HOUSEHOLD_SIZE,
+    MIN_HOUSEHOLD_SIZE
+} from '@/constants/onboarding'
 
 export const userProfileFieldsSchema = z.object({
     cookingLevel: z.enum(DIFFICULTIES).optional(),

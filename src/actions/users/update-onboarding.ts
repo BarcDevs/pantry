@@ -1,6 +1,9 @@
 'use server'
 
-import type { OnboardingInput, User } from '@/types/user'
+import type {
+    OnboardingInput,
+    User
+} from '@/types/user'
 
 import { auth } from '@/lib/auth'
 import { toPlainDoc } from '@/lib/mongo-doc'

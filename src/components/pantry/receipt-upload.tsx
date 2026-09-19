@@ -1,6 +1,9 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import {
+    useRef,
+    useState
+} from 'react'
 
 import type { ScannedReceiptItem } from '@/types/receipt'
 

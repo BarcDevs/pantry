@@ -2,8 +2,10 @@
 
 import { z } from 'zod'
 
-import type { Recipe, RecipeHistoryEntry }
-    from '@/types/recipe'
+import type {
+    Recipe,
+    RecipeHistoryEntry
+} from '@/types/recipe'
 
 import { requireUserId } from '@/lib/auth/require-user-id'
 import { toPlainDoc } from '@/lib/mongo-doc'
