@@ -1,3 +1,4 @@
+import { startOfToday } from 'date-fns'
 import { he } from 'react-day-picker/locale'
 
 import { buttonVariants } from '@/components/ui/button'
@@ -5,7 +6,6 @@ import { Calendar } from '@/components/ui/calendar'
 
 import { cn } from '@/lib/utils'
 
-const yearsBack = 1
 const yearsAhead = 20
 
 type ExpiryCalendarProps = {
@@ -17,7 +17,7 @@ export const ExpiryCalendar = ({
     selected,
     onSelect
 }: ExpiryCalendarProps) => {
-    const currentYear = new Date().getFullYear()
+    const today = startOfToday()
 
     return (
         <Calendar
@@ -28,8 +28,9 @@ export const ExpiryCalendar = ({
             captionLayout={'dropdown'}
             locale={he}
             dir={'rtl'}
-            startMonth={new Date(currentYear - yearsBack, 0)}
-            endMonth={new Date(currentYear + yearsAhead, 11)}
+            disabled={{ before: today }}
+            startMonth={today}
+            endMonth={new Date(today.getFullYear() + yearsAhead, 11)}
             classNames={{
                 button_previous: cn(buttonVariants({ variant: 'ghost' }), 'size-8 p-0 select-none aria-disabled:opacity-50 [&_svg]:rotate-180'),
                 button_next: cn(buttonVariants({ variant: 'ghost' }), 'size-8 p-0 select-none aria-disabled:opacity-50 [&_svg]:rotate-180'),
