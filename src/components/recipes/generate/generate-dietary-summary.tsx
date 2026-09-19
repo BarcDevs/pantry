@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-import { GenerateDietaryDialog }
-    from '@/components/recipes/generate/generate-dietary-dialog'
+import { GenerateDietaryDialog } from '@/components/recipes/generate/generate-dietary-dialog'
 import { SurfaceButton } from '@/components/shared/buttons/SurfaceButton'
 
 import { onboardingTexts } from '@/constants/texts/onboarding'

@@ -11,31 +11,20 @@ import type {
     FoodType,
     StorageLocation
 } from '@/types/enums'
-import type { PantryItem }
-    from '@/types/pantry-item'
+import type { PantryItem } from '@/types/pantry-item'
 
-import { EditItemDialog }
-    from '@/components/pantry/edit/edit-item-dialog'
-import { PantryFilterChips }
-    from '@/components/pantry/pantry-filter-chips'
-import { PantryGrid }
-    from '@/components/pantry/pantry-grid'
-import { PantryHeader }
-    from '@/components/pantry/pantry-header'
-import { PantrySearchInput }
-    from '@/components/pantry/pantry-search-input'
-import { PantryStatCards }
-    from '@/components/pantry/pantry-stat-cards'
-import { EmptyStateCard }
-    from '@/components/shared/EmptyStateCard'
+import { EditItemDialog } from '@/components/pantry/edit/edit-item-dialog'
+import { PantryFilterChips } from '@/components/pantry/pantry-filter-chips'
+import { PantryGrid } from '@/components/pantry/pantry-grid'
+import { PantryHeader } from '@/components/pantry/pantry-header'
+import { PantrySearchInput } from '@/components/pantry/pantry-search-input'
+import { PantryStatCards } from '@/components/pantry/pantry-stat-cards'
+import { EmptyStateCard } from '@/components/shared/EmptyStateCard'
 
-import { getExpiryStatus }
-    from '@/lib/pantry/expiry-status'
+import { getExpiryStatus } from '@/lib/pantry/expiry-status'
 
-import { routes }
-    from '@/constants/routes'
-import { pantryTexts }
-    from '@/constants/texts/pantry'
+import { routes } from '@/constants/routes'
+import { pantryTexts } from '@/constants/texts/pantry'
 
 type PantryViewProps = {
     items: PantryItem[]

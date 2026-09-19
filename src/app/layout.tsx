@@ -3,8 +3,7 @@ import { Direction } from 'radix-ui'
 
 import type { LayoutProps } from '@/types/react'
 
-import { ServiceWorkerRegister }
-    from '@/components/shell/service-worker-register'
+import { ServiceWorkerRegister } from '@/components/shell/service-worker-register'
 import { AppSessionProvider } from '@/components/shell/session-provider'
 
 import { cn } from '@/lib/utils'

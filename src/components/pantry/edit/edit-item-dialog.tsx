@@ -2,16 +2,11 @@
 
 import type { PantryItem } from '@/types/pantry-item'
 
-import { AddItemFields }
-    from '@/components/pantry/add/add-item-fields'
-import { PantryTypeRow }
-    from '@/components/pantry/add/pantry-type-row'
-import { StorageSuggestionHint }
-    from '@/components/pantry/add/storage-suggestion-hint'
-import { DeleteItemDialog }
-    from '@/components/pantry/edit/delete-item-dialog'
-import { StorageSuggestionButton }
-    from '@/components/pantry/edit/storage-suggestion-button'
+import { AddItemFields } from '@/components/pantry/add/add-item-fields'
+import { PantryTypeRow } from '@/components/pantry/add/pantry-type-row'
+import { StorageSuggestionHint } from '@/components/pantry/add/storage-suggestion-hint'
+import { DeleteItemDialog } from '@/components/pantry/edit/delete-item-dialog'
+import { StorageSuggestionButton } from '@/components/pantry/edit/storage-suggestion-button'
 import { AppDialog } from '@/components/shared/AppDialog'
 import { DestructiveButton } from '@/components/shared/buttons/DestructiveButton'
 import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
