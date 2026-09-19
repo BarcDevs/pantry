@@ -120,5 +120,5 @@ still clear on name change (not covered by this decision).
 **Why:** "no AI = no AI" - the toggle must change behavior, not wording.
 
 **How to apply:** Gemini may not allow the search tool together with structured output; if so use two
-calls (grounded find, then structure/convert). Update PRD AC-2.8 with the serving-conversion rule in the
-same change.
+calls (grounded find, then structure/convert). User decision 19/09/2026: skip PRD edits for this work
+(AC-2.8 already states the toggle behavior; the serving-conversion rule is recorded here only).
