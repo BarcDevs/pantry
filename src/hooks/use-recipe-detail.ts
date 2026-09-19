@@ -73,13 +73,17 @@ export const useRecipeDetail = (initialRecipe: Recipe) => {
 
     return {
         recipe,
-        toggleFavorite,
-        updateTags,
-        updateImageUrl,
-        startCooking,
-        confirmDelete,
-        setConfirmDelete,
-        isDeleting,
-        handleDelete
+        actions: {
+            toggleFavorite,
+            updateTags,
+            updateImageUrl,
+            startCooking
+        },
+        deletion: {
+            isConfirming: confirmDelete,
+            setIsConfirming: setConfirmDelete,
+            isDeleting,
+            confirm: handleDelete
+        }
     }
 }

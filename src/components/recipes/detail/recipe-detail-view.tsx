@@ -45,7 +45,7 @@ export const RecipeDetailView = ({
                 && !recipeDetail.recipe.imageUrl && (
                     <RecipeImageUrlField
                         imageUrl={recipeDetail.recipe.imageUrl}
-                        onChange={recipeDetail.updateImageUrl}
+                        onChange={recipeDetail.actions.updateImageUrl}
                     />
                 )}
             <RecipeBodyGrid>
@@ -74,19 +74,19 @@ export const RecipeDetailView = ({
             />
             <RecipeTagsEditor
                 tags={recipeDetail.recipe.tags}
-                onChange={recipeDetail.updateTags}
+                onChange={recipeDetail.actions.updateTags}
             />
             <RecipeDetailActions
                 recipe={recipeDetail.recipe}
-                onToggleFavorite={recipeDetail.toggleFavorite}
-                onStartCooking={recipeDetail.startCooking}
-                onRequestDelete={() => recipeDetail.setConfirmDelete(true)}
+                onToggleFavorite={recipeDetail.actions.toggleFavorite}
+                onStartCooking={recipeDetail.actions.startCooking}
+                onRequestDelete={() => recipeDetail.deletion.setIsConfirming(true)}
             />
             <DeleteRecipeDialog
-                open={recipeDetail.confirmDelete}
-                onOpenChange={recipeDetail.setConfirmDelete}
-                onConfirm={recipeDetail.handleDelete}
-                isDeleting={recipeDetail.isDeleting}
+                open={recipeDetail.deletion.isConfirming}
+                onOpenChange={recipeDetail.deletion.setIsConfirming}
+                onConfirm={recipeDetail.deletion.confirm}
+                isDeleting={recipeDetail.deletion.isDeleting}
                 recipeName={recipeDetail.recipe.title}
             />
         </div>
