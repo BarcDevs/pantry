@@ -96,7 +96,7 @@ describe('useAddItemForm type refresh', () => {
         await waitFor(() => expect(result.current.form.getValues('type')).toBe('dairy'))
 
         mockSuggestStorage.mockResolvedValue(typedSuggestion('beverages'))
-        act(() => result.current.refreshSuggestion())
+        act(() => result.current.suggestion.refresh())
 
         await waitFor(() => expect(result.current.form.getValues('type')).toBe('beverages'))
     })
@@ -105,13 +105,13 @@ describe('useAddItemForm type refresh', () => {
         mockSuggestStorage.mockRejectedValueOnce(new Error('ai down'))
         const { result } = renderHook(() => useAddItemForm())
         act(() => result.current.form.setValue('name', 'חלב'))
-        await waitFor(() => expect(result.current.suggestionFailed).toBe(true))
+        await waitFor(() => expect(result.current.suggestion.failed).toBe(true))
         act(() => result.current.form.setValue('type', 'meat' as never))
 
         mockSuggestStorage.mockResolvedValue(typedSuggestion('dairy'))
-        act(() => result.current.retrySuggestion())
+        act(() => result.current.suggestion.retry())
 
-        await waitFor(() => expect(result.current.suggestionFailed).toBe(false))
+        await waitFor(() => expect(result.current.suggestion.failed).toBe(false))
         expect(result.current.form.getValues('type')).toBe('meat')
     })
 
@@ -119,7 +119,7 @@ describe('useAddItemForm type refresh', () => {
         mockSuggestStorage.mockResolvedValue(typedSuggestion('dairy'))
         const { result } = renderHook(() => useAddItemForm())
         act(() => result.current.form.setValue('name', 'ח'))
-        act(() => result.current.refreshSuggestion())
+        act(() => result.current.suggestion.refresh())
         act(() => result.current.form.setValue('type', 'meat' as never))
 
         act(() => result.current.form.setValue('name', 'חלב'))
@@ -146,7 +146,7 @@ describe('useAddItemForm merge prompt', () => {
             rendered.result.current.form.setValue('type', 'dairy' as never)
             rendered.result.current.form.setValue('quantity', 1)
         })
-        await waitFor(() => expect(rendered.result.current.mergePrompt).not.toBeNull())
+        await waitFor(() => expect(rendered.result.current.merge.prompt).not.toBeNull())
         return rendered
     }
 
@@ -158,7 +158,7 @@ describe('useAddItemForm merge prompt', () => {
     it('offers to merge when an item with the same name and unit exists', async () => {
         const { result } = await setup()
 
-        expect(result.current.mergePrompt).toEqual({
+        expect(result.current.merge.prompt).toEqual({
             existing,
             isMerging: false,
             addedQuantity: 1,
@@ -171,17 +171,17 @@ describe('useAddItemForm merge prompt', () => {
 
         act(() => result.current.form.setValue('unit', PantryUnit.Kg))
 
-        await waitFor(() => expect(result.current.mergePrompt).toBeNull())
+        await waitFor(() => expect(result.current.merge.prompt).toBeNull())
     })
 
     it('shows the merged total and submits with mergeWithId once merging', async () => {
         const { result } = await setup()
 
-        act(() => result.current.startMerge())
+        act(() => result.current.merge.start())
         act(() => result.current.form.setValue('quantity', 3))
-        await act(async () => result.current.handleSubmit())
+        await act(async () => result.current.submission.submit())
 
-        expect(result.current.mergePrompt).toEqual(expect.objectContaining({
+        expect(result.current.merge.prompt).toEqual(expect.objectContaining({
             isMerging: true,
             total: 5
         }))
@@ -198,20 +198,20 @@ describe('useAddItemForm merge prompt', () => {
             incoming: {}
         }])
 
-        await act(async () => result.current.handleSubmit())
+        await act(async () => result.current.submission.submit())
 
         expect(mockAddItems).toHaveBeenCalledWith([
             expect.not.objectContaining({ mergeWithId: expect.anything() })
         ])
-        await waitFor(() => expect(result.current.duplicate).not.toBeNull())
+        await waitFor(() => expect(result.current.submission.duplicate.value).not.toBeNull())
     })
 
     it('stops merging when the user cancels', async () => {
         const { result } = await setup()
 
-        act(() => result.current.startMerge())
-        act(() => result.current.cancelMerge())
+        act(() => result.current.merge.start())
+        act(() => result.current.merge.cancel())
 
-        expect(result.current.mergePrompt?.isMerging).toBe(false)
+        expect(result.current.merge.prompt?.isMerging).toBe(false)
     })
 })

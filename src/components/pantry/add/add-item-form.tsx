@@ -33,30 +33,30 @@ export const AddItemForm = ({ prefill }: AddItemFormProps) => {
         <Form {...addItem.form}>
             <form
                 noValidate
-                onSubmit={addItem.handleSubmit}
+                onSubmit={addItem.submission.submit}
                 className={'flex flex-col gap-4 rounded-lg border border-border-2 bg-surface p-5'}
             >
                 <span className={'font-bold text-body text-ink'}>
                     {pantryTexts.addForm.manualEntryTitle}
                 </span>
                 <AddItemFields control={addItem.form.control}/>
-                {addItem.mergePrompt && (
+                {addItem.merge.prompt && (
                     <ExistingItemPrompt
-                        prompt={addItem.mergePrompt}
-                        onMerge={addItem.startMerge}
-                        onCancel={addItem.cancelMerge}
+                        prompt={addItem.merge.prompt}
+                        onMerge={addItem.merge.start}
+                        onCancel={addItem.merge.cancel}
                     />
                 )}
                 {showSuggestionPanel && (
                     <StorageSuggestionHint
-                        isLoading={addItem.isSuggesting}
-                        suggestion={addItem.suggestion}
-                        suggestionFailed={addItem.suggestionFailed}
+                        isLoading={addItem.suggestion.isSuggesting}
+                        suggestion={addItem.suggestion.value}
+                        suggestionFailed={addItem.suggestion.failed}
                         currentStorage={currentStorage}
-                        onSelectRecommended={addItem.applySuggestedStorage}
-                        onApplyExpiry={addItem.applySuggestedExpiry}
-                        onRetry={addItem.retrySuggestion}
-                        onRefresh={addItem.refreshSuggestion}
+                        onSelectRecommended={addItem.suggestion.applyStorage}
+                        onApplyExpiry={addItem.suggestion.applyExpiry}
+                        onRetry={addItem.suggestion.retry}
+                        onRefresh={addItem.suggestion.refresh}
                     />
                 )}
                 <PantryTypeRow
@@ -66,27 +66,27 @@ export const AddItemForm = ({ prefill }: AddItemFormProps) => {
                 <FormError errors={addItem.form.formState.errors}/>
                 <PrimaryButton
                     type={'submit'}
-                    disabled={addItem.isSubmitting}
+                    disabled={addItem.submission.isSubmitting}
                     className={'w-full'}
                 >
-                    {addItem.isSubmitting
+                    {addItem.submission.isSubmitting
                         ? pantryTexts.addForm.submitting
                         : pantryTexts.addForm.submit}
                 </PrimaryButton>
                 <DuplicateItemDialog
-                    open={addItem.duplicate !== null}
+                    open={addItem.submission.duplicate.value !== null}
                     onOpenChange={(open) => {
-                        if (!open) addItem.setDuplicate(null)
+                        if (!open) addItem.submission.duplicate.setValue(null)
                     }}
-                    onMerge={addItem.handleMerge}
-                    onKeepSeparate={addItem.handleKeepSeparate}
+                    onMerge={addItem.submission.duplicate.merge}
+                    onKeepSeparate={addItem.submission.duplicate.keepSeparate}
                 />
                 <TypePickerDialog
-                    open={addItem.isTypePickerOpen}
-                    onOpenChange={addItem.setIsTypePickerOpen}
+                    open={addItem.submission.typePicker.isOpen}
+                    onOpenChange={addItem.submission.typePicker.setIsOpen}
                     value={currentType}
-                    onSelect={addItem.selectPendingType}
-                    onSkip={addItem.skipPendingType}
+                    onSelect={addItem.submission.typePicker.select}
+                    onSkip={addItem.submission.typePicker.skip}
                 />
             </form>
         </Form>

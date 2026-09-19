@@ -226,61 +226,77 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         ))()
     }
 
+    const handleFormSubmit = form.handleSubmit((values) => {
+        if (isMerging && mergeCandidate) {
+            submit(values, { mergeWithId: mergeCandidate._id })
+            return
+        }
+        if (!values.type) {
+            setPendingValues(values)
+            setIsTypePickerOpen(true)
+            return
+        }
+        submit(values)
+    })
+
+    // Submits the values snapshotted when the type picker opened, not live form state -
+    // the picker is modal, so nothing else can change while it's open.
+    const selectPendingType = (
+        type: NonNullable<AddItemFormValues['type']>
+    ) => {
+        form.setValue('type', type)
+        setIsTypePickerOpen(false)
+        if (pendingValues) submit({ ...pendingValues, type })
+    }
+
+    const skipPendingType = () => {
+        setIsTypePickerOpen(false)
+        if (pendingValues) submit(pendingValues)
+    }
+
     return {
         form,
-        mergePrompt,
-        startMerge: () => setIsMergeRequested(true),
-        cancelMerge: () => setIsMergeRequested(false),
-        suggestion: effectiveSuggestion,
-        isSuggesting: isPendingSuggestion,
-        suggestionFailed: storageSuggestion.suggestionFailed,
-        retrySuggestion: () => setRetryToken((token) => token + 1),
-        refreshSuggestion: () => {
-            isFreshRequestedRef.current = true
-            setRetryToken((token) => token + 1)
+        merge: {
+            prompt: mergePrompt,
+            start: () => setIsMergeRequested(true),
+            cancel: () => setIsMergeRequested(false)
         },
-        isSubmitting,
-        duplicate,
-        setDuplicate,
-        isTypePickerOpen,
-        setIsTypePickerOpen,
-        handleSubmit: form.handleSubmit((values) => {
-            if (isMerging && mergeCandidate) {
-                submit(values, { mergeWithId: mergeCandidate._id })
-                return
-            }
-            if (!values.type) {
-                setPendingValues(values)
-                setIsTypePickerOpen(true)
-                return
-            }
-            submit(values)
-        }),
-        handleMerge,
-        handleKeepSeparate,
-        applySuggestedStorage: () => {
-            if (effectiveSuggestion) {
-                form.setValue(
-                    'storage',
-                    effectiveSuggestion.suggestedStorage
-                )
-            }
+        suggestion: {
+            value: effectiveSuggestion,
+            isSuggesting: isPendingSuggestion,
+            failed: storageSuggestion.suggestionFailed,
+            retry: () => setRetryToken((token) => token + 1),
+            refresh: () => {
+                isFreshRequestedRef.current = true
+                setRetryToken((token) => token + 1)
+            },
+            applyStorage: () => {
+                if (effectiveSuggestion) {
+                    form.setValue(
+                        'storage',
+                        effectiveSuggestion.suggestedStorage
+                    )
+                }
+            },
+            applyExpiry: () => (
+                applySuggestedExpiry(form, effectiveSuggestion)
+            )
         },
-        applySuggestedExpiry: () => (
-            applySuggestedExpiry(form, effectiveSuggestion)
-        ),
-        // Submits the values snapshotted when the type picker opened, not live form state -
-        // the picker is modal, so nothing else can change while it's open.
-        selectPendingType: (
-            type: NonNullable<AddItemFormValues['type']>
-        ) => {
-            form.setValue('type', type)
-            setIsTypePickerOpen(false)
-            if (pendingValues) submit({ ...pendingValues, type })
-        },
-        skipPendingType: () => {
-            setIsTypePickerOpen(false)
-            if (pendingValues) submit(pendingValues)
+        submission: {
+            isSubmitting,
+            submit: handleFormSubmit,
+            duplicate: {
+                value: duplicate,
+                setValue: setDuplicate,
+                merge: handleMerge,
+                keepSeparate: handleKeepSeparate
+            },
+            typePicker: {
+                isOpen: isTypePickerOpen,
+                setIsOpen: setIsTypePickerOpen,
+                select: selectPendingType,
+                skip: skipPendingType
+            }
         }
     }
 }
