@@ -11,70 +11,77 @@ import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { resolveSuggestedType } from '@/lib/pantry/resolve-suggested-type'
 
+type RowEditValues = {
+    name: string
+    storage: StorageLocation
+    type: FoodType | null
+    expiryDate: string
+}
+
 export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
-    const [name, setName] = useState(row.name)
-    const [storage, setStorage] = useState<StorageLocation>(row.storage)
-    const [type, setType] = useState<FoodType | null>(row.type)
-    const [expiryDate, setExpiryDate] = useState(row.expiryDate)
-    const {
-        suggestion,
-        suggestionFailed,
-        isSuggesting,
-        request
-    } = useStorageSuggestion(row.storageSuggestion)
+    const [values, setValues] = useState<RowEditValues>({
+        name: row.name,
+        storage: row.storage,
+        type: row.type,
+        expiryDate: row.expiryDate
+    })
+    const storageSuggestion = useStorageSuggestion(row.storageSuggestion)
+    const { suggestion } = storageSuggestion
+
+    const setField = <Key extends keyof RowEditValues>(
+        key: Key,
+        value: RowEditValues[Key]
+    ) => setValues((current) => ({
+        ...current,
+        [key]: value
+    }))
 
     const applySuggestedType = (
         result: StorageSuggestion,
         isFresh = false
-    ) => setType((currentType) => (
-        resolveSuggestedType(
+    ) => setValues((current) => ({
+        ...current,
+        type: resolveSuggestedType(
             result,
-            currentType,
+            current.type,
             isFresh
-        ) ?? currentType
-    ))
+        ) ?? current.type
+    }))
 
-    const requestSuggestion = () => request(name, {
+    const requestSuggestion = () => storageSuggestion.request(values.name, {
         onSuggested: applySuggestedType
     })
-    const refreshSuggestion = () => request(name, {
+    const refreshSuggestion = () => storageSuggestion.request(values.name, {
         fresh: true,
         onSuggested: (result) => applySuggestedType(result, true)
     })
 
     const applySuggestedStorage = () => {
-        if (suggestion) setStorage(suggestion.suggestedStorage)
+        if (suggestion) setField('storage', suggestion.suggestedStorage)
     }
 
     const applySuggestedExpiry = () => {
-        const entry = suggestion?.expiryByStorage[storage]
-        if (entry) setExpiryDate(entry.date)
+        const entry = suggestion?.expiryByStorage[values.storage]
+        if (entry) setField('expiryDate', entry.date)
     }
 
     const buildPatch = (): ReceiptReviewRowEditPatch => ({
-        name,
-        storage,
-        type,
-        expiryDate,
+        ...values,
         storageSuggestion: suggestion
     })
 
     return {
-        name,
-        setName,
-        storage,
-        setStorage,
-        type,
-        setType,
-        expiryDate,
-        setExpiryDate,
-        suggestion,
-        isSuggesting,
-        suggestionFailed,
-        requestSuggestion,
-        refreshSuggestion,
-        applySuggestedStorage,
-        applySuggestedExpiry,
+        values,
+        setField,
+        suggestion: {
+            value: suggestion,
+            isSuggesting: storageSuggestion.isSuggesting,
+            failed: storageSuggestion.suggestionFailed,
+            request: requestSuggestion,
+            refresh: refreshSuggestion,
+            applyStorage: applySuggestedStorage,
+            applyExpiry: applySuggestedExpiry
+        },
         buildPatch
     }
 }
