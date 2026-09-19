@@ -8,7 +8,10 @@ import { useRouter } from 'next/navigation'
 
 import { toast } from 'sonner'
 
-import type { RecipeDoc } from '@/types/recipe'
+import type {
+    RecipeDoc,
+    UpdateRecipeInput
+} from '@/types/recipe'
 
 import { useRecipeAdjustments } from '@/hooks/use-recipe-adjustments'
 import { useRefreshPantryStatus } from '@/hooks/use-refresh-pantry-status'
@@ -24,6 +27,7 @@ import { recipesTexts } from '@/constants/texts/recipes'
 
 import { refineRecipe } from '@/actions/recipes/refine-recipe'
 import { saveRecipe } from '@/actions/recipes/save-recipe'
+import { updateRecipe as updateSavedRecipe } from '@/actions/recipes/update-recipe'
 
 export const useRecipeResult = () => {
     const router = useRouter()
@@ -52,8 +56,19 @@ export const useRecipeResult = () => {
         saveGeneratedRecipe(next)
     }
 
-    const updateRecipe = (changes: Partial<RecipeDoc>) => {
-        if (recipe) commitRecipe({ ...recipe, ...changes })
+    const updateRecipeFields = (
+        changes: Pick<UpdateRecipeInput, 'isFavorite' | 'imageUrl'>
+    ) => {
+        if (!recipe) return
+        if (!savedRecipeId) {
+            commitRecipe({ ...recipe, ...changes })
+            return
+        }
+        setRecipe({ ...recipe, ...changes })
+        updateSavedRecipe(savedRecipeId, changes).catch((error: unknown) => {
+            console.error(error)
+            toast.error(recipesTexts.result.saveError)
+        })
     }
 
     const dismiss = () => {
@@ -81,11 +96,11 @@ export const useRecipeResult = () => {
 
     const toggleFavorite = () => {
         if (!recipe) return
-        updateRecipe({ isFavorite: !recipe.isFavorite })
+        updateRecipeFields({ isFavorite: !recipe.isFavorite })
     }
 
     const setManualImageUrl = (imageUrl: string) => {
-        updateRecipe({ imageUrl: imageUrl || undefined })
+        updateRecipeFields({ imageUrl: imageUrl || undefined })
     }
 
     const save = (): Promise<string | null> => (
