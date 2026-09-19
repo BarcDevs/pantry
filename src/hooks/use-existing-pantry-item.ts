@@ -27,7 +27,10 @@ export const useExistingPantryItem = (
             .then((item) => {
                 if (!cancelled) setResult({ name, item })
             })
-            .catch((error: unknown) => console.error(error))
+            .catch((error: unknown) => {
+                console.error(error)
+                if (!cancelled) setResult({ name, item: null })
+            })
 
         return () => { cancelled = true }
     }, [name])
