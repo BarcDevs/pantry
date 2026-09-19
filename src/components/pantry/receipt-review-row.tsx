@@ -16,6 +16,7 @@ import type {
 import { MinusIcon } from '@/components/icons/minus-icon'
 import { PlusIcon } from '@/components/icons/plus-icon'
 import { ReceiptRowEditDialog } from '@/components/pantry/receipt-row-edit-dialog'
+import { CheckButton } from '@/components/shared/buttons/CheckButton'
 import { IconButton } from '@/components/shared/buttons/IconButton'
 import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 import { Input } from '@/components/shared/Input'
@@ -30,7 +31,6 @@ import {
 import { getExpiryStatus } from '@/lib/pantry/expiry-status'
 import { quantityStepByUnit } from '@/lib/pantry/quantity-step-by-unit'
 import { toSelectOptions } from '@/lib/select-options'
-import { cn } from '@/lib/utils'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -70,16 +70,10 @@ export const ReceiptReviewRow = ({
 
     return (
         <div className={'flex flex-wrap items-center gap-2.5 rounded-lg border border-border-2 bg-surface p-3 md:flex-nowrap'}>
-            <button
+            <CheckButton
                 onClick={() => onToggle(row.id)}
                 aria-label={row.name}
-                aria-pressed={row.included}
-                className={cn(
-                    'flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-sm border-1.5',
-                    row.included
-                        ? 'border-green bg-green'
-                        : 'border-track bg-surface'
-                )}
+                isChecked={row.included}
             >
                 {row.included && (
                     <CheckIcon
@@ -87,7 +81,7 @@ export const ReceiptReviewRow = ({
                         className={'text-surface'}
                     />
                 )}
-            </button>
+            </CheckButton>
             <span className={'min-w-0 flex-1'}>
                 <span className={'block truncate text-body font-bold text-ink'}>
                     {row.name}

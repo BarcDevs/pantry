@@ -1,5 +1,7 @@
 import { StarIcon } from 'lucide-react'
 
+import { StarButton } from '@/components/shared/buttons/StarButton'
+
 import { cn } from '@/lib/utils'
 
 import { STAR_VALUES } from '@/constants/rating'
@@ -49,9 +51,8 @@ export const StarRating = ({
                 }
 
                 return (
-                    <button
+                    <StarButton
                         key={value}
-                        type={'button'}
                         aria-label={rating === value
                             ? texts.starLabelSelected(value)
                             : texts.starLabel(value)}
@@ -61,10 +62,10 @@ export const StarRating = ({
                         }}
                         onMouseEnter={() => onHover?.(value)}
                         onMouseLeave={onHoverEnd}
-                        className={cn('cursor-pointer', buttonClassName)}
+                        className={buttonClassName}
                     >
                         {star}
-                    </button>
+                    </StarButton>
                 )
             })}
         </div>

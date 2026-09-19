@@ -118,6 +118,35 @@ prop driving the two looks.
 <ToggleTextButton isActive={isAdded} onClick={onToggle}>{label}</ToggleTextButton>
 ```
 
+### `InputAdornmentButton`
+
+An icon button absolutely positioned inside a relatively-positioned input wrapper (e.g. `PasswordInput`'s show/hide
+eye). Wraps `Button` with `variant={'ghost'}`, no padding/hover background and `absolute left-2.5 top-1/2
+-translate-y-1/2 text-ink-4`.
+
+```tsx
+<InputAdornmentButton onClick={onToggleVisible}><Eye/></InputAdornmentButton>
+```
+
+### `CheckButton`
+
+A square checkbox-style toggle (`size-6`, green fill + check icon child when on). Wraps `Button` with
+`variant={'ghost'}` and an `isChecked` prop that drives the looks and `aria-pressed`, e.g. the receipt review row's
+include checkbox.
+
+```tsx
+<CheckButton isChecked={row.included} aria-label={row.name} onClick={onToggle}><CheckIcon/></CheckButton>
+```
+
+### `StarButton`
+
+Unstyled clickable wrapper around a rating star (no padding/background/hover fill). Wraps `Button` with
+`variant={'ghost'}`; used by `StarRating`.
+
+```tsx
+<StarButton aria-label={label} onClick={onRate}><StarIcon/></StarButton>
+```
+
 If a new recurring button shape shows up (checked against existing usages, not assumed), add another purpose-made
 button here instead of a one-off inline `className` override at the call site.
 
