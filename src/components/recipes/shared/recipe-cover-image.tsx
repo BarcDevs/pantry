@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import Image from 'next/image'
+
 import { cn } from '@/lib/utils'
 
 type RecipeCoverImageProps = {
@@ -17,12 +19,14 @@ export const RecipeCoverImage = ({
     const hasImage = Boolean(imageUrl) && failedUrl !== imageUrl
 
     if (hasImage) return (
-        <img
-            src={imageUrl}
+        <Image
+            src={imageUrl as string}
             alt={''}
+            fill={true}
+            unoptimized={true}
             referrerPolicy={'no-referrer'}
             onError={() => setFailedUrl(imageUrl)}
-            className={'absolute inset-0 size-full object-cover'}
+            className={'object-cover'}
         />
     )
 

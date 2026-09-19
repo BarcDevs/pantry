@@ -17,6 +17,7 @@
 - Short conditional blocks - never use `{`
 - Imports with ONE named import (`import { a } from '...'`): keep on one line, break only past ~100 chars, and then break before the `from` keyword, never inside the braces
 - Imports with 2+ named imports (`import { a, b } from '...'`): always one name per line, even when the line is short
+- Images: use `Image` from `next/image`, never a raw `<img>`. For arbitrary remote URLs (user-entered or scraped, e.g. og:image) pass `unoptimized` (plus `fill`/`referrerPolicy` as needed) and do NOT add a wildcard `remotePatterns` - that would turn the image optimizer into an open proxy
 - Don't make line-breaking too strict
 - Always provide informative and self-explanatory filenames and variable names
 - Components with 5+ related props (e.g. a form's field values, or their change handlers): group into a single object prop (e.g. `values`, `handlers`) instead of listing each field individually. Use `group.field` directly at the usage site - don't destructure the group back into individual local names

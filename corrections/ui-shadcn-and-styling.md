@@ -51,3 +51,13 @@ was `items-end` on a `flex-col` RTL container resolving to flush-*left*, not flu
 **Lesson:** never claim an RTL/bidi or layout fix is verified without driving the real component
 in a real browser and reading actual `getBoundingClientRect()`/computed styles — a screenshot or
 a `page.evaluate` DOM patch is not proof.
+
+---
+
+## 19/09/2026 — Use next/image, not a raw <img>
+
+**What was wrong:** the recipe cover fix (`RecipeCoverImage`) rendered a raw `<img>`. User: "not good. we're on next which has its own enhanced <Image/>".
+
+**Correct fact:** images go through `Image` from `next/image`. Remote URLs that come from users or scraped pages (og:image) use `unoptimized` (no host allow-list needed, and no wildcard `remotePatterns`, which would make the optimizer a proxy for any URL) with `fill`, and `referrerPolicy` still passes through to the element.
+
+**Lesson:** before reaching for a raw DOM element, check whether the framework has a primitive for it. `@next/next/no-img-element` is not enabled in this repo's ESLint config, so lint will not catch it.
