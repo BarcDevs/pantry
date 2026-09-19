@@ -116,20 +116,19 @@ export const useRecipeResult = () => {
 
     return {
         recipe,
-        savedRecipeId,
-        refineInstruction: adjustments.values.instruction,
-        setRefineInstruction: (value: string) => adjustments.setField('instruction', value),
-        usedReplacements: adjustments.values.usedReplacements,
-        toggleReplacement: adjustments.actions.toggleReplacement,
-        usedRemovals: adjustments.values.usedRemovals,
-        toggleRemoval: adjustments.actions.toggleRemoval,
-        isRefining,
-        refine,
-        dismiss,
-        toggleFavorite,
-        setManualImageUrl,
-        isSaving,
-        save,
-        startCooking
+        adjustments,
+        status: {
+            isRefining,
+            isSaving,
+            savedRecipeId
+        },
+        actions: {
+            refine,
+            save,
+            startCooking,
+            dismiss,
+            toggleFavorite,
+            setManualImageUrl
+        }
     }
 }
