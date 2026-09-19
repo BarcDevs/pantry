@@ -1,5 +1,6 @@
 import {
     useEffect,
+    useRef,
     useState,
     useTransition
 } from 'react'
@@ -59,7 +60,7 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         resolver: zodResolver(addItemFormSchema),
         defaultValues: {
             name: prefill.name ?? '',
-            storage: StorageLocation.Fridge,
+            storage: StorageLocation.Pantry,
             type: null,
             quantity: prefill.quantity ?? 1,
             unit: prefill.unit ?? PantryUnit.Units,
@@ -68,6 +69,7 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         }
     })
 
+    const isStorageChosenRef = useRef(false)
     const [suggestion, setSuggestion] = useState<
         StorageSuggestion | null
     >(null)
@@ -92,6 +94,14 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         nameDebounceMs
     )
 
+    useEffect(() => form.subscribe({
+        name: 'storage',
+        formState: { values: true },
+        callback: ({ type }) => {
+            if (type === 'change') isStorageChosenRef.current = true
+        }
+    }), [form])
+
     useResetOnChange(name, () => {
         setSuggestion(null)
         setSuggestionFailed(false)
@@ -113,6 +123,12 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
                 if (cancelled) return
                 setSuggestion(result)
                 setSuggestionFailed(false)
+                if (!isStorageChosenRef.current) {
+                    form.setValue(
+                        'storage',
+                        result.suggestedStorage
+                    )
+                }
                 if (
                     result.suggestedType
                     && !form.getValues('type')
