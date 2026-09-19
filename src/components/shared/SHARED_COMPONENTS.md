@@ -29,6 +29,21 @@ Wraps `Button` with `variant={'ghost'} h-auto w-fit p-0 font-bold` plus a `tone`
 <TextButton tone={'red'} onClick={onClearAll}>{label}</TextButton>
 ```
 
+### `OutlinedLinkButton`
+
+Small green-bordered pill for a link-style action inside a row (e.g. the recipe result's "add to pantry" link). Wraps
+`Button` with `variant={'ghost'} size={'xs'}` plus the green border/padding/caption-size classes; use with `asChild`
+around a `Link`.
+
+```tsx
+<OutlinedLinkButton asChild><Link href={href}>{label}</Link></OutlinedLinkButton>
+```
+
+### `calendar-nav-button-classes.ts`
+
+Not a component: the class string (ghost `buttonVariants` + `size-8` etc.) the expiry calendar passes to react-day-picker's
+`button_previous` / `button_next` slots, which need a class rather than a rendered `Button`.
+
 ### `PrimaryButton`
 
 Solid CTA - the main/submit action. Wraps `Button` with `variant={'default'}` (this is also `Button`'s own default

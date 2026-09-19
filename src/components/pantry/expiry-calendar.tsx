@@ -1,10 +1,8 @@
 import { startOfToday } from 'date-fns'
 import { he } from 'react-day-picker/locale'
 
-import { buttonVariants } from '@/components/ui/button'
+import { calendarNavButtonClasses } from '@/components/shared/buttons/calendar-nav-button-classes'
 import { Calendar } from '@/components/ui/calendar'
-
-import { cn } from '@/lib/utils'
 
 const yearsAhead = 20
 
@@ -32,8 +30,8 @@ export const ExpiryCalendar = ({
             startMonth={today}
             endMonth={new Date(today.getFullYear() + yearsAhead, 11)}
             classNames={{
-                button_previous: cn(buttonVariants({ variant: 'ghost' }), 'size-8 p-0 select-none aria-disabled:opacity-50 [&_svg]:rotate-180'),
-                button_next: cn(buttonVariants({ variant: 'ghost' }), 'size-8 p-0 select-none aria-disabled:opacity-50 [&_svg]:rotate-180'),
+                button_previous: calendarNavButtonClasses,
+                button_next: calendarNavButtonClasses,
                 dropdowns: 'flex h-8 w-full items-center justify-center gap-1.5 text-sm font-medium',
                 dropdown_root: 'relative rounded-md border border-input shadow-xs has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50',
                 dropdown: 'absolute inset-0 cursor-pointer bg-popover opacity-0',
