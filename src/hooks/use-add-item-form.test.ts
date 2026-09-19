@@ -96,9 +96,36 @@ describe('useAddItemForm type refresh', () => {
         await waitFor(() => expect(result.current.form.getValues('type')).toBe('dairy'))
 
         mockSuggestStorage.mockResolvedValue(typedSuggestion('beverages'))
-        act(() => result.current.retrySuggestion())
+        act(() => result.current.refreshSuggestion())
 
         await waitFor(() => expect(result.current.form.getValues('type')).toBe('beverages'))
+    })
+
+    it('keeps a type the user picked when retrying a failed suggestion', async () => {
+        mockSuggestStorage.mockRejectedValueOnce(new Error('ai down'))
+        const { result } = renderHook(() => useAddItemForm())
+        act(() => result.current.form.setValue('name', 'חלב'))
+        await waitFor(() => expect(result.current.suggestionFailed).toBe(true))
+        act(() => result.current.form.setValue('type', 'meat' as never))
+
+        mockSuggestStorage.mockResolvedValue(typedSuggestion('dairy'))
+        act(() => result.current.retrySuggestion())
+
+        await waitFor(() => expect(result.current.suggestionFailed).toBe(false))
+        expect(result.current.form.getValues('type')).toBe('meat')
+    })
+
+    it('does not carry a refresh over to a later name change', async () => {
+        mockSuggestStorage.mockResolvedValue(typedSuggestion('dairy'))
+        const { result } = renderHook(() => useAddItemForm())
+        act(() => result.current.form.setValue('name', 'ח'))
+        act(() => result.current.refreshSuggestion())
+        act(() => result.current.form.setValue('type', 'meat' as never))
+
+        act(() => result.current.form.setValue('name', 'חלב'))
+
+        await waitFor(() => expect(mockSuggestStorage).toHaveBeenCalled())
+        expect(result.current.form.getValues('type')).toBe('meat')
     })
 })
 

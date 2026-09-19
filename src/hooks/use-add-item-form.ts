@@ -29,6 +29,7 @@ import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { applySuggestedExpiry } from '@/lib/pantry/apply-suggested-expiry'
 import type { AddItemPrefill } from '@/lib/pantry/parse-add-item-prefill'
+import { resolveSuggestedType } from '@/lib/pantry/resolve-suggested-type'
 
 import { minNameLengthForSuggestion } from '@/constants/pantry'
 import { routes } from '@/constants/routes'
@@ -118,19 +119,21 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     })
 
     useEffect(() => {
-        if (debouncedName.length < minNameLengthForSuggestion) return
-
         const fresh = isFreshRequestedRef.current
         isFreshRequestedRef.current = false
+        if (debouncedName.length < minNameLengthForSuggestion) return
+
         requestSuggestion(debouncedName, {
             fresh,
             onSuggested: (result) => {
                 if (!isStorageChosenRef.current)
                     form.setValue('storage', result.suggestedStorage)
-                if (
-                    result.suggestedType
-                    && (fresh || !form.getValues('type'))
-                ) form.setValue('type', result.suggestedType)
+                const suggestedType = resolveSuggestedType(
+                    result,
+                    form.getValues('type'),
+                    fresh
+                )
+                if (suggestedType) form.setValue('type', suggestedType)
             }
         })
     }, [debouncedName, retryToken, form, requestSuggestion])
@@ -231,7 +234,8 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         suggestion: effectiveSuggestion,
         isSuggesting: isPendingSuggestion,
         suggestionFailed: storageSuggestion.suggestionFailed,
-        retrySuggestion: () => {
+        retrySuggestion: () => setRetryToken((token) => token + 1),
+        refreshSuggestion: () => {
             isFreshRequestedRef.current = true
             setRetryToken((token) => token + 1)
         },

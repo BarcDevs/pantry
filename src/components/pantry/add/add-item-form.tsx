@@ -56,7 +56,7 @@ export const AddItemForm = ({ prefill }: AddItemFormProps) => {
                         onSelectRecommended={addItem.applySuggestedStorage}
                         onApplyExpiry={addItem.applySuggestedExpiry}
                         onRetry={addItem.retrySuggestion}
-                        onRefresh={addItem.retrySuggestion}
+                        onRefresh={addItem.refreshSuggestion}
                     />
                 )}
                 <PantryTypeRow

@@ -14,6 +14,7 @@ import { useResetOnChange } from '@/hooks/use-reset-on-change'
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { applySuggestedExpiry } from '@/lib/pantry/apply-suggested-expiry'
+import { resolveSuggestedType } from '@/lib/pantry/resolve-suggested-type'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -79,12 +80,14 @@ export const useEditItemForm = ({
 
     const applySuggestedType = (
         result: StorageSuggestion,
-        shouldOverwrite = false
+        isFresh = false
     ) => {
-        if (
-            result.suggestedType
-            && (shouldOverwrite || !form.getValues('type'))
-        ) form.setValue('type', result.suggestedType)
+        const suggestedType = resolveSuggestedType(
+            result,
+            form.getValues('type'),
+            isFresh
+        )
+        if (suggestedType) form.setValue('type', suggestedType)
     }
 
     const requestSuggestion = () => storageSuggestion.request(name, {

@@ -9,6 +9,8 @@ import type {
 
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
+import { resolveSuggestedType } from '@/lib/pantry/resolve-suggested-type'
+
 export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
     const [name, setName] = useState(row.name)
     const [storage, setStorage] = useState<StorageLocation>(row.storage)
@@ -23,13 +25,14 @@ export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
 
     const applySuggestedType = (
         result: StorageSuggestion,
-        shouldOverwrite = false
-    ) => {
-        if (
-            result.suggestedType
-            && (shouldOverwrite || !type)
-        ) setType(result.suggestedType)
-    }
+        isFresh = false
+    ) => setType((currentType) => (
+        resolveSuggestedType(
+            result,
+            currentType,
+            isFresh
+        ) ?? currentType
+    ))
 
     const requestSuggestion = () => request(name, {
         onSuggested: applySuggestedType
