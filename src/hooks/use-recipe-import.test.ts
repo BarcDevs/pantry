@@ -73,10 +73,10 @@ describe('useRecipeImport', () => {
 
         const { result } = renderHook(() => useRecipeImport())
 
-        await act(async () => result.current.importFromUrl('https://x.com'))
+        await act(async () => result.current.importing.fromUrl('https://x.com'))
 
         expect(result.current.recipe).toBeNull()
-        expect(result.current.error).not.toBeNull()
+        expect(result.current.importing.error).not.toBeNull()
     })
 
     it('sets the blocked-site error when the URL import is blocked', async () => {
@@ -88,9 +88,9 @@ describe('useRecipeImport', () => {
 
         const { result } = renderHook(() => useRecipeImport())
 
-        await act(async () => result.current.importFromUrl('https://x.com'))
+        await act(async () => result.current.importing.fromUrl('https://x.com'))
 
-        expect(result.current.error).toBe(recipesTexts.import.importBlockedError)
+        expect(result.current.importing.error).toBe(recipesTexts.import.importBlockedError)
     })
 
     it('sets the recipe on a successful text import', async () => {
@@ -101,10 +101,10 @@ describe('useRecipeImport', () => {
 
         const { result } = renderHook(() => useRecipeImport())
 
-        await act(async () => result.current.importFromText('recipe text'))
+        await act(async () => result.current.importing.fromText('recipe text'))
 
         expect(result.current.recipe?.title).toBe('עוגה')
-        expect(result.current.error).toBeNull()
+        expect(result.current.importing.error).toBeNull()
     })
 
     it('saves the recipe and navigates to its detail page', async () => {
@@ -115,8 +115,8 @@ describe('useRecipeImport', () => {
         mockSaveRecipe.mockResolvedValue({ _id: 'r1' })
 
         const { result } = renderHook(() => useRecipeImport())
-        await act(async () => result.current.importFromText('recipe text'))
-        await act(async () => result.current.save())
+        await act(async () => result.current.importing.fromText('recipe text'))
+        await act(async () => result.current.review.save())
 
         expect(mockSaveRecipe).toHaveBeenCalled()
         expect(mockPush).toHaveBeenCalledWith('/recipes/r1')
@@ -134,9 +134,9 @@ describe('useRecipeImport', () => {
         })
 
         const { result } = renderHook(() => useRecipeImport())
-        await act(async () => result.current.importFromText('recipe text'))
+        await act(async () => result.current.importing.fromText('recipe text'))
         act(() => result.current.adjustments.setField('instruction', 'בלי סוכר'))
-        await act(async () => result.current.refine())
+        await act(async () => result.current.review.refine())
 
         expect(mockRefineRecipe).toHaveBeenCalledWith(expect.objectContaining({ instruction: 'בלי סוכר' }))
         expect(result.current.recipe?.title).toBe('עוגה (מעודכן)')
@@ -177,7 +177,7 @@ describe('useRecipeImport', () => {
         saveImportDraft(draft)
         const { result } = renderHook(() => useRecipeImport())
 
-        act(() => result.current.dismiss())
+        act(() => result.current.review.dismiss())
 
         expect(result.current.recipe).toBeNull()
         expect(renderHook(() => useRecipeImport()).result.current.recipe).toBeNull()
@@ -188,7 +188,7 @@ describe('useRecipeImport', () => {
         mockSaveRecipe.mockResolvedValue({ _id: 'r1' })
         const { result } = renderHook(() => useRecipeImport())
 
-        await act(async () => result.current.save())
+        await act(async () => result.current.review.save())
 
         expect(renderHook(() => useRecipeImport()).result.current.recipe).toBeNull()
     })

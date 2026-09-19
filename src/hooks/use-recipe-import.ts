@@ -130,16 +130,20 @@ export const useRecipeImport = () => {
 
     return {
         recipe,
-        error,
-        isImporting,
-        isSaving,
-        importFromUrl,
-        importFromText,
-        setTitle,
-        save,
         adjustments,
-        isRefining,
-        refine,
-        dismiss
+        importing: {
+            isImporting,
+            error,
+            fromUrl: importFromUrl,
+            fromText: importFromText
+        },
+        review: {
+            isSaving,
+            isRefining,
+            setTitle,
+            save,
+            refine,
+            dismiss
+        }
     }
 }

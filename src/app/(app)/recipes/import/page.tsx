@@ -24,13 +24,13 @@ const ImportRecipePage = () => {
     const recipeImport = useRecipeImport()
 
     const isUrlTab = tab === 'url'
-    const isSubmitDisabled = recipeImport.isImporting || (isUrlTab
+    const isSubmitDisabled = recipeImport.importing.isImporting || (isUrlTab
         ? url.trim().length === 0 || isUrlInputInvalid(url)
         : text.trim().length === 0 || isUrlInputInvalid(textImageUrl))
 
     const handleSubmit = () => {
-        if (isUrlTab) recipeImport.importFromUrl(url.trim())
-        else recipeImport.importFromText(text.trim(),
+        if (isUrlTab) recipeImport.importing.fromUrl(url.trim())
+        else recipeImport.importing.fromText(text.trim(),
             parseUrlInput(textImageUrl) ?? undefined)
     }
 
@@ -46,13 +46,13 @@ const ImportRecipePage = () => {
                 ? (
                     <ImportRecipeReview
                         recipe={recipeImport.recipe}
-                        isSaving={recipeImport.isSaving}
-                        onTitleChange={recipeImport.setTitle}
-                        onSave={recipeImport.save}
+                        isSaving={recipeImport.review.isSaving}
+                        onTitleChange={recipeImport.review.setTitle}
+                        onSave={recipeImport.review.save}
                         adjustments={recipeImport.adjustments}
-                        isRefining={recipeImport.isRefining}
-                        onRefine={recipeImport.refine}
-                        onDismiss={recipeImport.dismiss}
+                        isRefining={recipeImport.review.isRefining}
+                        onRefine={recipeImport.review.refine}
+                        onDismiss={recipeImport.review.dismiss}
                     />
                 ) : (
                     <>
@@ -87,13 +87,13 @@ const ImportRecipePage = () => {
                             onClick={handleSubmit}
                             className={'w-full'}
                         >
-                            {recipeImport.isImporting
+                            {recipeImport.importing.isImporting
                                 ? recipesTexts.import.importing
                                 : recipesTexts.import.submit}
                         </PrimaryButton>
-                        {recipeImport.error && (
+                        {recipeImport.importing.error && (
                             <p className={'mt-3 text-label text-status-red-fg'}>
-                                {recipeImport.error}
+                                {recipeImport.importing.error}
                             </p>
                         )}
                     </>
