@@ -92,7 +92,9 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                     onDelete={recipeLibrary.deleteRecipe}
                     isSelecting={recipeLibrary.isSelecting}
                     selectedIds={recipeLibrary.selectedIds}
-                    onToggleSelect={(recipe) => recipeLibrary.toggleSelected(recipe._id)}
+                    onToggleSelect={(recipe) => (
+                        recipeLibrary.toggleSelected(recipe._id)
+                    )}
                 />
             )}
             <BulkDeleteDialog

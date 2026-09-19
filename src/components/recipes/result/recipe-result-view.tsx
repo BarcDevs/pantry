@@ -58,7 +58,9 @@ export const RecipeResultView = () => {
                 onSave={() => recipeResult.save()}
                 onStartCooking={recipeResult.startCooking}
             />
-            {recipeResult.savedRecipeId === null && <RecipeDraftDismissButton onDismiss={recipeResult.dismiss}/>}
+            {recipeResult.savedRecipeId === null && (
+                <RecipeDraftDismissButton onDismiss={recipeResult.dismiss}/>
+            )}
         </div>
     )
 }

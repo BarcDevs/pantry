@@ -2,7 +2,10 @@ import { useState } from 'react'
 
 import { FoodType, StorageLocation } from '@/types/enums'
 import type { StorageSuggestion } from '@/types/pantry-item'
-import type { ReceiptReviewRow, ReceiptReviewRowEditPatch } from '@/types/receipt-review-row'
+import type {
+    ReceiptReviewRow,
+    ReceiptReviewRowEditPatch
+} from '@/types/receipt-review-row'
 
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
@@ -18,14 +21,22 @@ export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
         request
     } = useStorageSuggestion(row.storageSuggestion)
 
-    const applySuggestedType = (result: StorageSuggestion) => {
-        if (result.suggestedType && !type) setType(result.suggestedType)
+    const applySuggestedType = (
+        result: StorageSuggestion,
+        shouldOverwrite = false
+    ) => {
+        if (
+            result.suggestedType
+            && (shouldOverwrite || !type)
+        ) setType(result.suggestedType)
     }
 
-    const requestSuggestion = () => request(name, { onSuggested: applySuggestedType })
+    const requestSuggestion = () => request(name, {
+        onSuggested: applySuggestedType
+    })
     const refreshSuggestion = () => request(name, {
         fresh: true,
-        onSuggested: applySuggestedType
+        onSuggested: (result) => applySuggestedType(result, true)
     })
 
     const applySuggestedStorage = () => {

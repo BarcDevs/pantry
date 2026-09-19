@@ -75,7 +75,9 @@ export const AddItemForm = ({ prefill }: AddItemFormProps) => {
                 </PrimaryButton>
                 <DuplicateItemDialog
                     open={addItem.duplicate !== null}
-                    onOpenChange={(open) => { if (!open) addItem.setDuplicate(null) }}
+                    onOpenChange={(open) => {
+                        if (!open) addItem.setDuplicate(null)
+                    }}
                     onMerge={addItem.handleMerge}
                     onKeepSeparate={addItem.handleKeepSeparate}
                 />

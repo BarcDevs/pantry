@@ -67,6 +67,41 @@ describe('useAddItemForm storage', () => {
     })
 })
 
+describe('useAddItemForm type refresh', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockFindExisting.mockResolvedValue(null)
+    })
+
+    const typedSuggestion = (suggestedType: string) => ({
+        ...suggestionFor(StorageLocation.Fridge),
+        suggestedType
+    })
+
+    it('fills the type from the automatic suggestion only while it is empty', async () => {
+        mockSuggestStorage.mockResolvedValue(typedSuggestion('dairy'))
+        const { result } = renderHook(() => useAddItemForm())
+        act(() => result.current.form.setValue('type', 'meat' as never))
+
+        act(() => result.current.form.setValue('name', 'חלב'))
+
+        await waitFor(() => expect(mockSuggestStorage).toHaveBeenCalled())
+        expect(result.current.form.getValues('type')).toBe('meat')
+    })
+
+    it('replaces the type when the user refreshes the suggestion', async () => {
+        mockSuggestStorage.mockResolvedValue(typedSuggestion('dairy'))
+        const { result } = renderHook(() => useAddItemForm())
+        act(() => result.current.form.setValue('name', 'חלב'))
+        await waitFor(() => expect(result.current.form.getValues('type')).toBe('dairy'))
+
+        mockSuggestStorage.mockResolvedValue(typedSuggestion('beverages'))
+        act(() => result.current.retrySuggestion())
+
+        await waitFor(() => expect(result.current.form.getValues('type')).toBe('beverages'))
+    })
+})
+
 describe('useAddItemForm merge prompt', () => {
     const existing = {
         _id: 'item1',

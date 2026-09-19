@@ -1,6 +1,9 @@
 import type { StorageLocation } from '@/types/enums'
 import { STORAGE_LOCATIONS } from '@/types/enums'
-import type { ReceiptReviewRow, ReceiptReviewRowEditPatch } from '@/types/receipt-review-row'
+import type {
+    ReceiptReviewRow,
+    ReceiptReviewRowEditPatch
+} from '@/types/receipt-review-row'
 
 import { PantryTypeRow } from '@/components/pantry/add/pantry-type-row'
 import { StorageSuggestionHint } from '@/components/pantry/add/storage-suggestion-hint'
@@ -126,7 +129,10 @@ export const ReceiptRowEditDialog = ({
                     />
                 ) : (
                     <StorageSuggestionButton
-                        disabled={productEdit.name.trim().length < minNameLengthForSuggestion}
+                        disabled={
+                            productEdit.name.trim().length
+                            < minNameLengthForSuggestion
+                        }
                         isLoading={productEdit.isSuggesting}
                         onClick={productEdit.requestSuggestion}
                     />

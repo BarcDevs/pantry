@@ -10,37 +10,31 @@ import { useRouter } from 'next/navigation'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { zodResolver }
-    from '@hookform/resolvers/zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
     PantryUnit,
-    StorageLocation } from '@/types/enums'
+    StorageLocation
+} from '@/types/enums'
 import type {
     AddPantryItemInput,
     AddPantryItemOutcome,
     ExistingPantryItem
 } from '@/types/pantry-item'
 
-import { useDebouncedValue }
-    from '@/hooks/use-debounced-value'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { useExistingPantryItem } from '@/hooks/use-existing-pantry-item'
-import { useResetOnChange }
-    from '@/hooks/use-reset-on-change'
+import { useResetOnChange } from '@/hooks/use-reset-on-change'
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
-import { applySuggestedExpiry }
-    from '@/lib/pantry/apply-suggested-expiry'
+import { applySuggestedExpiry } from '@/lib/pantry/apply-suggested-expiry'
 import type { AddItemPrefill } from '@/lib/pantry/parse-add-item-prefill'
 
 import { minNameLengthForSuggestion } from '@/constants/pantry'
-import { routes }
-    from '@/constants/routes'
-import { pantryTexts }
-    from '@/constants/texts/pantry'
+import { routes } from '@/constants/routes'
+import { pantryTexts } from '@/constants/texts/pantry'
 
-import { addPantryItems }
-    from '@/actions/pantry/add-pantry-items'
+import { addPantryItems } from '@/actions/pantry/add-pantry-items'
 import {
     addItemFormSchema,
     type AddItemFormValues
@@ -131,12 +125,12 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         requestSuggestion(debouncedName, {
             fresh,
             onSuggested: (result) => {
-                if (!isStorageChosenRef.current) {
+                if (!isStorageChosenRef.current)
                     form.setValue('storage', result.suggestedStorage)
-                }
-                if (result.suggestedType && !form.getValues('type')) {
-                    form.setValue('type', result.suggestedType)
-                }
+                if (
+                    result.suggestedType
+                    && (fresh || !form.getValues('type'))
+                ) form.setValue('type', result.suggestedType)
             }
         })
     }, [debouncedName, retryToken, form, requestSuggestion])

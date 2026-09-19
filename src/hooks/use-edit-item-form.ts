@@ -3,28 +3,22 @@ import { useState, useTransition } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { zodResolver }
-    from '@hookform/resolvers/zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import type {
     PantryItem,
     StorageSuggestion
 } from '@/types/pantry-item'
 
-import { useResetOnChange }
-    from '@/hooks/use-reset-on-change'
+import { useResetOnChange } from '@/hooks/use-reset-on-change'
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
-import { applySuggestedExpiry }
-    from '@/lib/pantry/apply-suggested-expiry'
+import { applySuggestedExpiry } from '@/lib/pantry/apply-suggested-expiry'
 
-import { pantryTexts }
-    from '@/constants/texts/pantry'
+import { pantryTexts } from '@/constants/texts/pantry'
 
-import { deletePantryItem }
-    from '@/actions/pantry/delete-pantry-item'
-import { updatePantryItem }
-    from '@/actions/pantry/update-pantry-item'
+import { deletePantryItem } from '@/actions/pantry/delete-pantry-item'
+import { updatePantryItem } from '@/actions/pantry/update-pantry-item'
 import {
     addItemFormSchema,
     type AddItemFormValues
@@ -83,16 +77,22 @@ export const useEditItemForm = ({
 
     useResetOnChange(name, storageSuggestion.clear)
 
-    const applySuggestedType = (result: StorageSuggestion) => {
-        if (result.suggestedType && !form.getValues('type')) {
-            form.setValue('type', result.suggestedType)
-        }
+    const applySuggestedType = (
+        result: StorageSuggestion,
+        shouldOverwrite = false
+    ) => {
+        if (
+            result.suggestedType
+            && (shouldOverwrite || !form.getValues('type'))
+        ) form.setValue('type', result.suggestedType)
     }
 
-    const requestSuggestion = () => storageSuggestion.request(name, { onSuggested: applySuggestedType })
+    const requestSuggestion = () => storageSuggestion.request(name, {
+        onSuggested: applySuggestedType
+    })
     const refreshSuggestion = () => storageSuggestion.request(name, {
         fresh: true,
-        onSuggested: applySuggestedType
+        onSuggested: (result) => applySuggestedType(result, true)
     })
 
     const handleSubmit = form.handleSubmit((values) => {
