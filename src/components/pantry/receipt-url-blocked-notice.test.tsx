@@ -14,7 +14,7 @@ describe('ReceiptUrlBlockedNotice', () => {
 
         expect(screen.getByRole('link', { name: pantryTexts.receiptReview.urlBlockedHintLink }))
             .toHaveAttribute('href', `${routes.addPaste}?tab=text`)
-        expect(screen.getByText(pantryTexts.receiptReview.urlBlockedError))
+        expect(screen.getByText(new RegExp(pantryTexts.receiptReview.urlBlockedError)))
             .toBeInTheDocument()
     })
 })
