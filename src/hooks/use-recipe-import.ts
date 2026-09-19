@@ -92,6 +92,14 @@ export const useRecipeImport = () => {
         if (recipe) commitRecipe({ ...recipe, title })
     }
 
+    const setImageUrl = (imageUrl: string) => {
+        if (!recipe) return
+        commitRecipe({
+            ...recipe,
+            imageUrl: imageUrl || undefined
+        })
+    }
+
     const dismiss = () => {
         clearImportDraft()
         setRecipe(null)
@@ -141,6 +149,7 @@ export const useRecipeImport = () => {
             isSaving,
             isRefining,
             setTitle,
+            setImageUrl,
             save,
             refine,
             dismiss

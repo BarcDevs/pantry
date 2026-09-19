@@ -31,7 +31,10 @@ jest.mock('@/actions/recipes/save-recipe', () => ({
 
 import { useRouter } from 'next/navigation'
 
-import { saveImportDraft } from '@/lib/recipes/import-draft-storage'
+import {
+    readImportDraft,
+    saveImportDraft
+} from '@/lib/recipes/import-draft-storage'
 import { draftTtlMs } from '@/lib/recipes/recipe-draft-storage'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -105,6 +108,30 @@ describe('useRecipeImport', () => {
 
         expect(result.current.recipe?.title).toBe('עוגה')
         expect(result.current.importing.error).toBeNull()
+    })
+
+    it('replaces and removes the image of an imported recipe draft in place', async () => {
+        mockImportFromUrl.mockResolvedValue({
+            recipe: {
+                title: 'עוגה',
+                ingredients: [],
+                steps: [],
+                imageUrl: 'https://example.com/og.jpg'
+            },
+            fallbackToManual: false
+        })
+
+        const { result } = renderHook(() => useRecipeImport())
+        await act(async () => result.current.importing.fromUrl('https://x.com'))
+
+        act(() => result.current.review.setImageUrl('https://example.com/mine.jpg'))
+        expect(result.current.recipe?.imageUrl).toBe('https://example.com/mine.jpg')
+        expect(readImportDraft()?.imageUrl).toBe('https://example.com/mine.jpg')
+
+        act(() => result.current.review.setImageUrl(''))
+        expect(result.current.recipe?.imageUrl).toBeUndefined()
+        expect(readImportDraft()?.imageUrl).toBeUndefined()
+        expect(readImportDraft()?.title).toBe('עוגה')
     })
 
     it('saves the recipe and navigates to its detail page', async () => {

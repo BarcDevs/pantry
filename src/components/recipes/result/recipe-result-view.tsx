@@ -1,7 +1,5 @@
 'use client'
 
-import { RECIPE_SOURCES } from '@/types/enums'
-
 import { RecipeBodyGrid } from '@/components/recipes/result/recipe-body-grid'
 import { RecipeDraftDismissButton } from '@/components/recipes/result/recipe-draft-dismiss-button'
 import { RecipeImageUrlField } from '@/components/recipes/result/recipe-image-url-field'
@@ -14,10 +12,6 @@ import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
 
 import { useRecipeResult } from '@/hooks/use-recipe-result'
 
-const showsImageField = (
-    source: (typeof RECIPE_SOURCES)[number]
-): boolean => source !== 'imported_url'
-
 export const RecipeResultView = () => {
     const recipeResult = useRecipeResult()
 
@@ -27,13 +21,10 @@ export const RecipeResultView = () => {
         <div className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
             <RecipeResultHero recipe={recipeResult.recipe}/>
             <RecipeResultStats recipe={recipeResult.recipe}/>
-            {showsImageField(recipeResult.recipe.source)
-                && !recipeResult.recipe.imageUrl && (
-                    <RecipeImageUrlField
-                        imageUrl={recipeResult.recipe.imageUrl}
-                        onChange={recipeResult.actions.setManualImageUrl}
-                    />
-                )}
+            <RecipeImageUrlField
+                imageUrl={recipeResult.recipe.imageUrl}
+                onChange={recipeResult.actions.setManualImageUrl}
+            />
             <RecipeBodyGrid>
                 <RecipeIngredientsList
                     ingredients={recipeResult.recipe.ingredients}

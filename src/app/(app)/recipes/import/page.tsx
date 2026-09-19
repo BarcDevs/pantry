@@ -51,6 +51,7 @@ const ImportRecipePage = () => {
                         recipe={recipeImport.recipe}
                         isSaving={recipeImport.review.isSaving}
                         onTitleChange={recipeImport.review.setTitle}
+                        onImageUrlChange={recipeImport.review.setImageUrl}
                         onSave={recipeImport.review.save}
                         adjustments={recipeImport.adjustments}
                         isRefining={recipeImport.review.isRefining}

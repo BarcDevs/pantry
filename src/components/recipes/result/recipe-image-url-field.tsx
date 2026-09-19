@@ -37,9 +37,11 @@ export const RecipeImageUrlField = ({
                     {texts.imageFieldOptional}
                 </span>
             </div>
-            <p className={'mb-3 text-label text-ink-3'}>
-                {texts.imageFieldDescription}
-            </p>
+            {!imageUrl && (
+                <p className={'mb-3 text-label text-ink-3'}>
+                    {texts.imageFieldDescription}
+                </p>
+            )}
             <div className={'flex flex-wrap gap-2.25'}>
                 <UrlInput
                     value={draft}

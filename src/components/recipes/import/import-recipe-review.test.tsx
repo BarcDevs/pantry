@@ -24,19 +24,34 @@ jest.mock('@/components/recipes/result/recipe-steps-list', () => ({
     RecipeStepsList: () => null
 }))
 
+jest.mock('@/components/recipes/result/recipe-image-url-field', () => ({
+    RecipeImageUrlField: ({ imageUrl, onChange }: {
+        imageUrl?: string
+        onChange: (imageUrl: string) => void
+    }) => (
+        <button onClick={() => onChange('')}>
+            {`image:${imageUrl}`}
+        </button>
+    )
+}))
+
 const recipe = {
     title: 'שקשוקה',
     ingredients: [],
     steps: []
 } as unknown as RecipeDoc
 
-const renderReview = (isSaving: boolean) => {
+const renderReview = (
+    isSaving: boolean,
+    onImageUrlChange = jest.fn()
+) => {
     const onSave = jest.fn()
     render(
         <ImportRecipeReview
             recipe={recipe}
             isSaving={isSaving}
             onTitleChange={jest.fn()}
+            onImageUrlChange={onImageUrlChange}
             onSave={onSave}
             adjustments={{
                 values: {},
@@ -49,6 +64,15 @@ const renderReview = (isSaving: boolean) => {
     )
     return onSave
 }
+
+describe('ImportRecipeReview image', () => {
+    it('offers the image field and forwards changes', () => {
+        const onImageUrlChange = jest.fn()
+        renderReview(false, onImageUrlChange)
+        fireEvent.click(screen.getByText('image:undefined'))
+        expect(onImageUrlChange).toHaveBeenCalledWith('')
+    })
+})
 
 describe('ImportRecipeReview Enter', () => {
     it('saves from the title field', () => {

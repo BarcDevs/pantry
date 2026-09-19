@@ -2,6 +2,7 @@ import type { RecipeDoc } from '@/types/recipe'
 
 import { RecipeBodyGrid } from '@/components/recipes/result/recipe-body-grid'
 import { RecipeDraftDismissButton } from '@/components/recipes/result/recipe-draft-dismiss-button'
+import { RecipeImageUrlField } from '@/components/recipes/result/recipe-image-url-field'
 import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingredients-list'
 import { RecipeRefineInput } from '@/components/recipes/result/recipe-refine-input'
 import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero'
@@ -17,6 +18,7 @@ type ImportRecipeReviewProps = {
     recipe: RecipeDoc
     isSaving: boolean
     onTitleChange: (title: string) => void
+    onImageUrlChange: (imageUrl: string) => void
     onSave: () => void
     adjustments: ReturnType<typeof useRecipeAdjustments>
     isRefining: boolean
@@ -28,6 +30,7 @@ export const ImportRecipeReview = ({
     recipe,
     isSaving,
     onTitleChange,
+    onImageUrlChange,
     onSave,
     adjustments,
     isRefining,
@@ -46,6 +49,10 @@ export const ImportRecipeReview = ({
                 onEnter={isSaving ? undefined : onSave}
             />
         </div>
+        <RecipeImageUrlField
+            imageUrl={recipe.imageUrl}
+            onChange={onImageUrlChange}
+        />
         <RecipeBodyGrid>
             <RecipeIngredientsList
                 ingredients={recipe.ingredients}

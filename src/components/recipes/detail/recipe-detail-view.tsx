@@ -1,6 +1,5 @@
 'use client'
 
-import { RECIPE_SOURCES } from '@/types/enums'
 import type { Recipe } from '@/types/recipe'
 
 import { RecipeDetailActions } from '@/components/recipes/detail/recipe-detail-actions'
@@ -25,10 +24,6 @@ type RecipeDetailViewProps = {
     recipe: Recipe
 }
 
-const showsImageField = (
-    source: (typeof RECIPE_SOURCES)[number]
-): boolean => source !== 'imported_url'
-
 export const RecipeDetailView = ({
     recipe: initialRecipe
 }: RecipeDetailViewProps) => {
@@ -41,13 +36,10 @@ export const RecipeDetailView = ({
             <PageHeader/>
             <RecipeResultHero recipe={recipeDetail.recipe}/>
             <RecipeResultStats recipe={recipeDetail.recipe}/>
-            {showsImageField(recipeDetail.recipe.source)
-                && !recipeDetail.recipe.imageUrl && (
-                    <RecipeImageUrlField
-                        imageUrl={recipeDetail.recipe.imageUrl}
-                        onChange={recipeDetail.actions.updateImageUrl}
-                    />
-                )}
+            <RecipeImageUrlField
+                imageUrl={recipeDetail.recipe.imageUrl}
+                onChange={recipeDetail.actions.updateImageUrl}
+            />
             <RecipeBodyGrid>
                 <RecipeIngredientsList
                     ingredients={recipeDetail.recipe.ingredients}
