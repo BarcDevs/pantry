@@ -80,3 +80,22 @@ and left as an open follow-up.
 
 **How to apply:** new suggestion surfaces reuse `useStorageSuggestion` and pass `fresh` for a
 user-triggered refresh. Recorded in the PRD as AC-1.8.
+
+---
+
+## 19/09/2026 — Typing a name never clears the Add Item suggestion
+
+**Problem:** on Add Item, every name change cleared the suggestion and invalidated the in-flight
+request, while the debounced effect (keyed on the trimmed name) did not re-run for a trailing space,
+so a suggestion could vanish and never come back.
+
+**Decision:** name changes no longer clear the suggestion or drop an in-flight request; the merge
+request is still reset on name change. The debounced, trimmed-name effect requests automatically only
+when no suggestion currently exists; an explicit refresh (`fresh: true`) always requests and is the
+only thing that replaces an existing suggestion.
+
+**Why over alternatives:** simplest rule that honours "typing never clears a suggestion"; deciding
+whether a changed name is a "different product" was left out on purpose.
+
+**How to apply:** Add Item only. Recorded in the PRD as AC-1.8. Edit Item and the receipt row editor
+still clear on name change (not covered by this decision).

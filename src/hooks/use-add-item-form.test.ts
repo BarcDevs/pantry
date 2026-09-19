@@ -215,3 +215,69 @@ describe('useAddItemForm merge prompt', () => {
         expect(result.current.merge.prompt?.isMerging).toBe(false)
     })
 })
+
+describe('useAddItemForm suggestion persistence', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockFindExisting.mockResolvedValue(null)
+    })
+
+    const typeName = (
+        result: { current: ReturnType<typeof useAddItemForm> },
+        name: string
+    ) => act(() => result.current.form.setValue('name', name))
+
+    it('keeps the suggestion when the name only gains a trailing space', async () => {
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Fridge))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+
+        typeName(result, 'חלב ')
+
+        await act(async () => new Promise((resolve) => setTimeout(resolve, 700)))
+        expect(result.current.suggestion.value).not.toBeNull()
+        expect(mockSuggestStorage).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not request again for a new name while a suggestion exists', async () => {
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Fridge))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+
+        typeName(result, 'גבינה')
+
+        await act(async () => new Promise((resolve) => setTimeout(resolve, 700)))
+        expect(result.current.suggestion.value).not.toBeNull()
+        expect(mockSuggestStorage).toHaveBeenCalledTimes(1)
+    })
+
+    it('replaces the suggestion only when the user refreshes', async () => {
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Fridge))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value?.suggestedStorage).toBe(StorageLocation.Fridge))
+
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Freezer))
+        act(() => result.current.suggestion.refresh())
+
+        await waitFor(() => expect(result.current.suggestion.value?.suggestedStorage).toBe(StorageLocation.Freezer))
+        expect(mockSuggestStorage).toHaveBeenLastCalledWith('חלב', { fresh: true })
+    })
+
+    it('does not drop an in-flight result when the user keeps typing', async () => {
+        let resolveRequest: (value: unknown) => void = () => undefined
+        mockSuggestStorage.mockReturnValue(new Promise((resolve) => {
+            resolveRequest = resolve
+        }))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(mockSuggestStorage).toHaveBeenCalledTimes(1))
+
+        typeName(result, 'חלב ')
+        await act(async () => resolveRequest(suggestionFor(StorageLocation.Fridge)))
+
+        expect(result.current.suggestion.value).not.toBeNull()
+    })
+})

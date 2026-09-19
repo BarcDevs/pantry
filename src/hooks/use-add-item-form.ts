@@ -19,7 +19,8 @@ import {
 import type {
     AddPantryItemInput,
     AddPantryItemOutcome,
-    ExistingPantryItem
+    ExistingPantryItem,
+    StorageSuggestion
 } from '@/types/pantry-item'
 
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
@@ -73,6 +74,7 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
 
     const isStorageChosenRef = useRef(false)
     const isFreshRequestedRef = useRef(false)
+    const currentSuggestionRef = useRef<StorageSuggestion | null>(null)
     const storageSuggestion = useStorageSuggestion()
     const { request: requestSuggestion } = storageSuggestion
     const [retryToken, setRetryToken] = useState(0)
@@ -113,15 +115,17 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     const existingItem = useExistingPantryItem(debouncedName)
     const [isMergeRequested, setIsMergeRequested] = useState(false)
 
-    useResetOnChange(name, () => {
-        storageSuggestion.clear()
-        setIsMergeRequested(false)
-    })
+    useResetOnChange(name, () => setIsMergeRequested(false))
+
+    useEffect(() => {
+        currentSuggestionRef.current = storageSuggestion.suggestion
+    }, [storageSuggestion.suggestion])
 
     useEffect(() => {
         const fresh = isFreshRequestedRef.current
         isFreshRequestedRef.current = false
         if (debouncedName.length < minNameLengthForSuggestion) return
+        if (!fresh && currentSuggestionRef.current) return
 
         requestSuggestion(debouncedName, {
             fresh,
@@ -142,7 +146,11 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         name.trim().length >= minNameLengthForSuggestion
     )
     const isPendingSuggestion = isNameLongEnough && (
-        storageSuggestion.isSuggesting || debouncedName !== name.trim()
+        storageSuggestion.isSuggesting
+        || (
+            debouncedName !== name.trim()
+            && !storageSuggestion.suggestion
+        )
     )
     const effectiveSuggestion = isNameLongEnough
         ? storageSuggestion.suggestion
