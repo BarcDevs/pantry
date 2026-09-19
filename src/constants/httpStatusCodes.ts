@@ -7,5 +7,6 @@ export const HttpStatusCodes = {
     NOT_FOUND: 404,
     FORBIDDEN: 403,
     CONFLICT: 409,
+    TOO_MANY_REQUESTS: 429,
     INTERNAL_SERVER_ERROR: 500
 }
