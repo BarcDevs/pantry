@@ -17,6 +17,11 @@ import { pantryTexts } from '@/constants/texts/pantry'
 import { parseReceiptText } from '@/actions/pantry/parse-receipt-text'
 import { parseReceiptUrl } from '@/actions/pantry/parse-receipt-url'
 
+const logAndFallback = (error: unknown) => {
+    console.error(error)
+    return null
+}
+
 export const ReceiptPasteView = () => {
     const searchParams = useSearchParams()
     const isTextMode = searchParams.get('tab') === 'text'
@@ -45,8 +50,9 @@ export const ReceiptPasteView = () => {
                     setIsBlocked(false)
                     startParsing(async () => {
                         const result = await parseReceiptUrl(url.trim())
-                        if (result.fallbackToManual) {
-                            setIsBlocked(result.isBlocked)
+                            .catch(logAndFallback)
+                        if (!result || result.fallbackToManual) {
+                            setIsBlocked(result?.isBlocked ?? false)
                             setError(pantryTexts.receiptReview.urlError)
                             return
                         }
@@ -58,7 +64,8 @@ export const ReceiptPasteView = () => {
                     setError(null)
                     startParsing(async () => {
                         const result = await parseReceiptText(text.trim())
-                        if (result.items.length === 0) {
+                            .catch(logAndFallback)
+                        if (!result || result.items.length === 0) {
                             setError(pantryTexts.receiptReview.pasteTextError)
                             return
                         }

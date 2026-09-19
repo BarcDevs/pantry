@@ -1,6 +1,6 @@
 {
   "name": "pantry",
-  "version": "0.59.17",
+  "version": "0.59.18",
   "private": true,
   "scripts": {
     "postinstall": "git config core.hooksPath .husky",

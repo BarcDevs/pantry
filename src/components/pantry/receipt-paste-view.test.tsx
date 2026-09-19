@@ -2,11 +2,13 @@ import {
     act,
     fireEvent,
     render,
-    screen
+    screen,
+    waitFor
 } from '@testing-library/react'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
+import { parseReceiptText } from '@/actions/pantry/parse-receipt-text'
 import { parseReceiptUrl } from '@/actions/pantry/parse-receipt-url'
 
 import { ReceiptPasteView } from './receipt-paste-view'
@@ -29,6 +31,7 @@ jest.mock('@/components/pantry/receipt-review-shell', () => ({
 }))
 
 const mockParseUrl = parseReceiptUrl as jest.Mock
+const mockParseText = parseReceiptText as jest.Mock
 const texts = pantryTexts.receiptReview
 
 const submitUrl = async () => {
@@ -66,5 +69,34 @@ describe('ReceiptPasteView', () => {
         mockTab = null
         rerender(<ReceiptPasteView/>)
         expect(screen.queryByText(texts.urlBlockedHintLink)).not.toBeInTheDocument()
+    })
+
+    it('shows the manual fallback when parsing the url throws', async () => {
+        jest.spyOn(console, 'error').mockImplementation(() => undefined)
+        mockParseUrl.mockRejectedValue(new Error('ai down'))
+        render(<ReceiptPasteView/>)
+
+        await submitUrl()
+
+        await waitFor(() => expect(screen.getByText(texts.urlError)).toBeInTheDocument())
+        expect(screen.getByText(texts.urlFallback)).toBeInTheDocument()
+    })
+
+    it('shows the manual fallback when parsing the text throws', async () => {
+        jest.spyOn(console, 'error').mockImplementation(() => undefined)
+        mockParseText.mockRejectedValue(new Error('ai down'))
+        mockTab = 'text'
+        render(<ReceiptPasteView/>)
+        fireEvent.change(
+            screen.getByRole('textbox'),
+            { target: { value: 'חלב' } }
+        )
+
+        await act(async () => {
+            fireEvent.click(screen.getByText(texts.pasteSubmit))
+        })
+
+        await waitFor(() => expect(screen.getByText(texts.pasteTextError)).toBeInTheDocument())
+        expect(screen.getByText(texts.textFallback)).toBeInTheDocument()
     })
 })
