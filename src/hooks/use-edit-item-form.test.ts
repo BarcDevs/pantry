@@ -59,17 +59,19 @@ describe('useEditItemForm suggested type', () => {
     it('keeps the set type on a plain request', async () => {
         const { result } = setup()
 
-        act(() => result.current.requestSuggestion())
+        act(() => result.current.suggestion.request())
 
-        await waitFor(() => expect(result.current.suggestion).not.toBeNull())
+        await waitFor(() =>
+            expect(result.current.suggestion.value).not.toBeNull())
         expect(result.current.form.getValues('type')).toBe('meat')
     })
 
     it('replaces the set type on refresh', async () => {
         const { result } = setup()
 
-        act(() => result.current.refreshSuggestion())
+        act(() => result.current.suggestion.refresh())
 
-        await waitFor(() => expect(result.current.form.getValues('type')).toBe('dairy'))
+        await waitFor(() =>
+            expect(result.current.form.getValues('type')).toBe('dairy'))
     })
 })

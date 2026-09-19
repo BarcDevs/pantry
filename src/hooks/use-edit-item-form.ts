@@ -141,27 +141,33 @@ export const useEditItemForm = ({
 
     return {
         form,
-        suggestion: storageSuggestion.suggestion,
-        isSuggesting: storageSuggestion.isSuggesting,
-        suggestionFailed: storageSuggestion.suggestionFailed,
-        isSubmitting,
-        isDeleting,
-        confirmDelete,
-        setConfirmDelete,
-        requestSuggestion,
-        refreshSuggestion,
-        handleSubmit,
-        handleDelete,
-        applySuggestedStorage: () => {
-            if (storageSuggestion.suggestion) {
-                form.setValue(
-                    'storage',
-                    storageSuggestion.suggestion.suggestedStorage
-                )
-            }
+        suggestion: {
+            value: storageSuggestion.suggestion,
+            isSuggesting: storageSuggestion.isSuggesting,
+            failed: storageSuggestion.suggestionFailed,
+            request: requestSuggestion,
+            refresh: refreshSuggestion,
+            applyStorage: () => {
+                if (storageSuggestion.suggestion) {
+                    form.setValue(
+                        'storage',
+                        storageSuggestion.suggestion.suggestedStorage
+                    )
+                }
+            },
+            applyExpiry: () => (
+                applySuggestedExpiry(form, storageSuggestion.suggestion)
+            )
         },
-        applySuggestedExpiry: () => (
-            applySuggestedExpiry(form, storageSuggestion.suggestion)
-        )
+        submission: {
+            isSubmitting,
+            submit: handleSubmit
+        },
+        deletion: {
+            isConfirming: confirmDelete,
+            setIsConfirming: setConfirmDelete,
+            isDeleting,
+            confirm: handleDelete
+        }
     }
 }
