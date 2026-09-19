@@ -21,7 +21,7 @@ export const GenerateConfigFields = ({
     control
 }: GenerateConfigFieldsProps) => (
     <div className={'flex flex-col gap-4'}>
-        <div className={'grid grid-cols-3 gap-3'}>
+        <div className={'grid grid-cols-1 gap-3 md:grid-cols-3'}>
             <GenerateFieldCard>
                 <GenerateCountStepperField
                     control={control}
