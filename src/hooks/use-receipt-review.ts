@@ -205,14 +205,20 @@ export const useReceiptReview = (
     }
 
     return {
-        rows,
-        setScannedItems,
-        rowActions,
-        toggleAll,
-        clearAll,
-        confirm,
-        isSubmitting,
-        duplicates,
-        resolveDuplicate
+        rows: {
+            items: rows,
+            actions: rowActions,
+            setScannedItems,
+            toggleAll,
+            clearAll
+        },
+        submission: {
+            isSubmitting,
+            confirm
+        },
+        duplicates: {
+            pending: duplicates,
+            resolve: resolveDuplicate
+        }
     }
 }

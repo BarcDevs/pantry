@@ -75,14 +75,14 @@ describe('useReceiptReview', () => {
             () => useReceiptReview(ItemSource.ReceiptScan)
         )
 
-        await act(async () => result.current.setScannedItems(scanned))
-        expect(result.current.rows).toHaveLength(2)
+        await act(async () => result.current.rows.setScannedItems(scanned))
+        expect(result.current.rows.items).toHaveLength(2)
 
-        await act(async () => result.current.confirm())
+        await act(async () => result.current.submission.confirm())
 
-        expect(result.current.rows).toHaveLength(1)
-        expect(result.current.rows[0]?.name).toBe('מלפפונים')
-        expect(result.current.duplicates).toHaveLength(1)
+        expect(result.current.rows.items).toHaveLength(1)
+        expect(result.current.rows.items[0]?.name).toBe('מלפפונים')
+        expect(result.current.duplicates.pending).toHaveLength(1)
         expect(mockPush).not.toHaveBeenCalled()
 
         mockAddPantryItems.mockResolvedValue([
@@ -92,14 +92,14 @@ describe('useReceiptReview', () => {
             }
         ])
 
-        const pendingDuplicate = result.current.duplicates[0]
+        const pendingDuplicate = result.current.duplicates.pending[0]
         if (!pendingDuplicate) throw new Error('expected a pending duplicate')
 
         await act(async () => (
-            result.current.resolveDuplicate(pendingDuplicate, 'merge')
+            result.current.duplicates.resolve(pendingDuplicate, 'merge')
         ))
 
-        expect(result.current.rows).toHaveLength(0)
+        expect(result.current.rows.items).toHaveLength(0)
         expect(mockPush).toHaveBeenCalledTimes(1)
 
         expect(mockAddPantryItems).toHaveBeenCalledTimes(2)
