@@ -41,3 +41,10 @@ Branch, push and merge discipline.
 |---|---|
 | 19/09/2026 | Never commit directly to `main`, never push unprompted — work on a branch, state it, ask if the request doesn't match reality |
 | 19/09/2026 | Commit the feature first, then the refactor as its own commit |
+
+## Process & Verification - [[corrections/process-and-verification]]
+Verifying that a plan step or PRD requirement is really implemented before calling it done.
+
+| Date | Entry |
+|---|---|
+| 19/09/2026 | Web-search toggle only changed prompt wording; a plan step / PRD toggle is done only when the code enforces it |
