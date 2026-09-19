@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { format, parseISO } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 
+import { ExpiryCalendar } from '@/components/pantry/expiry-calendar'
 import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
-import { Calendar } from '@/components/ui/calendar'
 import {
     Popover,
     PopoverContent,
@@ -47,10 +47,10 @@ export const ReceiptRowExpiryField = ({
             </PopoverTrigger>
             <PopoverContent
                 align={'start'}
+                dir={'rtl'}
                 className={'w-auto p-0'}
             >
-                <Calendar
-                    mode={'single'}
+                <ExpiryCalendar
                     selected={selectedDate}
                     onSelect={(date) => {
                         onChange(date ? format(date, 'yyyy-MM-dd') : '')

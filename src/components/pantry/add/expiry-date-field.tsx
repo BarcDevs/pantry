@@ -8,8 +8,8 @@ import type {
     Path
 } from 'react-hook-form'
 
+import { ExpiryCalendar } from '@/components/pantry/expiry-calendar'
 import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
-import { Calendar } from '@/components/ui/calendar'
 import {
     FormField,
     FormItem,
@@ -70,10 +70,10 @@ export const ExpiryDateField = <T extends FieldValues>({
                             </PopoverTrigger>
                             <PopoverContent
                                 align={'start'}
+                dir={'rtl'}
                                 className={'w-auto p-0'}
                             >
-                                <Calendar
-                                    mode={'single'}
+                                <ExpiryCalendar
                                     selected={selectedDate}
                                     onSelect={(date) => {
                                         field.onChange(date ? format(date, 'yyyy-MM-dd') : '')
