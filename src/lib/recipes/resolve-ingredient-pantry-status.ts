@@ -4,6 +4,7 @@ import type {
     PantryUnit
 } from '@/types/enums'
 
+import { isAlwaysAvailableIngredient } from '@/lib/recipes/always-available-ingredients'
 import {
     findMatchingPantryItem,
     findRelatedPantryItem,
@@ -40,12 +41,13 @@ export const resolveIngredientPantryStatus = <T extends MinimalIngredient>(
         // display text, so pantry matching can't drift from a stale or bad stored value.
         const name = deriveIngredientName(ingredient.label ?? ingredient.name ?? '')
         const matchedItem = findMatchingPantryItem(name, pantryItems)
-        const inPantry = matchedItem !== undefined && hasEnoughPantryQuantity(
-            ingredient.quantity,
-            ingredient.unit,
-            matchedItem.quantity,
-            matchedItem.unit
-        )
+        const inPantry = isAlwaysAvailableIngredient(ingredient.label ?? ingredient.name ?? '')
+            || (matchedItem !== undefined && hasEnoughPantryQuantity(
+                ingredient.quantity,
+                ingredient.unit,
+                matchedItem.quantity,
+                matchedItem.unit
+            ))
         const replacementItem = !inPantry
             ? findRelatedPantryItem(
                 name,

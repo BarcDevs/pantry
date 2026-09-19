@@ -7,6 +7,40 @@ import {
 import { resolveIngredientPantryStatus } from './resolve-ingredient-pantry-status'
 
 describe('resolveIngredientPantryStatus', () => {
+    it.each([
+        'מים',
+        'מים חמים',
+        'מים רותחים',
+        'Water'
+    ])('treats "%s" as always available without a pantry item', (label) => {
+        const [result] = resolveIngredientPantryStatus(
+            [{
+                label,
+                category: FoodType.Beverages,
+                quantity: 2,
+                unit: CookingUnit.Cup
+            }],
+            []
+        )
+
+        expect(result.inPantry).toBe(true)
+        expect(result.replacementName).toBeUndefined()
+    })
+
+    it('does not treat other water-like ingredients as always available', () => {
+        const [result] = resolveIngredientPantryStatus(
+            [{
+                label: 'מי ורדים',
+                category: FoodType.Beverages,
+                quantity: 1,
+                unit: CookingUnit.Tablespoon
+            }],
+            []
+        )
+
+        expect(result.inPantry).toBe(false)
+    })
+
     it('marks an ingredient in-pantry when its derived name matches a pantry item with enough quantity', () => {
         const [result] = resolveIngredientPantryStatus(
             [{
