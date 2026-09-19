@@ -34,6 +34,8 @@ import { useRouter } from 'next/navigation'
 import { saveImportDraft } from '@/lib/recipes/import-draft-storage'
 import { draftTtlMs } from '@/lib/recipes/recipe-draft-storage'
 
+import { recipesTexts } from '@/constants/texts/recipes'
+
 import { importRecipeFromText } from '@/actions/recipes/import-recipe-from-text'
 import { importRecipeFromUrl } from '@/actions/recipes/import-recipe-from-url'
 import { refineRecipe } from '@/actions/recipes/refine-recipe'
@@ -65,7 +67,8 @@ describe('useRecipeImport', () => {
     it('sets an error and no recipe when the URL import falls back to manual', async () => {
         mockImportFromUrl.mockResolvedValue({
             recipe: null,
-            fallbackToManual: true
+            fallbackToManual: true,
+            isBlocked: false
         })
 
         const { result } = renderHook(() => useRecipeImport())
@@ -74,6 +77,20 @@ describe('useRecipeImport', () => {
 
         expect(result.current.recipe).toBeNull()
         expect(result.current.error).not.toBeNull()
+    })
+
+    it('sets the blocked-site error when the URL import is blocked', async () => {
+        mockImportFromUrl.mockResolvedValue({
+            recipe: null,
+            fallbackToManual: true,
+            isBlocked: true
+        })
+
+        const { result } = renderHook(() => useRecipeImport())
+
+        await act(async () => result.current.importFromUrl('https://x.com'))
+
+        expect(result.current.error).toBe(recipesTexts.import.importBlockedError)
     })
 
     it('sets the recipe on a successful text import', async () => {

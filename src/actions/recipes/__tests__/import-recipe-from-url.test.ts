@@ -206,8 +206,27 @@ describe('importRecipeFromUrl', () => {
 
         expect(result).toEqual({
             recipe: null,
-            fallbackToManual: true
+            fallbackToManual: true,
+            isBlocked: false
         })
+    })
+
+    it.each([
+        401,
+        403,
+        429
+    ])('flags the result as blocked on HTTP %i', async (status) => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFetch.mockResolvedValue(makeResponse('', { status }))
+
+        const result = await importRecipeFromUrl('https://example.com/recipe')
+
+        expect(result).toEqual({
+            recipe: null,
+            fallbackToManual: true,
+            isBlocked: true
+        })
+        expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
 
     it('returns fallbackToManual on total fetch failure', async () => {
@@ -220,7 +239,8 @@ describe('importRecipeFromUrl', () => {
 
         expect(result).toEqual({
             recipe: null,
-            fallbackToManual: true
+            fallbackToManual: true,
+            isBlocked: false
         })
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
@@ -244,7 +264,8 @@ describe('importRecipeFromUrl', () => {
 
             expect(result).toEqual({
                 recipe: null,
-                fallbackToManual: true
+                fallbackToManual: true,
+                isBlocked: false
             })
             expect(mockFetch).not.toHaveBeenCalled()
         }

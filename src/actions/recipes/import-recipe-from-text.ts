@@ -52,6 +52,7 @@ export const importRecipeFromText = async (
 
     return {
         recipe,
-        fallbackToManual: false
+        fallbackToManual: false,
+        isBlocked: false
     }
 }

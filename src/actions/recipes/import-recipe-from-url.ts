@@ -25,7 +25,8 @@ export const importRecipeFromUrl = async (
     if (parsedUrl === null || fetched?.status !== 'ok') {
         return {
             recipe: null,
-            fallbackToManual: true
+            fallbackToManual: true,
+            isBlocked: fetched?.status === 'blocked'
         }
     }
 
@@ -47,7 +48,8 @@ export const importRecipeFromUrl = async (
     if (generated.ingredients.length === 0 || generated.steps.length === 0) {
         return {
             recipe: null,
-            fallbackToManual: true
+            fallbackToManual: true,
+            isBlocked: false
         }
     }
 
@@ -58,6 +60,7 @@ export const importRecipeFromUrl = async (
 
     return {
         recipe,
-        fallbackToManual: false
+        fallbackToManual: false,
+        isBlocked: false
     }
 }

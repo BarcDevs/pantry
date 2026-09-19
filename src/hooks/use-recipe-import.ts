@@ -58,7 +58,11 @@ export const useRecipeImport = () => {
             try {
                 const result = await importRecipeFromUrl(url)
                 if (result.fallbackToManual || !result.recipe) {
-                    setError(recipesTexts.import.importError)
+                    setError(
+                        result.isBlocked
+                            ? recipesTexts.import.importBlockedError
+                            : recipesTexts.import.importError
+                    )
                     return
                 }
                 commitRecipe(result.recipe)

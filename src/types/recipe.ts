@@ -88,6 +88,7 @@ export type UpdateRecipeInput = Partial<{
 export type RecipeImportResult = {
     recipe: RecipeDoc | null
     fallbackToManual: boolean
+    isBlocked: boolean
 }
 
 export type GenerateRecipeInput = {
