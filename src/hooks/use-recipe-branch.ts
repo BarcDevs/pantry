@@ -21,11 +21,11 @@ export const useRecipeBranch = (recipe: RecipeDoc) => {
     const [isBranching, startBranching] = useTransition()
 
     const branch = () => {
-        if (!adjustments.instruction.trim()) return
+        if (!adjustments.values.instruction.trim()) return
 
         startBranching(async () => {
             try {
-                const branched = await branchRecipe(recipe, adjustments.instruction.trim())
+                const branched = await branchRecipe(recipe, adjustments.values.instruction.trim())
                 toast.success(recipesTexts.detail.branchSuccess)
                 router.push(routes.recipeDetail(branched._id))
             } catch (error) {
@@ -36,7 +36,7 @@ export const useRecipeBranch = (recipe: RecipeDoc) => {
     }
 
     return {
-        ...adjustments,
+        adjustments,
         isBranching,
         branch
     }

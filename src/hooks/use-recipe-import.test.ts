@@ -135,12 +135,12 @@ describe('useRecipeImport', () => {
 
         const { result } = renderHook(() => useRecipeImport())
         await act(async () => result.current.importFromText('recipe text'))
-        act(() => result.current.adjustments.setInstruction('בלי סוכר'))
+        act(() => result.current.adjustments.setField('instruction', 'בלי סוכר'))
         await act(async () => result.current.refine())
 
         expect(mockRefineRecipe).toHaveBeenCalledWith(expect.objectContaining({ instruction: 'בלי סוכר' }))
         expect(result.current.recipe?.title).toBe('עוגה (מעודכן)')
-        expect(result.current.adjustments.instruction).toBe('')
+        expect(result.current.adjustments.values.instruction).toBe('')
     })
 
     it('restores the unsaved draft whenever the user returns to the page', () => {

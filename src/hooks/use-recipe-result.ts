@@ -62,16 +62,16 @@ export const useRecipeResult = () => {
     }
 
     const refine = () => {
-        if (!recipe || !adjustments.instruction.trim()) return
+        if (!recipe || !adjustments.values.instruction.trim()) return
 
         startRefining(async () => {
             try {
                 const refined = await refineRecipe({
                     recipe,
-                    instruction: adjustments.instruction.trim()
+                    instruction: adjustments.values.instruction.trim()
                 })
                 commitRecipe(refined)
-                adjustments.reset()
+                adjustments.actions.reset()
             } catch (error) {
                 console.error(error)
                 toast.error(recipesTexts.result.refineError)
@@ -117,12 +117,12 @@ export const useRecipeResult = () => {
     return {
         recipe,
         savedRecipeId,
-        refineInstruction: adjustments.instruction,
-        setRefineInstruction: adjustments.setInstruction,
-        usedReplacements: adjustments.usedReplacements,
-        toggleReplacement: adjustments.toggleReplacement,
-        usedRemovals: adjustments.usedRemovals,
-        toggleRemoval: adjustments.toggleRemoval,
+        refineInstruction: adjustments.values.instruction,
+        setRefineInstruction: (value: string) => adjustments.setField('instruction', value),
+        usedReplacements: adjustments.values.usedReplacements,
+        toggleReplacement: adjustments.actions.toggleReplacement,
+        usedRemovals: adjustments.values.usedRemovals,
+        toggleRemoval: adjustments.actions.toggleRemoval,
         isRefining,
         refine,
         dismiss,

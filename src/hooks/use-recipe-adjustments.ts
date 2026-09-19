@@ -2,53 +2,88 @@ import { useState } from 'react'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
-export const useRecipeAdjustments = () => {
-    const [instruction, setInstruction] = useState('')
-    const [usedReplacements, setUsedReplacements] = useState<Record<string, boolean>>({})
-    const [usedRemovals, setUsedRemovals] = useState<Record<string, boolean>>({})
+type AdjustmentValues = {
+    instruction: string
+    usedReplacements: Record<string, boolean>
+    usedRemovals: Record<string, boolean>
+}
 
-    const toggleLine = (
-        line: string,
-        isOn: boolean
-    ) => {
-        setInstruction((current) => (
-            isOn
-                ? current.split(', ').filter((entry) => entry.trim() !== line).join(', ')
-                : (current ? `${current}, ${line}` : line)
-        ))
-    }
+const initialValues: AdjustmentValues = {
+    instruction: '',
+    usedReplacements: {},
+    usedRemovals: {}
+}
+
+const toggleInstructionLine = (
+    instruction: string,
+    line: string,
+    isOn: boolean
+) => (
+    isOn
+        ? instruction.split(', ').filter((entry) => entry.trim() !== line).join(', ')
+        : (instruction ? `${instruction}, ${line}` : line)
+)
+
+export const useRecipeAdjustments = () => {
+    const [values, setValues] = useState<AdjustmentValues>(initialValues)
+
+    const setField = <Key extends keyof AdjustmentValues>(
+        key: Key,
+        value: AdjustmentValues[Key]
+    ) => setValues((current) => ({
+        ...current,
+        [key]: value
+    }))
 
     const toggleReplacement = (
         ingredientName: string,
         ingredientLabel: string,
         replacementName: string
     ) => {
-        const isOn = usedReplacements[ingredientName]
+        const isOn = values.usedReplacements[ingredientName]
+        const line = recipesTexts.result.replacementAdjustmentLine(replacementName, ingredientLabel)
 
-        setUsedReplacements((current) => ({ ...current, [ingredientName]: !isOn }))
-        toggleLine(recipesTexts.result.replacementAdjustmentLine(replacementName, ingredientLabel), isOn)
+        setValues((current) => ({
+            ...current,
+            usedReplacements: {
+                ...current.usedReplacements,
+                [ingredientName]: !isOn
+            },
+            instruction: toggleInstructionLine(
+                current.instruction,
+                line,
+                isOn
+            )
+        }))
     }
 
     const toggleRemoval = (ingredientName: string, ingredientLabel: string) => {
-        const isOn = usedRemovals[ingredientName]
+        const isOn = values.usedRemovals[ingredientName]
+        const line = recipesTexts.result.removalAdjustmentLine(ingredientLabel)
 
-        setUsedRemovals((current) => ({ ...current, [ingredientName]: !isOn }))
-        toggleLine(recipesTexts.result.removalAdjustmentLine(ingredientLabel), isOn)
+        setValues((current) => ({
+            ...current,
+            usedRemovals: {
+                ...current.usedRemovals,
+                [ingredientName]: !isOn
+            },
+            instruction: toggleInstructionLine(
+                current.instruction,
+                line,
+                isOn
+            )
+        }))
     }
 
-    const reset = () => {
-        setInstruction('')
-        setUsedReplacements({})
-        setUsedRemovals({})
-    }
+    const reset = () => setValues(initialValues)
 
     return {
-        instruction,
-        setInstruction,
-        usedReplacements,
-        toggleReplacement,
-        usedRemovals,
-        toggleRemoval,
-        reset
+        values,
+        setField,
+        actions: {
+            toggleReplacement,
+            toggleRemoval,
+            reset
+        }
     }
 }

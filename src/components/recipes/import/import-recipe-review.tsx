@@ -49,16 +49,16 @@ export const ImportRecipeReview = ({
         <RecipeBodyGrid>
             <RecipeIngredientsList
                 ingredients={recipe.ingredients}
-                usedReplacements={adjustments.usedReplacements}
-                onToggleReplacement={adjustments.toggleReplacement}
-                usedRemovals={adjustments.usedRemovals}
-                onToggleRemoval={adjustments.toggleRemoval}
+                usedReplacements={adjustments.values.usedReplacements}
+                onToggleReplacement={adjustments.actions.toggleReplacement}
+                usedRemovals={adjustments.values.usedRemovals}
+                onToggleRemoval={adjustments.actions.toggleRemoval}
             />
             <RecipeStepsList steps={recipe.steps}/>
         </RecipeBodyGrid>
         <RecipeRefineInput
-            value={adjustments.instruction}
-            onChange={adjustments.setInstruction}
+            value={adjustments.values.instruction}
+            onChange={(value) => adjustments.setField('instruction', value)}
             onSubmit={onRefine}
             isRefining={isRefining}
         />

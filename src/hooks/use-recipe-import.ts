@@ -35,7 +35,7 @@ export const useRecipeImport = () => {
     const [isSaving, startSaving] = useTransition()
     const [isRefining, startRefining] = useTransition()
     const adjustments = useRecipeAdjustments()
-    const { reset: resetAdjustments } = adjustments
+    const { reset: resetAdjustments } = adjustments.actions
 
     const refreshPantryStatus = useRefreshPantryStatus(setRecipe)
 
@@ -99,7 +99,7 @@ export const useRecipeImport = () => {
     }
 
     const refine = () => {
-        const instruction = adjustments.instruction.trim()
+        const instruction = adjustments.values.instruction.trim()
         if (!recipe || !instruction) return
         startRefining(async () => {
             try {

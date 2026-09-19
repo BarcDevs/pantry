@@ -51,16 +51,16 @@ export const RecipeDetailView = ({
             <RecipeBodyGrid>
                 <RecipeIngredientsList
                     ingredients={recipeDetail.recipe.ingredients}
-                    usedReplacements={recipeBranch.usedReplacements}
-                    onToggleReplacement={recipeBranch.toggleReplacement}
-                    usedRemovals={recipeBranch.usedRemovals}
-                    onToggleRemoval={recipeBranch.toggleRemoval}
+                    usedReplacements={recipeBranch.adjustments.values.usedReplacements}
+                    onToggleReplacement={recipeBranch.adjustments.actions.toggleReplacement}
+                    usedRemovals={recipeBranch.adjustments.values.usedRemovals}
+                    onToggleRemoval={recipeBranch.adjustments.actions.toggleRemoval}
                 />
                 <RecipeStepsList steps={recipeDetail.recipe.steps}/>
             </RecipeBodyGrid>
             <RecipeRefineInput
-                value={recipeBranch.instruction}
-                onChange={recipeBranch.setInstruction}
+                value={recipeBranch.adjustments.values.instruction}
+                onChange={(value) => recipeBranch.adjustments.setField('instruction', value)}
                 onSubmit={recipeBranch.branch}
                 isRefining={recipeBranch.isBranching}
                 label={recipesTexts.detail.adjustLabel}

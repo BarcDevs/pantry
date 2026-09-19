@@ -38,7 +38,10 @@ const renderReview = (isSaving: boolean) => {
             isSaving={isSaving}
             onTitleChange={jest.fn()}
             onSave={onSave}
-            adjustments={{} as never}
+            adjustments={{
+                values: {},
+                actions: {}
+            } as never}
             isRefining={false}
             onRefine={jest.fn()}
             onDismiss={jest.fn()}
