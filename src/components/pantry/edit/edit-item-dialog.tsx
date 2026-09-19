@@ -71,6 +71,7 @@ export const EditItemDialog = ({
                             isLoading={editItem.suggestion.isSuggesting}
                             suggestion={editItem.suggestion.value}
                             suggestionFailed={editItem.suggestion.failed}
+                            isStale={editItem.suggestion.stale}
                             currentStorage={currentStorage}
                             onSelectRecommended={editItem.suggestion.applyStorage}
                             onApplyExpiry={editItem.suggestion.applyExpiry}

@@ -45,6 +45,40 @@ describe('useReceiptRowEdit suggested type', () => {
         expect(result.current.values.type).toBe('meat')
     })
 
+    it('is stale after a name change without clearing or requesting', async () => {
+        const { result } = renderHook(() => useReceiptRowEdit(row))
+        act(() => result.current.suggestion.request())
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+        expect(result.current.suggestion.stale).toBe(false)
+
+        act(() => result.current.setField('name', 'גבינה'))
+
+        expect(result.current.suggestion.stale).toBe(true)
+        expect(result.current.suggestion.value).not.toBeNull()
+        expect(mockSuggestStorage).toHaveBeenCalledTimes(1)
+    })
+
+    it('treats an initial suggestion as generated for the row name', () => {
+        const withSuggestion = { ...(row as object), storageSuggestion: suggestion } as never
+        const { result } = renderHook(() => useReceiptRowEdit(withSuggestion))
+        expect(result.current.suggestion.stale).toBe(false)
+
+        act(() => result.current.setField('name', 'גבינה'))
+
+        expect(result.current.suggestion.stale).toBe(true)
+    })
+
+    it('is not stale again after a refresh for the new name', async () => {
+        const { result } = renderHook(() => useReceiptRowEdit(row))
+        act(() => result.current.suggestion.request())
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+        act(() => result.current.setField('name', 'גבינה'))
+
+        act(() => result.current.suggestion.refresh())
+
+        await waitFor(() => expect(result.current.suggestion.stale).toBe(false))
+    })
+
     it('replaces the set type on refresh', async () => {
         const { result } = renderHook(() => useReceiptRowEdit(row))
 

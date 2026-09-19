@@ -84,6 +84,7 @@ export const pantryTexts = {
             unit: string
         ) => `כעת ממזג: ${existing} + ${added} = ${total} ${unit}`,
         suggestionRefresh: 'רענון ההצעה',
+        suggestionStale: 'ההצעה נוצרה עבור שם אחר - אם המוצר השתנה, לחץ על רענון',
         notesLabel: 'הערות (אופציונלי)',
         submit: 'הוספה למזווה',
         submitting: 'מוסיף...',

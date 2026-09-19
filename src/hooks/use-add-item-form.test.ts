@@ -281,3 +281,46 @@ describe('useAddItemForm suggestion persistence', () => {
         expect(result.current.suggestion.value).not.toBeNull()
     })
 })
+
+describe('useAddItemForm stale suggestion', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockFindExisting.mockResolvedValue(null)
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Fridge))
+    })
+
+    const typeName = (
+        result: { current: ReturnType<typeof useAddItemForm> },
+        name: string
+    ) => act(() => result.current.form.setValue('name', name))
+
+    it('turns stale after a name change without clearing or requesting', async () => {
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+        expect(result.current.suggestion.stale).toBe(false)
+
+        typeName(result, 'גבינה')
+
+        await act(async () => new Promise((resolve) => setTimeout(resolve, 700)))
+        expect(result.current.suggestion.stale).toBe(true)
+        expect(result.current.suggestion.value).not.toBeNull()
+        expect(mockSuggestStorage).toHaveBeenCalledTimes(1)
+    })
+
+    it('is not stale for a trailing space and clears after refresh', async () => {
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+
+        typeName(result, 'חלב ')
+        expect(result.current.suggestion.stale).toBe(false)
+
+        typeName(result, 'גבינה')
+        expect(result.current.suggestion.stale).toBe(true)
+        await act(async () => new Promise((resolve) => setTimeout(resolve, 700)))
+        act(() => result.current.suggestion.refresh())
+
+        await waitFor(() => expect(result.current.suggestion.stale).toBe(false))
+    })
+})

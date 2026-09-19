@@ -16,7 +16,6 @@ import type {
     StorageSuggestion
 } from '@/types/pantry-item'
 
-import { useResetOnChange } from '@/hooks/use-reset-on-change'
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { applySuggestedExpiry } from '@/lib/pantry/apply-suggested-expiry'
@@ -70,7 +69,10 @@ export const useEditItemForm = ({
         defaultValues: toFormValues(item)
     })
 
-    const storageSuggestion = useStorageSuggestion(item.storageSuggestion)
+    const storageSuggestion = useStorageSuggestion(
+        item.storageSuggestion,
+        item.name
+    )
     const [isSubmitting, startSubmitting] = (
         useTransition()
     )
@@ -81,8 +83,6 @@ export const useEditItemForm = ({
         control: form.control,
         name: 'name'
     })
-
-    useResetOnChange(name, storageSuggestion.clear)
 
     const applySuggestedType = (
         result: StorageSuggestion,
@@ -151,6 +151,7 @@ export const useEditItemForm = ({
             value: storageSuggestion.suggestion,
             isSuggesting: storageSuggestion.isSuggesting,
             failed: storageSuggestion.suggestionFailed,
+            stale: storageSuggestion.isStaleFor(name),
             request: requestSuggestion,
             refresh: refreshSuggestion,
             applyStorage: () => {

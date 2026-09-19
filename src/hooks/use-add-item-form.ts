@@ -276,6 +276,7 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
             value: effectiveSuggestion,
             isSuggesting: isPendingSuggestion,
             failed: storageSuggestion.suggestionFailed,
+            stale: storageSuggestion.isStaleFor(name),
             retry: () => setRetryToken((token) => token + 1),
             refresh: () => {
                 isFreshRequestedRef.current = true

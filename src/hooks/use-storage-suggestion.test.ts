@@ -29,6 +29,24 @@ describe('useStorageSuggestion', () => {
         expect(result.current.suggestion?.reason).toBe('initial')
     })
 
+    it('is stale only once the name differs from the one it was generated for', async () => {
+        mockSuggestStorage.mockResolvedValue(suggestion('new'))
+        const { result } = renderHook(() => useStorageSuggestion())
+        expect(result.current.isStaleFor('חלב')).toBe(false)
+
+        await act(async () => result.current.request('חלב'))
+
+        expect(result.current.isStaleFor(' חלב ')).toBe(false)
+        expect(result.current.isStaleFor('גבינה')).toBe(true)
+    })
+
+    it('treats the initial suggestion as generated for the initial name', () => {
+        const { result } = renderHook(() => useStorageSuggestion(suggestion('initial') as never, 'חלב'))
+
+        expect(result.current.isStaleFor('חלב')).toBe(false)
+        expect(result.current.isStaleFor('גבינה')).toBe(true)
+    })
+
     it('ignores names shorter than the minimum', async () => {
         const { result } = renderHook(() => useStorageSuggestion())
 

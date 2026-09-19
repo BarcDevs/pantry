@@ -121,6 +121,7 @@ export const ReceiptRowEditDialog = ({
                         isLoading={productEdit.suggestion.isSuggesting}
                         suggestion={productEdit.suggestion.value}
                         suggestionFailed={productEdit.suggestion.failed}
+                        isStale={productEdit.suggestion.stale}
                         currentStorage={productEdit.values.storage}
                         onSelectRecommended={productEdit.suggestion.applyStorage}
                         onApplyExpiry={productEdit.suggestion.applyExpiry}

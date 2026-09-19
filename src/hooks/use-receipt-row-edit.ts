@@ -28,7 +28,10 @@ export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
         type: row.type,
         expiryDate: row.expiryDate
     })
-    const storageSuggestion = useStorageSuggestion(row.storageSuggestion)
+    const storageSuggestion = useStorageSuggestion(
+        row.storageSuggestion,
+        row.name
+    )
     const { suggestion } = storageSuggestion
 
     const setField = <Key extends keyof RowEditValues>(
@@ -80,6 +83,7 @@ export const useReceiptRowEdit = (row: ReceiptReviewRow) => {
             value: suggestion,
             isSuggesting: storageSuggestion.isSuggesting,
             failed: storageSuggestion.suggestionFailed,
+            stale: storageSuggestion.isStaleFor(values.name),
             request: requestSuggestion,
             refresh: refreshSuggestion,
             applyStorage: applySuggestedStorage,

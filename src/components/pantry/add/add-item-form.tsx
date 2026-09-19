@@ -52,6 +52,7 @@ export const AddItemForm = ({ prefill }: AddItemFormProps) => {
                         isLoading={addItem.suggestion.isSuggesting}
                         suggestion={addItem.suggestion.value}
                         suggestionFailed={addItem.suggestion.failed}
+                        isStale={addItem.suggestion.stale}
                         currentStorage={currentStorage}
                         onSelectRecommended={addItem.suggestion.applyStorage}
                         onApplyExpiry={addItem.suggestion.applyExpiry}

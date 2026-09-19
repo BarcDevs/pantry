@@ -66,6 +66,33 @@ describe('useEditItemForm suggested type', () => {
         expect(result.current.form.getValues('type')).toBe('meat')
     })
 
+    it('is stale after a name change without clearing or requesting', async () => {
+        const { result } = setup()
+        act(() => result.current.suggestion.request())
+        await waitFor(() =>
+            expect(result.current.suggestion.value).not.toBeNull())
+        expect(result.current.suggestion.stale).toBe(false)
+
+        act(() => result.current.form.setValue('name', 'גבינה'))
+
+        expect(result.current.suggestion.stale).toBe(true)
+        expect(result.current.suggestion.value).not.toBeNull()
+        expect(mockSuggestStorage).toHaveBeenCalledTimes(1)
+    })
+
+    it('is not stale again after a refresh for the new name', async () => {
+        const { result } = setup()
+        act(() => result.current.suggestion.request())
+        await waitFor(() =>
+            expect(result.current.suggestion.value).not.toBeNull())
+        act(() => result.current.form.setValue('name', 'גבינה'))
+
+        act(() => result.current.suggestion.refresh())
+
+        await waitFor(() =>
+            expect(result.current.suggestion.stale).toBe(false))
+    })
+
     it('replaces the set type on refresh', async () => {
         const { result } = setup()
 
