@@ -102,11 +102,15 @@ export const useDeductRecipe = (
     const skipDeduct = () => goToRating()
 
     return {
-        rows,
-        adjustUsed,
-        setChoice,
-        isSubmitting,
-        confirmDeduct,
-        skipDeduct
+        rows: {
+            items: rows,
+            adjustUsed,
+            setChoice
+        },
+        submission: {
+            isSubmitting,
+            confirm: confirmDeduct,
+            skip: skipDeduct
+        }
     }
 }

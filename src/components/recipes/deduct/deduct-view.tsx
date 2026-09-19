@@ -28,16 +28,16 @@ export const DeductView = ({
         <div className={'mx-auto max-w-screen-sm px-4 py-8'}>
             <DeductHeader/>
             <DeductRowsList
-                rows={deductRecipe.rows}
-                onMinus={(id) => deductRecipe.adjustUsed(id, -1)}
-                onPlus={(id) => deductRecipe.adjustUsed(id, 1)}
-                onKeep={(id) => deductRecipe.setChoice(id, 'keep')}
-                onDelete={(id) => deductRecipe.setChoice(id, 'delete')}
+                rows={deductRecipe.rows.items}
+                onMinus={(id) => deductRecipe.rows.adjustUsed(id, -1)}
+                onPlus={(id) => deductRecipe.rows.adjustUsed(id, 1)}
+                onKeep={(id) => deductRecipe.rows.setChoice(id, 'keep')}
+                onDelete={(id) => deductRecipe.rows.setChoice(id, 'delete')}
             />
             <DeductActions
-                isSubmitting={deductRecipe.isSubmitting}
-                onConfirm={deductRecipe.confirmDeduct}
-                onSkip={deductRecipe.skipDeduct}
+                isSubmitting={deductRecipe.submission.isSubmitting}
+                onConfirm={deductRecipe.submission.confirm}
+                onSkip={deductRecipe.submission.skip}
             />
         </div>
     )
