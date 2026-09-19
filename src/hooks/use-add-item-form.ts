@@ -78,13 +78,8 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
 
     const isStorageChosenRef = useRef(false)
     const isFreshRequestedRef = useRef(false)
-    const {
-        suggestion,
-        suggestionFailed,
-        isSuggesting,
-        request: requestSuggestion,
-        clear: clearSuggestion
-    } = useStorageSuggestion()
+    const storageSuggestion = useStorageSuggestion()
+    const { request: requestSuggestion } = storageSuggestion
     const [retryToken, setRetryToken] = useState(0)
     const [isSubmitting, startSubmitting] = useTransition()
     const [duplicate, setDuplicate] = useState<
@@ -124,7 +119,7 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     const [isMergeRequested, setIsMergeRequested] = useState(false)
 
     useResetOnChange(name, () => {
-        clearSuggestion()
+        storageSuggestion.clear()
         setIsMergeRequested(false)
     })
 
@@ -150,10 +145,10 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         name.trim().length >= minNameLengthForSuggestion
     )
     const isPendingSuggestion = isNameLongEnough && (
-        isSuggesting || debouncedName !== name.trim()
+        storageSuggestion.isSuggesting || debouncedName !== name.trim()
     )
     const effectiveSuggestion = isNameLongEnough
-        ? suggestion
+        ? storageSuggestion.suggestion
         : null
 
     const mergeCandidate = (
@@ -241,7 +236,7 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         cancelMerge: () => setIsMergeRequested(false),
         suggestion: effectiveSuggestion,
         isSuggesting: isPendingSuggestion,
-        suggestionFailed,
+        suggestionFailed: storageSuggestion.suggestionFailed,
         retrySuggestion: () => {
             isFreshRequestedRef.current = true
             setRetryToken((token) => token + 1)

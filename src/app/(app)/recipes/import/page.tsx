@@ -21,29 +21,17 @@ const ImportRecipePage = () => {
     const [text, setText] = useState('')
     const [textImageUrl, setTextImageUrl] = useState('')
 
-    const {
-        recipe,
-        error,
-        isImporting,
-        isSaving,
-        importFromUrl,
-        importFromText,
-        setTitle,
-        save,
-        adjustments,
-        isRefining,
-        refine,
-        dismiss
-    } = useRecipeImport()
+    const recipeImport = useRecipeImport()
 
     const isUrlTab = tab === 'url'
-    const isSubmitDisabled = isImporting || (isUrlTab
+    const isSubmitDisabled = recipeImport.isImporting || (isUrlTab
         ? url.trim().length === 0 || isUrlInputInvalid(url)
         : text.trim().length === 0 || isUrlInputInvalid(textImageUrl))
 
     const handleSubmit = () => {
-        if (isUrlTab) importFromUrl(url.trim())
-        else importFromText(text.trim(), parseUrlInput(textImageUrl) ?? undefined)
+        if (isUrlTab) recipeImport.importFromUrl(url.trim())
+        else recipeImport.importFromText(text.trim(),
+            parseUrlInput(textImageUrl) ?? undefined)
     }
 
     const onEnter = isSubmitDisabled ? undefined : handleSubmit
@@ -54,17 +42,17 @@ const ImportRecipePage = () => {
                 title={recipesTexts.import.title}
                 className={'mb-1.5'}
             />
-            {recipe
+            {recipeImport.recipe
                 ? (
                     <ImportRecipeReview
-                        recipe={recipe}
-                        isSaving={isSaving}
-                        onTitleChange={setTitle}
-                        onSave={save}
-                        adjustments={adjustments}
-                        isRefining={isRefining}
-                        onRefine={refine}
-                        onDismiss={dismiss}
+                        recipe={recipeImport.recipe}
+                        isSaving={recipeImport.isSaving}
+                        onTitleChange={recipeImport.setTitle}
+                        onSave={recipeImport.save}
+                        adjustments={recipeImport.adjustments}
+                        isRefining={recipeImport.isRefining}
+                        onRefine={recipeImport.refine}
+                        onDismiss={recipeImport.dismiss}
                     />
                 ) : (
                     <>
@@ -99,13 +87,13 @@ const ImportRecipePage = () => {
                             onClick={handleSubmit}
                             className={'w-full'}
                         >
-                            {isImporting
+                            {recipeImport.isImporting
                                 ? recipesTexts.import.importing
                                 : recipesTexts.import.submit}
                         </PrimaryButton>
-                        {error && (
+                        {recipeImport.error && (
                             <p className={'mt-3 text-label text-status-red-fg'}>
-                                {error}
+                                {recipeImport.error}
                             </p>
                         )}
                     </>

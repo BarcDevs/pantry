@@ -25,27 +25,12 @@ type RecipeLibraryViewProps = {
 export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
     const [isDeleting, setIsDeleting] = useState(false)
     const [confirmBulkDelete, setConfirmBulkDelete] = useState(false)
-    const {
-        query,
-        setQuery,
-        filter,
-        setFilter,
-        sort,
-        setSort,
-        filteredRecipes,
-        toggleFavorite,
-        deleteRecipe,
-        isSelecting,
-        selectedIds,
-        toggleSelectMode,
-        toggleSelected,
-        deleteSelected
-    } = useRecipeLibrary(recipes)
+    const recipeLibrary = useRecipeLibrary(recipes)
 
     const handleBulkDelete = async () => {
         setIsDeleting(true)
         try {
-            await deleteSelected()
+            await recipeLibrary.deleteSelected()
             setConfirmBulkDelete(false)
         } catch {
             setIsDeleting(false)
@@ -71,17 +56,17 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                 <RecipeImportLink/>
             </div>
             <RecipeSearchInput
-                value={query}
-                onChange={setQuery}
+                value={recipeLibrary.query}
+                onChange={recipeLibrary.setQuery}
             />
             <div className={'mb-4.5 flex flex-wrap items-center justify-between gap-2'}>
                 <RecipeFilterTabs
-                    value={filter}
-                    onChange={setFilter}
+                    value={recipeLibrary.filter}
+                    onChange={recipeLibrary.setFilter}
                 />
                 <SortSelect
-                    value={sort}
-                    onChange={setSort}
+                    value={recipeLibrary.sort}
+                    onChange={recipeLibrary.setSort}
                     label={recipesTexts.library.sortLabel}
                     options={[
                         { value: 'recent', label: recipesTexts.library.sortRecent },
@@ -91,23 +76,23 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                 />
             </div>
             <RecipeSelectionBar
-                isSelecting={isSelecting}
-                selectedCount={selectedIds.length}
-                onToggleSelectMode={toggleSelectMode}
+                isSelecting={recipeLibrary.isSelecting}
+                selectedCount={recipeLibrary.selectedIds.length}
+                onToggleSelectMode={recipeLibrary.toggleSelectMode}
                 onRequestDelete={() => setConfirmBulkDelete(true)}
             />
-            {filteredRecipes.length === 0 ? (
+            {recipeLibrary.filteredRecipes.length === 0 ? (
                 <p className={'py-10 text-center text-body text-ink-3'}>
                     {recipesTexts.library.noResults}
                 </p>
             ) : (
                 <RecipeGrid
-                    recipes={filteredRecipes}
-                    onToggleFavorite={toggleFavorite}
-                    onDelete={deleteRecipe}
-                    isSelecting={isSelecting}
-                    selectedIds={selectedIds}
-                    onToggleSelect={(recipe) => toggleSelected(recipe._id)}
+                    recipes={recipeLibrary.filteredRecipes}
+                    onToggleFavorite={recipeLibrary.toggleFavorite}
+                    onDelete={recipeLibrary.deleteRecipe}
+                    isSelecting={recipeLibrary.isSelecting}
+                    selectedIds={recipeLibrary.selectedIds}
+                    onToggleSelect={(recipe) => recipeLibrary.toggleSelected(recipe._id)}
                 />
             )}
             <BulkDeleteDialog
@@ -115,7 +100,7 @@ export const RecipeLibraryView = ({ recipes }: RecipeLibraryViewProps) => {
                 onOpenChange={setConfirmBulkDelete}
                 onConfirm={handleBulkDelete}
                 isDeleting={isDeleting}
-                count={selectedIds.length}
+                count={recipeLibrary.selectedIds.length}
             />
         </div>
     )

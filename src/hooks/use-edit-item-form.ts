@@ -69,13 +69,7 @@ export const useEditItemForm = ({
         defaultValues: toFormValues(item)
     })
 
-    const {
-        suggestion,
-        suggestionFailed,
-        isSuggesting,
-        request,
-        clear: clearSuggestion
-    } = useStorageSuggestion(item.storageSuggestion)
+    const storageSuggestion = useStorageSuggestion(item.storageSuggestion)
     const [isSubmitting, startSubmitting] = (
         useTransition()
     )
@@ -87,7 +81,7 @@ export const useEditItemForm = ({
         name: 'name'
     })
 
-    useResetOnChange(name, clearSuggestion)
+    useResetOnChange(name, storageSuggestion.clear)
 
     const applySuggestedType = (result: StorageSuggestion) => {
         if (result.suggestedType && !form.getValues('type')) {
@@ -95,8 +89,8 @@ export const useEditItemForm = ({
         }
     }
 
-    const requestSuggestion = () => request(name, { onSuggested: applySuggestedType })
-    const refreshSuggestion = () => request(name, {
+    const requestSuggestion = () => storageSuggestion.request(name, { onSuggested: applySuggestedType })
+    const refreshSuggestion = () => storageSuggestion.request(name, {
         fresh: true,
         onSuggested: applySuggestedType
     })
@@ -114,7 +108,7 @@ export const useEditItemForm = ({
                         ? new Date(values.expiryDate)
                         : undefined,
                     notes: values?.notes.trim(),
-                    storageSuggestion: suggestion
+                    storageSuggestion: storageSuggestion.suggestion
                 })
                 toast.success(pantryTexts.editForm.saveSuccess)
                 onSaved()
@@ -144,9 +138,9 @@ export const useEditItemForm = ({
 
     return {
         form,
-        suggestion,
-        isSuggesting,
-        suggestionFailed,
+        suggestion: storageSuggestion.suggestion,
+        isSuggesting: storageSuggestion.isSuggesting,
+        suggestionFailed: storageSuggestion.suggestionFailed,
         isSubmitting,
         isDeleting,
         confirmDelete,
@@ -156,15 +150,15 @@ export const useEditItemForm = ({
         handleSubmit,
         handleDelete,
         applySuggestedStorage: () => {
-            if (suggestion) {
+            if (storageSuggestion.suggestion) {
                 form.setValue(
                     'storage',
-                    suggestion.suggestedStorage
+                    storageSuggestion.suggestion.suggestedStorage
                 )
             }
         },
         applySuggestedExpiry: () => (
-            applySuggestedExpiry(form, suggestion)
+            applySuggestedExpiry(form, storageSuggestion.suggestion)
         )
     }
 }

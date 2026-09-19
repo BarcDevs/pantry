@@ -14,14 +14,7 @@ type RateViewProps = {
 }
 
 export const RateView = ({ recipe }: RateViewProps) => {
-    const {
-        rating,
-        setRating,
-        hoverRating,
-        setHoverRating,
-        isSubmitting,
-        finishRate
-    } = useRateRecipe(recipe._id)
+    const rateRecipe = useRateRecipe(recipe._id)
 
     return (
         <div className={'mx-auto max-w-screen-sm px-4 py-8'}>
@@ -30,17 +23,17 @@ export const RateView = ({ recipe }: RateViewProps) => {
                 title={recipe.title}
             />
             <RateStars
-                rating={rating}
-                hoverRating={hoverRating}
-                onRate={setRating}
-                onHover={setHoverRating}
-                onHoverEnd={() => setHoverRating(0)}
+                rating={rateRecipe.rating}
+                hoverRating={rateRecipe.hoverRating}
+                onRate={rateRecipe.setRating}
+                onHover={rateRecipe.setHoverRating}
+                onHoverEnd={() => rateRecipe.setHoverRating(0)}
             />
             <RateAutoSaveNote/>
             <RateFinishButton
-                rating={rating}
-                isSubmitting={isSubmitting}
-                onClick={finishRate}
+                rating={rateRecipe.rating}
+                isSubmitting={rateRecipe.isSubmitting}
+                onClick={rateRecipe.finishRate}
             />
         </div>
     )

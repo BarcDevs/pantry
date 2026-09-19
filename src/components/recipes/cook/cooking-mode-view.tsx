@@ -14,35 +14,32 @@ type CookingModeViewProps = {
 }
 
 export const CookingModeView = ({ recipe }: CookingModeViewProps) => {
-    const {
-        stepIndex,
-        isLastStep,
-        goPrev,
-        goNext,
-        doneCooking
-    } = useCookingMode(recipe._id, recipe.steps.length)
+    const cookingMode = useCookingMode(
+        recipe._id,
+        recipe.steps.length
+    )
 
-    const step = recipe.steps[stepIndex]
+    const step = recipe.steps[cookingMode.stepIndex]
 
     return (
         <div className={'flex min-h-dvh flex-col bg-ink text-surface'}>
             <div className={'mx-auto flex w-full max-w-(--breakpoint-md) flex-1 flex-col px-4 py-6'}>
                 <CookingModeHeader
                     title={recipe.title}
-                    stepNumber={stepIndex + 1}
+                    stepNumber={cookingMode.stepIndex + 1}
                     totalSteps={recipe.steps.length}
-                    onDoneCooking={doneCooking}
+                    onDoneCooking={cookingMode.doneCooking}
                 />
                 <CookingProgressBar
-                    stepIndex={stepIndex}
+                    stepIndex={cookingMode.stepIndex}
                     stepCount={recipe.steps.length}
                 />
                 <CookingStepContent step={step}/>
                 <CookingStepNav
-                    stepIndex={stepIndex}
-                    isLastStep={isLastStep}
-                    onPrev={goPrev}
-                    onNext={goNext}
+                    stepIndex={cookingMode.stepIndex}
+                    isLastStep={cookingMode.isLastStep}
+                    onPrev={cookingMode.goPrev}
+                    onNext={cookingMode.goNext}
                 />
             </div>
         </div>

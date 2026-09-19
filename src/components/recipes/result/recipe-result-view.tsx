@@ -19,62 +19,46 @@ const showsImageField = (
 ): boolean => source !== 'imported_url'
 
 export const RecipeResultView = () => {
-    const {
-        recipe,
-        savedRecipeId,
-        refineInstruction,
-        setRefineInstruction,
-        usedReplacements,
-        toggleReplacement,
-        usedRemovals,
-        toggleRemoval,
-        isRefining,
-        refine,
-        dismiss,
-        toggleFavorite,
-        setManualImageUrl,
-        isSaving,
-        save,
-        startCooking
-    } = useRecipeResult()
+    const recipeResult = useRecipeResult()
 
-    if (!recipe) return null
+    if (!recipeResult.recipe) return null
 
     return (
         <div className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
-            <RecipeResultHero recipe={recipe}/>
-            <RecipeResultStats recipe={recipe}/>
-            {showsImageField(recipe.source) && !recipe.imageUrl && (
-                <RecipeImageUrlField
-                    imageUrl={recipe.imageUrl}
-                    onChange={setManualImageUrl}
-                />
-            )}
+            <RecipeResultHero recipe={recipeResult.recipe}/>
+            <RecipeResultStats recipe={recipeResult.recipe}/>
+            {showsImageField(recipeResult.recipe.source)
+                && !recipeResult.recipe.imageUrl && (
+                    <RecipeImageUrlField
+                        imageUrl={recipeResult.recipe.imageUrl}
+                        onChange={recipeResult.setManualImageUrl}
+                    />
+                )}
             <RecipeBodyGrid>
                 <RecipeIngredientsList
-                    ingredients={recipe.ingredients}
-                    usedReplacements={usedReplacements}
-                    onToggleReplacement={toggleReplacement}
-                    usedRemovals={usedRemovals}
-                    onToggleRemoval={toggleRemoval}
+                    ingredients={recipeResult.recipe.ingredients}
+                    usedReplacements={recipeResult.usedReplacements}
+                    onToggleReplacement={recipeResult.toggleReplacement}
+                    usedRemovals={recipeResult.usedRemovals}
+                    onToggleRemoval={recipeResult.toggleRemoval}
                 />
-                <RecipeStepsList steps={recipe.steps}/>
+                <RecipeStepsList steps={recipeResult.recipe.steps}/>
             </RecipeBodyGrid>
             <RecipeRefineInput
-                value={refineInstruction}
-                onChange={setRefineInstruction}
-                onSubmit={refine}
-                isRefining={isRefining}
+                value={recipeResult.refineInstruction}
+                onChange={recipeResult.setRefineInstruction}
+                onSubmit={recipeResult.refine}
+                isRefining={recipeResult.isRefining}
             />
             <RecipeResultActions
-                recipe={recipe}
-                isSaved={savedRecipeId !== null}
-                isSaving={isSaving}
-                onToggleFavorite={toggleFavorite}
-                onSave={() => save()}
-                onStartCooking={startCooking}
+                recipe={recipeResult.recipe}
+                isSaved={recipeResult.savedRecipeId !== null}
+                isSaving={recipeResult.isSaving}
+                onToggleFavorite={recipeResult.toggleFavorite}
+                onSave={() => recipeResult.save()}
+                onStartCooking={recipeResult.startCooking}
             />
-            {savedRecipeId === null && <RecipeDraftDismissButton onDismiss={dismiss}/>}
+            {recipeResult.savedRecipeId === null && <RecipeDraftDismissButton onDismiss={recipeResult.dismiss}/>}
         </div>
     )
 }

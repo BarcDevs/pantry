@@ -30,15 +30,7 @@ export const useRecipeResult = () => {
 
     const [recipe, setRecipe] = useState<RecipeDoc | null>(null)
     const [savedRecipeId, setSavedRecipeId] = useState<string | null>(null)
-    const {
-        instruction: refineInstruction,
-        setInstruction: setRefineInstruction,
-        usedReplacements,
-        toggleReplacement,
-        usedRemovals,
-        toggleRemoval,
-        reset: resetAdjustments
-    } = useRecipeAdjustments()
+    const adjustments = useRecipeAdjustments()
     const [isRefining, startRefining] = useTransition()
     const [isSaving, startSaving] = useTransition()
     const refreshPantryStatus = useRefreshPantryStatus(setRecipe)
@@ -70,16 +62,16 @@ export const useRecipeResult = () => {
     }
 
     const refine = () => {
-        if (!recipe || !refineInstruction.trim()) return
+        if (!recipe || !adjustments.instruction.trim()) return
 
         startRefining(async () => {
             try {
                 const refined = await refineRecipe({
                     recipe,
-                    instruction: refineInstruction.trim()
+                    instruction: adjustments.instruction.trim()
                 })
                 commitRecipe(refined)
-                resetAdjustments()
+                adjustments.reset()
             } catch (error) {
                 console.error(error)
                 toast.error(recipesTexts.result.refineError)
@@ -125,12 +117,12 @@ export const useRecipeResult = () => {
     return {
         recipe,
         savedRecipeId,
-        refineInstruction,
-        setRefineInstruction,
-        usedReplacements,
-        toggleReplacement,
-        usedRemovals,
-        toggleRemoval,
+        refineInstruction: adjustments.instruction,
+        setRefineInstruction: adjustments.setInstruction,
+        usedReplacements: adjustments.usedReplacements,
+        toggleReplacement: adjustments.toggleReplacement,
+        usedRemovals: adjustments.usedRemovals,
+        toggleRemoval: adjustments.toggleRemoval,
         isRefining,
         refine,
         dismiss,

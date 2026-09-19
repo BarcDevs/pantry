@@ -24,51 +24,36 @@ type GenerateConfigFormProps = {
 export const GenerateConfigForm = ({
     dietaryPreferences
 }: GenerateConfigFormProps) => {
-    const {
-        form,
-        pantryItems,
-        isLoadingPantry,
-        selectedItemIds,
-        toggleItem,
-        toggleAllItems,
-        isPantrySheetOpen,
-        setIsPantrySheetOpen,
-        isSparsePantry,
-        isExpiredGateOpen,
-        expiredSelectedItems,
-        removeExpiredFromSelection,
-        acknowledgeExpired,
-        isSubmitting,
-        submit
-    } = useGenerateRecipeForm()
+    const generateRecipe = useGenerateRecipeForm()
 
     const texts = recipesTexts.generate
-    const scope = form.watch('scope')
+    const scope = generateRecipe.form.watch('scope')
 
     return (
-        <Form {...form}>
+        <Form {...generateRecipe.form}>
             <form
-                onSubmit={submit}
+                onSubmit={generateRecipe.submit}
                 className={'flex flex-col gap-4'}
             >
-                <GenerateConfigFields control={form.control}/>
+                <GenerateConfigFields control={generateRecipe.form.control}/>
                 <PantrySelectionSummary
-                    selectedCount={selectedItemIds.length}
-                    totalCount={pantryItems.length}
-                    onEdit={() => setIsPantrySheetOpen(true)}
+                    selectedCount={generateRecipe.selectedItemIds.length}
+                    totalCount={generateRecipe.pantryItems.length}
+                    onEdit={() => generateRecipe.setIsPantrySheetOpen(true)}
                 />
-                {isSparsePantry && scope !== 'open' && <SparsePantryWarning/>}
-                {isExpiredGateOpen && (
+                {generateRecipe.isSparsePantry && scope !== 'open'
+                    && <SparsePantryWarning/>}
+                {generateRecipe.isExpiredGateOpen && (
                     <ExpiredItemsGate
-                        expiredItems={expiredSelectedItems}
-                        onRemoveExpired={removeExpiredFromSelection}
-                        onContinueAnyway={acknowledgeExpired}
+                        expiredItems={generateRecipe.expiredSelectedItems}
+                        onRemoveExpired={generateRecipe.removeExpiredFromSelection}
+                        onContinueAnyway={generateRecipe.acknowledgeExpired}
                     />
                 )}
-                <GenerateSourceGroup control={form.control}/>
+                <GenerateSourceGroup control={generateRecipe.form.control}/>
                 <GenerateDietarySummary dietaryPreferences={dietaryPreferences}/>
                 <FormInputField
-                    control={form.control}
+                    control={generateRecipe.form.control}
                     name={'customInstructions'}
                     label={texts.customInstructionsLabel}
                     render={(field) => (
@@ -82,21 +67,23 @@ export const GenerateConfigForm = ({
                         />
                     )}
                 />
-                <FormError errors={form.formState.errors}/>
+                <FormError errors={generateRecipe.form.formState.errors}/>
                 <PrimaryButton
                     type={'submit'}
-                    disabled={isSubmitting || isExpiredGateOpen || isLoadingPantry}
+                    disabled={generateRecipe.isSubmitting
+                        || generateRecipe.isExpiredGateOpen
+                        || generateRecipe.isLoadingPantry}
                     className={'w-full'}
                 >
-                    {isSubmitting ? texts.submitting : texts.submit}
+                    {generateRecipe.isSubmitting ? texts.submitting : texts.submit}
                 </PrimaryButton>
                 <PantrySelectSheet
-                    open={isPantrySheetOpen}
-                    onOpenChange={setIsPantrySheetOpen}
-                    items={pantryItems}
-                    selectedItemIds={selectedItemIds}
-                    onToggleItem={toggleItem}
-                    onToggleAll={toggleAllItems}
+                    open={generateRecipe.isPantrySheetOpen}
+                    onOpenChange={generateRecipe.setIsPantrySheetOpen}
+                    items={generateRecipe.pantryItems}
+                    selectedItemIds={generateRecipe.selectedItemIds}
+                    onToggleItem={generateRecipe.toggleItem}
+                    onToggleAll={generateRecipe.toggleAllItems}
                 />
             </form>
         </Form>

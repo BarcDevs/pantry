@@ -18,14 +18,7 @@ export const DeductView = ({
     recipe,
     pantryItems
 }: DeductViewProps) => {
-    const {
-        rows,
-        adjustUsed,
-        setChoice,
-        isSubmitting,
-        confirmDeduct,
-        skipDeduct
-    } = useDeductRecipe(
+    const deductRecipe = useDeductRecipe(
         recipe._id,
         recipe.ingredients,
         pantryItems
@@ -35,16 +28,16 @@ export const DeductView = ({
         <div className={'mx-auto max-w-screen-sm px-4 py-8'}>
             <DeductHeader/>
             <DeductRowsList
-                rows={rows}
-                onMinus={(id) => adjustUsed(id, -1)}
-                onPlus={(id) => adjustUsed(id, 1)}
-                onKeep={(id) => setChoice(id, 'keep')}
-                onDelete={(id) => setChoice(id, 'delete')}
+                rows={deductRecipe.rows}
+                onMinus={(id) => deductRecipe.adjustUsed(id, -1)}
+                onPlus={(id) => deductRecipe.adjustUsed(id, 1)}
+                onKeep={(id) => deductRecipe.setChoice(id, 'keep')}
+                onDelete={(id) => deductRecipe.setChoice(id, 'delete')}
             />
             <DeductActions
-                isSubmitting={isSubmitting}
-                onConfirm={confirmDeduct}
-                onSkip={skipDeduct}
+                isSubmitting={deductRecipe.isSubmitting}
+                onConfirm={deductRecipe.confirmDeduct}
+                onSkip={deductRecipe.skipDeduct}
             />
         </div>
     )

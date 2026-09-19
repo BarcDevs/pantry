@@ -29,81 +29,65 @@ const showsImageField = (
     source: (typeof RECIPE_SOURCES)[number]
 ): boolean => source !== 'imported_url'
 
-export const RecipeDetailView = ({ recipe: initialRecipe }: RecipeDetailViewProps) => {
-    const {
-        recipe,
-        toggleFavorite,
-        updateTags,
-        updateImageUrl,
-        startCooking,
-        confirmDelete,
-        setConfirmDelete,
-        isDeleting,
-        handleDelete
-    } = useRecipeDetail(initialRecipe)
+export const RecipeDetailView = ({
+    recipe: initialRecipe
+}: RecipeDetailViewProps) => {
+    const recipeDetail = useRecipeDetail(initialRecipe)
 
-    const {
-        instruction: adjustInstruction,
-        setInstruction: setAdjustInstruction,
-        usedReplacements,
-        toggleReplacement,
-        usedRemovals,
-        toggleRemoval,
-        isBranching,
-        branch
-    } = useRecipeBranch(recipe)
+    const recipeBranch = useRecipeBranch(recipeDetail.recipe)
 
     return (
         <div className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
             <PageHeader/>
-            <RecipeResultHero recipe={recipe}/>
-            <RecipeResultStats recipe={recipe}/>
-            {showsImageField(recipe.source) && !recipe.imageUrl && (
-                <RecipeImageUrlField
-                    imageUrl={recipe.imageUrl}
-                    onChange={updateImageUrl}
-                />
-            )}
+            <RecipeResultHero recipe={recipeDetail.recipe}/>
+            <RecipeResultStats recipe={recipeDetail.recipe}/>
+            {showsImageField(recipeDetail.recipe.source)
+                && !recipeDetail.recipe.imageUrl && (
+                    <RecipeImageUrlField
+                        imageUrl={recipeDetail.recipe.imageUrl}
+                        onChange={recipeDetail.updateImageUrl}
+                    />
+                )}
             <RecipeBodyGrid>
                 <RecipeIngredientsList
-                    ingredients={recipe.ingredients}
-                    usedReplacements={usedReplacements}
-                    onToggleReplacement={toggleReplacement}
-                    usedRemovals={usedRemovals}
-                    onToggleRemoval={toggleRemoval}
+                    ingredients={recipeDetail.recipe.ingredients}
+                    usedReplacements={recipeBranch.usedReplacements}
+                    onToggleReplacement={recipeBranch.toggleReplacement}
+                    usedRemovals={recipeBranch.usedRemovals}
+                    onToggleRemoval={recipeBranch.toggleRemoval}
                 />
-                <RecipeStepsList steps={recipe.steps}/>
+                <RecipeStepsList steps={recipeDetail.recipe.steps}/>
             </RecipeBodyGrid>
             <RecipeRefineInput
-                value={adjustInstruction}
-                onChange={setAdjustInstruction}
-                onSubmit={branch}
-                isRefining={isBranching}
+                value={recipeBranch.instruction}
+                onChange={recipeBranch.setInstruction}
+                onSubmit={recipeBranch.branch}
+                isRefining={recipeBranch.isBranching}
                 label={recipesTexts.detail.adjustLabel}
                 placeholder={recipesTexts.detail.adjustPlaceholder}
                 submitLabel={recipesTexts.detail.adjustSubmit}
                 loadingLabel={recipesTexts.detail.adjusting}
             />
             <RecipeRatingDisplay
-                rating={recipe.rating}
-                cookCount={recipe.history.length}
+                rating={recipeDetail.recipe.rating}
+                cookCount={recipeDetail.recipe.history.length}
             />
             <RecipeTagsEditor
-                tags={recipe.tags}
-                onChange={updateTags}
+                tags={recipeDetail.recipe.tags}
+                onChange={recipeDetail.updateTags}
             />
             <RecipeDetailActions
-                recipe={recipe}
-                onToggleFavorite={toggleFavorite}
-                onStartCooking={startCooking}
-                onRequestDelete={() => setConfirmDelete(true)}
+                recipe={recipeDetail.recipe}
+                onToggleFavorite={recipeDetail.toggleFavorite}
+                onStartCooking={recipeDetail.startCooking}
+                onRequestDelete={() => recipeDetail.setConfirmDelete(true)}
             />
             <DeleteRecipeDialog
-                open={confirmDelete}
-                onOpenChange={setConfirmDelete}
-                onConfirm={handleDelete}
-                isDeleting={isDeleting}
-                recipeName={recipe.title}
+                open={recipeDetail.confirmDelete}
+                onOpenChange={recipeDetail.setConfirmDelete}
+                onConfirm={recipeDetail.handleDelete}
+                isDeleting={recipeDetail.isDeleting}
+                recipeName={recipeDetail.recipe.title}
             />
         </div>
     )

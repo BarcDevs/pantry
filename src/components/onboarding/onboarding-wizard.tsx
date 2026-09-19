@@ -13,56 +13,43 @@ import { ONBOARDING_STEP_COUNT } from '@/constants/onboarding'
 import { onboardingTexts } from '@/constants/texts/onboarding'
 
 export const OnboardingWizard = () => {
-    const {
-        step,
-        isLastStep,
-        isSubmitting,
-        advance,
-        goBack,
-        skipAll,
-        cookingLevel,
-        setCookingLevel,
-        dietaryPreferences,
-        setDietaryPreferences,
-        householdSize,
-        setHouseholdSize
-    } = useOnboardingWizard()
+    const onboarding = useOnboardingWizard()
 
     return (
         <div className={'flex min-h-screen flex-col bg-canvas'}>
-            <OnboardingHeader onSkipAll={skipAll}/>
+            <OnboardingHeader onSkipAll={onboarding.skipAll}/>
             <OnboardingProgress
-                step={step}
+                step={onboarding.step}
                 stepCount={ONBOARDING_STEP_COUNT}
-                stepLabel={onboardingTexts.stepLabels[step]}
+                stepLabel={onboardingTexts.stepLabels[onboarding.step]}
             />
             <div className={'mx-auto flex w-full max-w-140 flex-1 flex-col justify-center gap-6 px-6 py-8'}>
-                {step === 0 && (
+                {onboarding.step === 0 && (
                     <StepCookingLevel
-                        value={cookingLevel}
-                        onChange={setCookingLevel}
+                        value={onboarding.cookingLevel}
+                        onChange={onboarding.setCookingLevel}
                     />
                 )}
-                {step === 1 && (
+                {onboarding.step === 1 && (
                     <StepDietaryPreferences
-                        value={dietaryPreferences}
-                        onChange={setDietaryPreferences}
+                        value={onboarding.dietaryPreferences}
+                        onChange={onboarding.setDietaryPreferences}
                     />
                 )}
-                {step === 2 && (
+                {onboarding.step === 2 && (
                     <StepHouseholdSize
-                        value={householdSize}
-                        onChange={setHouseholdSize}
+                        value={onboarding.householdSize}
+                        onChange={onboarding.setHouseholdSize}
                     />
                 )}
             </div>
             <OnboardingFooter
-                isLastStep={isLastStep}
-                showBack={step > 0}
-                disabled={isSubmitting}
-                onBack={goBack}
-                onSkip={advance}
-                onNext={advance}
+                isLastStep={onboarding.isLastStep}
+                showBack={onboarding.step > 0}
+                disabled={onboarding.isSubmitting}
+                onBack={onboarding.goBack}
+                onSkip={onboarding.advance}
+                onNext={onboarding.advance}
             />
         </div>
     )
