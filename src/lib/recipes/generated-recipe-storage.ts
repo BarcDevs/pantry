@@ -1,21 +1,7 @@
-import type { RecipeDoc } from '@/types/recipe'
+import { createRecipeDraftStorage } from '@/lib/recipes/recipe-draft-storage'
 
-const storageKey = 'pantry:generated-recipe'
+const storage = createRecipeDraftStorage('pantry:generated-recipe')
 
-export const saveGeneratedRecipe = (recipe: RecipeDoc): void => {
-    sessionStorage.setItem(storageKey, JSON.stringify(recipe))
-}
-
-export const readGeneratedRecipe = (): RecipeDoc | null => {
-    const raw = sessionStorage.getItem(storageKey)
-    if (!raw) return null
-    try {
-        return JSON.parse(raw) as RecipeDoc
-    } catch {
-        return null
-    }
-}
-
-export const clearGeneratedRecipe = (): void => {
-    sessionStorage.removeItem(storageKey)
-}
+export const saveGeneratedRecipe = storage.save
+export const readGeneratedRecipe = storage.read
+export const clearGeneratedRecipe = storage.clear

@@ -5,6 +5,17 @@ export const routes = {
     forgotPassword: '/forgot-password',
     pantry: '/pantry',
     add: '/add',
+    addItemPrefilled: (
+        name: string,
+        quantity: number,
+        unit: string,
+        returnTo?: string
+    ) => `/add?${new URLSearchParams({
+        name,
+        quantity: String(quantity),
+        unit,
+        ...(returnTo ? { returnTo } : {})
+    })}`,
     addReceipt: '/add/receipt',
     addPaste: '/add/paste',
     generate: '/generate',

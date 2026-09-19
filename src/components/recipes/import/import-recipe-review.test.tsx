@@ -14,6 +14,12 @@ jest.mock('@/components/recipes/result/recipe-result-hero', () => ({
 jest.mock('@/components/recipes/result/recipe-ingredients-list', () => ({
     RecipeIngredientsList: () => null
 }))
+jest.mock('@/components/recipes/result/recipe-draft-dismiss-button', () => ({
+    RecipeDraftDismissButton: () => null
+}))
+jest.mock('@/components/recipes/result/recipe-refine-input', () => ({
+    RecipeRefineInput: () => null
+}))
 jest.mock('@/components/recipes/result/recipe-steps-list', () => ({
     RecipeStepsList: () => null
 }))
@@ -32,6 +38,10 @@ const renderReview = (isSaving: boolean) => {
             isSaving={isSaving}
             onTitleChange={jest.fn()}
             onSave={onSave}
+            adjustments={{} as never}
+            isRefining={false}
+            onRefine={jest.fn()}
+            onDismiss={jest.fn()}
         />
     )
     return onSave

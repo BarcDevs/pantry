@@ -11,9 +11,15 @@ import { Form } from '@/components/ui/form'
 
 import { useAddItemForm } from '@/hooks/use-add-item-form'
 
+import type { AddItemPrefill } from '@/lib/pantry/parse-add-item-prefill'
+
 import { pantryTexts } from '@/constants/texts/pantry'
 
-export const AddItemForm = () => {
+type AddItemFormProps = {
+    prefill?: AddItemPrefill
+}
+
+export const AddItemForm = ({ prefill }: AddItemFormProps) => {
     const {
         form,
         suggestion,
@@ -32,7 +38,7 @@ export const AddItemForm = () => {
         applySuggestedExpiry,
         selectPendingType,
         skipPendingType
-    } = useAddItemForm()
+    } = useAddItemForm(prefill)
 
     const currentStorage = form.watch('storage')
     const currentType = form.watch('type')

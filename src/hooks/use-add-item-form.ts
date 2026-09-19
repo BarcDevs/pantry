@@ -28,6 +28,7 @@ import { useResetOnChange }
 
 import { applySuggestedExpiry }
     from '@/lib/pantry/apply-suggested-expiry'
+import type { AddItemPrefill } from '@/lib/pantry/parse-add-item-prefill'
 
 import { routes }
     from '@/constants/routes'
@@ -51,17 +52,17 @@ type DuplicateOutcome = Extract<
 const nameDebounceMs = 500
 const minNameLengthForSuggestion = 2
 
-export const useAddItemForm = () => {
+export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     const router = useRouter()
 
     const form = useForm<AddItemFormValues>({
         resolver: zodResolver(addItemFormSchema),
         defaultValues: {
-            name: '',
+            name: prefill.name ?? '',
             storage: StorageLocation.Fridge,
             type: null,
-            quantity: 1,
-            unit: PantryUnit.Units,
+            quantity: prefill.quantity ?? 1,
+            unit: prefill.unit ?? PantryUnit.Units,
             expiryDate: '',
             notes: ''
         }
@@ -174,7 +175,7 @@ export const useAddItemForm = () => {
                     return
                 }
                 toast.success(pantryTexts.addForm.saveSuccess)
-                router.push(routes.pantry)
+                router.push(prefill.returnTo ?? routes.pantry)
             } catch (error) {
                 console.error(error)
                 form.setError('root', {

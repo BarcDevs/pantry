@@ -11,10 +11,12 @@ import { toast } from 'sonner'
 import type { RecipeDoc } from '@/types/recipe'
 
 import { useRecipeAdjustments } from '@/hooks/use-recipe-adjustments'
+import { useRefreshPantryStatus } from '@/hooks/use-refresh-pantry-status'
 
 import {
     clearGeneratedRecipe,
-    readGeneratedRecipe
+    readGeneratedRecipe,
+    saveGeneratedRecipe
 } from '@/lib/recipes/generated-recipe-storage'
 
 import { routes } from '@/constants/routes'
@@ -39,6 +41,7 @@ export const useRecipeResult = () => {
     } = useRecipeAdjustments()
     const [isRefining, startRefining] = useTransition()
     const [isSaving, startSaving] = useTransition()
+    const refreshPantryStatus = useRefreshPantryStatus(setRecipe)
 
     useEffect(() => {
         const stored = readGeneratedRecipe()
@@ -48,13 +51,22 @@ export const useRecipeResult = () => {
         }
         // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration from sessionStorage, not derived from React state
         setRecipe(stored)
-    }, [router])
+        refreshPantryStatus(stored)
+    }, [router, refreshPantryStatus])
+
+    const commitRecipe = (next: RecipeDoc) => {
+        setRecipe(next)
+        setSavedRecipeId(null)
+        saveGeneratedRecipe(next)
+    }
 
     const updateRecipe = (changes: Partial<RecipeDoc>) => {
-        setRecipe((current) => (
-            current ? { ...current, ...changes } : current
-        ))
-        setSavedRecipeId(null)
+        if (recipe) commitRecipe({ ...recipe, ...changes })
+    }
+
+    const dismiss = () => {
+        clearGeneratedRecipe()
+        router.push(routes.generate)
     }
 
     const refine = () => {
@@ -66,8 +78,7 @@ export const useRecipeResult = () => {
                     recipe,
                     instruction: refineInstruction.trim()
                 })
-                setRecipe(refined)
-                setSavedRecipeId(null)
+                commitRecipe(refined)
                 resetAdjustments()
             } catch (error) {
                 console.error(error)
@@ -122,6 +133,7 @@ export const useRecipeResult = () => {
         toggleRemoval,
         isRefining,
         refine,
+        dismiss,
         toggleFavorite,
         setManualImageUrl,
         isSaving,

@@ -29,7 +29,11 @@ const ImportRecipePage = () => {
         importFromUrl,
         importFromText,
         setTitle,
-        save
+        save,
+        adjustments,
+        isRefining,
+        refine,
+        dismiss
     } = useRecipeImport()
 
     const isUrlTab = tab === 'url'
@@ -57,6 +61,10 @@ const ImportRecipePage = () => {
                         isSaving={isSaving}
                         onTitleChange={setTitle}
                         onSave={save}
+                        adjustments={adjustments}
+                        isRefining={isRefining}
+                        onRefine={refine}
+                        onDismiss={dismiss}
                     />
                 ) : (
                     <>

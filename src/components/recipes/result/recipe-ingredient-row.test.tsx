@@ -6,6 +6,10 @@ import {
 
 import { CookingUnit, FoodType } from '@/types/enums'
 
+jest.mock('next/navigation', () => ({
+    usePathname: () => '/generate/result'
+}))
+
 import { RecipeIngredientRow } from './recipe-ingredient-row'
 
 describe('RecipeIngredientRow', () => {
@@ -277,5 +281,83 @@ describe('RecipeIngredientRow', () => {
             />
         )
         expect(screen.queryByText('הסר מהמתכון')).not.toBeInTheDocument()
+    })
+
+    it('links a missing ingredient to the add-item form and back', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    label: 'עגבניות',
+                    name: 'עגבניות',
+                    category: FoodType.Vegetables,
+                    quantity: 2,
+                    unit: CookingUnit.Kg,
+                    inPantry: false
+                }}
+            />
+        )
+
+        const href = screen.getByRole('link', { name: 'הוסף למזווה' }).getAttribute('href')!
+        const params = new URLSearchParams(href.split('?')[1])
+
+        expect(href.startsWith('/add?')).toBe(true)
+        expect(params.get('name')).toBe('עגבניות')
+        expect(params.get('quantity')).toBe('2')
+        expect(params.get('unit')).toBe('kg')
+        expect(params.get('returnTo')).toBe('/generate/result')
+    })
+
+    it('shows no add link for an ingredient already in the pantry', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    label: 'עגבניות',
+                    name: 'עגבניות',
+                    category: FoodType.Vegetables,
+                    quantity: 2,
+                    unit: CookingUnit.Kg,
+                    inPantry: true
+                }}
+            />
+        )
+
+        expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    })
+
+    it('still offers the add link when a replacement is suggested', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    label: 'חלב',
+                    name: 'חלב',
+                    category: FoodType.Dairy,
+                    quantity: 1,
+                    unit: CookingUnit.L,
+                    inPantry: false,
+                    replacementName: 'חלב סויה'
+                }}
+            />
+        )
+
+        expect(screen.getByRole('link', { name: 'הוסף למזווה' })).toBeInTheDocument()
+    })
+
+    it('hides the add link while the replacement is in use', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    label: 'חלב',
+                    name: 'חלב',
+                    category: FoodType.Dairy,
+                    quantity: 1,
+                    unit: CookingUnit.L,
+                    inPantry: false,
+                    replacementName: 'חלב סויה'
+                }}
+                isReplacementAdded
+            />
+        )
+
+        expect(screen.queryByRole('link')).not.toBeInTheDocument()
     })
 })

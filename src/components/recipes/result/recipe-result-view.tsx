@@ -3,6 +3,7 @@
 import { RECIPE_SOURCES } from '@/types/enums'
 
 import { RecipeBodyGrid } from '@/components/recipes/result/recipe-body-grid'
+import { RecipeDraftDismissButton } from '@/components/recipes/result/recipe-draft-dismiss-button'
 import { RecipeImageUrlField } from '@/components/recipes/result/recipe-image-url-field'
 import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingredients-list'
 import { RecipeRefineInput } from '@/components/recipes/result/recipe-refine-input'
@@ -29,6 +30,7 @@ export const RecipeResultView = () => {
         toggleRemoval,
         isRefining,
         refine,
+        dismiss,
         toggleFavorite,
         setManualImageUrl,
         isSaving,
@@ -72,6 +74,7 @@ export const RecipeResultView = () => {
                 onSave={() => save()}
                 onStartCooking={startCooking}
             />
+            {savedRecipeId === null && <RecipeDraftDismissButton onDismiss={dismiss}/>}
         </div>
     )
 }
