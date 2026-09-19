@@ -28,7 +28,8 @@ export const aiIngredientSchema = z.object({
 export const ingredientSchema = aiIngredientSchema.extend({
     name: z.string(),
     inPantry: z.boolean(),
-    replacementName: z.string().optional()
+    replacementName: z.string().optional(),
+    replacementOptions: z.array(z.string()).optional()
 })
 
 export const stepSchema = z.object({

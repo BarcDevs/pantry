@@ -21,6 +21,8 @@ export type RecipeIngredient = {
     inPantry: boolean
     optional: boolean
     replacementName?: string
+    /** Every pantry item that can replace this ingredient, closest first - `replacementName` is the first. */
+    replacementOptions?: string[]
 }
 
 export type RecipeStep = {

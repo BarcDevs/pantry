@@ -30,6 +30,8 @@ export const RecipeResultView = () => {
                     ingredients={recipeResult.recipe.ingredients}
                     usedReplacements={recipeResult.adjustments.values.usedReplacements}
                     onToggleReplacement={recipeResult.adjustments.actions.toggleReplacement}
+                    chosenReplacements={recipeResult.adjustments.values.chosenReplacements}
+                    onChooseReplacement={recipeResult.adjustments.actions.chooseReplacement}
                     usedRemovals={recipeResult.adjustments.values.usedRemovals}
                     onToggleRemoval={recipeResult.adjustments.actions.toggleRemoval}
                 />

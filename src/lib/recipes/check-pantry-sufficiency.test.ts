@@ -3,6 +3,7 @@ import { FoodType } from '@/types/enums'
 import {
     findMatchingPantryItem,
     findRelatedPantryItem,
+    findRelatedPantryItems,
     hasEnoughPantryQuantity
 } from './check-pantry-sufficiency'
 
@@ -117,5 +118,43 @@ describe('hasEnoughPantryQuantity', () => {
     it('supports range quantities by using the upper bound', () => {
         expect(hasEnoughPantryQuantity('8-10', 'units', 9, 'units')).toBe(false)
         expect(hasEnoughPantryQuantity('8-10', 'units', 10, 'units')).toBe(true)
+    })
+})
+
+describe('findRelatedPantryItems', () => {
+    it('lists every replacement with the closest semantic match first', () => {
+        const items = [
+            { name: 'חלב שקדים בטעם וניל', type: FoodType.Dairy },
+            { name: 'חלב סויה', type: FoodType.Dairy },
+            { name: 'שמן זית', type: FoodType.Condiments }
+        ]
+
+        expect(findRelatedPantryItems('חלב', FoodType.Dairy, items).map((item) => item.name))
+            .toEqual(['חלב סויה', 'חלב שקדים בטעם וניל'])
+    })
+
+    it('ranks a color-only variant above a bare generic match', () => {
+        const items = [
+            { name: 'פלפל', type: FoodType.Vegetables },
+            { name: 'פלפל ירוק', type: FoodType.Vegetables }
+        ]
+
+        expect(findRelatedPantryItems('פלפל אדום', FoodType.Vegetables, items).map((item) => item.name))
+            .toEqual(['פלפל ירוק', 'פלפל'])
+    })
+
+    it('keeps pantry order when matches are equally close', () => {
+        const items = [
+            { name: 'חלב אורז', type: FoodType.Dairy },
+            { name: 'חלב סויה', type: FoodType.Dairy }
+        ]
+
+        expect(findRelatedPantryItems('חלב', FoodType.Dairy, items).map((item) => item.name))
+            .toEqual(['חלב אורז', 'חלב סויה'])
+    })
+
+    it('returns an empty list when nothing is related', () => {
+        expect(findRelatedPantryItems('סוכר', FoodType.Condiments, [{ name: 'קמח', type: FoodType.Grains }]))
+            .toEqual([])
     })
 })

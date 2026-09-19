@@ -179,4 +179,52 @@ describe('resolveIngredientPantryStatus', () => {
         expect(result.name).toBe('בצל')
         expect(result.inPantry).toBe(true)
     })
+
+    it('exposes every replacement, closest first, with the first as the default', () => {
+        const [result] = resolveIngredientPantryStatus(
+            [{
+                label: 'חלב',
+                category: FoodType.Dairy,
+                quantity: 1,
+                unit: CookingUnit.L
+            }],
+            [
+                {
+                    name: 'חלב שקדים בטעם וניל',
+                    type: FoodType.Dairy,
+                    quantity: 1,
+                    unit: PantryUnit.L
+                },
+                {
+                    name: 'חלב סויה',
+                    type: FoodType.Dairy,
+                    quantity: 1,
+                    unit: PantryUnit.L
+                }
+            ]
+        )
+
+        expect(result.replacementOptions).toEqual(['חלב סויה', 'חלב שקדים בטעם וניל'])
+        expect(result.replacementName).toBe('חלב סויה')
+    })
+
+    it('has no replacement options for an ingredient already in the pantry', () => {
+        const [result] = resolveIngredientPantryStatus(
+            [{
+                label: 'חלב',
+                category: FoodType.Dairy,
+                quantity: 1,
+                unit: CookingUnit.L
+            }],
+            [{
+                name: 'חלב',
+                type: FoodType.Dairy,
+                quantity: 2,
+                unit: PantryUnit.L
+            }]
+        )
+
+        expect(result.replacementOptions).toEqual([])
+        expect(result.replacementName).toBeUndefined()
+    })
 })

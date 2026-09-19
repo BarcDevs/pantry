@@ -363,4 +363,44 @@ describe('RecipeIngredientRow', () => {
 
         expect(screen.queryByRole('link')).not.toBeInTheDocument()
     })
+
+    const milk = {
+        label: 'חלב',
+        name: 'חלב',
+        category: FoodType.Dairy,
+        quantity: 1,
+        unit: CookingUnit.L,
+        inPantry: false,
+        optional: false,
+        replacementName: 'חלב סויה'
+    }
+
+    it('turns the replacement label into a picker when there are several options', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    ...milk,
+                    replacementOptions: ['חלב סויה', 'חלב אורז']
+                }}
+                onChooseReplacement={jest.fn()}
+            />
+        )
+
+        expect(screen.getByRole('combobox', { name: 'בחירת תחליף' })).toHaveTextContent('תחליף זמין: חלב סויה')
+    })
+
+    it('keeps a plain label when there is a single option', () => {
+        render(
+            <RecipeIngredientRow
+                ingredient={{
+                    ...milk,
+                    replacementOptions: ['חלב סויה']
+                }}
+                onChooseReplacement={jest.fn()}
+            />
+        )
+
+        expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+        expect(screen.getByText('תחליף זמין: חלב סויה')).toBeInTheDocument()
+    })
 })

@@ -5,12 +5,14 @@ import { recipesTexts } from '@/constants/texts/recipes'
 type AdjustmentValues = {
     instruction: string
     usedReplacements: Record<string, boolean>
+    chosenReplacements: Record<string, string>
     usedRemovals: Record<string, boolean>
 }
 
 const initialValues: AdjustmentValues = {
     instruction: '',
     usedReplacements: {},
+    chosenReplacements: {},
     usedRemovals: {}
 }
 
@@ -57,6 +59,34 @@ export const useRecipeAdjustments = () => {
         }))
     }
 
+    const chooseReplacement = (
+        ingredientName: string,
+        ingredientLabel: string,
+        currentName: string,
+        chosenName: string
+    ) => setValues((current) => {
+        const swapped = current.usedReplacements[ingredientName]
+            ? toggleInstructionLine(
+                toggleInstructionLine(
+                    current.instruction,
+                    recipesTexts.result.replacementAdjustmentLine(currentName, ingredientLabel),
+                    true
+                ),
+                recipesTexts.result.replacementAdjustmentLine(chosenName, ingredientLabel),
+                false
+            )
+            : current.instruction
+
+        return {
+            ...current,
+            chosenReplacements: {
+                ...current.chosenReplacements,
+                [ingredientName]: chosenName
+            },
+            instruction: swapped
+        }
+    })
+
     const toggleRemoval = (ingredientName: string, ingredientLabel: string) => {
         const isOn = values.usedRemovals[ingredientName]
         const line = recipesTexts.result.removalAdjustmentLine(ingredientLabel)
@@ -82,6 +112,7 @@ export const useRecipeAdjustments = () => {
         setField,
         actions: {
             toggleReplacement,
+            chooseReplacement,
             toggleRemoval,
             reset
         }

@@ -58,6 +58,8 @@ export const ImportRecipeReview = ({
                 ingredients={recipe.ingredients}
                 usedReplacements={adjustments.values.usedReplacements}
                 onToggleReplacement={adjustments.actions.toggleReplacement}
+                chosenReplacements={adjustments.values.chosenReplacements}
+                onChooseReplacement={adjustments.actions.chooseReplacement}
                 usedRemovals={adjustments.values.usedRemovals}
                 onToggleRemoval={adjustments.actions.toggleRemoval}
             />

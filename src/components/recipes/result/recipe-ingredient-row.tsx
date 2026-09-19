@@ -3,6 +3,7 @@ import { usePathname } from 'next/navigation'
 import type { RecipeIngredient } from '@/types/recipe'
 
 import { RecipeAddToPantryButton } from '@/components/recipes/result/recipe-add-to-pantry-button'
+import { ReplacementPicker } from '@/components/recipes/result/replacement-picker'
 import { ToggleTextButton } from '@/components/shared/buttons/ToggleTextButton'
 
 import { formatQuantity } from '@/lib/recipes/format-quantity'
@@ -15,6 +16,7 @@ type RecipeIngredientRowProps = {
     ingredient: RecipeIngredient
     isReplacementAdded?: boolean
     onToggleReplacement?: () => void
+    onChooseReplacement?: (replacementName: string) => void
     isRemovalAdded?: boolean
     onToggleRemoval?: () => void
 }
@@ -23,6 +25,7 @@ export const RecipeIngredientRow = ({
     ingredient,
     isReplacementAdded = false,
     onToggleReplacement,
+    onChooseReplacement,
     isRemovalAdded = false,
     onToggleRemoval
 }: RecipeIngredientRowProps) => {
@@ -30,6 +33,23 @@ export const RecipeIngredientRow = ({
     const hasReplacement = !ingredient.inPantry && !!ingredient.replacementName
     const isUsingReplacement = hasReplacement && isReplacementAdded
     const canAddToPantry = !ingredient.inPantry && !isUsingReplacement && !isRemovalAdded
+    const canPickReplacement = hasReplacement
+        && !isRemovalAdded
+        && !!onChooseReplacement
+        && (ingredient.replacementOptions?.length ?? 0) > 1
+    const statusLabel = isUsingReplacement
+        ? recipesTexts.result.ingredientUsingReplacementLabel(ingredient.replacementName!)
+        : isRemovalAdded
+            ? recipesTexts.result.ingredientRemovedLabel
+            : ingredient.replacementName
+                ? recipesTexts.result.ingredientReplacementLabel(ingredient.replacementName)
+                : recipesTexts.result.ingredientMissingLabel
+    const statusClassName = cn(
+        isUsingReplacement && 'text-green',
+        !isUsingReplacement && isRemovalAdded && 'text-ink-3',
+        !isUsingReplacement && !isRemovalAdded && hasReplacement && 'text-status-amber-fg',
+        !isUsingReplacement && !isRemovalAdded && !hasReplacement && 'text-status-red-fg'
+    )
 
     return (
         <div className={'border-b border-border-3 py-2.75 last:border-b-0'}>
@@ -59,23 +79,21 @@ export const RecipeIngredientRow = ({
                     </span>
                 </span>
                 {(!ingredient.inPantry || isRemovalAdded) && (
-                    <span
-                        className={cn(
-                            'text-caption font-bold',
-                            isUsingReplacement && 'text-green',
-                            !isUsingReplacement && isRemovalAdded && 'text-ink-3',
-                            !isUsingReplacement && !isRemovalAdded && hasReplacement && 'text-status-amber-fg',
-                            !isUsingReplacement && !isRemovalAdded && !hasReplacement && 'text-status-red-fg'
-                        )}
-                    >
-                        {isUsingReplacement
-                            ? recipesTexts.result.ingredientUsingReplacementLabel(ingredient.replacementName!)
-                            : isRemovalAdded
-                                ? recipesTexts.result.ingredientRemovedLabel
-                                : ingredient.replacementName
-                                    ? recipesTexts.result.ingredientReplacementLabel(ingredient.replacementName)
-                                    : recipesTexts.result.ingredientMissingLabel}
-                    </span>
+                    canPickReplacement
+                        ? (
+                            <ReplacementPicker
+                                value={ingredient.replacementName!}
+                                options={ingredient.replacementOptions!}
+                                label={statusLabel}
+                                onChange={onChooseReplacement!}
+                                className={statusClassName}
+                            />
+                        )
+                        : (
+                            <span className={cn('text-caption font-bold', statusClassName)}>
+                                {statusLabel}
+                            </span>
+                        )
                 )}
                 {ingredient.optional && (
                     <span className={'rounded-full bg-border-3 px-2 py-0.5 text-caption text-ink-3'}>

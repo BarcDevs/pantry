@@ -116,4 +116,31 @@ describe('useRecipeAdjustments', () => {
 
         expect(result.current.values.usedRemovals).toEqual({})
     })
+
+    it('remembers the chosen replacement without touching the prompt while it is not in use', () => {
+        const { result } = renderHook(() => useRecipeAdjustments())
+
+        act(() => {
+            result.current.actions.chooseReplacement('חלב', 'חלב', 'חלב סויה', 'חלב אורז')
+        })
+
+        expect(result.current.values.chosenReplacements['חלב']).toBe('חלב אורז')
+        expect(result.current.values.instruction).toBe('')
+    })
+
+    it('swaps the prompt line when the replacement changes while it is in use', () => {
+        const { result } = renderHook(() => useRecipeAdjustments())
+
+        act(() => {
+            result.current.setField('instruction', 'בלי בצל')
+        })
+        act(() => {
+            result.current.actions.toggleReplacement('חלב', 'חלב', 'חלב סויה')
+        })
+        act(() => {
+            result.current.actions.chooseReplacement('חלב', 'חלב', 'חלב סויה', 'חלב אורז')
+        })
+
+        expect(result.current.values.instruction).toBe('בלי בצל, להשתמש בחלב אורז במקום חלב')
+    })
 })

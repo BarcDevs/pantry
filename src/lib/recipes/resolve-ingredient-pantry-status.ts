@@ -7,7 +7,7 @@ import type {
 import { isAlwaysAvailableIngredient } from '@/lib/recipes/always-available-ingredients'
 import {
     findMatchingPantryItem,
-    findRelatedPantryItem,
+    findRelatedPantryItems,
     hasEnoughPantryQuantity
 } from '@/lib/recipes/check-pantry-sufficiency'
 import { deriveIngredientName } from '@/lib/recipes/derive-ingredient-name'
@@ -35,6 +35,7 @@ export const resolveIngredientPantryStatus = <T extends MinimalIngredient>(
     name: string
     inPantry: boolean
     replacementName?: string
+    replacementOptions: string[]
 }> => (
     ingredients.map((ingredient) => {
         // `name` is never trusted from storage or the AI - always re-derived live from the
@@ -48,19 +49,20 @@ export const resolveIngredientPantryStatus = <T extends MinimalIngredient>(
                 matchedItem.quantity,
                 matchedItem.unit
             ))
-        const replacementItem = !inPantry
-            ? findRelatedPantryItem(
+        const replacementItems = !inPantry
+            ? findRelatedPantryItems(
                 name,
                 ingredient.category,
                 pantryItems
             )
-            : undefined
+            : []
 
         return {
             ...ingredient,
             name,
             inPantry,
-            replacementName: replacementItem?.name
+            replacementName: replacementItems[0]?.name,
+            replacementOptions: replacementItems.map((item) => item.name)
         }
     })
 )

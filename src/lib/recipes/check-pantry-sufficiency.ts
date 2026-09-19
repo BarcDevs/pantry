@@ -55,22 +55,44 @@ const sameWordSet = (words: string[], otherWords: string[]): boolean => (
     && wordsCoveredBy(otherWords, words)
 )
 
-export const findRelatedPantryItem = <T extends { name: string, type: FoodType | null }>(
+const colorOnlyBonus = 0.25
+
+type RelatedCandidate<T> = {
+    item: T
+    score: number
+    lengthGap: number
+}
+
+const closeness = (words: string[], otherWords: string[]): number => {
+    const sharedCount = words.filter(
+        (word) => otherWords.some((otherWord) => wordsRelate(word, otherWord))
+    ).length
+    return sharedCount / Math.max(words.length, otherWords.length) || 1
+}
+
+/**
+ * Every pantry item that can stand in for the ingredient, closest match first: the
+ * more words two names share, the closer they are (a color-only variant like green vs
+ * red pepper gets a small bonus), then the smaller name-length gap wins, then pantry
+ * order. The first entry is the default suggestion; the rest are alternatives.
+ */
+export const findRelatedPantryItems = <T extends { name: string, type: FoodType | null }>(
     ingredientName: string,
     ingredientCategory: FoodType | undefined,
     pantryItems: T[]
-): T | undefined => {
+): T[] => {
     const normalizedIngredient = normalizeItemName(ingredientName)
     const ingredientWords = nameWords(ingredientName)
     const ingredientCoreWords = nameWordsForMatching(ingredientName)
+    const candidates: Array<RelatedCandidate<T>> = []
 
-    return pantryItems.find((item) => {
+    pantryItems.forEach((item) => {
         if (
             ingredientCategory !== undefined
             && item.type !== null
             && item.type !== ingredientCategory
-        ) return false
-        if (normalizeItemName(item.name) === normalizedIngredient) return false
+        ) return
+        if (normalizeItemName(item.name) === normalizedIngredient) return
 
         const itemWords = nameWords(item.name)
         // Color-only differences (green pepper / red pepper) are interchangeable -
@@ -78,11 +100,32 @@ export const findRelatedPantryItem = <T extends { name: string, type: FoodType |
         // separately from the general coverage check below (which must run on the
         // full, un-stripped words - otherwise "black pepper" reduces to the same
         // bare "pepper" as "red pepper" and would wrongly match it too).
-        if (sameWordSet(ingredientCoreWords, nameWordsForMatching(item.name))) return true
+        const isColorOnlyMatch = sameWordSet(ingredientCoreWords, nameWordsForMatching(item.name))
+        const isCovered = wordsCoveredBy(ingredientWords, itemWords)
+            || wordsCoveredBy(itemWords, ingredientWords)
+        if (!isColorOnlyMatch && !isCovered) return
 
-        return wordsCoveredBy(ingredientWords, itemWords) || wordsCoveredBy(itemWords, ingredientWords)
+        candidates.push({
+            item,
+            score: closeness(ingredientWords, itemWords) + (isColorOnlyMatch ? colorOnlyBonus : 0),
+            lengthGap: Math.abs(item.name.length - ingredientName.length)
+        })
     })
+
+    return candidates
+        .sort((a, b) => b.score - a.score || a.lengthGap - b.lengthGap)
+        .map((candidate) => candidate.item)
 }
+
+export const findRelatedPantryItem = <T extends { name: string, type: FoodType | null }>(
+    ingredientName: string,
+    ingredientCategory: FoodType | undefined,
+    pantryItems: T[]
+): T | undefined => findRelatedPantryItems(
+    ingredientName,
+    ingredientCategory,
+    pantryItems
+)[0]
 
 export const hasEnoughPantryQuantity = (
     ingredientQuantity: number | string,

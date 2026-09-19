@@ -86,6 +86,7 @@ export const recipesTexts = {
         ingredientsTitle: 'מצרכים',
         ingredientOptionalLabel: 'רשות',
         ingredientMissingLabel: 'חסר',
+        replacementPickerLabel: 'בחירת תחליף',
         discardDraft: 'מחיקת הטיוטה',
         ingredientAddToPantryLink: 'הוסף למזווה',
         ingredientReplacementLabel: (name: string) => `תחליף זמין: ${name}`,
