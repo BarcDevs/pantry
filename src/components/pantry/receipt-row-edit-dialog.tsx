@@ -72,8 +72,8 @@ export const ReceiptRowEditDialog = ({
                         {pantryTexts.addForm.nameLabel}
                     </label>
                     <Input
-                        value={productEdit.name}
-                        onChange={(e) => productEdit.setName(e.target.value)}
+                        value={productEdit.values.name}
+                        onChange={(e) => productEdit.setField('name', e.target.value)}
                         onEnter={handleDone}
                     />
                 </div>
@@ -83,8 +83,8 @@ export const ReceiptRowEditDialog = ({
                             {pantryTexts.addForm.storageLabel}
                         </label>
                         <Select
-                            value={productEdit.storage}
-                            onValueChange={(value: StorageLocation) => productEdit.setStorage(value)}
+                            value={productEdit.values.storage}
+                            onValueChange={(value: StorageLocation) => productEdit.setField('storage', value)}
                         >
                             <SelectTrigger className={'w-full cursor-pointer'}>
                                 <SelectValue/>
@@ -107,34 +107,35 @@ export const ReceiptRowEditDialog = ({
                             {pantryTexts.addForm.expiryLabel}
                         </label>
                         <ReceiptRowExpiryField
-                            value={productEdit.expiryDate}
-                            onChange={productEdit.setExpiryDate}
+                            value={productEdit.values.expiryDate}
+                            onChange={(date) => productEdit.setField('expiryDate', date)}
                         />
                     </div>
                 </div>
                 <PantryTypeRow
-                    value={productEdit.type}
-                    onChange={productEdit.setType}
+                    value={productEdit.values.type}
+                    onChange={(type) => productEdit.setField('type', type)}
                 />
-                {(productEdit.suggestion || productEdit.suggestionFailed) ? (
+                {(productEdit.suggestion.value || productEdit.suggestion.failed) ? (
                     <StorageSuggestionHint
-                        isLoading={productEdit.isSuggesting}
-                        suggestion={productEdit.suggestion}
-                        suggestionFailed={productEdit.suggestionFailed}
-                        currentStorage={productEdit.storage}
-                        onSelectRecommended={productEdit.applySuggestedStorage}
-                        onApplyExpiry={productEdit.applySuggestedExpiry}
-                        onRetry={productEdit.requestSuggestion}
-                        onRefresh={productEdit.refreshSuggestion}
+                        isLoading={productEdit.suggestion.isSuggesting}
+                        suggestion={productEdit.suggestion.value}
+                        suggestionFailed={productEdit.suggestion.failed}
+                        isStale={productEdit.suggestion.stale}
+                        currentStorage={productEdit.values.storage}
+                        onSelectRecommended={productEdit.suggestion.applyStorage}
+                        onApplyExpiry={productEdit.suggestion.applyExpiry}
+                        onRetry={productEdit.suggestion.request}
+                        onRefresh={productEdit.suggestion.refresh}
                     />
                 ) : (
                     <StorageSuggestionButton
                         disabled={
-                            productEdit.name.trim().length
+                            productEdit.values.name.trim().length
                             < minNameLengthForSuggestion
                         }
-                        isLoading={productEdit.isSuggesting}
-                        onClick={productEdit.requestSuggestion}
+                        isLoading={productEdit.suggestion.isSuggesting}
+                        onClick={productEdit.suggestion.request}
                     />
                 )}
             </div>

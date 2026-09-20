@@ -1,4 +1,7 @@
-import { useState, useTransition } from 'react'
+import {
+    useState,
+    useTransition
+} from 'react'
 
 import { useRouter } from 'next/navigation'
 
@@ -9,16 +12,31 @@ import { recipesTexts } from '@/constants/texts/recipes'
 
 import { cookRecipe } from '@/actions/recipes/cook-recipe'
 
+type RateValues = {
+    rating: number
+    hoverRating: number
+}
+
 export const useRateRecipe = (recipeId: string) => {
     const router = useRouter()
-    const [rating, setRating] = useState(0)
-    const [hoverRating, setHoverRating] = useState(0)
+    const [values, setValues] = useState<RateValues>({
+        rating: 0,
+        hoverRating: 0
+    })
     const [isSubmitting, startSubmitting] = useTransition()
+
+    const setField = <Key extends keyof RateValues>(
+        key: Key,
+        value: RateValues[Key]
+    ) => setValues((current) => ({
+        ...current,
+        [key]: value
+    }))
 
     const finishRate = () => {
         startSubmitting(async () => {
             try {
-                await cookRecipe(recipeId, rating > 0 ? rating : null)
+                await cookRecipe(recipeId, values.rating > 0 ? values.rating : null)
                 router.push(routes.pantry)
             } catch (error) {
                 console.error(error)
@@ -28,11 +46,11 @@ export const useRateRecipe = (recipeId: string) => {
     }
 
     return {
-        rating,
-        setRating,
-        hoverRating,
-        setHoverRating,
-        isSubmitting,
-        finishRate
+        values,
+        setField,
+        submission: {
+            isSubmitting,
+            finish: finishRate
+        }
     }
 }

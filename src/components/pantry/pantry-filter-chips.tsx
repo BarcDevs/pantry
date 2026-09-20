@@ -1,4 +1,7 @@
-import type { FoodType, StorageLocation } from '@/types/enums'
+import type {
+    FoodType,
+    StorageLocation
+} from '@/types/enums'
 import { STORAGE_LOCATIONS } from '@/types/enums'
 import type { SetState } from '@/types/react'
 

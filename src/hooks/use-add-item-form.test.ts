@@ -96,9 +96,36 @@ describe('useAddItemForm type refresh', () => {
         await waitFor(() => expect(result.current.form.getValues('type')).toBe('dairy'))
 
         mockSuggestStorage.mockResolvedValue(typedSuggestion('beverages'))
-        act(() => result.current.retrySuggestion())
+        act(() => result.current.suggestion.refresh())
 
         await waitFor(() => expect(result.current.form.getValues('type')).toBe('beverages'))
+    })
+
+    it('keeps a type the user picked when retrying a failed suggestion', async () => {
+        mockSuggestStorage.mockRejectedValueOnce(new Error('ai down'))
+        const { result } = renderHook(() => useAddItemForm())
+        act(() => result.current.form.setValue('name', 'חלב'))
+        await waitFor(() => expect(result.current.suggestion.failed).toBe(true))
+        act(() => result.current.form.setValue('type', 'meat' as never))
+
+        mockSuggestStorage.mockResolvedValue(typedSuggestion('dairy'))
+        act(() => result.current.suggestion.retry())
+
+        await waitFor(() => expect(result.current.suggestion.failed).toBe(false))
+        expect(result.current.form.getValues('type')).toBe('meat')
+    })
+
+    it('does not carry a refresh over to a later name change', async () => {
+        mockSuggestStorage.mockResolvedValue(typedSuggestion('dairy'))
+        const { result } = renderHook(() => useAddItemForm())
+        act(() => result.current.form.setValue('name', 'ח'))
+        act(() => result.current.suggestion.refresh())
+        act(() => result.current.form.setValue('type', 'meat' as never))
+
+        act(() => result.current.form.setValue('name', 'חלב'))
+
+        await waitFor(() => expect(mockSuggestStorage).toHaveBeenCalled())
+        expect(result.current.form.getValues('type')).toBe('meat')
     })
 })
 
@@ -119,7 +146,7 @@ describe('useAddItemForm merge prompt', () => {
             rendered.result.current.form.setValue('type', 'dairy' as never)
             rendered.result.current.form.setValue('quantity', 1)
         })
-        await waitFor(() => expect(rendered.result.current.mergePrompt).not.toBeNull())
+        await waitFor(() => expect(rendered.result.current.merge.prompt).not.toBeNull())
         return rendered
     }
 
@@ -131,7 +158,7 @@ describe('useAddItemForm merge prompt', () => {
     it('offers to merge when an item with the same name and unit exists', async () => {
         const { result } = await setup()
 
-        expect(result.current.mergePrompt).toEqual({
+        expect(result.current.merge.prompt).toEqual({
             existing,
             isMerging: false,
             addedQuantity: 1,
@@ -144,17 +171,17 @@ describe('useAddItemForm merge prompt', () => {
 
         act(() => result.current.form.setValue('unit', PantryUnit.Kg))
 
-        await waitFor(() => expect(result.current.mergePrompt).toBeNull())
+        await waitFor(() => expect(result.current.merge.prompt).toBeNull())
     })
 
     it('shows the merged total and submits with mergeWithId once merging', async () => {
         const { result } = await setup()
 
-        act(() => result.current.startMerge())
+        act(() => result.current.merge.start())
         act(() => result.current.form.setValue('quantity', 3))
-        await act(async () => result.current.handleSubmit())
+        await act(async () => result.current.submission.submit())
 
-        expect(result.current.mergePrompt).toEqual(expect.objectContaining({
+        expect(result.current.merge.prompt).toEqual(expect.objectContaining({
             isMerging: true,
             total: 5
         }))
@@ -171,20 +198,129 @@ describe('useAddItemForm merge prompt', () => {
             incoming: {}
         }])
 
-        await act(async () => result.current.handleSubmit())
+        await act(async () => result.current.submission.submit())
 
         expect(mockAddItems).toHaveBeenCalledWith([
             expect.not.objectContaining({ mergeWithId: expect.anything() })
         ])
-        await waitFor(() => expect(result.current.duplicate).not.toBeNull())
+        await waitFor(() => expect(result.current.submission.duplicate.value).not.toBeNull())
     })
 
     it('stops merging when the user cancels', async () => {
         const { result } = await setup()
 
-        act(() => result.current.startMerge())
-        act(() => result.current.cancelMerge())
+        act(() => result.current.merge.start())
+        act(() => result.current.merge.cancel())
 
-        expect(result.current.mergePrompt?.isMerging).toBe(false)
+        expect(result.current.merge.prompt?.isMerging).toBe(false)
+    })
+})
+
+describe('useAddItemForm suggestion persistence', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockFindExisting.mockResolvedValue(null)
+    })
+
+    const typeName = (
+        result: { current: ReturnType<typeof useAddItemForm> },
+        name: string
+    ) => act(() => result.current.form.setValue('name', name))
+
+    it('keeps the suggestion when the name only gains a trailing space', async () => {
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Fridge))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+
+        typeName(result, 'חלב ')
+
+        await act(async () => new Promise((resolve) => setTimeout(resolve, 700)))
+        expect(result.current.suggestion.value).not.toBeNull()
+        expect(mockSuggestStorage).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not request again for a new name while a suggestion exists', async () => {
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Fridge))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+
+        typeName(result, 'גבינה')
+
+        await act(async () => new Promise((resolve) => setTimeout(resolve, 700)))
+        expect(result.current.suggestion.value).not.toBeNull()
+        expect(mockSuggestStorage).toHaveBeenCalledTimes(1)
+    })
+
+    it('replaces the suggestion only when the user refreshes', async () => {
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Fridge))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value?.suggestedStorage).toBe(StorageLocation.Fridge))
+
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Freezer))
+        act(() => result.current.suggestion.refresh())
+
+        await waitFor(() => expect(result.current.suggestion.value?.suggestedStorage).toBe(StorageLocation.Freezer))
+        expect(mockSuggestStorage).toHaveBeenLastCalledWith('חלב', { fresh: true })
+    })
+
+    it('does not drop an in-flight result when the user keeps typing', async () => {
+        let resolveRequest: (value: unknown) => void = () => undefined
+        mockSuggestStorage.mockReturnValue(new Promise((resolve) => {
+            resolveRequest = resolve
+        }))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(mockSuggestStorage).toHaveBeenCalledTimes(1))
+
+        typeName(result, 'חלב ')
+        await act(async () => resolveRequest(suggestionFor(StorageLocation.Fridge)))
+
+        expect(result.current.suggestion.value).not.toBeNull()
+    })
+})
+
+describe('useAddItemForm stale suggestion', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockFindExisting.mockResolvedValue(null)
+        mockSuggestStorage.mockResolvedValue(suggestionFor(StorageLocation.Fridge))
+    })
+
+    const typeName = (
+        result: { current: ReturnType<typeof useAddItemForm> },
+        name: string
+    ) => act(() => result.current.form.setValue('name', name))
+
+    it('turns stale after a name change without clearing or requesting', async () => {
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+        expect(result.current.suggestion.stale).toBe(false)
+
+        typeName(result, 'גבינה')
+
+        await act(async () => new Promise((resolve) => setTimeout(resolve, 700)))
+        expect(result.current.suggestion.stale).toBe(true)
+        expect(result.current.suggestion.value).not.toBeNull()
+        expect(mockSuggestStorage).toHaveBeenCalledTimes(1)
+    })
+
+    it('is not stale for a trailing space and clears after refresh', async () => {
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'חלב')
+        await waitFor(() => expect(result.current.suggestion.value).not.toBeNull())
+
+        typeName(result, 'חלב ')
+        expect(result.current.suggestion.stale).toBe(false)
+
+        typeName(result, 'גבינה')
+        expect(result.current.suggestion.stale).toBe(true)
+        await act(async () => new Promise((resolve) => setTimeout(resolve, 700)))
+        act(() => result.current.suggestion.refresh())
+
+        await waitFor(() => expect(result.current.suggestion.stale).toBe(false))
     })
 })

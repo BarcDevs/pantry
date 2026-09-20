@@ -6,7 +6,10 @@ import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { TextButton } from '@/components/shared/buttons/TextButton'
 import { UrlInput } from '@/components/shared/UrlInput'
 
-import { isUrlInputInvalid, parseUrlInput } from '@/lib/network/parse-url-input'
+import {
+    isUrlInputInvalid,
+    parseUrlInput
+} from '@/lib/network/parse-url-input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -34,9 +37,11 @@ export const RecipeImageUrlField = ({
                     {texts.imageFieldOptional}
                 </span>
             </div>
-            <p className={'mb-3 text-label text-ink-3'}>
-                {texts.imageFieldDescription}
-            </p>
+            {!imageUrl && (
+                <p className={'mb-3 text-label text-ink-3'}>
+                    {texts.imageFieldDescription}
+                </p>
+            )}
             <div className={'flex flex-wrap gap-2.25'}>
                 <UrlInput
                     value={draft}

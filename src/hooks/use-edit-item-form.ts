@@ -1,6 +1,12 @@
-import { useState, useTransition } from 'react'
+import {
+    useState,
+    useTransition
+} from 'react'
 
-import { useForm, useWatch } from 'react-hook-form'
+import {
+    useForm,
+    useWatch
+} from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,10 +16,10 @@ import type {
     StorageSuggestion
 } from '@/types/pantry-item'
 
-import { useResetOnChange } from '@/hooks/use-reset-on-change'
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { applySuggestedExpiry } from '@/lib/pantry/apply-suggested-expiry'
+import { resolveSuggestedType } from '@/lib/pantry/resolve-suggested-type'
 
 import { pantryTexts } from '@/constants/texts/pantry'
 
@@ -63,7 +69,10 @@ export const useEditItemForm = ({
         defaultValues: toFormValues(item)
     })
 
-    const storageSuggestion = useStorageSuggestion(item.storageSuggestion)
+    const storageSuggestion = useStorageSuggestion(
+        item.storageSuggestion,
+        item.name
+    )
     const [isSubmitting, startSubmitting] = (
         useTransition()
     )
@@ -75,16 +84,16 @@ export const useEditItemForm = ({
         name: 'name'
     })
 
-    useResetOnChange(name, storageSuggestion.clear)
-
     const applySuggestedType = (
         result: StorageSuggestion,
-        shouldOverwrite = false
+        isFresh = false
     ) => {
-        if (
-            result.suggestedType
-            && (shouldOverwrite || !form.getValues('type'))
-        ) form.setValue('type', result.suggestedType)
+        const suggestedType = resolveSuggestedType(
+            result,
+            form.getValues('type'),
+            isFresh
+        )
+        if (suggestedType) form.setValue('type', suggestedType)
     }
 
     const requestSuggestion = () => storageSuggestion.request(name, {
@@ -138,27 +147,34 @@ export const useEditItemForm = ({
 
     return {
         form,
-        suggestion: storageSuggestion.suggestion,
-        isSuggesting: storageSuggestion.isSuggesting,
-        suggestionFailed: storageSuggestion.suggestionFailed,
-        isSubmitting,
-        isDeleting,
-        confirmDelete,
-        setConfirmDelete,
-        requestSuggestion,
-        refreshSuggestion,
-        handleSubmit,
-        handleDelete,
-        applySuggestedStorage: () => {
-            if (storageSuggestion.suggestion) {
-                form.setValue(
-                    'storage',
-                    storageSuggestion.suggestion.suggestedStorage
-                )
-            }
+        suggestion: {
+            value: storageSuggestion.suggestion,
+            isSuggesting: storageSuggestion.isSuggesting,
+            failed: storageSuggestion.suggestionFailed,
+            stale: storageSuggestion.isStaleFor(name),
+            request: requestSuggestion,
+            refresh: refreshSuggestion,
+            applyStorage: () => {
+                if (storageSuggestion.suggestion) {
+                    form.setValue(
+                        'storage',
+                        storageSuggestion.suggestion.suggestedStorage
+                    )
+                }
+            },
+            applyExpiry: () => (
+                applySuggestedExpiry(form, storageSuggestion.suggestion)
+            )
         },
-        applySuggestedExpiry: () => (
-            applySuggestedExpiry(form, storageSuggestion.suggestion)
-        )
+        submission: {
+            isSubmitting,
+            submit: handleSubmit
+        },
+        deletion: {
+            isConfirming: confirmDelete,
+            setIsConfirming: setConfirmDelete,
+            isDeleting,
+            confirm: handleDelete
+        }
     }
 }

@@ -24,6 +24,7 @@ import { recipesTexts } from '@/constants/texts/recipes'
 
 import { refineRecipe } from '@/actions/recipes/refine-recipe'
 import { saveRecipe } from '@/actions/recipes/save-recipe'
+import { updateRecipe as updateSavedRecipe } from '@/actions/recipes/update-recipe'
 
 export const useRecipeResult = () => {
     const router = useRouter()
@@ -52,8 +53,23 @@ export const useRecipeResult = () => {
         saveGeneratedRecipe(next)
     }
 
-    const updateRecipe = (changes: Partial<RecipeDoc>) => {
-        if (recipe) commitRecipe({ ...recipe, ...changes })
+    const updateRecipeFields = (
+        changes: Partial<Pick<RecipeDoc, 'isFavorite' | 'imageUrl'>>
+    ) => {
+        if (!recipe) return
+        if (!savedRecipeId) {
+            commitRecipe({ ...recipe, ...changes })
+            return
+        }
+        setRecipe({ ...recipe, ...changes })
+        const savedChanges = {
+            ...changes,
+            ...('imageUrl' in changes && { imageUrl: changes.imageUrl ?? null })
+        }
+        updateSavedRecipe(savedRecipeId, savedChanges).catch((error: unknown) => {
+            console.error(error)
+            toast.error(recipesTexts.result.saveError)
+        })
     }
 
     const dismiss = () => {
@@ -62,16 +78,16 @@ export const useRecipeResult = () => {
     }
 
     const refine = () => {
-        if (!recipe || !adjustments.instruction.trim()) return
+        if (!recipe || !adjustments.values.instruction.trim()) return
 
         startRefining(async () => {
             try {
                 const refined = await refineRecipe({
                     recipe,
-                    instruction: adjustments.instruction.trim()
+                    instruction: adjustments.values.instruction.trim()
                 })
                 commitRecipe(refined)
-                adjustments.reset()
+                adjustments.actions.reset()
             } catch (error) {
                 console.error(error)
                 toast.error(recipesTexts.result.refineError)
@@ -81,11 +97,11 @@ export const useRecipeResult = () => {
 
     const toggleFavorite = () => {
         if (!recipe) return
-        updateRecipe({ isFavorite: !recipe.isFavorite })
+        updateRecipeFields({ isFavorite: !recipe.isFavorite })
     }
 
     const setManualImageUrl = (imageUrl: string) => {
-        updateRecipe({ imageUrl: imageUrl || undefined })
+        updateRecipeFields({ imageUrl: imageUrl || undefined })
     }
 
     const save = (): Promise<string | null> => (
@@ -116,20 +132,19 @@ export const useRecipeResult = () => {
 
     return {
         recipe,
-        savedRecipeId,
-        refineInstruction: adjustments.instruction,
-        setRefineInstruction: adjustments.setInstruction,
-        usedReplacements: adjustments.usedReplacements,
-        toggleReplacement: adjustments.toggleReplacement,
-        usedRemovals: adjustments.usedRemovals,
-        toggleRemoval: adjustments.toggleRemoval,
-        isRefining,
-        refine,
-        dismiss,
-        toggleFavorite,
-        setManualImageUrl,
-        isSaving,
-        save,
-        startCooking
+        adjustments,
+        status: {
+            isRefining,
+            isSaving,
+            savedRecipeId
+        },
+        actions: {
+            refine,
+            save,
+            startCooking,
+            dismiss,
+            toggleFavorite,
+            setManualImageUrl
+        }
     }
 }

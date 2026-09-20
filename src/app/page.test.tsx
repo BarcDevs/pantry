@@ -1,4 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import {
+    render,
+    screen
+} from '@testing-library/react'
 
 jest.mock('next-auth/react', () => ({
     useSession: () => ({ data: null, status: 'unauthenticated' })

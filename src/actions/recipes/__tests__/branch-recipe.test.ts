@@ -3,7 +3,8 @@
  */
 jest.mock('@/models/recipe.model', () => ({
     RecipeModel: {
-        create: jest.fn()
+        create: jest.fn(),
+        findOneAndUpdate: jest.fn()
     }
 }))
 jest.mock('@/lib/ai/gemini', () => ({
@@ -31,6 +32,7 @@ import { branchRecipe } from '../branch-recipe'
 const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockGenerateStructured = generateStructured as jest.Mock
 const mockCreate = RecipeModel.create as jest.Mock
+const mockFindOneAndUpdate = RecipeModel.findOneAndUpdate as jest.Mock
 const mockFind = PantryItemModel.find as jest.Mock
 
 const leanChain = (result: unknown) => ({
@@ -123,5 +125,32 @@ describe('branchRecipe', () => {
                 isFavorite: false
             })
         )
+    })
+
+    it('saves a new recipe carrying the previous image and never updates the original', async () => {
+        const imageUrl = 'https://example.com/pasta.jpg'
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockGenerateStructured.mockResolvedValue(refinedResponse)
+        mockFind.mockReturnValue(leanChain([]))
+        mockCreate.mockResolvedValue({
+            toObject: () => ({
+                ...recipe,
+                imageUrl,
+                _id: { toString: () => 'branched_1' }
+            })
+        })
+
+        const result = await branchRecipe(
+            {
+                ...recipe,
+                imageUrl
+            },
+            'להשתמש בחלב סויה במקום חלב'
+        )
+
+        expect(mockCreate).toHaveBeenCalledTimes(1)
+        expect(mockCreate).toHaveBeenCalledWith(expect.objectContaining({ imageUrl }))
+        expect(result._id).toBe('branched_1')
+        expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
     })
 })

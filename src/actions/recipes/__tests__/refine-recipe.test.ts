@@ -133,6 +133,23 @@ describe('refineRecipe', () => {
         expect(result.source).toBe(recipe.source)
     })
 
+    it('carries the previous image url over to the refined recipe', async () => {
+        const imageUrl = 'https://example.com/pasta.jpg'
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockGenerateStructured.mockResolvedValue(refinedResponse)
+        mockFind.mockReturnValue(leanChain(pantryItems))
+
+        const result = await refineRecipe({
+            recipe: {
+                ...recipe,
+                imageUrl
+            },
+            instruction: 'תוסיף חריפות'
+        })
+
+        expect(result.imageUrl).toBe(imageUrl)
+    })
+
     it('rejects refining a recipe owned by another user', async () => {
         mockAuth.mockResolvedValue({ user: { id: 'user_456' } } as never)
         await expect(refineRecipe({

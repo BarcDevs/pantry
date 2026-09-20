@@ -1,11 +1,8 @@
-import type { PantryItem }
-    from '@/types/pantry-item'
+import type { PantryItem } from '@/types/pantry-item'
 
-import { SecondaryButton }
-    from '@/components/shared/buttons/SecondaryButton'
+import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
-import { recipesTexts }
-    from '@/constants/texts/recipes'
+import { recipesTexts } from '@/constants/texts/recipes'
 
 type ExpiredItemsGateProps = {
     expiredItems: PantryItem[]

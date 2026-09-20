@@ -16,6 +16,7 @@ Naming and file-organization conventions caught or confirmed mid-session.
 | 24/07/2026 | Zod/validation schemas live at `src/schemas/`, not `src/lib/schemas/` |
 | 19/09/2026 | Break long lines (conditions, arrow bodies, handler props) and drop braces on one-statement blocks - lint does not catch either |
 | 19/09/2026 | Centralize logic repeated across hooks first; hooks returning 5+ values are used as one `obj.field` object |
+| 19/09/2026 | Imports break at 2+ named imports or 100+ chars; a review finding is a claim, check it against the rule |
 
 ## Tooling — [[corrections/tooling]]
 When to use graphify vs. plain search tools.
@@ -32,6 +33,7 @@ shadcn/ui component boundaries, Tailwind/twMerge conflicts, and RTL/layout verif
 | 04/09/2026 | Never hand-edit `src/components/ui/*` (shadcn) directly — wrap it in `src/components/shared/` |
 | 05/09/2026 | Extend `tailwind-merge` only with the specific token proven to conflict, not the whole theme |
 | 11/09/2026 | Never claim an RTL/layout fix is verified without checking real computed styles in a real browser |
+| 19/09/2026 | Use `next/image` (`unoptimized` for arbitrary remote URLs), never a raw `<img>` |
 
 ## Git & Deploy — [[corrections/git-and-deploy]]
 Branch, push and merge discipline.
@@ -40,3 +42,10 @@ Branch, push and merge discipline.
 |---|---|
 | 19/09/2026 | Never commit directly to `main`, never push unprompted — work on a branch, state it, ask if the request doesn't match reality |
 | 19/09/2026 | Commit the feature first, then the refactor as its own commit |
+
+## Process & Verification - [[corrections/process-and-verification]]
+Verifying that a plan step or PRD requirement is really implemented before calling it done.
+
+| Date | Entry |
+|---|---|
+| 19/09/2026 | Web-search toggle only changed prompt wording; a plan step / PRD toggle is done only when the code enforces it |

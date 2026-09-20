@@ -1,8 +1,14 @@
-import { useState, useTransition } from 'react'
+import {
+    useState,
+    useTransition
+} from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { useForm, useWatch } from 'react-hook-form'
+import {
+    useForm,
+    useWatch
+} from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -111,17 +117,25 @@ export const useOnboardingWizard = () => {
     }
 
     return {
-        step,
-        isLastStep,
-        isSubmitting,
-        advance,
-        goBack,
-        skipAll,
-        cookingLevel,
-        setCookingLevel,
-        dietaryPreferences,
-        setDietaryPreferences,
-        householdSize,
-        setHouseholdSize
+        step: {
+            index: step,
+            isLast: isLastStep,
+            advance,
+            goBack
+        },
+        values: {
+            cookingLevel,
+            dietaryPreferences,
+            householdSize
+        },
+        setters: {
+            cookingLevel: setCookingLevel,
+            dietaryPreferences: setDietaryPreferences,
+            householdSize: setHouseholdSize
+        },
+        submission: {
+            isSubmitting,
+            skipAll
+        }
     }
 }

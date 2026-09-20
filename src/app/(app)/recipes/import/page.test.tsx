@@ -15,13 +15,17 @@ jest.mock('next/navigation', () => ({
 jest.mock('@/hooks/use-recipe-import', () => ({
     useRecipeImport: () => ({
         recipe: null,
-        error: null,
-        isImporting: false,
-        isSaving: false,
-        importFromUrl,
-        importFromText,
-        setTitle: jest.fn(),
-        save: jest.fn()
+        importing: {
+            error: null,
+            isImporting: false,
+            fromUrl: importFromUrl,
+            fromText: importFromText
+        },
+        review: {
+            isSaving: false,
+            setTitle: jest.fn(),
+            save: jest.fn()
+        }
     })
 }))
 

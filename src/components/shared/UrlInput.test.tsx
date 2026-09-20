@@ -1,4 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import {
+    render,
+    screen
+} from '@testing-library/react'
 
 import { commonTexts } from '@/constants/texts/common'
 

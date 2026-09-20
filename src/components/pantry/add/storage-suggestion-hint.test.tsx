@@ -32,6 +32,7 @@ const renderHint = (overrides: Partial<Parameters<typeof StorageSuggestionHint>[
             isLoading={false}
             suggestion={suggestion}
             suggestionFailed={false}
+            isStale={false}
             currentStorage={StorageLocation.Fridge}
             onSelectRecommended={jest.fn()}
             onApplyExpiry={jest.fn()}
@@ -62,5 +63,21 @@ describe('StorageSuggestionHint refresh', () => {
         renderHint({ suggestion: null })
 
         expect(screen.queryByRole('button', { name: 'רענון ההצעה' })).not.toBeInTheDocument()
+    })
+})
+
+describe('StorageSuggestionHint stale warning', () => {
+    const warning = 'ההצעה נוצרה עבור שם אחר - אם המוצר השתנה, לחץ על רענון'
+
+    it('warns that the suggestion may be stale', () => {
+        renderHint({ isStale: true })
+
+        expect(screen.getByText(warning)).toBeInTheDocument()
+    })
+
+    it('shows no warning when the suggestion is current', () => {
+        renderHint()
+
+        expect(screen.queryByText(warning)).not.toBeInTheDocument()
     })
 })

@@ -11,6 +11,8 @@ import { IconButton } from '@/components/shared/buttons/IconButton'
 import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
+import { cn } from '@/lib/utils'
+
 import { pantryTexts } from '@/constants/texts/pantry'
 import { dayInMs } from '@/constants/time'
 
@@ -23,6 +25,7 @@ type StorageSuggestionHintProps = {
     isLoading: boolean
     suggestion: StorageSuggestion | null
     suggestionFailed: boolean
+    isStale: boolean
     currentStorage: StorageLocation
     onSelectRecommended: () => void
     onApplyExpiry: () => void
@@ -34,6 +37,7 @@ export const StorageSuggestionHint = ({
     isLoading,
     suggestion,
     suggestionFailed,
+    isStale,
     currentStorage,
     onSelectRecommended,
     onApplyExpiry,
@@ -66,12 +70,20 @@ export const StorageSuggestionHint = ({
                         aria-label={pantryTexts.addForm.suggestionRefresh}
                         title={pantryTexts.addForm.suggestionRefresh}
                         onClick={onRefresh}
-                        className={'ms-auto size-6 text-green'}
+                        className={cn(
+                            'ms-auto size-6 text-green',
+                            isStale && 'bg-warning-bg text-warning-fg ring-1 ring-warning-border'
+                        )}
                     >
                         <RefreshCwIcon size={13}/>
                     </IconButton>
                 )}
             </div>
+            {isStale && suggestion && !isLoading && (
+                <p className={'mt-2 font-bold text-caption text-warning-fg'}>
+                    {pantryTexts.addForm.suggestionStale}
+                </p>
+            )}
             {suggestionFailed && !isLoading && (
                 <div className={'mt-2 flex items-center justify-between gap-2.5'}>
                     <span className={'text-caption text-ink-3'}>

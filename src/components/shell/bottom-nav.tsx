@@ -3,7 +3,10 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { ChefHatIcon, RefrigeratorIcon } from 'lucide-react'
+import {
+    ChefHatIcon,
+    RefrigeratorIcon
+} from 'lucide-react'
 
 import { CameraIcon } from '@/components/icons/camera-icon'
 import { LibraryIcon } from '@/components/icons/library-icon'

@@ -59,9 +59,9 @@ describe('useRecipeLibrary can-cook filter', () => {
         })
         const { result } = renderHook(() => useRecipeLibrary([recipe]))
 
-        act(() => result.current.setFilter('can-cook'))
+        act(() => result.current.setField('filter', 'can-cook'))
 
-        expect(result.current.filteredRecipes).toHaveLength(1)
+        expect(result.current.recipes.filtered).toHaveLength(1)
     })
 
     it('excludes a recipe missing a non-optional ingredient', () => {
@@ -78,8 +78,8 @@ describe('useRecipeLibrary can-cook filter', () => {
         })
         const { result } = renderHook(() => useRecipeLibrary([recipe]))
 
-        act(() => result.current.setFilter('can-cook'))
+        act(() => result.current.setField('filter', 'can-cook'))
 
-        expect(result.current.filteredRecipes).toHaveLength(0)
+        expect(result.current.recipes.filtered).toHaveLength(0)
     })
 })

@@ -1,5 +1,7 @@
 import type { RecipeDoc } from '@/types/recipe'
 
+import { RecipeCoverImage } from '@/components/recipes/shared/recipe-cover-image'
+
 import { recipesTexts } from '@/constants/texts/recipes'
 
 type RecipeResultHeroProps = {
@@ -8,14 +10,13 @@ type RecipeResultHeroProps = {
 
 export const RecipeResultHero = ({ recipe }: RecipeResultHeroProps) => (
     <div
-        className={'relative mb-5 h-[200px] overflow-hidden rounded-2xl bg-[image:var(--gradient-brand)] bg-cover bg-center'}
-        style={recipe.imageUrl ? { backgroundImage: `url(${recipe.imageUrl})` } : undefined}
+        className={'relative mb-5 h-[200px] overflow-hidden rounded-2xl bg-[image:var(--gradient-brand)]'}
     >
-        {!recipe.imageUrl && (
-            <div className={'absolute inset-0 flex items-center justify-center text-8xl'}>
-                {recipe.emoji ?? '🍽️'}
-            </div>
-        )}
+        <RecipeCoverImage
+            imageUrl={recipe.imageUrl}
+            emoji={recipe.emoji}
+            emojiClassName={'text-8xl'}
+        />
         <div className={'absolute inset-x-0 bottom-0 bg-linear-to-t from-black/40 to-transparent p-5'}>
             <div className={'mb-2 flex gap-2'}>
                 <span className={'rounded-full bg-surface/90 px-3 py-1 text-caption font-bold text-ink'}>

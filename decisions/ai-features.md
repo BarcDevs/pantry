@@ -80,3 +80,45 @@ and left as an open follow-up.
 
 **How to apply:** new suggestion surfaces reuse `useStorageSuggestion` and pass `fresh` for a
 user-triggered refresh. Recorded in the PRD as AC-1.8.
+
+---
+
+## 19/09/2026 — Typing a name never clears the Add Item suggestion
+
+**Problem:** on Add Item, every name change cleared the suggestion and invalidated the in-flight
+request, while the debounced effect (keyed on the trimmed name) did not re-run for a trailing space,
+so a suggestion could vanish and never come back.
+
+**Decision:** name changes no longer clear the suggestion or drop an in-flight request; the merge
+request is still reset on name change. The debounced, trimmed-name effect requests automatically only
+when no suggestion currently exists; an explicit refresh (`fresh: true`) always requests and is the
+only thing that replaces an existing suggestion.
+
+**Why over alternatives:** simplest rule that honours "typing never clears a suggestion"; deciding
+whether a changed name is a "different product" was left out on purpose.
+
+**How to apply:** Add Item only. Recorded in the PRD as AC-1.8. Edit Item and the receipt row editor
+still clear on name change (not covered by this decision).
+
+---
+
+## 19/09/2026 — Web recipe sourcing (allow_ai_generation)
+
+**Status:** decided, NOT implemented. The toggle currently only changes one prompt sentence (see
+[[corrections/process-and-verification]]); PRD AC-2.8 already specifies the goal.
+
+**Decision:**
+- Default (toggle on): search the web first (Gemini Google Search Grounding). If a matching recipe is
+  found, use it; if its serving count differs from the requested meals, do a conversion (scale) of that
+  recipe, not a fresh generation. Only when nothing is found, generate one from scratch.
+- Toggle off: only web-found recipes, no exception - nothing is ever generated. Nothing found = an
+  explicit "no match found" state.
+- The origin URL of a web-found recipe is saved in the DB (`sourceUrl`), and its image comes from that
+  page through the same safe fetch + og:image extraction as URL import.
+- Open: whether a web-found recipe is labelled `imported_url` (with `sourceUrl`) or stays `ai_generated`.
+
+**Why:** "no AI = no AI" - the toggle must change behavior, not wording.
+
+**How to apply:** Gemini may not allow the search tool together with structured output; if so use two
+calls (grounded find, then structure/convert). User decision 19/09/2026: skip PRD edits for this work
+(AC-2.8 already states the toggle behavior; the serving-conversion rule is recorded here only).

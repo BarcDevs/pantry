@@ -31,8 +31,13 @@ jest.mock('@/actions/recipes/save-recipe', () => ({
 
 import { useRouter } from 'next/navigation'
 
-import { saveImportDraft } from '@/lib/recipes/import-draft-storage'
+import {
+    readImportDraft,
+    saveImportDraft
+} from '@/lib/recipes/import-draft-storage'
 import { draftTtlMs } from '@/lib/recipes/recipe-draft-storage'
+
+import { recipesTexts } from '@/constants/texts/recipes'
 
 import { importRecipeFromText } from '@/actions/recipes/import-recipe-from-text'
 import { importRecipeFromUrl } from '@/actions/recipes/import-recipe-from-url'
@@ -65,15 +70,30 @@ describe('useRecipeImport', () => {
     it('sets an error and no recipe when the URL import falls back to manual', async () => {
         mockImportFromUrl.mockResolvedValue({
             recipe: null,
-            fallbackToManual: true
+            fallbackToManual: true,
+            isBlocked: false
         })
 
         const { result } = renderHook(() => useRecipeImport())
 
-        await act(async () => result.current.importFromUrl('https://x.com'))
+        await act(async () => result.current.importing.fromUrl('https://x.com'))
 
         expect(result.current.recipe).toBeNull()
-        expect(result.current.error).not.toBeNull()
+        expect(result.current.importing.error).not.toBeNull()
+    })
+
+    it('sets the blocked-site error when the URL import is blocked', async () => {
+        mockImportFromUrl.mockResolvedValue({
+            recipe: null,
+            fallbackToManual: true,
+            isBlocked: true
+        })
+
+        const { result } = renderHook(() => useRecipeImport())
+
+        await act(async () => result.current.importing.fromUrl('https://x.com'))
+
+        expect(result.current.importing.error).toBe(recipesTexts.import.importBlockedError)
     })
 
     it('sets the recipe on a successful text import', async () => {
@@ -84,10 +104,34 @@ describe('useRecipeImport', () => {
 
         const { result } = renderHook(() => useRecipeImport())
 
-        await act(async () => result.current.importFromText('recipe text'))
+        await act(async () => result.current.importing.fromText('recipe text'))
 
         expect(result.current.recipe?.title).toBe('עוגה')
-        expect(result.current.error).toBeNull()
+        expect(result.current.importing.error).toBeNull()
+    })
+
+    it('replaces and removes the image of an imported recipe draft in place', async () => {
+        mockImportFromUrl.mockResolvedValue({
+            recipe: {
+                title: 'עוגה',
+                ingredients: [],
+                steps: [],
+                imageUrl: 'https://example.com/og.jpg'
+            },
+            fallbackToManual: false
+        })
+
+        const { result } = renderHook(() => useRecipeImport())
+        await act(async () => result.current.importing.fromUrl('https://x.com'))
+
+        act(() => result.current.review.setImageUrl('https://example.com/mine.jpg'))
+        expect(result.current.recipe?.imageUrl).toBe('https://example.com/mine.jpg')
+        expect(readImportDraft()?.imageUrl).toBe('https://example.com/mine.jpg')
+
+        act(() => result.current.review.setImageUrl(''))
+        expect(result.current.recipe?.imageUrl).toBeUndefined()
+        expect(readImportDraft()?.imageUrl).toBeUndefined()
+        expect(readImportDraft()?.title).toBe('עוגה')
     })
 
     it('saves the recipe and navigates to its detail page', async () => {
@@ -98,8 +142,8 @@ describe('useRecipeImport', () => {
         mockSaveRecipe.mockResolvedValue({ _id: 'r1' })
 
         const { result } = renderHook(() => useRecipeImport())
-        await act(async () => result.current.importFromText('recipe text'))
-        await act(async () => result.current.save())
+        await act(async () => result.current.importing.fromText('recipe text'))
+        await act(async () => result.current.review.save())
 
         expect(mockSaveRecipe).toHaveBeenCalled()
         expect(mockPush).toHaveBeenCalledWith('/recipes/r1')
@@ -117,13 +161,13 @@ describe('useRecipeImport', () => {
         })
 
         const { result } = renderHook(() => useRecipeImport())
-        await act(async () => result.current.importFromText('recipe text'))
-        act(() => result.current.adjustments.setInstruction('בלי סוכר'))
-        await act(async () => result.current.refine())
+        await act(async () => result.current.importing.fromText('recipe text'))
+        act(() => result.current.adjustments.setField('instruction', 'בלי סוכר'))
+        await act(async () => result.current.review.refine())
 
         expect(mockRefineRecipe).toHaveBeenCalledWith(expect.objectContaining({ instruction: 'בלי סוכר' }))
         expect(result.current.recipe?.title).toBe('עוגה (מעודכן)')
-        expect(result.current.adjustments.instruction).toBe('')
+        expect(result.current.adjustments.values.instruction).toBe('')
     })
 
     it('restores the unsaved draft whenever the user returns to the page', () => {
@@ -160,7 +204,7 @@ describe('useRecipeImport', () => {
         saveImportDraft(draft)
         const { result } = renderHook(() => useRecipeImport())
 
-        act(() => result.current.dismiss())
+        act(() => result.current.review.dismiss())
 
         expect(result.current.recipe).toBeNull()
         expect(renderHook(() => useRecipeImport()).result.current.recipe).toBeNull()
@@ -171,7 +215,7 @@ describe('useRecipeImport', () => {
         mockSaveRecipe.mockResolvedValue({ _id: 'r1' })
         const { result } = renderHook(() => useRecipeImport())
 
-        await act(async () => result.current.save())
+        await act(async () => result.current.review.save())
 
         expect(renderHook(() => useRecipeImport()).result.current.recipe).toBeNull()
     })

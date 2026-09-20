@@ -62,6 +62,27 @@ describe('updateRecipe', () => {
         expect(updateArg).not.toHaveProperty('rating')
     })
 
+    it.each([null, ''])('unsets imageUrl when it is cleared with %p', async (cleared) => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFindOneAndUpdate.mockReturnValue(leanChain({ _id: { toString: () => recipeId } }))
+
+        await updateRecipe(recipeId, { imageUrl: cleared })
+
+        const [, updateArg] = mockFindOneAndUpdate.mock.calls[0]
+        expect(updateArg).toEqual({ $unset: { imageUrl: 1 } })
+    })
+
+    it('sets imageUrl when a URL is given and leaves it alone when omitted', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockFindOneAndUpdate.mockReturnValue(leanChain({ _id: { toString: () => recipeId } }))
+
+        await updateRecipe(recipeId, { imageUrl: 'https://example.com/a.png' })
+        await updateRecipe(recipeId, { isFavorite: true })
+
+        expect(mockFindOneAndUpdate.mock.calls[0][1]).toEqual({ imageUrl: 'https://example.com/a.png' })
+        expect(mockFindOneAndUpdate.mock.calls[1][1]).toEqual({ isFavorite: true })
+    })
+
     it('throws when the recipe is not found or not owned', async () => {
         mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
         mockFindOneAndUpdate.mockReturnValue(leanChain(null))

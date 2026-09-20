@@ -29,6 +29,21 @@ Wraps `Button` with `variant={'ghost'} h-auto w-fit p-0 font-bold` plus a `tone`
 <TextButton tone={'red'} onClick={onClearAll}>{label}</TextButton>
 ```
 
+### `OutlinedLinkButton`
+
+Small green-bordered pill for a link-style action inside a row (e.g. the recipe result's "add to pantry" link). Wraps
+`Button` with `variant={'ghost'} size={'xs'}` plus the green border/padding/caption-size classes; use with `asChild`
+around a `Link`.
+
+```tsx
+<OutlinedLinkButton asChild><Link href={href}>{label}</Link></OutlinedLinkButton>
+```
+
+### `calendar-nav-button-classes.ts`
+
+Not a component: the class string (ghost `buttonVariants` + `size-8` etc.) the expiry calendar passes to react-day-picker's
+`button_previous` / `button_next` slots, which need a class rather than a rendered `Button`.
+
 ### `PrimaryButton`
 
 Solid CTA - the main/submit action. Wraps `Button` with `variant={'default'}` (this is also `Button`'s own default
@@ -101,6 +116,35 @@ prop driving the two looks.
 
 ```tsx
 <ToggleTextButton isActive={isAdded} onClick={onToggle}>{label}</ToggleTextButton>
+```
+
+### `InputAdornmentButton`
+
+An icon button absolutely positioned inside a relatively-positioned input wrapper (e.g. `PasswordInput`'s show/hide
+eye). Wraps `Button` with `variant={'ghost'}`, no padding/hover background and `absolute left-2.5 top-1/2
+-translate-y-1/2 text-ink-4`.
+
+```tsx
+<InputAdornmentButton onClick={onToggleVisible}><Eye/></InputAdornmentButton>
+```
+
+### `CheckButton`
+
+A square checkbox-style toggle (`size-6`, green fill + check icon child when on). Wraps `Button` with
+`variant={'ghost'}` and an `isChecked` prop that drives the looks and `aria-pressed`, e.g. the receipt review row's
+include checkbox.
+
+```tsx
+<CheckButton isChecked={row.included} aria-label={row.name} onClick={onToggle}><CheckIcon/></CheckButton>
+```
+
+### `StarButton`
+
+Unstyled clickable wrapper around a rating star (no padding/background/hover fill). Wraps `Button` with
+`variant={'ghost'}`; used by `StarRating`.
+
+```tsx
+<StarButton aria-label={label} onClick={onRate}><StarIcon/></StarButton>
 ```
 
 If a new recurring button shape shows up (checked against existing usages, not assumed), add another purpose-made

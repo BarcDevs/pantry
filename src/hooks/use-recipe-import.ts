@@ -35,7 +35,7 @@ export const useRecipeImport = () => {
     const [isSaving, startSaving] = useTransition()
     const [isRefining, startRefining] = useTransition()
     const adjustments = useRecipeAdjustments()
-    const { reset: resetAdjustments } = adjustments
+    const { reset: resetAdjustments } = adjustments.actions
 
     const refreshPantryStatus = useRefreshPantryStatus(setRecipe)
 
@@ -58,7 +58,11 @@ export const useRecipeImport = () => {
             try {
                 const result = await importRecipeFromUrl(url)
                 if (result.fallbackToManual || !result.recipe) {
-                    setError(recipesTexts.import.importError)
+                    setError(
+                        result.isBlocked
+                            ? recipesTexts.import.importBlockedError
+                            : recipesTexts.import.importError
+                    )
                     return
                 }
                 commitRecipe(result.recipe)
@@ -88,6 +92,14 @@ export const useRecipeImport = () => {
         if (recipe) commitRecipe({ ...recipe, title })
     }
 
+    const setImageUrl = (imageUrl: string) => {
+        if (!recipe) return
+        commitRecipe({
+            ...recipe,
+            imageUrl: imageUrl || undefined
+        })
+    }
+
     const dismiss = () => {
         clearImportDraft()
         setRecipe(null)
@@ -95,7 +107,7 @@ export const useRecipeImport = () => {
     }
 
     const refine = () => {
-        const instruction = adjustments.instruction.trim()
+        const instruction = adjustments.values.instruction.trim()
         if (!recipe || !instruction) return
         startRefining(async () => {
             try {
@@ -126,16 +138,21 @@ export const useRecipeImport = () => {
 
     return {
         recipe,
-        error,
-        isImporting,
-        isSaving,
-        importFromUrl,
-        importFromText,
-        setTitle,
-        save,
         adjustments,
-        isRefining,
-        refine,
-        dismiss
+        importing: {
+            isImporting,
+            error,
+            fromUrl: importFromUrl,
+            fromText: importFromText
+        },
+        review: {
+            isSaving,
+            isRefining,
+            setTitle,
+            setImageUrl,
+            save,
+            refine,
+            dismiss
+        }
     }
 }

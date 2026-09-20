@@ -20,6 +20,21 @@ describe('createRecipeDraftStorage', () => {
         expect(storage.read()).toEqual(recipe)
     })
 
+    it('drops a removed image from the persisted draft', () => {
+        const withImage = {
+            ...recipe,
+            imageUrl: 'https://example.com/a.jpg'
+        }
+        storage.save(withImage)
+        storage.save({
+            ...withImage,
+            imageUrl: undefined
+        })
+
+        expect(storage.read()?.imageUrl).toBeUndefined()
+        expect(localStorage.getItem('test:draft')).not.toContain('imageUrl')
+    })
+
     it('expires the draft after the ttl and removes it', () => {
         storage.save(recipe)
         jest.spyOn(Date, 'now').mockReturnValue(Date.now() + draftTtlMs)

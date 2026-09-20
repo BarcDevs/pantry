@@ -2,7 +2,10 @@
 
 import { z } from 'zod'
 
-import type { User, UserProfileInput } from '@/types/user'
+import type {
+    User,
+    UserProfileInput
+} from '@/types/user'
 
 import { auth } from '@/lib/auth'
 import { toPlainDoc } from '@/lib/mongo-doc'

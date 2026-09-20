@@ -3,6 +3,7 @@ import { Agent } from 'undici'
 
 import { isPrivateAddress } from '@/lib/network/is-private-address'
 
+import { HttpStatusCodes } from '@/constants/httpStatusCodes'
 import { secondInMs } from '@/constants/time'
 
 const maxRedirects = 3
@@ -13,9 +14,9 @@ const browserHeaders = {
     'Accept-Language': 'he-IL,he;q=0.9,en;q=0.8'
 }
 const blockedStatuses = new Set([
-    401,
-    403,
-    429
+    HttpStatusCodes.UNAUTHORIZED,
+    HttpStatusCodes.FORBIDDEN,
+    HttpStatusCodes.TOO_MANY_REQUESTS
 ])
 const allowedProtocols = new Set([
     'http:',
@@ -130,8 +131,8 @@ export const fetchSafeUrl = async (
             logFetchFailure(currentUrl, `request failed: ${String(error)}`)
             throw error
         }
-        const isRedirect = response.status >= 300
-            && response.status < 400
+        const isRedirect = response.status >= HttpStatusCodes.MULTIPLE_CHOICES
+            && response.status < HttpStatusCodes.BAD_REQUEST
         if (isRedirect) {
             const location = response.headers.get('location')
             if (!location) {

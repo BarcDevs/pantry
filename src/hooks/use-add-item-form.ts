@@ -7,7 +7,10 @@ import {
 
 import { useRouter } from 'next/navigation'
 
-import { useForm, useWatch } from 'react-hook-form'
+import {
+    useForm,
+    useWatch
+} from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,7 +22,8 @@ import {
 import type {
     AddPantryItemInput,
     AddPantryItemOutcome,
-    ExistingPantryItem
+    ExistingPantryItem,
+    StorageSuggestion
 } from '@/types/pantry-item'
 
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
@@ -29,6 +33,7 @@ import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { applySuggestedExpiry } from '@/lib/pantry/apply-suggested-expiry'
 import type { AddItemPrefill } from '@/lib/pantry/parse-add-item-prefill'
+import { resolveSuggestedType } from '@/lib/pantry/resolve-suggested-type'
 
 import { minNameLengthForSuggestion } from '@/constants/pantry'
 import { routes } from '@/constants/routes'
@@ -72,6 +77,7 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
 
     const isStorageChosenRef = useRef(false)
     const isFreshRequestedRef = useRef(false)
+    const currentSuggestionRef = useRef<StorageSuggestion | null>(null)
     const storageSuggestion = useStorageSuggestion()
     const { request: requestSuggestion } = storageSuggestion
     const [retryToken, setRetryToken] = useState(0)
@@ -112,25 +118,29 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     const existingItem = useExistingPantryItem(debouncedName)
     const [isMergeRequested, setIsMergeRequested] = useState(false)
 
-    useResetOnChange(name, () => {
-        storageSuggestion.clear()
-        setIsMergeRequested(false)
-    })
+    useResetOnChange(name, () => setIsMergeRequested(false))
 
     useEffect(() => {
-        if (debouncedName.length < minNameLengthForSuggestion) return
+        currentSuggestionRef.current = storageSuggestion.suggestion
+    }, [storageSuggestion.suggestion])
 
+    useEffect(() => {
         const fresh = isFreshRequestedRef.current
         isFreshRequestedRef.current = false
+        if (debouncedName.length < minNameLengthForSuggestion) return
+        if (!fresh && currentSuggestionRef.current) return
+
         requestSuggestion(debouncedName, {
             fresh,
             onSuggested: (result) => {
                 if (!isStorageChosenRef.current)
                     form.setValue('storage', result.suggestedStorage)
-                if (
-                    result.suggestedType
-                    && (fresh || !form.getValues('type'))
-                ) form.setValue('type', result.suggestedType)
+                const suggestedType = resolveSuggestedType(
+                    result,
+                    form.getValues('type'),
+                    fresh
+                )
+                if (suggestedType) form.setValue('type', suggestedType)
             }
         })
     }, [debouncedName, retryToken, form, requestSuggestion])
@@ -139,7 +149,11 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         name.trim().length >= minNameLengthForSuggestion
     )
     const isPendingSuggestion = isNameLongEnough && (
-        storageSuggestion.isSuggesting || debouncedName !== name.trim()
+        storageSuggestion.isSuggesting
+        || (
+            debouncedName !== name.trim()
+            && !storageSuggestion.suggestion
+        )
     )
     const effectiveSuggestion = isNameLongEnough
         ? storageSuggestion.suggestion
@@ -223,60 +237,78 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
         ))()
     }
 
+    const handleFormSubmit = form.handleSubmit((values) => {
+        if (isMerging && mergeCandidate) {
+            submit(values, { mergeWithId: mergeCandidate._id })
+            return
+        }
+        if (!values.type) {
+            setPendingValues(values)
+            setIsTypePickerOpen(true)
+            return
+        }
+        submit(values)
+    })
+
+    // Submits the values snapshotted when the type picker opened, not live form state -
+    // the picker is modal, so nothing else can change while it's open.
+    const selectPendingType = (
+        type: NonNullable<AddItemFormValues['type']>
+    ) => {
+        form.setValue('type', type)
+        setIsTypePickerOpen(false)
+        if (pendingValues) submit({ ...pendingValues, type })
+    }
+
+    const skipPendingType = () => {
+        setIsTypePickerOpen(false)
+        if (pendingValues) submit(pendingValues)
+    }
+
     return {
         form,
-        mergePrompt,
-        startMerge: () => setIsMergeRequested(true),
-        cancelMerge: () => setIsMergeRequested(false),
-        suggestion: effectiveSuggestion,
-        isSuggesting: isPendingSuggestion,
-        suggestionFailed: storageSuggestion.suggestionFailed,
-        retrySuggestion: () => {
-            isFreshRequestedRef.current = true
-            setRetryToken((token) => token + 1)
+        merge: {
+            prompt: mergePrompt,
+            start: () => setIsMergeRequested(true),
+            cancel: () => setIsMergeRequested(false)
         },
-        isSubmitting,
-        duplicate,
-        setDuplicate,
-        isTypePickerOpen,
-        setIsTypePickerOpen,
-        handleSubmit: form.handleSubmit((values) => {
-            if (isMerging && mergeCandidate) {
-                submit(values, { mergeWithId: mergeCandidate._id })
-                return
-            }
-            if (!values.type) {
-                setPendingValues(values)
-                setIsTypePickerOpen(true)
-                return
-            }
-            submit(values)
-        }),
-        handleMerge,
-        handleKeepSeparate,
-        applySuggestedStorage: () => {
-            if (effectiveSuggestion) {
-                form.setValue(
-                    'storage',
-                    effectiveSuggestion.suggestedStorage
-                )
-            }
+        suggestion: {
+            value: effectiveSuggestion,
+            isSuggesting: isPendingSuggestion,
+            failed: storageSuggestion.suggestionFailed,
+            stale: storageSuggestion.isStaleFor(name),
+            retry: () => setRetryToken((token) => token + 1),
+            refresh: () => {
+                isFreshRequestedRef.current = true
+                setRetryToken((token) => token + 1)
+            },
+            applyStorage: () => {
+                if (effectiveSuggestion) {
+                    form.setValue(
+                        'storage',
+                        effectiveSuggestion.suggestedStorage
+                    )
+                }
+            },
+            applyExpiry: () => (
+                applySuggestedExpiry(form, effectiveSuggestion)
+            )
         },
-        applySuggestedExpiry: () => (
-            applySuggestedExpiry(form, effectiveSuggestion)
-        ),
-        // Submits the values snapshotted when the type picker opened, not live form state -
-        // the picker is modal, so nothing else can change while it's open.
-        selectPendingType: (
-            type: NonNullable<AddItemFormValues['type']>
-        ) => {
-            form.setValue('type', type)
-            setIsTypePickerOpen(false)
-            if (pendingValues) submit({ ...pendingValues, type })
-        },
-        skipPendingType: () => {
-            setIsTypePickerOpen(false)
-            if (pendingValues) submit(pendingValues)
+        submission: {
+            isSubmitting,
+            submit: handleFormSubmit,
+            duplicate: {
+                value: duplicate,
+                setValue: setDuplicate,
+                merge: handleMerge,
+                keepSeparate: handleKeepSeparate
+            },
+            typePicker: {
+                isOpen: isTypePickerOpen,
+                setIsOpen: setIsTypePickerOpen,
+                select: selectPendingType,
+                skip: skipPendingType
+            }
         }
     }
 }

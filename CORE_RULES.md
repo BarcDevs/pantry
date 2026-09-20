@@ -15,12 +15,13 @@
 - Text: never use `-` character. only the simple hyphen `-` for all text, including classnames and config keys. This avoids encoding issues and ensures consistency across all contexts (JSX, CSS, config, etc.)
 - Use unified imports for module that has many imports
 - Short conditional blocks - never use `{`
-- Don't break single imports to multiple lines - import line length is nearly irrelevant, only break truly excessive lines (~100+ chars)
-- Never break line around single imports - if an import genuinely must break, break before the `from` keyword
+- Imports with ONE named import (`import { a } from '...'`): keep on one line, break only past ~100 chars, and then break before the `from` keyword, never inside the braces
+- Imports with 2+ named imports (`import { a, b } from '...'`): always one name per line, even when the line is short
+- Images: use `Image` from `next/image`, never a raw `<img>`. For arbitrary remote URLs (user-entered or scraped, e.g. og:image) pass `unoptimized` (plus `fill`/`referrerPolicy` as needed) and do NOT add a wildcard `remotePatterns` - that would turn the image optimizer into an open proxy
 - Don't make line-breaking too strict
 - Always provide informative and self-explanatory filenames and variable names
 - Components with 5+ related props (e.g. a form's field values, or their change handlers): group into a single object prop (e.g. `values`, `handlers`) instead of listing each field individually. Use `group.field` directly at the usage site - don't destructure the group back into individual local names
-- Hooks that return 5+ values (e.g. a form hook returning its form, handlers and dialog state): keep the return value as one object named after the feature (`const addItem = useAddItemForm()`) and use `addItem.field` at the usage site - don't destructure the whole return into individual local names. Destructure only 1-4 values you genuinely need, or nested helpers such as `form`
+- Hooks that return 5+ values (e.g. a form hook returning its form, handlers and dialog state): keep the return value as one object named after the feature (`const addItem = useAddItemForm()`) and use `addItem.field` at the usage site - don't destructure the whole return into individual local names. Destructure only 1-4 values you genuinely need, or nested helpers such as `form`. A hook returning 5+ values returns a small number of feature-named nested objects, never a flat list of 5+ keys: group by kind, e.g. `{ values, suggestion: { value, isSuggesting, failed, request, refresh, applyStorage, applyExpiry }, buildPatch }`, and call sites use `hook.group.field` directly without destructuring the groups back into local names. State that is only form-like fields (several `useState` pairs for name/storage/type/etc.) lives in ONE `values` object with a single typed `setField(key, value)` setter, using a functional `setValues((current) => ...)` update so async callbacks never read stale closures - not one `useState` pair per field. Hooks that return react-hook-form's `form` already satisfy this
 
 ## Language & Format
 - Quotes: Single quotes (') for all strings, imports, JSX props, backtick allowed for template strings

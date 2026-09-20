@@ -17,9 +17,11 @@ type RequestOptions = {
 }
 
 export const useStorageSuggestion = (
-    initial: StorageSuggestion | null = null
+    initial: StorageSuggestion | null = null,
+    initialName = ''
 ) => {
     const [suggestion, setSuggestion] = useState<StorageSuggestion | null>(initial)
+    const [generatedForName, setGeneratedForName] = useState(initialName.trim())
     const [suggestionFailed, setSuggestionFailed] = useState(false)
     const [isSuggesting, startSuggesting] = useTransition()
     const latestRequestRef = useRef(0)
@@ -29,6 +31,11 @@ export const useStorageSuggestion = (
         setSuggestion(null)
         setSuggestionFailed(false)
     }, [])
+
+    const isStaleFor = (currentName: string) => (
+        suggestion !== null
+        && currentName.trim() !== generatedForName
+    )
 
     const request = useCallback((
         name: string,
@@ -47,6 +54,7 @@ export const useStorageSuggestion = (
                 const result = await suggestStorage(trimmedName, { fresh })
                 if (requestId !== latestRequestRef.current) return
                 setSuggestion(result)
+                setGeneratedForName(trimmedName)
                 setSuggestionFailed(false)
                 onSuggested?.(result)
             } catch (error) {
@@ -62,6 +70,7 @@ export const useStorageSuggestion = (
         suggestion,
         suggestionFailed,
         isSuggesting,
+        isStaleFor,
         request,
         clear
     }

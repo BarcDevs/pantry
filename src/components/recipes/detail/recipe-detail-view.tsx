@@ -1,6 +1,5 @@
 'use client'
 
-import { RECIPE_SOURCES } from '@/types/enums'
 import type { Recipe } from '@/types/recipe'
 
 import { RecipeDetailActions } from '@/components/recipes/detail/recipe-detail-actions'
@@ -25,10 +24,6 @@ type RecipeDetailViewProps = {
     recipe: Recipe
 }
 
-const showsImageField = (
-    source: (typeof RECIPE_SOURCES)[number]
-): boolean => source !== 'imported_url'
-
 export const RecipeDetailView = ({
     recipe: initialRecipe
 }: RecipeDetailViewProps) => {
@@ -41,26 +36,23 @@ export const RecipeDetailView = ({
             <PageHeader/>
             <RecipeResultHero recipe={recipeDetail.recipe}/>
             <RecipeResultStats recipe={recipeDetail.recipe}/>
-            {showsImageField(recipeDetail.recipe.source)
-                && !recipeDetail.recipe.imageUrl && (
-                    <RecipeImageUrlField
-                        imageUrl={recipeDetail.recipe.imageUrl}
-                        onChange={recipeDetail.updateImageUrl}
-                    />
-                )}
+            <RecipeImageUrlField
+                imageUrl={recipeDetail.recipe.imageUrl}
+                onChange={recipeDetail.actions.updateImageUrl}
+            />
             <RecipeBodyGrid>
                 <RecipeIngredientsList
                     ingredients={recipeDetail.recipe.ingredients}
-                    usedReplacements={recipeBranch.usedReplacements}
-                    onToggleReplacement={recipeBranch.toggleReplacement}
-                    usedRemovals={recipeBranch.usedRemovals}
-                    onToggleRemoval={recipeBranch.toggleRemoval}
+                    usedReplacements={recipeBranch.adjustments.values.usedReplacements}
+                    onToggleReplacement={recipeBranch.adjustments.actions.toggleReplacement}
+                    usedRemovals={recipeBranch.adjustments.values.usedRemovals}
+                    onToggleRemoval={recipeBranch.adjustments.actions.toggleRemoval}
                 />
                 <RecipeStepsList steps={recipeDetail.recipe.steps}/>
             </RecipeBodyGrid>
             <RecipeRefineInput
-                value={recipeBranch.instruction}
-                onChange={recipeBranch.setInstruction}
+                value={recipeBranch.adjustments.values.instruction}
+                onChange={(value) => recipeBranch.adjustments.setField('instruction', value)}
                 onSubmit={recipeBranch.branch}
                 isRefining={recipeBranch.isBranching}
                 label={recipesTexts.detail.adjustLabel}
@@ -74,19 +66,19 @@ export const RecipeDetailView = ({
             />
             <RecipeTagsEditor
                 tags={recipeDetail.recipe.tags}
-                onChange={recipeDetail.updateTags}
+                onChange={recipeDetail.actions.updateTags}
             />
             <RecipeDetailActions
                 recipe={recipeDetail.recipe}
-                onToggleFavorite={recipeDetail.toggleFavorite}
-                onStartCooking={recipeDetail.startCooking}
-                onRequestDelete={() => recipeDetail.setConfirmDelete(true)}
+                onToggleFavorite={recipeDetail.actions.toggleFavorite}
+                onStartCooking={recipeDetail.actions.startCooking}
+                onRequestDelete={() => recipeDetail.deletion.setIsConfirming(true)}
             />
             <DeleteRecipeDialog
-                open={recipeDetail.confirmDelete}
-                onOpenChange={recipeDetail.setConfirmDelete}
-                onConfirm={recipeDetail.handleDelete}
-                isDeleting={recipeDetail.isDeleting}
+                open={recipeDetail.deletion.isConfirming}
+                onOpenChange={recipeDetail.deletion.setIsConfirming}
+                onConfirm={recipeDetail.deletion.confirm}
+                isDeleting={recipeDetail.deletion.isDeleting}
                 recipeName={recipeDetail.recipe.title}
             />
         </div>

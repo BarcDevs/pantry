@@ -23,6 +23,8 @@ Configuration and design choices for the Gemini-backed AI suggestion/recipe feat
 | 11/09/2026 | Ingredient-substitution UI reuses existing status colors (red/amber/green) instead of a new palette |
 | 19/09/2026 | Add Item storage defaults to pantry and applies the AI suggestion automatically (never over a manual choice) |
 | 19/09/2026 | Suggestion refresh bypasses the 24h cache and replaces the type; one shared `useStorageSuggestion` hook |
+| 19/09/2026 | Add Item: typing a name never clears the suggestion; only an explicit refresh replaces it |
+| 19/09/2026 | Web recipe sourcing: web first, generate only if none found, convert on serving mismatch, save origin URL; toggle off = web only (not implemented yet) |
 
 ## UI Components — [[decisions/ui-components]]
 Reusable component conventions (buttons, wrappers) surfaced during pantry sessions.

@@ -25,7 +25,8 @@ export const importRecipeFromUrl = async (
     if (parsedUrl === null || fetched?.status !== 'ok') {
         return {
             recipe: null,
-            fallbackToManual: true
+            fallbackToManual: true,
+            isBlocked: fetched?.status === 'blocked'
         }
     }
 
@@ -47,17 +48,19 @@ export const importRecipeFromUrl = async (
     if (generated.ingredients.length === 0 || generated.steps.length === 0) {
         return {
             recipe: null,
-            fallbackToManual: true
+            fallbackToManual: true,
+            isBlocked: false
         }
     }
 
     const recipe = buildImportedRecipeDoc(userId, generated, pantryItems, {
         sourceUrl: parsedUrl,
-        imageUrl: extractOgImage(fetched.html)
+        imageUrl: extractOgImage(fetched.html, parsedUrl)
     })
 
     return {
         recipe,
-        fallbackToManual: false
+        fallbackToManual: false,
+        isBlocked: false
     }
 }

@@ -9,17 +9,14 @@ import type {
     PantryItem
 } from '@/types/pantry-item'
 
-import { requireUserId }
-    from '@/lib/auth/require-user-id'
+import { requireUserId } from '@/lib/auth/require-user-id'
 import { toPlainDoc } from '@/lib/mongo-doc'
 import connectDB from '@/lib/mongodb'
-import { normalizeName }
-    from '@/lib/normalize-name'
+import { findPantryItemByName } from '@/lib/pantry/find-pantry-item-by-name'
 
 import { ActionError } from '@/constants/errors'
 
-import { PantryItemModel }
-    from '@/models/pantry-item.model'
+import { PantryItemModel } from '@/models/pantry-item.model'
 import { pantryItemBaseSchema } from '@/schemas/pantry-item-fields'
 
 const addPantryItemSchema = pantryItemBaseSchema.extend({
@@ -82,10 +79,7 @@ export const addPantryItems = async (
 
         const duplicateMatch = entry.forceSeparate
             ? undefined
-            : knownItems.find((known) => (
-                normalizeName(known.name)
-                    === normalizeName(entry.name)
-            ))
+            : findPantryItemByName(knownItems, entry.name)
 
         if (duplicateMatch) {
             const existing = await PantryItemModel

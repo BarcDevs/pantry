@@ -28,7 +28,7 @@ export const useRecipeDetail = (initialRecipe: Recipe) => {
         const previousValue = recipe[key]
         setRecipe((current) => ({ ...current, [key]: value }))
         try {
-            await updateRecipe(recipe._id, { [key]: value })
+            await updateRecipe(recipe._id, { [key]: value ?? null })
         } catch (error) {
             console.error(error)
             setRecipe((current) => ({ ...current, [key]: previousValue }))
@@ -73,13 +73,17 @@ export const useRecipeDetail = (initialRecipe: Recipe) => {
 
     return {
         recipe,
-        toggleFavorite,
-        updateTags,
-        updateImageUrl,
-        startCooking,
-        confirmDelete,
-        setConfirmDelete,
-        isDeleting,
-        handleDelete
+        actions: {
+            toggleFavorite,
+            updateTags,
+            updateImageUrl,
+            startCooking
+        },
+        deletion: {
+            isConfirming: confirmDelete,
+            setIsConfirming: setConfirmDelete,
+            isDeleting,
+            confirm: handleDelete
+        }
     }
 }

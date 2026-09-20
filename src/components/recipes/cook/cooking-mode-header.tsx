@@ -1,6 +1,9 @@
 import Link from 'next/link'
 
-import { ArrowRightIcon, CheckIcon } from 'lucide-react'
+import {
+    ArrowRightIcon,
+    CheckIcon
+} from 'lucide-react'
 
 import { IconButton } from '@/components/shared/buttons/IconButton'
 import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'

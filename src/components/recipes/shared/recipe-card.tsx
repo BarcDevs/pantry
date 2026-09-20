@@ -8,6 +8,7 @@ import type { Recipe } from '@/types/recipe'
 
 import { DeleteRecipeDialog } from '@/components/recipes/shared/delete-recipe-dialog'
 import { RecipeCardActions } from '@/components/recipes/shared/recipe-card-actions'
+import { RecipeCoverImage } from '@/components/recipes/shared/recipe-cover-image'
 
 import { formatCookedAt } from '@/lib/recipes/format-cooked-at'
 
@@ -63,14 +64,13 @@ export const RecipeCard = ({
                 className={'block overflow-hidden rounded-lg border border-border-2 bg-surface text-start shadow-sm'}
             >
                 <div
-                    className={'relative h-30 bg-[image:var(--gradient-brand)] bg-cover bg-center'}
-                    style={recipe.imageUrl ? { backgroundImage: `url(${recipe.imageUrl})` } : undefined}
+                    className={'relative h-30 bg-[image:var(--gradient-brand)]'}
                 >
-                    {!recipe.imageUrl && (
-                        <div className={'absolute inset-0 flex items-center justify-center text-5xl'}>
-                            {recipe.emoji ?? '🍽️'}
-                        </div>
-                    )}
+                    <RecipeCoverImage
+                        imageUrl={recipe.imageUrl}
+                        emoji={recipe.emoji}
+                        emojiClassName={'text-5xl'}
+                    />
                     <div className={'absolute inset-x-0 top-0 flex justify-between p-2.5'}>
                         <span className={'rounded-full bg-surface/90 px-2.5 py-1 text-caption font-bold text-ink'}>
                             {`⏱ ${recipe.maxTime} דק׳`}

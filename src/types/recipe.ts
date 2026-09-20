@@ -82,12 +82,13 @@ export type UpdateRecipeInput = Partial<{
     tags: string[]
     ingredients: RecipeIngredient[]
     steps: RecipeStep[]
-    imageUrl: string
+    imageUrl: string | null
 }>
 
 export type RecipeImportResult = {
     recipe: RecipeDoc | null
     fallbackToManual: boolean
+    isBlocked: boolean
 }
 
 export type GenerateRecipeInput = {

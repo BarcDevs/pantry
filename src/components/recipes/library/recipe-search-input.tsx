@@ -1,14 +1,12 @@
 import { SearchIcon } from 'lucide-react'
 
-import type { SetState } from '@/types/react'
-
 import { Input } from '@/components/shared/Input'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
 type RecipeSearchInputProps = {
     value: string
-    onChange: SetState<string>
+    onChange: (value: string) => void
 }
 
 export const RecipeSearchInput = ({

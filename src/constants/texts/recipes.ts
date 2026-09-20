@@ -235,6 +235,7 @@ export const recipesTexts = {
         submit: 'ייבוא ושמירה בספרייה',
         importing: 'מייבא...',
         importError: 'הייבוא נכשל, נסו קישור אחר או הדביקו כטקסט',
+        importBlockedError: 'האתר חוסם קריאה אוטומטית של הקישור, נסו להדביק את המתכון כטקסט',
         reviewTitle: 'סקירת המתכון',
         titleLabel: 'שם המתכון',
         ingredientsLabel: 'מצרכים (שורה לכל מצרך)',

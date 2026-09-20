@@ -2,9 +2,13 @@
 
 import { useState } from 'react'
 
-import { Eye, EyeOff } from 'lucide-react'
+import {
+    Eye,
+    EyeOff
+} from 'lucide-react'
 import type { ComponentProps } from 'react'
 
+import { InputAdornmentButton } from '@/components/shared/buttons/InputAdornmentButton'
 import { Input } from '@/components/shared/Input'
 import { LtrInput } from '@/components/shared/LtrInput'
 
@@ -25,15 +29,11 @@ export const PasswordInput = ({
                 className={cn('pr-3 pl-9', className)}
                 {...props}
             />
-            <button
-                type={'button'}
-                onClick={() => setIsVisible((prev) => !prev)}
-                className={'absolute left-2.5 top-1/2 -translate-y-1/2 cursor-pointer text-ink-4'}
-            >
+            <InputAdornmentButton onClick={() => setIsVisible((prev) => !prev)}>
                 {isVisible
                     ? <EyeOff className={'size-4'}/>
                     : <Eye className={'size-4'}/>}
-            </button>
+            </InputAdornmentButton>
         </div>
     )
 }

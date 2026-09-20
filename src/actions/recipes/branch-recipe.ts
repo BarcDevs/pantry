@@ -1,6 +1,9 @@
 'use server'
 
-import type { Recipe, RecipeDoc } from '@/types/recipe'
+import type {
+    Recipe,
+    RecipeDoc
+} from '@/types/recipe'
 
 import { refineRecipe } from '@/actions/recipes/refine-recipe'
 import { saveRecipe } from '@/actions/recipes/save-recipe'

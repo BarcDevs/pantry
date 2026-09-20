@@ -52,8 +52,8 @@ export const ReceiptReviewShell = ({
     children
 }: ReceiptReviewShellProps) => {
     const receiptReview = useReceiptReview(source)
-    const duplicate = receiptReview.duplicates[0] ?? null
-    const hasRows = receiptReview.rows.length > 0
+    const duplicate = receiptReview.duplicates.pending[0] ?? null
+    const hasRows = receiptReview.rows.items.length > 0
     const isScan = source === ItemSource.ReceiptScan
     const {
         reviewTitle,
@@ -75,33 +75,33 @@ export const ReceiptReviewShell = ({
                     <ReceiptSourceCard
                         icon={sourceIcon}
                         label={sourceLabel}
-                        itemCount={receiptReview.rows.length}
-                        allSelected={receiptReview.rows.every((row) => row.included)}
-                        onToggleAll={receiptReview.toggleAll}
-                        onClearAll={receiptReview.clearAll}
+                        itemCount={receiptReview.rows.items.length}
+                        allSelected={receiptReview.rows.items.every((row) => row.included)}
+                        onToggleAll={receiptReview.rows.toggleAll}
+                        onClearAll={receiptReview.rows.clearAll}
                     />
                 </>
             )}
             {hasRows
                 ? (
                     <ReceiptReviewList
-                        rows={receiptReview.rows}
-                        isSubmitting={receiptReview.isSubmitting}
-                        rowActions={receiptReview.rowActions}
-                        onConfirm={receiptReview.confirm}
-                        onCancel={() => receiptReview.setScannedItems([])}
+                        rows={receiptReview.rows.items}
+                        isSubmitting={receiptReview.submission.isSubmitting}
+                        rowActions={receiptReview.rows.actions}
+                        onConfirm={receiptReview.submission.confirm}
+                        onCancel={() => receiptReview.rows.setScannedItems([])}
                     />
                 )
-                : children({ onScanned: receiptReview.setScannedItems })}
+                : children({ onScanned: receiptReview.rows.setScannedItems })}
             <DuplicateItemDialog
                 open={duplicate !== null}
                 onOpenChange={(open) => {
                     if (!open && duplicate) {
-                        receiptReview.resolveDuplicate(duplicate, 'separate')
+                        receiptReview.duplicates.resolve(duplicate, 'separate')
                     }
                 }}
-                onMerge={() => duplicate && receiptReview.resolveDuplicate(duplicate, 'merge')}
-                onKeepSeparate={() => duplicate && receiptReview.resolveDuplicate(duplicate, 'separate')}
+                onMerge={() => duplicate && receiptReview.duplicates.resolve(duplicate, 'merge')}
+                onKeepSeparate={() => duplicate && receiptReview.duplicates.resolve(duplicate, 'separate')}
             />
         </main>
     )

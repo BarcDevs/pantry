@@ -32,10 +32,14 @@ export const useCookingMode = (
     }
 
     return {
-        stepIndex,
-        isLastStep,
-        goPrev,
-        goNext,
-        doneCooking
+        step: {
+            index: stepIndex,
+            isLast: isLastStep
+        },
+        actions: {
+            goPrev,
+            goNext,
+            doneCooking
+        }
     }
 }

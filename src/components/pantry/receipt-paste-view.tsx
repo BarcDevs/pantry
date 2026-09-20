@@ -1,6 +1,9 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import {
+    useState,
+    useTransition
+} from 'react'
 
 import { useSearchParams } from 'next/navigation'
 
@@ -10,10 +13,17 @@ import { ReceiptReviewShell } from '@/components/pantry/receipt-review-shell'
 import { ReceiptTextForm } from '@/components/pantry/receipt-text-form'
 import { ReceiptUrlForm } from '@/components/pantry/receipt-url-form'
 
+import { useResetOnChange } from '@/hooks/use-reset-on-change'
+
 import { pantryTexts } from '@/constants/texts/pantry'
 
 import { parseReceiptText } from '@/actions/pantry/parse-receipt-text'
 import { parseReceiptUrl } from '@/actions/pantry/parse-receipt-url'
+
+const logAndFallback = (error: unknown) => {
+    console.error(error)
+    return null
+}
 
 export const ReceiptPasteView = () => {
     const searchParams = useSearchParams()
@@ -23,6 +33,11 @@ export const ReceiptPasteView = () => {
     const [error, setError] = useState<string | null>(null)
     const [isBlocked, setIsBlocked] = useState(false)
     const [isParsing, startParsing] = useTransition()
+
+    useResetOnChange(isTextMode, () => {
+        setError(null)
+        setIsBlocked(false)
+    })
 
     return (
         <ReceiptReviewShell
@@ -38,8 +53,9 @@ export const ReceiptPasteView = () => {
                     setIsBlocked(false)
                     startParsing(async () => {
                         const result = await parseReceiptUrl(url.trim())
-                        if (result.fallbackToManual) {
-                            setIsBlocked(result.isBlocked)
+                            .catch(logAndFallback)
+                        if (!result || result.fallbackToManual) {
+                            setIsBlocked(result?.isBlocked ?? false)
                             setError(pantryTexts.receiptReview.urlError)
                             return
                         }
@@ -51,7 +67,8 @@ export const ReceiptPasteView = () => {
                     setError(null)
                     startParsing(async () => {
                         const result = await parseReceiptText(text.trim())
-                        if (result.items.length === 0) {
+                            .catch(logAndFallback)
+                        if (!result || result.items.length === 0) {
                             setError(pantryTexts.receiptReview.pasteTextError)
                             return
                         }

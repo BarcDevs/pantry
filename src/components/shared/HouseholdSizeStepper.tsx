@@ -2,7 +2,10 @@ import type { ReactNode } from 'react'
 
 import { SecondaryButton } from '@/components/shared/buttons/SecondaryButton'
 
-import { MAX_HOUSEHOLD_SIZE, MIN_HOUSEHOLD_SIZE } from '@/constants/onboarding'
+import {
+    MAX_HOUSEHOLD_SIZE,
+    MIN_HOUSEHOLD_SIZE
+} from '@/constants/onboarding'
 import { onboardingTexts } from '@/constants/texts/onboarding'
 
 type HouseholdSizeStepperProps = {
