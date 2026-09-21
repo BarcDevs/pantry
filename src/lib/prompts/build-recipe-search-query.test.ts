@@ -20,6 +20,22 @@ describe('buildRecipeSearchQuery', () => {
             .toBe('מתכון ערב עוף')
     })
 
+    it('searches for the requested dish alone, without meal type or ingredients', () => {
+        expect(buildRecipeSearchQuery(
+            'dinner',
+            [item('עוף', FoodType.Meat)],
+            'לזניה'
+        )).toBe('מתכון לזניה')
+    })
+
+    it('falls back to meal type and ingredients when no dish is given', () => {
+        expect(buildRecipeSearchQuery(
+            'dinner',
+            [item('עוף', FoodType.Meat)],
+            undefined
+        )).toBe('מתכון ערב עוף')
+    })
+
     it('keeps at most 4 ingredients, preferring protein, vegetables, dairy and grains over staples', () => {
         const query = buildRecipeSearchQuery('lunch', [
             item('מלח', FoodType.Condiments),

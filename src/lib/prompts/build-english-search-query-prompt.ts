@@ -11,6 +11,6 @@ export const buildEnglishSearchQueryPrompt = (
     Main ingredients: ${ingredientNames.join(', ') || 'none'}.
     Max total time: ${input.maxTime} minutes.
     ${input.customInstructions
-        ? `Extra wishes from the user: ${input.customInstructions}`
+        ? `Requested dish (in Hebrew - translate it; the query must be about this dish): ${input.customInstructions}`
         : ''}
 `

@@ -225,7 +225,8 @@ export const findWebRecipe = async (
             },
             buildRecipeSearchQuery(
                 input.request.mealType,
-                input.selectedPantryItems
+                input.selectedPantryItems,
+                input.request.customInstructions?.trim() || undefined
             ),
             SearchLanguage.Hebrew
         )

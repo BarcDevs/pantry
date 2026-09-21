@@ -109,7 +109,7 @@ const setup = () => {
         ...recipe,
         mealCount
     }))
-    const run = () => findWebRecipe(input, {
+    const runWith = (request: FindWebRecipeInput) => findWebRecipe(request, {
         searchClient: { search },
         fetchPage,
         buildRecipe,
@@ -117,6 +117,7 @@ const setup = () => {
         convertServings,
         now: () => state.clock
     })
+    const run = () => runWith(input)
     return {
         state,
         convertServings,
@@ -124,7 +125,8 @@ const setup = () => {
         fetchPage,
         buildRecipe,
         composeEnglishQuery,
-        run
+        run,
+        runWith
     }
 }
 
@@ -133,6 +135,23 @@ describe('findWebRecipe', () => {
         jest.spyOn(console, 'error').mockImplementation(() => undefined)
     })
     afterEach(() => jest.restoreAllMocks())
+
+    it('searches for the requested dish instead of the pantry ingredients', async () => {
+        const t = setup()
+        t.search.mockResolvedValue(searchResults('https://a.co.il/r'))
+        t.fetchPage.mockResolvedValue(okPage('https://a.co.il/r'))
+        t.buildRecipe.mockResolvedValue(built({ sourceUrl: 'https://a.co.il/r' }))
+
+        await t.runWith({
+            ...input,
+            request: {
+                ...input.request,
+                customInstructions: '  פד תאי '
+            }
+        })
+
+        expect(t.search.mock.calls[0][0]).toBe('מתכון פד תאי')
+    })
 
     it('returns the qualifying Hebrew hit with the fetched final url, not the search url', async () => {
         const t = setup()

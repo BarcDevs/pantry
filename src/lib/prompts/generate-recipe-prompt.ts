@@ -30,7 +30,7 @@ export const buildGenerateRecipePrompt = (
         ? `העדפות תזונתיות: ${userContext.dietaryPreferences.join(', ')}.`
         : ''}
     ${input.customInstructions
-        ? `הוראות מיוחדות נוספות מהמשתמש: ${input.customInstructions}`
+        ? `המנה המבוקשת: ${input.customInstructions}. צור מתכון למנה הזו והתאם אותו למזווה.`
         : ''}
     ${recipeUnitsInstructions}
     ${recipePantryMatchingInstruction(pantryItemNames)}
