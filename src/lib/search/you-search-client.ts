@@ -69,7 +69,10 @@ export const createYouSearchClient = (
                 exclude_domains: excludedSearchDomains,
                 safesearch: searchSafeSearchLevel
             }),
-            signal: AbortSignal.timeout(searchRequestTimeoutMs)
+            signal: AbortSignal.timeout(Math.min(
+                searchRequestTimeoutMs,
+                options.timeoutMs ?? searchRequestTimeoutMs
+            ))
         })
         if (response.status !== HttpStatusCodes.OK) {
             throw new Error(`Search request failed with status ${response.status}`)

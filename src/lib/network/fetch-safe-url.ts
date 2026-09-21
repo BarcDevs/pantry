@@ -104,6 +104,8 @@ export type FetchSafeUrlOptions = {
     maxBytes: number
     allowedContentTypes: string[]
     deadlineMs?: number
+    /** Aborts the whole fetch early (e.g. a losing parallel candidate). */
+    signal?: AbortSignal
 }
 
 export type SafeFetchResult = {
@@ -116,9 +118,15 @@ export const fetchSafeUrl = async (
     options: FetchSafeUrlOptions
 ): Promise<SafeFetchResult | null> => {
     let currentUrl = startUrl
-    const deadline = AbortSignal.timeout(
+    const timeout = AbortSignal.timeout(
         options.deadlineMs ?? safeFetchDeadlineMs
     )
+    const deadline = options.signal
+        ? AbortSignal.any([
+            timeout,
+            options.signal
+        ])
+        : timeout
     for (let hop = 0; hop <= maxRedirects; hop += 1) {
         const safeAddress = await resolveSafeAddress(currentUrl)
         if (!safeAddress) {

@@ -1,0 +1,459 @@
+/**
+ * @jest-environment node
+ */
+jest.mock('@/lib/ai/gemini', () => ({
+    generateStructured: jest.fn()
+}))
+
+import {
+    CookingUnit,
+    FoodType,
+    MatchStrictness
+} from '@/types/enums'
+import type { RecipeDoc } from '@/types/recipe'
+
+import type { PageFetchResult } from '@/lib/network/fetch-page-text'
+
+import {
+    aiStructuringTimeoutMs,
+    candidateFetchTimeoutMs,
+    hebrewStageBudgetMs,
+    minBudgetForEnglishStageMs,
+    queryTranslationTimeoutMs,
+    SearchLanguage,
+    searchRequestTimeoutMs,
+    webSearchBudgetMs
+} from '@/constants/search'
+import { secondInMs } from '@/constants/time'
+
+import type { FindWebRecipeInput } from './find-web-recipe'
+import { findWebRecipe } from './find-web-recipe'
+
+const pantryItem = {
+    name: 'עוף',
+    type: FoodType.Meat,
+    quantity: 1,
+    unit: 'units' as const
+}
+
+const input: FindWebRecipeInput = {
+    request: {
+        mealCount: 2,
+        maxTime: 30,
+        mealType: 'dinner',
+        scope: 'pantry-first',
+        allowAiGeneration: true,
+        matchStrictness: MatchStrictness.Flexible
+    },
+    userId: 'user_1',
+    selectedPantryItems: [pantryItem],
+    allPantryItems: [pantryItem]
+}
+
+const okPage = (finalUrl: string): PageFetchResult => ({
+    status: 'ok',
+    pageText: 'text',
+    html: '<html></html>',
+    finalUrl
+})
+
+const recipeDoc = (overrides: Partial<RecipeDoc> = {}): RecipeDoc => ({
+    title: 'r',
+    maxTime: 20,
+    ingredients: [{
+        label: 'עוף',
+        name: 'עוף',
+        category: FoodType.Meat,
+        quantity: 1,
+        unit: CookingUnit.Units,
+        inPantry: true,
+        optional: false
+    }],
+    ...overrides
+} as RecipeDoc)
+
+const built = (overrides: Partial<RecipeDoc> = {}) => ({
+    status: 'ok',
+    recipe: recipeDoc(overrides)
+})
+
+const searchResults = (...urls: string[]) => urls.map((url) => ({
+    url,
+    title: url
+}))
+
+const deferred = <T>() => {
+    let resolve!: (value: T) => void
+    const promise = new Promise<T>((done) => {
+        resolve = done
+    })
+    return {
+        promise,
+        resolve
+    }
+}
+
+const setup = () => {
+    const state = { clock: 0 }
+    const search = jest.fn()
+    const fetchPage = jest.fn()
+    const buildRecipe = jest.fn()
+    const composeEnglishQuery = jest.fn().mockResolvedValue('chicken dinner')
+    const run = () => findWebRecipe(input, {
+        searchClient: { search },
+        fetchPage,
+        buildRecipe,
+        composeEnglishQuery,
+        now: () => state.clock
+    })
+    return {
+        state,
+        search,
+        fetchPage,
+        buildRecipe,
+        composeEnglishQuery,
+        run
+    }
+}
+
+describe('findWebRecipe', () => {
+    beforeEach(() => {
+        jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    })
+    afterEach(() => jest.restoreAllMocks())
+
+    it('returns the qualifying Hebrew hit with the fetched final url, not the search url', async () => {
+        const t = setup()
+        t.search.mockResolvedValue(searchResults('https://a.co.il/r'))
+        t.fetchPage.mockResolvedValue(okPage('https://a.co.il/canonical'))
+        t.buildRecipe.mockResolvedValue(built({ sourceUrl: 'https://a.co.il/canonical' }))
+
+        const result = await t.run()
+
+        expect(result?.sourceUrl).toBe('https://a.co.il/canonical')
+        expect(t.search).toHaveBeenCalledTimes(1)
+        expect(t.search.mock.calls[0][0]).toBe('מתכון ערב עוף')
+        expect(t.search.mock.calls[0][1].language).toBe(SearchLanguage.Hebrew)
+        expect(t.buildRecipe.mock.calls[0][0].pageUrl).toBe('https://a.co.il/canonical')
+        expect(t.composeEnglishQuery).not.toHaveBeenCalled()
+    })
+
+    it('skips blocked (402) and unqualified candidates and takes a later qualifying one', async () => {
+        const t = setup()
+        t.search.mockResolvedValue(searchResults(
+            'https://a.com/1',
+            'https://a.com/2',
+            'https://a.com/3'
+        ))
+        t.fetchPage.mockImplementation(async (url: string) => (
+            url.endsWith('/1')
+                ? { status: 'blocked' }
+                : okPage(url)
+        ))
+        t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) => (
+            pageUrl.endsWith('/2')
+                ? built({ maxTime: 90 })
+                : built({ sourceUrl: pageUrl })
+        ))
+
+        expect((await t.run())?.sourceUrl).toBe('https://a.com/3')
+    })
+
+    it('evaluates at most 3 candidates per stage, all started in parallel', async () => {
+        const t = setup()
+        t.search.mockResolvedValue(searchResults(
+            'https://a.com/1',
+            'https://a.com/2',
+            'https://a.com/3',
+            'https://a.com/4'
+        ))
+        const gate = deferred<PageFetchResult>()
+        t.fetchPage.mockReturnValue(gate.promise)
+
+        const running = t.run()
+        await new Promise((done) => setImmediate(done))
+
+        expect(t.fetchPage).toHaveBeenCalledTimes(3)
+        gate.resolve({ status: 'failed' })
+        await running
+    })
+
+    it('goes to the English stage after a Hebrew miss and returns its hit', async () => {
+        const t = setup()
+        t.search
+            .mockResolvedValueOnce(searchResults('https://a.co.il/1'))
+            .mockResolvedValueOnce(searchResults('https://b.com/1'))
+        t.fetchPage.mockImplementation(async (url: string) => (
+            url.includes('a.co.il')
+                ? { status: 'failed' }
+                : okPage(url)
+        ))
+        t.buildRecipe.mockResolvedValue(built({ sourceUrl: 'https://b.com/1' }))
+
+        const result = await t.run()
+
+        expect(result?.sourceUrl).toBe('https://b.com/1')
+        expect(t.search.mock.calls[1][0]).toBe('chicken dinner')
+        expect(t.search.mock.calls[1][1].language).toBe(SearchLanguage.English)
+    })
+
+    it('returns null when both stages miss', async () => {
+        const t = setup()
+        t.search
+            .mockResolvedValueOnce(searchResults('https://a.com/1'))
+            .mockResolvedValueOnce(searchResults('https://b.com/1'))
+        t.fetchPage.mockResolvedValue({ status: 'failed' })
+
+        expect(await t.run()).toBeNull()
+        expect(t.search).toHaveBeenCalledTimes(2)
+    })
+
+    it('does not retry a url already tried in the previous stage', async () => {
+        const t = setup()
+        t.search.mockResolvedValue(searchResults('https://a.com/1'))
+        t.fetchPage.mockResolvedValue({ status: 'failed' })
+
+        await t.run()
+
+        expect(t.fetchPage).toHaveBeenCalledTimes(1)
+    })
+
+    it('returns null without logging payloads when the search throws', async () => {
+        const t = setup()
+        t.search.mockRejectedValue(new Error('Search request failed with status 500'))
+
+        expect(await t.run()).toBeNull()
+        expect(t.fetchPage).not.toHaveBeenCalled()
+        expect(t.composeEnglishQuery).not.toHaveBeenCalled()
+        expect(console.error).toHaveBeenCalledWith(
+            expect.stringContaining('status 500')
+        )
+    })
+
+    it('returns null when the English translation throws', async () => {
+        const t = setup()
+        t.search.mockResolvedValue(searchResults('https://a.com/1'))
+        t.fetchPage.mockResolvedValue({ status: 'failed' })
+        t.composeEnglishQuery.mockRejectedValue(new Error('ai down'))
+
+        expect(await t.run()).toBeNull()
+    })
+
+    describe('parallel candidates', () => {
+        it('a lower-ranked candidate finishing first never beats a higher-ranked qualifying one', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults(
+                'https://a.com/1',
+                'https://a.com/2'
+            ))
+            const first = deferred<PageFetchResult>()
+            t.fetchPage.mockImplementation((url: string) => (
+                url.endsWith('/1')
+                    ? first.promise
+                    : Promise.resolve(okPage(url))
+            ))
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) =>
+                built({ sourceUrl: pageUrl }))
+
+            const running = t.run()
+            await new Promise((done) => setImmediate(done))
+            expect(t.buildRecipe).toHaveBeenCalledTimes(1)
+            first.resolve(okPage('https://a.com/1'))
+
+            expect((await running)?.sourceUrl).toBe('https://a.com/1')
+        })
+
+        it('falls to a lower-ranked candidate when every higher-ranked one fails', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults(
+                'https://a.com/1',
+                'https://a.com/2'
+            ))
+            const first = deferred<PageFetchResult>()
+            t.fetchPage.mockImplementation((url: string) => (
+                url.endsWith('/1')
+                    ? first.promise
+                    : Promise.resolve(okPage(url))
+            ))
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) =>
+                built({ sourceUrl: pageUrl }))
+
+            const running = t.run()
+            await new Promise((done) => setImmediate(done))
+            first.resolve({ status: 'failed' })
+
+            expect((await running)?.sourceUrl).toBe('https://a.com/2')
+        })
+
+        it('aborts the still-running losers once a winner is returned', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults(
+                'https://a.com/1',
+                'https://a.com/2',
+                'https://a.com/3'
+            ))
+            const signals: Record<string, AbortSignal> = {}
+            t.fetchPage.mockImplementation((url: string, options: { signal: AbortSignal }) => {
+                signals[url] = options.signal
+                return url.endsWith('/1')
+                    ? Promise.resolve(okPage(url))
+                    : new Promise(() => undefined)
+            })
+            t.buildRecipe.mockResolvedValue(built({ sourceUrl: 'https://a.com/1' }))
+
+            const result = await t.run()
+
+            expect(result?.sourceUrl).toBe('https://a.com/1')
+            expect(signals['https://a.com/2'].aborted).toBe(true)
+            expect(signals['https://a.com/3'].aborted).toBe(true)
+        })
+
+        it('a candidate that throws does not affect the others', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults(
+                'https://a.com/1',
+                'https://a.com/2'
+            ))
+            t.fetchPage.mockImplementation(async (url: string) => okPage(url))
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) => {
+                if (pageUrl.endsWith('/1')) throw new Error('ai timeout')
+                return built({ sourceUrl: pageUrl })
+            })
+
+            expect((await t.run())?.sourceUrl).toBe('https://a.com/2')
+        })
+    })
+
+    describe('time budget', () => {
+        it('gives each step its own cap while plenty of budget remains', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults('https://a.com/1'))
+            t.fetchPage.mockResolvedValue(okPage('https://a.com/1'))
+            t.buildRecipe.mockResolvedValue({ status: 'failed' })
+
+            await t.run()
+
+            expect(t.search.mock.calls[0][1].timeoutMs).toBe(searchRequestTimeoutMs)
+            expect(t.fetchPage.mock.calls[0][1].deadlineMs).toBe(candidateFetchTimeoutMs)
+            expect(t.buildRecipe.mock.calls[0][0].timeoutMs).toBe(aiStructuringTimeoutMs)
+        })
+
+        it('clips a slow AI parse near the Hebrew stage deadline', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults('https://a.com/1'))
+            t.fetchPage.mockImplementation(async (url: string) => {
+                t.state.clock = 6 * secondInMs
+                return okPage(url)
+            })
+            t.buildRecipe.mockResolvedValue({ status: 'failed' })
+
+            await t.run()
+
+            expect(t.buildRecipe.mock.calls[0][0].timeoutMs).toBe(
+                hebrewStageBudgetMs - 6 * secondInMs
+            )
+        })
+
+        it('caps the Hebrew stage at its own budget even though the whole phase has more', async () => {
+            const t = setup()
+            t.search.mockImplementation(async () => {
+                t.state.clock = 7 * secondInMs
+                return searchResults('https://a.com/1')
+            })
+            t.fetchPage.mockResolvedValue({ status: 'failed' })
+
+            await t.run()
+
+            expect(t.fetchPage.mock.calls[0][1].deadlineMs).toBe(
+                hebrewStageBudgetMs - 7 * secondInMs
+            )
+            expect(webSearchBudgetMs - 7 * secondInMs).toBeGreaterThan(
+                hebrewStageBudgetMs - 7 * secondInMs
+            )
+        })
+
+        it('starts nothing new when the Hebrew stage budget is used up by the search', async () => {
+            const t = setup()
+            t.search.mockImplementation(async () => {
+                t.state.clock = hebrewStageBudgetMs
+                return searchResults('https://a.com/1')
+            })
+
+            expect(await t.run()).toBeNull()
+            expect(t.fetchPage).not.toHaveBeenCalled()
+        })
+
+        it('skips the English stage when less than the minimum budget remains', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults('https://a.com/1'))
+            t.fetchPage.mockImplementation(async () => {
+                t.state.clock = webSearchBudgetMs - minBudgetForEnglishStageMs + 1
+                return { status: 'failed' }
+            })
+
+            expect(await t.run()).toBeNull()
+            expect(t.composeEnglishQuery).not.toHaveBeenCalled()
+            expect(t.search).toHaveBeenCalledTimes(1)
+        })
+
+        it('runs the English stage with exactly the minimum budget left, every step clipped to it', async () => {
+            const t = setup()
+            t.search
+                .mockResolvedValueOnce(searchResults('https://a.com/1'))
+                .mockResolvedValueOnce(searchResults('https://b.com/1'))
+            t.fetchPage.mockImplementation(async (url: string) => {
+                if (url.includes('a.com')) {
+                    t.state.clock = hebrewStageBudgetMs
+                    return { status: 'failed' }
+                }
+                return okPage(url)
+            })
+            t.composeEnglishQuery.mockImplementation(async () => {
+                t.state.clock += 4 * secondInMs
+                return 'chicken dinner'
+            })
+            t.buildRecipe.mockResolvedValue({ status: 'failed' })
+
+            await t.run()
+
+            expect(t.composeEnglishQuery.mock.calls[0][2]).toBe(queryTranslationTimeoutMs)
+            expect(t.search.mock.calls[1][1].timeoutMs).toBe(
+                webSearchBudgetMs - hebrewStageBudgetMs - 4 * secondInMs
+            )
+            expect(t.fetchPage.mock.calls[1][1].deadlineMs).toBeLessThanOrEqual(
+                webSearchBudgetMs - hebrewStageBudgetMs - 4 * secondInMs
+            )
+        })
+
+        it('never lets any step exceed the overall ceiling', async () => {
+            const t = setup()
+            t.search
+                .mockImplementationOnce(async () => {
+                    t.state.clock = hebrewStageBudgetMs - secondInMs
+                    return searchResults('https://a.com/1')
+                })
+                .mockImplementationOnce(async () => {
+                    t.state.clock += secondInMs
+                    return searchResults('https://b.com/1')
+                })
+            t.fetchPage.mockImplementation(async (url: string, options: { deadlineMs: number }) => {
+                expect(t.state.clock + options.deadlineMs).toBeLessThanOrEqual(webSearchBudgetMs)
+                t.state.clock += options.deadlineMs
+                return { status: 'failed' }
+            })
+            t.composeEnglishQuery.mockImplementation(async (
+                _request: unknown,
+                _ingredients: unknown,
+                timeoutMs: number
+            ) => {
+                expect(t.state.clock + timeoutMs).toBeLessThanOrEqual(webSearchBudgetMs)
+                t.state.clock += timeoutMs
+                return 'q'
+            })
+
+            await t.run()
+
+            expect(t.state.clock).toBeLessThanOrEqual(webSearchBudgetMs)
+        })
+    })
+})

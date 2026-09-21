@@ -19,6 +19,8 @@ export const buildRecipeFromPage = async (
         pageUrl: string
         page: FetchedPage
         pantryItems: MinimalPantryItem[]
+        timeoutMs?: number
+        signal?: AbortSignal
     }
 ): Promise<PageRecipeResult> => {
     const generated = await generateStructured(
@@ -28,7 +30,12 @@ export const buildRecipeFromPage = async (
         ),
         importedRecipeSchema,
         importedRecipeFallback,
-        0
+        0,
+        undefined,
+        {
+            timeoutMs: input.timeoutMs,
+            signal: input.signal
+        }
     )
 
     if (generated.ingredients.length === 0 || generated.steps.length === 0) {

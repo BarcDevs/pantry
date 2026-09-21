@@ -29,12 +29,18 @@ export type PageFetchResult =
     | { status: 'failed' }
 
 export const fetchPageText = async (
-    url: string
+    url: string,
+    options: {
+        deadlineMs?: number
+        signal?: AbortSignal
+    } = {}
 ): Promise<PageFetchResult> => {
     let fetched: SafeFetchResult | null
     try {
         fetched = await fetchSafeUrl(url, {
             maxBytes: maxPageBytes,
+            deadlineMs: options.deadlineMs,
+            signal: options.signal,
             allowedContentTypes
         })
     } catch (error) {

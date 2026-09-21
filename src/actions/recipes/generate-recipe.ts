@@ -11,6 +11,7 @@ import {
     RECIPE_SCOPES
 } from '@/types/enums'
 import type {
+    AiPromptContext,
     GenerateRecipeInput,
     RecipeDoc
 } from '@/types/recipe'
@@ -20,12 +21,16 @@ import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
 import { buildGenerateRecipePrompt } from '@/lib/prompts/generate-recipe-prompt'
+import { findWebRecipe } from '@/lib/recipes/find-web-recipe'
 import {
     normalizeIngredientFractions,
     normalizeStepFractions
 } from '@/lib/recipes/normalize-fraction-words'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 import { resolveIngredientPantryStatus } from '@/lib/recipes/resolve-ingredient-pantry-status'
+import { createSearchClient } from '@/lib/search/create-search-client'
+
+import env from '@/config/env'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { UserModel } from '@/models/user.model'
@@ -63,6 +68,36 @@ export const generateRecipe = async (
         ? await PantryItemModel.find(pantryQuery).lean<MinimalPantryItem[]>()
         : allPantryItems
     const pantryItemNames = selectedPantryItems.map((item) => item.name)
+
+    const aiPromptContext: AiPromptContext = {
+        mealCount: parsedInput.mealCount,
+        maxTime: parsedInput.maxTime,
+        mealType: parsedInput.mealType,
+        scope: parsedInput.scope,
+        allowAiGeneration: parsedInput.allowAiGeneration,
+        matchStrictness: parsedInput.matchStrictness,
+        customInstructions: parsedInput.customInstructions,
+        pantrySnapshot: pantryItemNames
+    }
+
+    const searchClient = parsedInput.allowAiGeneration && !env.e2eMockAi
+        ? createSearchClient()
+        : null
+    if (searchClient) {
+        const webRecipe = await findWebRecipe(
+            {
+                request: parsedInput,
+                userId,
+                selectedPantryItems,
+                allPantryItems
+            },
+            { searchClient }
+        )
+        if (webRecipe) return {
+            ...webRecipe,
+            aiPromptContext
+        }
+    }
 
     const user = await UserModel
         .findById(userId)
@@ -115,15 +150,6 @@ export const generateRecipe = async (
         history: [],
         isFavorite: false,
         tags: [],
-        aiPromptContext: {
-            mealCount: parsedInput.mealCount,
-            maxTime: parsedInput.maxTime,
-            mealType: parsedInput.mealType,
-            scope: parsedInput.scope,
-            allowAiGeneration: parsedInput.allowAiGeneration,
-            matchStrictness: parsedInput.matchStrictness,
-            customInstructions: parsedInput.customInstructions,
-            pantrySnapshot: pantryItemNames
-        }
+        aiPromptContext
     }
 }

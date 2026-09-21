@@ -3,6 +3,8 @@ import { type ZodType } from 'zod'
 
 import type { ImageInput } from '@/types/receipt'
 
+import { mergeAbortSignals } from '@/lib/ai/merge-abort-signals'
+
 import { aiModel } from '@/config/ai'
 import env from '@/config/env'
 
@@ -11,7 +13,11 @@ export const generateStructured = async <T>(
     schema: ZodType<T>,
     mock?: () => T,
     maxRetries?: number,
-    image?: ImageInput
+    image?: ImageInput,
+    abort: {
+        timeoutMs?: number
+        signal?: AbortSignal
+    } = {}
 ): Promise<T> => {
     if (env.e2eMockAi) {
         if (!mock) {
@@ -26,6 +32,7 @@ export const generateStructured = async <T>(
         model: aiModel,
         schema,
         maxRetries,
+        abortSignal: mergeAbortSignals(abort),
         ...(image
             ? {
                 messages: [{

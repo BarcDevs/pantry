@@ -8,6 +8,9 @@ export type SearchResult = {
 export type RecipeSearchClient = {
     search: (
         query: string,
-        options: { language: SearchLanguage }
+        options: {
+            language: SearchLanguage
+            timeoutMs?: number
+        }
     ) => Promise<SearchResult[]>
 }

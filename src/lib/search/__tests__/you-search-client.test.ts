@@ -3,7 +3,8 @@
  */
 import {
     excludedSearchDomains,
-    SearchLanguage
+    SearchLanguage,
+    searchRequestTimeoutMs
 } from '@/constants/search'
 
 import { createYouSearchClient } from '../you-search-client'
@@ -54,6 +55,21 @@ describe('createYouSearchClient', () => {
             exclude_domains: excludedSearchDomains,
             safesearch: 'moderate'
         })
+    })
+
+    it('clips the request timeout to the remaining budget when it is shorter', async () => {
+        const timeoutSpy = jest.spyOn(AbortSignal, 'timeout')
+        mockFetch.mockResolvedValue(jsonResponse({ results: {} }))
+
+        await client.search('q', {
+            language: SearchLanguage.Hebrew,
+            timeoutMs: 700
+        })
+        await client.search('q', { language: SearchLanguage.Hebrew })
+
+        expect(timeoutSpy).toHaveBeenNthCalledWith(1, 700)
+        expect(timeoutSpy).toHaveBeenNthCalledWith(2, searchRequestTimeoutMs)
+        timeoutSpy.mockRestore()
     })
 
     it('returns an empty list when the response has no web results', async () => {
