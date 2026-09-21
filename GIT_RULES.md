@@ -12,6 +12,7 @@
 - Don't run /commit skill on small fixes or formatting
 - Always ask before invoking /commit
 - Never jump ahead to commit without being asked
+- **Exception - records (user decision 2026-09-21):** a commit that ONLY records a correction or decision (`corrections/`, `decisions/` and their `index.md` rows) is made in the same turn as the correction, as a `docs` commit, without asking and without waiting for a "commit" instruction. Every session, not just this one. It does not extend to any other change.
 - Commit messages: imperative, present tense, describe what was **implemented** not just what changed
 - Generate messages with /caveman-commit skill
 - **Never claim commit succeeded without running actual `git commit`** - /caveman-commit is drafting only

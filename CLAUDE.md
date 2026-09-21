@@ -106,6 +106,8 @@ Full rules there. Key constraint: never invoke `/commit` skill on small fixes, f
 
 **Never commit without explicit user instruction** - not even after `/review` finishes, lint passes, and typecheck is clean. Those are quality gates, not permission. Wait for "commit", "/commit", or equivalent.
 
+**Exception - records (user decision 2026-09-21):** a record of a correction or decision (files under `corrections/` or `decisions/` and their `index.md` rows) is committed in the same turn as the correction, as its own `docs` commit, WITHOUT asking and without waiting for a "commit" instruction. Saying "I will commit those from now on" in chat is worthless - this rule is what makes it stick. It applies to every session and does not extend to any other change.
+
 **Commit type:** does this add user-facing behavior? -> `feat`. Fix a bug? -> `fix`. Restructure existing code without changing behavior (config/constant extraction, type aliasing, centralization)? -> `rfc`, never `feat` or `chore`.
 
 ## Style/formatting fixes
