@@ -17,6 +17,7 @@ import type { PageFetchResult } from '@/lib/network/fetch-page-text'
 import {
     aiStructuringTimeoutMs,
     candidateFetchTimeoutMs,
+    conversionTimeoutMs,
     hebrewStageBudgetMs,
     minBudgetForEnglishStageMs,
     queryTranslationTimeoutMs,
@@ -60,6 +61,8 @@ const okPage = (finalUrl: string): PageFetchResult => ({
 const recipeDoc = (overrides: Partial<RecipeDoc> = {}): RecipeDoc => ({
     title: 'r',
     maxTime: 20,
+    mealCount: 2,
+    mealType: 'dinner',
     ingredients: [{
         label: 'עוף',
         name: 'עוף',
@@ -102,15 +105,21 @@ const setup = () => {
     const fetchPage = jest.fn()
     const buildRecipe = jest.fn()
     const composeEnglishQuery = jest.fn().mockResolvedValue('chicken dinner')
+    const convertServings = jest.fn(async (recipe: RecipeDoc, mealCount: number) => ({
+        ...recipe,
+        mealCount
+    }))
     const run = () => findWebRecipe(input, {
         searchClient: { search },
         fetchPage,
         buildRecipe,
         composeEnglishQuery,
+        convertServings,
         now: () => state.clock
     })
     return {
         state,
+        convertServings,
         search,
         fetchPage,
         buildRecipe,
@@ -531,6 +540,89 @@ describe('findWebRecipe', () => {
 
             expect(await t.run()).toBeNull()
             expect(t.fetchPage).toHaveBeenCalledTimes(6)
+        })
+    })
+
+    describe('servings conversion', () => {
+        const hit = async (
+            t: ReturnType<typeof setup>,
+            overrides: Partial<RecipeDoc> = {}
+        ) => {
+            t.search.mockResolvedValue(searchResults('https://a.com/1'))
+            t.fetchPage.mockResolvedValue(okPage('https://a.com/1'))
+            t.buildRecipe.mockResolvedValue(built({
+                sourceUrl: 'https://a.com/1',
+                ...overrides
+            }))
+            return t.run()
+        }
+
+        it('does not call the AI when the servings already match', async () => {
+            const t = setup()
+
+            const result = await hit(t)
+
+            expect(t.convertServings).not.toHaveBeenCalled()
+            expect(result?.mealCount).toBe(2)
+        })
+
+        it('converts to the requested servings and sets the requested meal type', async () => {
+            const t = setup()
+
+            const result = await hit(t, {
+                mealCount: 4,
+                mealType: 'lunch'
+            })
+
+            expect(t.convertServings).toHaveBeenCalledTimes(1)
+            expect(t.convertServings.mock.calls[0][1]).toBe(2)
+            expect(t.convertServings.mock.calls[0][2]).toEqual([pantryItem])
+            expect(t.convertServings.mock.calls[0][3]).toBe(conversionTimeoutMs)
+            expect(result?.mealCount).toBe(2)
+            expect(result?.mealType).toBe('dinner')
+            expect(result?.sourceUrl).toBe('https://a.com/1')
+        })
+
+        it('keeps the recipe unconverted when the conversion throws', async () => {
+            const t = setup()
+            t.convertServings.mockRejectedValue(new Error('ai timeout'))
+
+            const result = await hit(t, { mealCount: 4 })
+
+            expect(result?.mealCount).toBe(4)
+            expect(result?.mealType).toBe('dinner')
+            expect(console.error).toHaveBeenCalledWith(
+                expect.stringContaining('servings conversion')
+            )
+        })
+
+        it('clips the conversion timeout to the remaining budget', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults('https://a.com/1'))
+            t.fetchPage.mockResolvedValue(okPage('https://a.com/1'))
+            t.buildRecipe.mockImplementation(async () => {
+                t.state.clock = webSearchBudgetMs - 3 * secondInMs
+                return built({ mealCount: 4 })
+            })
+
+            await t.run()
+
+            expect(t.convertServings.mock.calls[0][3]).toBe(3 * secondInMs)
+        })
+
+        it('skips the conversion when the budget is nearly exhausted', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults('https://a.com/1'))
+            t.fetchPage.mockResolvedValue(okPage('https://a.com/1'))
+            t.buildRecipe.mockImplementation(async () => {
+                t.state.clock = webSearchBudgetMs - 500
+                return built({ mealCount: 4 })
+            })
+
+            const result = await t.run()
+
+            expect(t.convertServings).not.toHaveBeenCalled()
+            expect(result?.mealCount).toBe(4)
         })
     })
 

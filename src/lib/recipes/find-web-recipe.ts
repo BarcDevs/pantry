@@ -8,6 +8,7 @@ import type { PageFetchResult } from '@/lib/network/fetch-page-text'
 import { fetchPageText } from '@/lib/network/fetch-page-text'
 import { buildRecipeSearchQuery } from '@/lib/prompts/build-recipe-search-query'
 import { buildRecipeFromPage } from '@/lib/recipes/build-recipe-from-page'
+import { convertRecipeServings } from '@/lib/recipes/convert-recipe-servings'
 import { judgeWebRecipe } from '@/lib/recipes/judge-web-recipe'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 import { composeEnglishSearchQuery } from '@/lib/search/compose-english-search-query'
@@ -19,6 +20,7 @@ import type { RecipeSearchClient } from '@/lib/search/types'
 import {
     aiStructuringTimeoutMs,
     candidateFetchTimeoutMs,
+    conversionTimeoutMs,
     hebrewStageBudgetMs,
     maxCandidatesPerStage,
     minBudgetForEnglishStageMs,
@@ -48,6 +50,7 @@ export type FindWebRecipeDeps = {
         input: Parameters<typeof buildRecipeFromPage>[0]
     ) => Promise<PageRecipeResult>
     composeEnglishQuery?: typeof composeEnglishSearchQuery
+    convertServings?: typeof convertRecipeServings
     now?: () => number
 }
 
@@ -63,6 +66,38 @@ const logFailure = (step: string, error: unknown): void => {
     console.error(
         `[findWebRecipe] ${step} failed: ${error instanceof Error ? error.message : 'unknown error'}`
     )
+}
+
+/**
+ * Aligns a qualified recipe with the request: meal type is what we searched
+ * for, and different servings are converted by one AI call. When the
+ * conversion fails, times out or has no budget left the recipe is kept
+ * unconverted with its own servings - never rejected.
+ */
+const alignWithRequest = async (
+    input: FindWebRecipeInput,
+    deps: Required<FindWebRecipeDeps>,
+    phase: Deadline,
+    recipe: RecipeDoc
+): Promise<RecipeDoc> => {
+    const { mealCount, mealType } = input.request
+    const typed = {
+        ...recipe,
+        mealType
+    }
+    if (recipe.mealCount === mealCount) return typed
+    if (!phase.canStart()) return typed
+    try {
+        return await deps.convertServings(
+            typed,
+            mealCount,
+            input.allPantryItems,
+            phase.clip(conversionTimeoutMs)
+        )
+    } catch (error) {
+        logFailure('servings conversion', error)
+        return typed
+    }
 }
 
 /** Fetch, parse and judge one page. Never throws: any failure means "not qualified". */
@@ -170,6 +205,7 @@ export const findWebRecipe = async (
         fetchPage: fetchPageText,
         buildRecipe: buildRecipeFromPage,
         composeEnglishQuery: composeEnglishSearchQuery,
+        convertServings: convertRecipeServings,
         now: Date.now,
         ...deps
     }
@@ -193,7 +229,12 @@ export const findWebRecipe = async (
             ),
             SearchLanguage.Hebrew
         )
-        if (hebrewHit) return hebrewHit
+        if (hebrewHit) return await alignWithRequest(
+            input,
+            resolvedDeps,
+            phase,
+            hebrewHit
+        )
         if (phase.remainingMs() < minBudgetForEnglishStageMs) return null
 
         const englishQuery = await resolvedDeps.composeEnglishQuery(
@@ -202,7 +243,7 @@ export const findWebRecipe = async (
             phase.clip(queryTranslationTimeoutMs)
         )
         if (!phase.canStart()) return null
-        return await runStage(
+        const englishHit = await runStage(
             {
                 input,
                 deps: resolvedDeps,
@@ -214,6 +255,13 @@ export const findWebRecipe = async (
             },
             englishQuery,
             SearchLanguage.English
+        )
+        if (!englishHit) return null
+        return await alignWithRequest(
+            input,
+            resolvedDeps,
+            phase,
+            englishHit
         )
     } catch (error) {
         logFailure('search', error)

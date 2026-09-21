@@ -9,6 +9,7 @@ export const webSearchBudgetMs = 15 * secondInMs
 export const hebrewStageBudgetMs = 9 * secondInMs
 export const maxCandidatesPerStage = 3
 export const aiStructuringTimeoutMs = 8 * secondInMs
+export const conversionTimeoutMs = 8 * secondInMs
 export const queryTranslationTimeoutMs = 3 * secondInMs
 export const minBudgetForEnglishStageMs = 6 * secondInMs
 export const minStepBudgetMs = secondInMs
