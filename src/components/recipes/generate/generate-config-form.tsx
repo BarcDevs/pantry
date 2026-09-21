@@ -3,6 +3,7 @@
 import { ExpiredItemsGate } from '@/components/recipes/generate/expired-items-gate'
 import { GenerateConfigFields } from '@/components/recipes/generate/generate-config-fields'
 import { GenerateDietarySummary } from '@/components/recipes/generate/generate-dietary-summary'
+import { GenerateDishField } from '@/components/recipes/generate/generate-dish-field'
 import { GenerateNoMatchNotice } from '@/components/recipes/generate/generate-no-match-notice'
 import { GenerateSourceGroup } from '@/components/recipes/generate/generate-source-group'
 import { PantrySelectSheet } from '@/components/recipes/generate/pantry-select-sheet'
@@ -10,8 +11,6 @@ import { PantrySelectionSummary } from '@/components/recipes/generate/pantry-sel
 import { SparsePantryWarning } from '@/components/recipes/generate/sparse-pantry-warning'
 import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { FormError } from '@/components/shared/form/FormError'
-import { FormInputField } from '@/components/shared/form/FormInputField'
-import { Input } from '@/components/shared/Input'
 import { Form } from '@/components/ui/form'
 
 import { useGenerateRecipeForm } from '@/hooks/use-generate-recipe-form'
@@ -54,21 +53,7 @@ export const GenerateConfigForm = ({
                 )}
                 <GenerateSourceGroup control={generateRecipe.form.control}/>
                 <GenerateDietarySummary dietaryPreferences={dietaryPreferences}/>
-                <FormInputField
-                    control={generateRecipe.form.control}
-                    name={'customInstructions'}
-                    label={texts.customInstructionsLabel}
-                    render={(field) => (
-                        <Input
-                            name={field.name}
-                            onBlur={field.onBlur}
-                            ref={field.ref}
-                            value={field.value as string}
-                            onChange={field.onChange}
-                            placeholder={texts.customInstructionsPlaceholder}
-                        />
-                    )}
-                />
+                <GenerateDishField control={generateRecipe.form.control}/>
                 <FormError errors={generateRecipe.form.formState.errors}/>
                 {generateRecipe.noMatch.isShown && (
                     <GenerateNoMatchNotice isStrict={matchStrictness === 'strict'}/>
