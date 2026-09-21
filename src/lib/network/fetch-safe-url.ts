@@ -4,10 +4,9 @@ import { Agent } from 'undici'
 import { isPrivateAddress } from '@/lib/network/is-private-address'
 
 import { HttpStatusCodes } from '@/constants/httpStatusCodes'
-import { secondInMs } from '@/constants/time'
+import { safeFetchDeadlineMs } from '@/constants/network'
 
 const maxRedirects = 3
-const fetchTimeoutMs = 5 * secondInMs
 const browserHeaders = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
     Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -103,6 +102,7 @@ export class FetchBlockedError extends Error {}
 export type FetchSafeUrlOptions = {
     maxBytes: number
     allowedContentTypes: string[]
+    deadlineMs?: number
 }
 
 export type SafeFetchResult = {
@@ -115,6 +115,9 @@ export const fetchSafeUrl = async (
     options: FetchSafeUrlOptions
 ): Promise<SafeFetchResult | null> => {
     let currentUrl = startUrl
+    const deadline = AbortSignal.timeout(
+        options.deadlineMs ?? safeFetchDeadlineMs
+    )
     for (let hop = 0; hop <= maxRedirects; hop += 1) {
         const safeAddress = await resolveSafeAddress(currentUrl)
         if (!safeAddress) {
@@ -126,7 +129,7 @@ export const fetchSafeUrl = async (
             response = await fetch(currentUrl, {
                 redirect: 'manual',
                 headers: browserHeaders,
-                signal: AbortSignal.timeout(fetchTimeoutMs),
+                signal: deadline,
                 dispatcher: pinnedDispatcher(
                     safeAddress.address,
                     safeAddress.family

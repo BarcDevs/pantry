@@ -154,6 +154,39 @@ describe('fetchSafeUrl', () => {
         })
     })
 
+    it('cuts off a slow second hop with one shared deadline', async () => {
+        const deadlineMs = 60
+        const hopDelayMs = 40
+        mockFetch
+            .mockImplementationOnce(async () => {
+                await new Promise((resolve) => setTimeout(resolve, hopDelayMs))
+                return makeResponse(302, { location: '/slow' })
+            })
+            .mockImplementationOnce(
+                (_url: string, init: { signal: AbortSignal }) => new Promise(
+                    (_resolve, reject) => {
+                        init.signal.addEventListener(
+                            'abort',
+                            () => reject(init.signal.reason)
+                        )
+                    }
+                )
+            )
+        const startedAt = Date.now()
+        await expect(
+            fetchSafeUrl(
+                'https://example.com/a',
+                {
+                    ...fetchOptions,
+                    deadlineMs
+                }
+            )
+        ).rejects.toBeDefined()
+        const secondHopSignal = mockFetch.mock.calls[1][1].signal
+        expect(secondHopSignal).toBe(mockFetch.mock.calls[0][1].signal)
+        expect(Date.now() - startedAt).toBeLessThan(deadlineMs + hopDelayMs)
+    })
+
     it('pins the connection to the checked IP', async () => {
         mockFetch.mockResolvedValue(makeResponse(200, { body: 'ok' }))
         await fetchSafeUrl('https://example.com/a', fetchOptions)
