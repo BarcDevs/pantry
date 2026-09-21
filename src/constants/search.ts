@@ -7,7 +7,7 @@ export const searchRequestTimeoutMs = 3 * secondInMs
 export const candidateFetchTimeoutMs = 3 * secondInMs
 export const webSearchBudgetMs = 15 * secondInMs
 export const hebrewStageBudgetMs = 9 * secondInMs
-export const maxCandidatesPerStage = 3
+export const maxCandidatesPerStage = 7
 export const aiStructuringTimeoutMs = 8 * secondInMs
 export const conversionTimeoutMs = 8 * secondInMs
 export const queryTranslationTimeoutMs = 3 * secondInMs
@@ -33,7 +33,14 @@ export const queryCategoryPriority: Array<FoodType> = [
     FoodType.Grains
 ]
 
+/** Sites that always answer a server fetch with 402/403 (paywall or bot block), so never worth a candidate slot. Add a host when a real fetch shows it. */
+export const blockedSearchDomains = [
+    'hashulchan.co.il',
+    'seriouseats.com'
+]
+
 export const excludedSearchDomains = [
+    ...blockedSearchDomains,
     'youtube.com',
     'youtu.be',
     'facebook.com',
