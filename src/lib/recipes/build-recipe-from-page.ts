@@ -11,7 +11,10 @@ import { extractRecipeSourceName } from '@/lib/recipes/extract-recipe-source-nam
 import { importedRecipeFallback } from '@/lib/recipes/imported-recipe-fallback'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
-import { importedRecipeSchema } from '@/schemas/imported-recipe-schema'
+import {
+    importedRecipeSchema,
+    webImportedRecipeSchema
+} from '@/schemas/imported-recipe-schema'
 
 export const buildRecipeFromPage = async (
     input: {
@@ -19,6 +22,7 @@ export const buildRecipeFromPage = async (
         pageUrl: string
         page: FetchedPage
         pantryItems: MinimalPantryItem[]
+        requestedDish?: string
         timeoutMs?: number
         signal?: AbortSignal
     }
@@ -26,9 +30,12 @@ export const buildRecipeFromPage = async (
     const generated = await generateStructured(
         buildImportRecipeFromUrlPrompt(
             input.page.pageText,
-            input.pantryItems.map((item) => item.name)
+            input.pantryItems.map((item) => item.name),
+            input.requestedDish
         ),
-        importedRecipeSchema,
+        input.requestedDish
+            ? webImportedRecipeSchema
+            : importedRecipeSchema,
         importedRecipeFallback,
         0,
         undefined,
@@ -44,6 +51,8 @@ export const buildRecipeFromPage = async (
 
     return {
         status: 'ok',
+        matchesRequestedDish: (generated as { matchesRequestedDish?: boolean })
+            .matchesRequestedDish,
         recipe: buildImportedRecipeDoc(
             input.userId,
             generated,

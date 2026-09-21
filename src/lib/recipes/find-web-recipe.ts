@@ -128,6 +128,7 @@ const evaluateCandidate = async (
             pageUrl: page.finalUrl,
             page,
             pantryItems: input.allPantryItems,
+            requestedDish: input.request.customInstructions?.trim() || undefined,
             timeoutMs: deadline.clip(aiStructuringTimeoutMs),
             signal
         })
@@ -136,7 +137,8 @@ const evaluateCandidate = async (
         const isQualified = judgeWebRecipe(
             built.recipe,
             input.request,
-            input.allPantryItems
+            input.allPantryItems,
+            built.matchesRequestedDish
         )
         return isQualified ? built.recipe : null
     } catch (error) {

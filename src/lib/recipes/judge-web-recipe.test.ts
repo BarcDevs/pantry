@@ -46,6 +46,45 @@ const strict = {
     matchStrictness: MatchStrictness.Strict
 }
 
+describe('judgeWebRecipe requested dish', () => {
+    const withDish = {
+        ...strict,
+        customInstructions: 'לזניה'
+    }
+    const pantryMatch = recipe([ingredient('אורז', true)])
+    const pantryMiss = recipe([ingredient('בשר', false)])
+
+    it('accepts when the dish matches and the pantry matches', () => {
+        expect(judgeWebRecipe(pantryMatch, withDish, pantry, true)).toBe(true)
+    })
+
+    it('rejects a dish mismatch even when the ingredients match the pantry', () => {
+        expect(judgeWebRecipe(pantryMatch, withDish, pantry, false)).toBe(false)
+    })
+
+    it('treats a missing flag as not matching when a dish was requested', () => {
+        expect(judgeWebRecipe(pantryMatch, withDish, pantry, undefined)).toBe(false)
+        expect(judgeWebRecipe(pantryMatch, withDish, pantry)).toBe(false)
+    })
+
+    it('still applies the pantry rule when the dish matches', () => {
+        expect(judgeWebRecipe(pantryMiss, withDish, pantry, true)).toBe(false)
+        expect(judgeWebRecipe(pantryMiss, {
+            ...withDish,
+            matchStrictness: MatchStrictness.Flexible
+        }, pantry, true)).toBe(false)
+    })
+
+    it('ignores the flag when no dish was requested (blank counts as none)', () => {
+        expect(judgeWebRecipe(pantryMatch, strict, pantry, false)).toBe(true)
+        expect(judgeWebRecipe(pantryMatch, strict, pantry, undefined)).toBe(true)
+        expect(judgeWebRecipe(pantryMatch, {
+            ...strict,
+            customInstructions: '   '
+        }, pantry, false)).toBe(true)
+    })
+})
+
 describe('judgeWebRecipe', () => {
     it('rejects a recipe whose stated time exceeds the requested max', () => {
         expect(judgeWebRecipe(recipe([], 45), flexible, pantry)).toBe(false)

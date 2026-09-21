@@ -29,4 +29,8 @@ export const importedRecipeSchema = z.object({
     }))
 })
 
+export const webImportedRecipeSchema = importedRecipeSchema.extend({
+    matchesRequestedDish: z.boolean().optional()
+})
+
 export type ImportedRecipe = z.infer<typeof importedRecipeSchema>

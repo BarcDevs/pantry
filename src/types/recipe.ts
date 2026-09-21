@@ -108,6 +108,8 @@ export type PageRecipeResult =
     | {
         status: 'ok'
         recipe: RecipeDoc
+        /** Only set when a dish was requested: whether the page recipe is that dish. */
+        matchesRequestedDish?: boolean
     }
     | { status: 'failed' }
 

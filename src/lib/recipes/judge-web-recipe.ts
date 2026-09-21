@@ -7,6 +7,7 @@ import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-
 type WebRecipeRequest = {
     maxTime: number
     matchStrictness: MatchStrictness
+    customInstructions?: string
 }
 
 /**
@@ -30,12 +31,21 @@ const isMissing = (
  * 2. Pantry match: strict = nothing missing (optional and side ingredients
  *    included); flexible = every non-optional (core) ingredient present,
  *    optional ones may be missing.
+ * 3. Requested dish: when a dish was typed it is ALWAYS strict - the page
+ *    recipe must be that dish (or a clear variant), i.e. `matchesRequestedDish`
+ *    must be exactly true; false or missing rejects. Without a dish it is unused.
  */
 export const judgeWebRecipe = (
     recipe: RecipeDoc,
     request: WebRecipeRequest,
-    pantryItems: MinimalPantryItem[]
+    pantryItems: MinimalPantryItem[],
+    matchesRequestedDish?: boolean
 ): boolean => {
+    if (
+        request.customInstructions?.trim()
+        && matchesRequestedDish !== true
+    ) return false
+
     const statedTime = recipe.maxTime
     if (
         Number.isFinite(statedTime)

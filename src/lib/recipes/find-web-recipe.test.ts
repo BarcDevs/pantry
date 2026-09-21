@@ -153,6 +153,81 @@ describe('findWebRecipe', () => {
         expect(t.search.mock.calls[0][0]).toBe('מתכון פד תאי')
     })
 
+    describe('requested dish match', () => {
+        const dishInput = {
+            ...input,
+            request: {
+                ...input.request,
+                customInstructions: 'לזניה'
+            }
+        }
+
+        it('rejects a mismatching higher-ranked page and lets the next matching one win', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults('https://a.com/1', 'https://a.com/2'))
+            t.fetchPage.mockImplementation(async (url: string) => okPage(url))
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) => ({
+                ...built({ sourceUrl: pageUrl }),
+                matchesRequestedDish: pageUrl.endsWith('/2')
+            }))
+
+            const result = await t.runWith(dishInput)
+
+            expect(result?.sourceUrl).toBe('https://a.com/2')
+            expect(t.buildRecipe.mock.calls[0][0].requestedDish).toBe('לזניה')
+        })
+
+        it('treats a missing flag as a mismatch and goes on to the English stage with the same dish', async () => {
+            const t = setup()
+            t.search
+                .mockResolvedValueOnce(searchResults('https://a.com/1'))
+                .mockResolvedValueOnce(searchResults('https://b.com/1'))
+            t.fetchPage.mockImplementation(async (url: string) => okPage(url))
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) => (
+                pageUrl.includes('a.com')
+                    ? built({ sourceUrl: pageUrl })
+                    : {
+                        ...built({ sourceUrl: pageUrl }),
+                        matchesRequestedDish: true
+                    }
+            ))
+
+            const result = await t.runWith(dishInput)
+
+            expect(result?.sourceUrl).toBe('https://b.com/1')
+            expect(t.search.mock.calls[1][1].language).toBe(SearchLanguage.English)
+            expect(t.buildRecipe).toHaveBeenCalledTimes(2)
+            expect(t.buildRecipe.mock.calls[1][0].requestedDish).toBe('לזניה')
+        })
+
+        it('returns null when every candidate mismatches the dish', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults('https://a.com/1'))
+            t.fetchPage.mockImplementation(async (url: string) => okPage(url))
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) => ({
+                ...built({ sourceUrl: pageUrl }),
+                matchesRequestedDish: false
+            }))
+
+            expect(await t.runWith(dishInput)).toBeNull()
+        })
+
+        it('is unaffected without a dish: no requestedDish, flag ignored', async () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults('https://a.com/1'))
+            t.fetchPage.mockImplementation(async (url: string) => okPage(url))
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) => ({
+                ...built({ sourceUrl: pageUrl }),
+                matchesRequestedDish: false
+            }))
+
+            const result = await t.run()
+
+            expect(result?.sourceUrl).toBe('https://a.com/1')
+            expect(t.buildRecipe.mock.calls[0][0].requestedDish).toBeUndefined()
+        })
+    })
+
     it('returns the qualifying Hebrew hit with the fetched final url, not the search url', async () => {
         const t = setup()
         t.search.mockResolvedValue(searchResults('https://a.co.il/r'))
