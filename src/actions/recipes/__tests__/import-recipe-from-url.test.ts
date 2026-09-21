@@ -190,6 +190,31 @@ describe('importRecipeFromUrl', () => {
         }
     )
 
+    it(
+        'prefers the JSON-LD Recipe image over a wrong og:image',
+        async () => {
+            mockAuth.mockResolvedValue(
+                { user: { id: 'user_123' } } as never
+            )
+            mockFetch.mockResolvedValue(
+                makeResponse(
+                    '<html><head><meta property="og:image" content="https://example.com/FISH-TACOS-2.png">'
+                    + '<script type="application/ld+json">{"@graph":[{"@type":"Recipe","image":["https://example.com/peppers.jpg"]}]}</script>'
+                    + '</head></html>'
+                )
+            )
+            mockGenerateStructured.mockResolvedValue(aiRecipe)
+
+            const result = await importRecipeFromUrl(
+                'https://example.com/recipe'
+            )
+
+            expect(result.recipe?.imageUrl).toBe(
+                'https://example.com/peppers.jpg'
+            )
+        }
+    )
+
     it.each([
         ['ingredients', { ingredients: [] }],
         ['steps', { steps: [] }]

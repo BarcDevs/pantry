@@ -6,7 +6,7 @@ import type {
 import { generateStructured } from '@/lib/ai/gemini'
 import { buildImportRecipeFromUrlPrompt } from '@/lib/prompts/import-recipe-from-url-prompt'
 import { buildImportedRecipeDoc } from '@/lib/recipes/build-imported-recipe-doc'
-import { extractOgImage } from '@/lib/recipes/extract-og-image'
+import { extractRecipeImage } from '@/lib/recipes/extract-recipe-image'
 import { importedRecipeFallback } from '@/lib/recipes/imported-recipe-fallback'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
@@ -42,7 +42,7 @@ export const buildRecipeFromPage = async (
             input.pantryItems,
             {
                 sourceUrl: input.pageUrl,
-                imageUrl: extractOgImage(input.page.html, input.pageUrl)
+                imageUrl: extractRecipeImage(input.page.html, input.pageUrl)
             }
         )
     }

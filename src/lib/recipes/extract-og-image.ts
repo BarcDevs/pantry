@@ -1,4 +1,5 @@
-const maxOgImageLength = 2000
+import { resolveSafeImageUrl } from '@/lib/recipes/resolve-safe-image-url'
+
 const metaTagPattern = /<meta\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi
 const attributePattern = /([^\s"'=<>/]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+)))?/g
 const namedEntities: Record<string, string> = {
@@ -45,21 +46,6 @@ const readAttributes = (tag: string): Map<string, string> => {
         attributes.set(name, match[2] ?? match[3] ?? match[4] ?? '')
     }
     return attributes
-}
-
-const resolveSafeImageUrl = (
-    candidate: string,
-    pageUrl: string
-): string | undefined => {
-    try {
-        const resolved = new URL(candidate.trim(), pageUrl)
-        const isHttp = resolved.protocol === 'http:'
-            || resolved.protocol === 'https:'
-        if (!isHttp || resolved.href.length > maxOgImageLength) return undefined
-        return resolved.href
-    } catch {
-        return undefined
-    }
 }
 
 export const extractOgImage = (
