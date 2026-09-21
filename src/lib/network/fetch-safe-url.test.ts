@@ -70,7 +70,10 @@ describe('fetchSafeUrl', () => {
         mockFetch.mockResolvedValue(makeResponse(200, { body: 'hello' }))
         await expect(
             fetchSafeUrl('https://example.com/a', fetchOptions)
-        ).resolves.toBe('hello')
+        ).resolves.toEqual({
+            body: 'hello',
+            finalUrl: 'https://example.com/a'
+        })
     })
 
     it('blocks a redirect to a private IP literal without fetching it', async () => {
@@ -145,7 +148,10 @@ describe('fetchSafeUrl', () => {
             .mockResolvedValueOnce(makeResponse(200, { body: 'done' }))
         await expect(
             fetchSafeUrl('https://example.com/a', fetchOptions)
-        ).resolves.toBe('done')
+        ).resolves.toEqual({
+            body: 'done',
+            finalUrl: 'https://example.com/d'
+        })
     })
 
     it('pins the connection to the checked IP', async () => {

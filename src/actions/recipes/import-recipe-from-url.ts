@@ -2,19 +2,14 @@
 
 import type { RecipeImportResult } from '@/types/recipe'
 
-import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
 import { fetchPageText } from '@/lib/network/fetch-page-text'
 import { parseUrlInput } from '@/lib/network/parse-url-input'
-import { buildImportRecipeFromUrlPrompt } from '@/lib/prompts/import-recipe-from-url-prompt'
-import { buildImportedRecipeDoc } from '@/lib/recipes/build-imported-recipe-doc'
-import { extractOgImage } from '@/lib/recipes/extract-og-image'
-import { importedRecipeFallback } from '@/lib/recipes/imported-recipe-fallback'
+import { buildRecipeFromPage } from '@/lib/recipes/build-recipe-from-page'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
-import { importedRecipeSchema } from '@/schemas/imported-recipe-schema'
 
 export const importRecipeFromUrl = async (
     url: string
@@ -35,17 +30,14 @@ export const importRecipeFromUrl = async (
         .find({ userId })
         .lean<MinimalPantryItem[]>()
 
-    const generated = await generateStructured(
-        buildImportRecipeFromUrlPrompt(
-            fetched.pageText,
-            pantryItems.map((item) => item.name)
-        ),
-        importedRecipeSchema,
-        importedRecipeFallback,
-        0
-    )
+    const built = await buildRecipeFromPage({
+        userId,
+        pageUrl: parsedUrl,
+        page: fetched,
+        pantryItems
+    })
 
-    if (generated.ingredients.length === 0 || generated.steps.length === 0) {
+    if (built.status === 'failed') {
         return {
             recipe: null,
             fallbackToManual: true,
@@ -53,13 +45,8 @@ export const importRecipeFromUrl = async (
         }
     }
 
-    const recipe = buildImportedRecipeDoc(userId, generated, pantryItems, {
-        sourceUrl: parsedUrl,
-        imageUrl: extractOgImage(fetched.html, parsedUrl)
-    })
-
     return {
-        recipe,
+        recipe: built.recipe,
         fallbackToManual: false,
         isBlocked: false
     }

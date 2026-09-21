@@ -87,6 +87,18 @@ export type UpdateRecipeInput = Partial<{
     imageUrl: string | null
 }>
 
+export type FetchedPage = {
+    pageText: string
+    html: string
+}
+
+export type PageRecipeResult =
+    | {
+        status: 'ok'
+        recipe: RecipeDoc
+    }
+    | { status: 'failed' }
+
 export type RecipeImportResult = {
     recipe: RecipeDoc | null
     fallbackToManual: boolean

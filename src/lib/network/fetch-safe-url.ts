@@ -105,10 +105,15 @@ export type FetchSafeUrlOptions = {
     allowedContentTypes: string[]
 }
 
+export type SafeFetchResult = {
+    body: string
+    finalUrl: string
+}
+
 export const fetchSafeUrl = async (
     startUrl: string,
     options: FetchSafeUrlOptions
-): Promise<string | null> => {
+): Promise<SafeFetchResult | null> => {
     let currentUrl = startUrl
     for (let hop = 0; hop <= maxRedirects; hop += 1) {
         const safeAddress = await resolveSafeAddress(currentUrl)
@@ -160,7 +165,10 @@ export const fetchSafeUrl = async (
             logFetchFailure(currentUrl, `content-type "${contentType}" not allowed`)
             return null
         }
-        return readBoundedBody(response, options.maxBytes)
+        return {
+            body: await readBoundedBody(response, options.maxBytes),
+            finalUrl: currentUrl
+        }
     }
     logFetchFailure(currentUrl, 'too many redirects')
     return null

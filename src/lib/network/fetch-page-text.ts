@@ -1,3 +1,4 @@
+import type { SafeFetchResult } from '@/lib/network/fetch-safe-url'
 import {
     FetchBlockedError,
     fetchSafeUrl
@@ -22,6 +23,7 @@ export type PageFetchResult =
         status: 'ok'
         pageText: string
         html: string
+        finalUrl: string
     }
     | { status: 'blocked' }
     | { status: 'failed' }
@@ -29,9 +31,9 @@ export type PageFetchResult =
 export const fetchPageText = async (
     url: string
 ): Promise<PageFetchResult> => {
-    let html: string | null
+    let fetched: SafeFetchResult | null
     try {
-        html = await fetchSafeUrl(url, {
+        fetched = await fetchSafeUrl(url, {
             maxBytes: maxPageBytes,
             allowedContentTypes
         })
@@ -40,11 +42,12 @@ export const fetchPageText = async (
             ? { status: 'blocked' }
             : { status: 'failed' }
     }
-    if (html === null) return { status: 'failed' }
+    if (fetched === null) return { status: 'failed' }
     return {
         status: 'ok',
-        pageText: stripHtml(html)
+        pageText: stripHtml(fetched.body)
             .slice(0, maxPageTextLength),
-        html
+        html: fetched.body,
+        finalUrl: fetched.finalUrl
     }
 }
