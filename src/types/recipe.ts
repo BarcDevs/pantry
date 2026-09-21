@@ -69,6 +69,16 @@ export type RecipeDoc = {
     aiPromptContext: AiPromptContext | null
 }
 
+export type GenerateRecipeResult =
+    | {
+        status: 'found'
+        recipe: RecipeDoc
+    }
+    | {
+        status: 'no-match'
+        reason: 'not-found' | 'search-unavailable'
+    }
+
 export type Recipe = RecipeDoc & MongoDbObject
 
 export type RecipeLibraryFilter = 'all' | 'can-cook' | 'favorites'

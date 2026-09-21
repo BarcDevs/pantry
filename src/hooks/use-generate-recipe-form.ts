@@ -57,6 +57,7 @@ export const useGenerateRecipeForm = () => {
     )
     const [isSubmitting, startSubmitting] = useTransition()
     const [isPantrySheetOpen, setIsPantrySheetOpen] = useState(false)
+    const [isNoMatch, setIsNoMatch] = useState(false)
 
     useEffect(() => {
         startLoadingPantry(async () => {
@@ -121,17 +122,23 @@ export const useGenerateRecipeForm = () => {
     const submit = form.handleSubmit((values) => {
         if (isExpiredGateOpen) return
 
+        setIsNoMatch(false)
         startSubmitting(async () => {
             try {
-                const recipe = await generateRecipe({
+                const result = await generateRecipe({
                     ...values,
                     customInstructions: (
                         values.customInstructions.trim() || undefined
                     ),
                     selectedItemIds
                 })
-                saveGeneratedRecipe(recipe)
-                router.push(routes.generateResult)
+                if (result.status === 'found') {
+                    saveGeneratedRecipe(result.recipe)
+                    router.push(routes.generateResult)
+                    return
+                }
+                if (result.reason === 'not-found') setIsNoMatch(true)
+                else toast.error(recipesTexts.generate.generateError)
             } catch (error) {
                 console.error(error)
                 toast.error(recipesTexts.generate.generateError)
@@ -162,6 +169,9 @@ export const useGenerateRecipeForm = () => {
         submission: {
             isSubmitting,
             submit
+        },
+        noMatch: {
+            isShown: isNoMatch
         }
     }
 }

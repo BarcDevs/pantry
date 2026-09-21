@@ -69,7 +69,13 @@ export const recipesTexts = {
         expiredGateContinue: 'המשך בכל זאת',
         expiredGateRemove: 'הסרת פגי תוקף',
         submit: '✦ צור מתכון',
-        submitting: 'יוצר מתכון...',
+        submitting: 'מחפש מתכון ברשת...',
+        noMatchTitle: 'לא נמצא מתכון מתאים',
+        noMatchHints: {
+            enableAi: 'אפשר יצירה על ידי AI',
+            flexibleMode: 'עבור למצב גמיש',
+            addItems: 'נסה להוסיף מצרכים'
+        },
         generateError: 'יצירת המתכון נכשלה, נסה שוב',
         pantryLoadError: 'טעינת המזווה נכשלה'
     },

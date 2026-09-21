@@ -13,6 +13,7 @@ import {
 import type {
     AiPromptContext,
     GenerateRecipeInput,
+    GenerateRecipeResult,
     RecipeDoc
 } from '@/types/recipe'
 import type { RecipePromptUserContext } from '@/types/user'
@@ -50,7 +51,7 @@ const generateRecipeSchema = z.object({
 
 export const generateRecipe = async (
     input: GenerateRecipeInput
-): Promise<RecipeDoc> => {
+): Promise<GenerateRecipeResult> => {
     const userId = await requireUserId()
     const parsedInput = generateRecipeSchema.parse(input)
 
@@ -80,9 +81,14 @@ export const generateRecipe = async (
         pantrySnapshot: pantryItemNames
     }
 
-    const searchClient = parsedInput.allowAiGeneration && !env.e2eMockAi
+    const isWebOnly = !parsedInput.allowAiGeneration && !env.e2eMockAi
+    const searchClient = !env.e2eMockAi
         ? createSearchClient()
         : null
+    if (isWebOnly && !searchClient) return {
+        status: 'no-match',
+        reason: 'search-unavailable'
+    }
     if (searchClient) {
         const webRecipe = await findWebRecipe(
             {
@@ -94,8 +100,15 @@ export const generateRecipe = async (
             { searchClient }
         )
         if (webRecipe) return {
-            ...webRecipe,
-            aiPromptContext
+            status: 'found',
+            recipe: {
+                ...webRecipe,
+                aiPromptContext
+            }
+        }
+        if (isWebOnly) return {
+            status: 'no-match',
+            reason: 'not-found'
         }
     }
 
@@ -132,7 +145,7 @@ export const generateRecipe = async (
         ]
     }))
 
-    return {
+    const recipe: RecipeDoc = {
         userId,
         title: generated.title,
         source: 'ai_generated',
@@ -151,5 +164,10 @@ export const generateRecipe = async (
         isFavorite: false,
         tags: [],
         aiPromptContext
+    }
+
+    return {
+        status: 'found',
+        recipe
     }
 }

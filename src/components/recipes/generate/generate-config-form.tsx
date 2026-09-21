@@ -3,6 +3,7 @@
 import { ExpiredItemsGate } from '@/components/recipes/generate/expired-items-gate'
 import { GenerateConfigFields } from '@/components/recipes/generate/generate-config-fields'
 import { GenerateDietarySummary } from '@/components/recipes/generate/generate-dietary-summary'
+import { GenerateNoMatchNotice } from '@/components/recipes/generate/generate-no-match-notice'
 import { GenerateSourceGroup } from '@/components/recipes/generate/generate-source-group'
 import { PantrySelectSheet } from '@/components/recipes/generate/pantry-select-sheet'
 import { PantrySelectionSummary } from '@/components/recipes/generate/pantry-selection-summary'
@@ -28,6 +29,7 @@ export const GenerateConfigForm = ({
 
     const texts = recipesTexts.generate
     const scope = generateRecipe.form.watch('scope')
+    const matchStrictness = generateRecipe.form.watch('matchStrictness')
 
     return (
         <Form {...generateRecipe.form}>
@@ -68,6 +70,9 @@ export const GenerateConfigForm = ({
                     )}
                 />
                 <FormError errors={generateRecipe.form.formState.errors}/>
+                {generateRecipe.noMatch.isShown && (
+                    <GenerateNoMatchNotice isStrict={matchStrictness === 'strict'}/>
+                )}
                 <PrimaryButton
                     type={'submit'}
                     disabled={generateRecipe.submission.isSubmitting
