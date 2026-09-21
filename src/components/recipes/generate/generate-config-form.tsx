@@ -4,11 +4,11 @@ import { ExpiredItemsGate } from '@/components/recipes/generate/expired-items-ga
 import { GenerateConfigFields } from '@/components/recipes/generate/generate-config-fields'
 import { GenerateDietarySummary } from '@/components/recipes/generate/generate-dietary-summary'
 import { GenerateDishField } from '@/components/recipes/generate/generate-dish-field'
-import { GenerateNoMatchNotice } from '@/components/recipes/generate/generate-no-match-notice'
 import { GenerateSourceGroup } from '@/components/recipes/generate/generate-source-group'
 import { PantrySelectSheet } from '@/components/recipes/generate/pantry-select-sheet'
 import { PantrySelectionSummary } from '@/components/recipes/generate/pantry-selection-summary'
 import { SparsePantryWarning } from '@/components/recipes/generate/sparse-pantry-warning'
+import { RecipeNoMatchDialog } from '@/components/recipes/shared/recipe-no-match-dialog'
 import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { FormError } from '@/components/shared/form/FormError'
 import { Form } from '@/components/ui/form'
@@ -28,7 +28,6 @@ export const GenerateConfigForm = ({
 
     const texts = recipesTexts.generate
     const scope = generateRecipe.form.watch('scope')
-    const matchStrictness = generateRecipe.form.watch('matchStrictness')
 
     return (
         <Form {...generateRecipe.form}>
@@ -55,9 +54,13 @@ export const GenerateConfigForm = ({
                 <GenerateDietarySummary dietaryPreferences={dietaryPreferences}/>
                 <GenerateDishField control={generateRecipe.form.control}/>
                 <FormError errors={generateRecipe.form.formState.errors}/>
-                {generateRecipe.noMatch.isShown && (
-                    <GenerateNoMatchNotice isStrict={matchStrictness === 'strict'}/>
-                )}
+                <RecipeNoMatchDialog
+                    open={generateRecipe.noMatch.isOpen}
+                    dish={generateRecipe.noMatch.dish}
+                    isBusy={generateRecipe.submission.isSubmitting}
+                    onEnableAi={generateRecipe.noMatch.enableAiAndRetry}
+                    onDismiss={generateRecipe.noMatch.close}
+                />
                 <PrimaryButton
                     type={'submit'}
                     disabled={generateRecipe.submission.isSubmitting

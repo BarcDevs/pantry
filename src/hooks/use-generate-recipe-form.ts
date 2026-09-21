@@ -57,7 +57,7 @@ export const useGenerateRecipeForm = () => {
     )
     const [isSubmitting, startSubmitting] = useTransition()
     const [isPantrySheetOpen, setIsPantrySheetOpen] = useState(false)
-    const [isNoMatch, setIsNoMatch] = useState(false)
+    const [noMatchDish, setNoMatchDish] = useState<string>()
 
     useEffect(() => {
         startLoadingPantry(async () => {
@@ -122,14 +122,14 @@ export const useGenerateRecipeForm = () => {
     const submit = form.handleSubmit((values) => {
         if (isExpiredGateOpen) return
 
-        setIsNoMatch(false)
+        const dish = values.customInstructions.trim() || undefined
+
+        setNoMatchDish(undefined)
         startSubmitting(async () => {
             try {
                 const result = await generateRecipe({
                     ...values,
-                    customInstructions: (
-                        values.customInstructions.trim() || undefined
-                    ),
+                    customInstructions: dish,
                     selectedItemIds
                 })
                 if (result.status === 'found') {
@@ -137,7 +137,7 @@ export const useGenerateRecipeForm = () => {
                     router.push(routes.generateResult)
                     return
                 }
-                if (result.reason === 'not-found') setIsNoMatch(true)
+                if (result.reason === 'not-found') setNoMatchDish(dish ?? '')
                 else toast.error(recipesTexts.generate.generateError)
             } catch (error) {
                 console.error(error)
@@ -171,7 +171,14 @@ export const useGenerateRecipeForm = () => {
             submit
         },
         noMatch: {
-            isShown: isNoMatch
+            isOpen: noMatchDish !== undefined,
+            dish: noMatchDish ?? '',
+            close: () => setNoMatchDish(undefined),
+            enableAiAndRetry: () => {
+                setNoMatchDish(undefined)
+                form.setValue('allowAiGeneration', true)
+                void submit()
+            }
         }
     }
 }

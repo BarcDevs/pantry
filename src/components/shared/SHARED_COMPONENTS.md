@@ -218,6 +218,16 @@ Destructive-action confirmation modal (delete, remove, etc.) built on shadcn `Di
 />
 ```
 
+## `CenteredModal`
+
+Design-style centered modal card (emoji icon, title, description, a stack of buttons in `children`) on a dimmed `ink/45` backdrop. Built directly on Radix `Dialog` (not `AppDialog`, whose `ui/dialog` overlay is fixed `black/50` and whose header/icon slot is a start-aligned title plus a destructive-tinted circle). Backdrop click and Esc call `onOpenChange(false)`. First consumer: `RecipeNoMatchDialog`.
+
+```tsx
+<CenteredModal open={open} onOpenChange={setOpen} icon={'🔍'} title={title} description={body}>
+    {buttons}
+</CenteredModal>
+```
+
 ## `form/` - React Hook Form field components
 
 All form fields are RHF-based: they take `control`/`name` (not `value`/`onChange`) and wire into `FormField`/`FormItem`/`FormMessage` from `@/components/ui/form` for built-in label association and validation-error display. Build the form with `useForm` (+ `zodResolver`) and pass `form.control` down - see `useAddItemForm`/`AddItemFields` for the reference pattern.

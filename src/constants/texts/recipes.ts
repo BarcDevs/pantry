@@ -72,11 +72,13 @@ export const recipesTexts = {
         expiredGateRemove: 'הסרת פגי תוקף',
         submit: '✦ צור מתכון',
         submitting: 'מחפש מתכון ברשת...',
-        noMatchTitle: 'לא נמצא מתכון מתאים',
-        noMatchHints: {
-            enableAi: 'אפשר יצירה על ידי AI',
-            flexibleMode: 'עבור למצב גמיש',
-            addItems: 'נסה להוסיף מצרכים'
+        noMatchDialog: {
+            icon: '🔍',
+            title: 'לא נמצא מתכון תואם',
+            body: (dish: string) => `לא מצאנו ברשת מתכון ל"${dish}" שמתאים למזווה שלכם. אפשר להפעיל יצירת מתכון ב-AI כדי שנרכיב לכם מתכון מותאם, לשנות את הבקשה או להסתפק במה שיש.`,
+            bodyWithoutDish: 'לא מצאנו ברשת מתכון שמתאים להגדרות שלכם. אפשר להפעיל יצירת מתכון ב-AI כדי שנרכיב לכם מתכון מותאם, לשנות את הבקשה או להסתפק במה שיש.',
+            enableAi: 'הפעילו יצירת מתכון ב-AI ונסו שוב',
+            editRequest: 'אשנה את הבקשה'
         },
         generateError: 'יצירת המתכון נכשלה, נסה שוב',
         pantryLoadError: 'טעינת המזווה נכשלה'
