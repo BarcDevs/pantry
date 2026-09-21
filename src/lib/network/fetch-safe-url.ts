@@ -14,6 +14,7 @@ const browserHeaders = {
 }
 const blockedStatuses = new Set([
     HttpStatusCodes.UNAUTHORIZED,
+    HttpStatusCodes.PAYMENT_REQUIRED,
     HttpStatusCodes.FORBIDDEN,
     HttpStatusCodes.TOO_MANY_REQUESTS
 ])

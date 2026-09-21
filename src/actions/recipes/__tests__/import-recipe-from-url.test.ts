@@ -238,6 +238,7 @@ describe('importRecipeFromUrl', () => {
 
     it.each([
         401,
+        402,
         403,
         429
     ])('flags the result as blocked on HTTP %i', async (status) => {

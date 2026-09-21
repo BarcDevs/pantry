@@ -10,7 +10,10 @@ jest.mock('undici', () => ({
 
 import { lookup } from 'node:dns/promises'
 
-import { fetchSafeUrl } from './fetch-safe-url'
+import {
+    FetchBlockedError,
+    fetchSafeUrl
+} from './fetch-safe-url'
 
 const mockLookup = lookup as jest.Mock
 const mockFetch = jest.fn()
@@ -185,6 +188,25 @@ describe('fetchSafeUrl', () => {
         const secondHopSignal = mockFetch.mock.calls[1][1].signal
         expect(secondHopSignal).toBe(mockFetch.mock.calls[0][1].signal)
         expect(Date.now() - startedAt).toBeLessThan(deadlineMs + hopDelayMs)
+    })
+
+    it.each([
+        401,
+        402,
+        403,
+        429
+    ])('throws FetchBlockedError on HTTP %i', async (status) => {
+        mockFetch.mockResolvedValue(makeResponse(status))
+        await expect(
+            fetchSafeUrl('https://example.com/a', fetchOptions)
+        ).rejects.toBeInstanceOf(FetchBlockedError)
+    })
+
+    it('returns null on a non-blocked error status', async () => {
+        mockFetch.mockResolvedValue(makeResponse(404))
+        await expect(
+            fetchSafeUrl('https://example.com/a', fetchOptions)
+        ).resolves.toBeNull()
     })
 
     it('pins the connection to the checked IP', async () => {
