@@ -20,12 +20,12 @@ describe('buildRecipeSearchQuery', () => {
             .toBe('מתכון ערב עוף')
     })
 
-    it('searches for the requested dish alone, without meal type or ingredients', () => {
+    it('combines the requested dish with the meal type and the selected products', () => {
         expect(buildRecipeSearchQuery(
             'dinner',
             [item('עוף', FoodType.Meat)],
             'לזניה'
-        )).toBe('מתכון לזניה')
+        )).toBe('מתכון לזניה ערב עוף')
     })
 
     it('falls back to meal type and ingredients when no dish is given', () => {

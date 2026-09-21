@@ -19,6 +19,7 @@ import {
     candidateFetchTimeoutMs,
     conversionTimeoutMs,
     hebrewStageBudgetMs,
+    maxCandidatesPerStage,
     minBudgetForEnglishStageMs,
     queryTranslationTimeoutMs,
     SearchLanguage,
@@ -150,7 +151,7 @@ describe('findWebRecipe', () => {
             }
         })
 
-        expect(t.search.mock.calls[0][0]).toBe('מתכון פד תאי')
+        expect(t.search.mock.calls[0][0]).toMatch(/^מתכון פד תאי /)
     })
 
     describe('requested dish match', () => {
@@ -265,13 +266,13 @@ describe('findWebRecipe', () => {
         expect((await t.run())?.sourceUrl).toBe('https://a.com/3')
     })
 
-    it('evaluates at most 3 candidates per stage, all started in parallel', async () => {
+    it('evaluates at most maxCandidatesPerStage candidates per stage, all started in parallel', async () => {
         const t = setup()
         t.search.mockResolvedValue(searchResults(
-            'https://a.com/1',
-            'https://a.com/2',
-            'https://a.com/3',
-            'https://a.com/4'
+            ...Array.from(
+                { length: maxCandidatesPerStage + 1 },
+                (_, index) => `https://a.com/${index + 1}`
+            )
         ))
         const gate = deferred<PageFetchResult>()
         t.fetchPage.mockReturnValue(gate.promise)
@@ -279,7 +280,7 @@ describe('findWebRecipe', () => {
         const running = t.run()
         await new Promise((done) => setImmediate(done))
 
-        expect(t.fetchPage).toHaveBeenCalledTimes(3)
+        expect(t.fetchPage).toHaveBeenCalledTimes(maxCandidatesPerStage)
         gate.resolve({ status: 'failed' })
         await running
     })
