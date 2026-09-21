@@ -84,12 +84,15 @@ const searchResults = (...urls: string[]) => urls.map((url) => ({
 
 const deferred = <T>() => {
     let resolve!: (value: T) => void
-    const promise = new Promise<T>((done) => {
+    let reject!: (reason: unknown) => void
+    const promise = new Promise<T>((done, fail) => {
         resolve = done
+        reject = fail
     })
     return {
         promise,
-        resolve
+        resolve,
+        reject
     }
 }
 
@@ -321,6 +324,213 @@ describe('findWebRecipe', () => {
             })
 
             expect((await t.run())?.sourceUrl).toBe('https://a.com/2')
+        })
+    })
+
+    describe('a higher-ranked candidate fails while a lower-ranked one succeeds', () => {
+        const flush = () => new Promise((done) => setImmediate(done))
+
+        const track = <T>(promise: Promise<T>) => {
+            const state = { settled: false }
+            promise.then(() => {
+                state.settled = true
+            })
+            return state
+        }
+
+        type FirstOutcome = {
+            name: string
+            request?: Partial<FindWebRecipeInput['request']>
+            release: (gate: ReturnType<typeof deferred<PageFetchResult>>) => void
+            first: () => unknown
+        }
+
+        const missingIngredient = (optional: boolean) => [{
+            label: 'סלמון',
+            name: 'סלמון',
+            category: FoodType.Fish,
+            quantity: 1,
+            unit: CookingUnit.Units,
+            inPantry: false,
+            optional
+        }]
+
+        const outcomes: FirstOutcome[] = [
+            {
+                name: '(a) fetch is blocked (401/402/403/429 -> FetchBlockedError)',
+                release: (gate) => gate.resolve({ status: 'blocked' }),
+                first: () => built()
+            },
+            {
+                name: '(a) fetch throws',
+                release: (gate) => gate.reject(new Error('network down')),
+                first: () => built()
+            },
+            {
+                name: '(b) fetch times out',
+                release: (gate) => gate.resolve({ status: 'failed' }),
+                first: () => built()
+            },
+            {
+                name: '(c) structuring returns failed (no ingredients or steps)',
+                release: (gate) => gate.resolve(okPage('https://a.com/1')),
+                first: () => ({ status: 'failed' })
+            },
+            {
+                name: '(d) rejected by maxTime',
+                release: (gate) => gate.resolve(okPage('https://a.com/1')),
+                first: () => built({ maxTime: 90 })
+            },
+            {
+                name: '(e) rejected by the flexible pantry match (core ingredient missing)',
+                release: (gate) => gate.resolve(okPage('https://a.com/1')),
+                first: () => built({ ingredients: missingIngredient(false) })
+            },
+            {
+                name: '(e) rejected by the strict pantry match (optional ingredient missing)',
+                request: { matchStrictness: MatchStrictness.Strict },
+                release: (gate) => gate.resolve(okPage('https://a.com/1')),
+                first: () => built({ ingredients: missingIngredient(true) })
+            },
+            {
+                name: '(f) throws an unexpected error',
+                release: (gate) => gate.resolve(okPage('https://a.com/1')),
+                first: () => {
+                    throw new Error('unexpected')
+                }
+            }
+        ]
+
+        it.each(outcomes)('$name: the lower-ranked winner is held until it finishes', async (outcome) => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults(
+                'https://a.com/1',
+                'https://a.com/2'
+            ))
+            const gate = deferred<PageFetchResult>()
+            t.fetchPage.mockImplementation((url: string) => (
+                url.endsWith('/1')
+                    ? gate.promise
+                    : Promise.resolve(okPage(url))
+            ))
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) => {
+                if (pageUrl.endsWith('/1')) return outcome.first()
+                return built({ sourceUrl: pageUrl })
+            })
+
+            const running = findWebRecipe(
+                {
+                    ...input,
+                    request: {
+                        ...input.request,
+                        ...outcome.request
+                    }
+                },
+                {
+                    searchClient: { search: t.search },
+                    fetchPage: t.fetchPage,
+                    buildRecipe: t.buildRecipe,
+                    composeEnglishQuery: t.composeEnglishQuery,
+                    now: () => t.state.clock
+                }
+            )
+            const state = track(running)
+            await flush()
+            expect(state.settled).toBe(false)
+
+            outcome.release(gate)
+
+            expect((await running)?.sourceUrl).toBe('https://a.com/2')
+        })
+
+        const threeCandidates = () => {
+            const t = setup()
+            t.search.mockResolvedValue(searchResults(
+                'https://a.com/1',
+                'https://a.com/2',
+                'https://a.com/3'
+            ))
+            const second = deferred<PageFetchResult>()
+            t.fetchPage.mockImplementation((url: string) => {
+                if (url.endsWith('/1')) return Promise.resolve({ status: 'failed' })
+                if (url.endsWith('/2')) return second.promise
+                return Promise.resolve(okPage(url))
+            })
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) =>
+                built({ sourceUrl: pageUrl }))
+            const running = t.run()
+            return {
+                t,
+                second,
+                running,
+                state: track(running)
+            }
+        }
+
+        it('#1 fails, #2 pending, #3 qualifies first: #3 is held, then wins when #2 fails', async () => {
+            const { t, second, running, state } = threeCandidates()
+            await flush()
+            expect(t.buildRecipe).toHaveBeenCalledTimes(1)
+            expect(state.settled).toBe(false)
+
+            second.resolve({ status: 'failed' })
+
+            expect((await running)?.sourceUrl).toBe('https://a.com/3')
+        })
+
+        it('#1 fails, #2 pending, #3 qualifies first: #3 is held, then #2 wins when it qualifies', async () => {
+            const { second, running, state } = threeCandidates()
+            await flush()
+            expect(state.settled).toBe(false)
+
+            second.resolve(okPage('https://a.com/2'))
+
+            expect((await running)?.sourceUrl).toBe('https://a.com/2')
+        })
+
+        it('all three fail: the stage yields nothing and the English stage runs', async () => {
+            const t = setup()
+            t.search
+                .mockResolvedValueOnce(searchResults(
+                    'https://a.com/1',
+                    'https://a.com/2',
+                    'https://a.com/3'
+                ))
+                .mockResolvedValueOnce(searchResults('https://b.com/x'))
+            t.fetchPage.mockImplementation(async (url: string) => {
+                if (url.endsWith('/1')) return { status: 'blocked' }
+                if (url.endsWith('/2')) return { status: 'failed' }
+                return okPage(url)
+            })
+            t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) => {
+                if (pageUrl.includes('b.com')) return built({ sourceUrl: pageUrl })
+                return { status: 'failed' }
+            })
+
+            const result = await t.run()
+
+            expect(t.composeEnglishQuery).toHaveBeenCalledTimes(1)
+            expect(t.search).toHaveBeenCalledTimes(2)
+            expect(result?.sourceUrl).toBe('https://b.com/x')
+        })
+
+        it('all three fail in both stages: nothing is returned (caller falls back)', async () => {
+            const t = setup()
+            t.search
+                .mockResolvedValueOnce(searchResults(
+                    'https://a.com/1',
+                    'https://a.com/2',
+                    'https://a.com/3'
+                ))
+                .mockResolvedValueOnce(searchResults(
+                    'https://b.com/1',
+                    'https://b.com/2',
+                    'https://b.com/3'
+                ))
+            t.fetchPage.mockResolvedValue({ status: 'failed' })
+
+            expect(await t.run()).toBeNull()
+            expect(t.fetchPage).toHaveBeenCalledTimes(6)
         })
     })
 
