@@ -15,6 +15,7 @@ export const buildImportedRecipeDoc = (
     pantryItems: MinimalPantryItem[],
     extras: {
         sourceUrl?: string
+        sourceName?: string
         imageUrl?: string
     } = {}
 ): RecipeDoc => ({
@@ -22,6 +23,7 @@ export const buildImportedRecipeDoc = (
     title: generated.title,
     source: 'imported_url',
     sourceUrl: extras.sourceUrl,
+    sourceName: extras.sourceName,
     difficulty: generated.difficulty,
     maxTime: generated.maxTime,
     mealCount: generated.mealCount,

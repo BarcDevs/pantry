@@ -58,6 +58,7 @@ export const recipeDocSchema = z.object({
     title: z.string(),
     source: z.enum(RECIPE_SOURCES),
     sourceUrl: httpUrlSchema.optional(),
+    sourceName: z.string().trim().max(100).optional(),
     difficulty: z.enum(DIFFICULTIES),
     maxTime: z.number().int().positive(),
     mealCount: z.number().int().positive(),

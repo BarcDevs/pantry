@@ -134,6 +134,7 @@ describe('importRecipeFromUrl', () => {
             )
             expect(result.recipe?.title).toBe(aiRecipe.title)
             expect(result.recipe?.imageUrl).toBeUndefined()
+            expect(result.recipe?.sourceName).toBe('example.com')
         }
     )
 

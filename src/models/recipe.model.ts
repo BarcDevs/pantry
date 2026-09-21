@@ -135,6 +135,7 @@ const recipeSchema = new mongoose.Schema<RecipeDoc>(
             required: true
         },
         sourceUrl: { type: String },
+        sourceName: { type: String },
         difficulty: {
             type: String,
             enum: DIFFICULTIES,

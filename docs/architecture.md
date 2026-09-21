@@ -45,4 +45,6 @@ type ItemSource = 'manual' | 'receipt_scan' | 'receipt_url'
 type Unit = 'kg' | 'g' | 'L' | 'ml' | 'units'
 ```
 
+- **`recipes.sourceUrl` / `recipes.sourceName`** (both optional) are set for `imported_url` recipes: the fetched page's final URL and a human-readable website name (schema.org Recipe `publisher.name` -> `og:site_name` -> hostname without `www.`, max 100 chars). Search-result snippets are never stored.
+
 See `docs/pantry-prd.md` for the full `StorageSuggestion` and `RecipeGenerationRequest` interfaces, the complete `pantry_items`/`recipes`/`users` schemas, and the API endpoint table.

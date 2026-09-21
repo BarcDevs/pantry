@@ -52,6 +52,8 @@ export type RecipeDoc = {
     title: string
     source: RecipeSource
     sourceUrl?: string
+    /** Human-readable website name of the page the recipe came from (URL import / web search). */
+    sourceName?: string
     difficulty: Difficulty
     maxTime: number
     mealCount: number
