@@ -47,7 +47,7 @@ export const GenerateDishField = ({
                             value={field.value}
                             onChange={field.onChange}
                             placeholder={texts.dishPlaceholder}
-                            className={'h-auto rounded-[12px] border-border bg-[#faf8f2] px-[14px] py-[13px] text-body text-ink shadow-none md:text-body'}
+                            className={'h-auto rounded-[12px] border-border bg-input-bg px-[14px] py-[13px] text-body text-ink shadow-none md:text-body'}
                         />
                     </FormControl>
                     <FormMessage/>

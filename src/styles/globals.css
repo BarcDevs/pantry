@@ -11,6 +11,7 @@
     /* Neutrals */
     --canvas: #fffaf0;
     --surface: #ffffff;
+    --input-bg: #faf8f2;
     --ink: #2c2a26;
     --ink-2: #6f6a5e;
     --ink-3: #8a8578;
@@ -99,6 +100,7 @@
 @theme inline {
     --color-canvas: var(--canvas);
     --color-surface: var(--surface);
+    --color-input-bg: var(--input-bg);
     --color-ink: var(--ink);
     --color-ink-2: var(--ink-2);
     --color-ink-3: var(--ink-3);
