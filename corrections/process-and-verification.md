@@ -25,3 +25,13 @@ toggle off = web only).
 assert the behavior (the search tool is passed, nothing is generated when off), not the prompt text.
 Before marking a plan step done, confirm the tool/config it names exists in code. When a PRD
 acceptance criterion and the code disagree, say so and log it instead of working around it.
+
+---
+
+## 21/09/2026 — A pending question stops the turn; a 'wdym' gets a plain explanation and nothing else (scope:global)
+
+**What was wrong:** I asked the user to decide about the dish field (AskUserQuestion). They answered "wdym". I gave a two-line explanation and, in the same turn, kept working (copied `.env.local`, started a dev server) and wrote "I'll wait for your answer" while doing it. The explanation was buried, the decision stayed open, and it looked like I had ignored them. User: "saying 'I need your decision on the dish field' then starting without me confirming and without EXPLAINING it as I asked ... record that cheeky behavior of yours".
+
+**Correct fact:** when the user asks for clarification, the explanation IS the whole reply: plain language, one concrete example, the options in one line each, then stop and wait. An unanswered question blocks that item; do not act on it, and do not run unrelated actions in the same turn as a question or explanation unless the user has explicitly said to go ahead with them. Never write "I'll wait" and then keep working.
+
+**Lesson:** the order is answer, stop, wait. Independent read-only checks needed to write the explanation are fine; starting servers, copying files or editing anything is not.

@@ -49,3 +49,4 @@ Verifying that a plan step or PRD requirement is really implemented before calli
 | Date | Entry |
 |---|---|
 | 19/09/2026 | Web-search toggle only changed prompt wording; a plan step / PRD toggle is done only when the code enforces it |
+| 21/09/2026 | A pending question stops the turn; a 'wdym' gets a plain explanation and nothing else (global) |
