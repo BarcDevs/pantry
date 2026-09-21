@@ -13,6 +13,7 @@ import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero
 import { RecipeResultStats } from '@/components/recipes/result/recipe-result-stats'
 import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
 import { DeleteRecipeDialog } from '@/components/recipes/shared/delete-recipe-dialog'
+import { RecipeSourceLine } from '@/components/recipes/shared/recipe-source-line'
 import { PageHeader } from '@/components/shared/PageHeader'
 
 import { useRecipeBranch } from '@/hooks/use-recipe-branch'
@@ -35,6 +36,7 @@ export const RecipeDetailView = ({
         <div className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
             <PageHeader/>
             <RecipeResultHero recipe={recipeDetail.recipe}/>
+            <RecipeSourceLine recipe={recipeDetail.recipe}/>
             <RecipeResultStats recipe={recipeDetail.recipe}/>
             <RecipeImageUrlField
                 imageUrl={recipeDetail.recipe.imageUrl}

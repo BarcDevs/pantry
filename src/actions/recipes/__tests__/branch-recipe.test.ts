@@ -153,4 +153,33 @@ describe('branchRecipe', () => {
         expect(result._id).toBe('branched_1')
         expect(mockFindOneAndUpdate).not.toHaveBeenCalled()
     })
+
+    it('carries the source url and name onto the new saved recipe', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockGenerateStructured.mockResolvedValue(refinedResponse)
+        mockFind.mockReturnValue(leanChain([]))
+        mockCreate.mockResolvedValue({
+            toObject: () => ({
+                ...recipe,
+                _id: { toString: () => 'branched_1' }
+            })
+        })
+
+        await branchRecipe(
+            {
+                ...recipe,
+                source: 'imported_url' as const,
+                sourceUrl: 'https://a.co.il/r',
+                sourceName: 'a.co.il'
+            },
+            'להשתמש בחלב סויה במקום חלב'
+        )
+
+        expect(mockCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+                sourceUrl: 'https://a.co.il/r',
+                sourceName: 'a.co.il'
+            })
+        )
+    })
 })

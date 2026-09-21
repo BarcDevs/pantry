@@ -87,6 +87,8 @@ export const recipesTexts = {
     },
     result: {
         servingsLabel: 'מנות',
+        sourceAi: 'נוצר על ידי AI',
+        sourceLabel: (name: string) => `מקור: ${name}`,
         stepsLabel: 'שלבים',
         pantryMatchLabel: 'מהמלאי',
         ingredientsTitle: 'מצרכים',

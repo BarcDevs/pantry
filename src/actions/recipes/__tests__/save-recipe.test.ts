@@ -92,4 +92,28 @@ describe('saveRecipe', () => {
             expect.objectContaining({ userId: 'user_123' })
         )
     })
+
+    it('persists sourceUrl and sourceName', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockCreate.mockResolvedValue({
+            toObject: () => ({
+                ...recipe,
+                _id: { toString: () => 'recipe_1' }
+            })
+        })
+
+        await saveRecipe({
+            ...recipe,
+            source: 'imported_url',
+            sourceUrl: 'https://a.co.il/r',
+            sourceName: 'a.co.il'
+        })
+
+        expect(mockCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+                sourceUrl: 'https://a.co.il/r',
+                sourceName: 'a.co.il'
+            })
+        )
+    })
 })

@@ -158,4 +158,23 @@ describe('refineRecipe', () => {
         })).rejects.toThrow()
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
+
+    it('keeps the source url and name on the refined recipe', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockGenerateStructured.mockResolvedValue(refinedResponse)
+        mockFind.mockReturnValue(leanChain(pantryItems))
+
+        const result = await refineRecipe({
+            recipe: {
+                ...recipe,
+                source: 'imported_url' as const,
+                sourceUrl: 'https://a.co.il/r',
+                sourceName: 'a.co.il'
+            },
+            instruction: 'תוסיף חריפות'
+        })
+
+        expect(result.sourceUrl).toBe('https://a.co.il/r')
+        expect(result.sourceName).toBe('a.co.il')
+    })
 })

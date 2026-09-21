@@ -9,6 +9,7 @@ import { RecipeResultActions } from '@/components/recipes/result/recipe-result-a
 import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero'
 import { RecipeResultStats } from '@/components/recipes/result/recipe-result-stats'
 import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
+import { RecipeSourceLine } from '@/components/recipes/shared/recipe-source-line'
 
 import { useRecipeResult } from '@/hooks/use-recipe-result'
 
@@ -20,6 +21,7 @@ export const RecipeResultView = () => {
     return (
         <div className={'mx-auto w-full max-w-(--breakpoint-lg) px-4 py-6'}>
             <RecipeResultHero recipe={recipeResult.recipe}/>
+            <RecipeSourceLine recipe={recipeResult.recipe}/>
             <RecipeResultStats recipe={recipeResult.recipe}/>
             <RecipeImageUrlField
                 imageUrl={recipeResult.recipe.imageUrl}
