@@ -12,18 +12,18 @@ const texts = recipesTexts.generate.noMatchDialog
 
 const setup = (dish: string) => {
     const onEnableAi = jest.fn()
-    const onDismiss = jest.fn()
+    const onEditRequest = jest.fn()
     render(
         <RecipeNoMatchDialog
             open={true}
             dish={dish}
             onEnableAi={onEnableAi}
-            onDismiss={onDismiss}
+            onEditRequest={onEditRequest}
         />
     )
     return {
         onEnableAi,
-        onDismiss
+        onEditRequest
     }
 }
 
@@ -48,7 +48,7 @@ describe('RecipeNoMatchDialog', () => {
         expect(actions.onEnableAi).toHaveBeenCalledTimes(1)
 
         fireEvent.click(screen.getByRole('button', { name: texts.editRequest }))
-        expect(actions.onDismiss).toHaveBeenCalledTimes(1)
+        expect(actions.onEditRequest).toHaveBeenCalledTimes(1)
     })
 
     it('disables both buttons while busy', () => {
@@ -58,11 +58,40 @@ describe('RecipeNoMatchDialog', () => {
                 dish={''}
                 isBusy={true}
                 onEnableAi={jest.fn()}
-                onDismiss={jest.fn()}
+                onEditRequest={jest.fn()}
             />
         )
 
         expect(screen.getByRole('button', { name: texts.enableAi })).toBeDisabled()
         expect(screen.getByRole('button', { name: texts.editRequest })).toBeDisabled()
+    })
+
+    it('closes through onClose on Escape when given, else falls back to onEditRequest', () => {
+        const onClose = jest.fn()
+        const onEditRequest = jest.fn()
+        const { rerender } = render(
+            <RecipeNoMatchDialog
+                open={true}
+                dish={''}
+                onEnableAi={jest.fn()}
+                onEditRequest={onEditRequest}
+                onClose={onClose}
+            />
+        )
+
+        fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
+        expect(onClose).toHaveBeenCalledTimes(1)
+        expect(onEditRequest).not.toHaveBeenCalled()
+
+        rerender(
+            <RecipeNoMatchDialog
+                open={true}
+                dish={''}
+                onEnableAi={jest.fn()}
+                onEditRequest={onEditRequest}
+            />
+        )
+        fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
+        expect(onEditRequest).toHaveBeenCalledTimes(1)
     })
 })

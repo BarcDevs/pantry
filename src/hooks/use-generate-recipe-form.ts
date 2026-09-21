@@ -127,13 +127,19 @@ export const useGenerateRecipeForm = () => {
         setNoMatchDish(undefined)
         startSubmitting(async () => {
             try {
-                const result = await generateRecipe({
+                const request = {
                     ...values,
                     customInstructions: dish,
                     selectedItemIds
-                })
+                }
+                const result = await generateRecipe(request)
                 if (result.status === 'found') {
-                    saveGeneratedRecipe(result.recipe)
+                    saveGeneratedRecipe(result.recipe, {
+                        request,
+                        shownUrls: result.recipe.sourceUrl
+                            ? [result.recipe.sourceUrl]
+                            : []
+                    })
                     router.push(routes.generateResult)
                     return
                 }

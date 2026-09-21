@@ -62,4 +62,49 @@ describe('createRecipeDraftStorage', () => {
 
         expect(storage.read()).toBeNull()
     })
+
+    describe('context', () => {
+        const contextStorage = createRecipeDraftStorage<{ tag: string }>('test:context-draft')
+
+        it('stores and returns the context alongside the recipe', () => {
+            contextStorage.save(recipe, { tag: 'a' })
+
+            expect(contextStorage.read()).toEqual(recipe)
+            expect(contextStorage.readContext()).toEqual({ tag: 'a' })
+        })
+
+        it('keeps the stored context when the recipe is saved again without one', () => {
+            contextStorage.save(recipe, { tag: 'a' })
+            contextStorage.save({
+                ...recipe,
+                title: 'edited'
+            })
+
+            expect(contextStorage.read()?.title).toBe('edited')
+            expect(contextStorage.readContext()).toEqual({ tag: 'a' })
+        })
+
+        it('replaces the context when a new one is given', () => {
+            contextStorage.save(recipe, { tag: 'a' })
+            contextStorage.save(recipe, { tag: 'b' })
+
+            expect(contextStorage.readContext()).toEqual({ tag: 'b' })
+        })
+
+        it('expires and clears the context together with the draft', () => {
+            contextStorage.save(recipe, { tag: 'a' })
+            jest.spyOn(Date, 'now').mockReturnValue(Date.now() + draftTtlMs)
+
+            expect(contextStorage.readContext()).toBeNull()
+            expect(localStorage.getItem('test:context-draft')).toBeNull()
+        })
+
+        it('does not carry an old context into a draft saved after clear', () => {
+            contextStorage.save(recipe, { tag: 'a' })
+            contextStorage.clear()
+            contextStorage.save(recipe)
+
+            expect(contextStorage.readContext()).toBeNull()
+        })
+    })
 })

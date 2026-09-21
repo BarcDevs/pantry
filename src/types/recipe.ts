@@ -126,4 +126,10 @@ export type GenerateRecipeInput = {
     allowAiGeneration: boolean
     matchStrictness: MatchStrictness
     customInstructions?: string
+    excludeUrls?: string[]
+}
+
+export type GeneratedRetryContext = {
+    request: GenerateRecipeInput
+    shownUrls: string[]
 }

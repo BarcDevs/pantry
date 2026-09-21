@@ -216,6 +216,23 @@ describe('generateRecipe web-first sourcing', () => {
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
 
+    it('passes excludeUrls to the web search but keeps them out of the prompt context', async () => {
+        mockFindWebRecipe.mockResolvedValue(webRecipe)
+
+        const result = await unwrapFound(generateRecipe({
+            ...input,
+            excludeUrls: ['https://a.co.il/shown']
+        }))
+
+        expect(mockFindWebRecipe).toHaveBeenCalledWith(
+            expect.objectContaining({
+                request: expect.objectContaining({ excludeUrls: ['https://a.co.il/shown'] })
+            }),
+            { searchClient }
+        )
+        expect(result.aiPromptContext).not.toHaveProperty('excludeUrls')
+    })
+
     it('falls back to AI generation when nothing is found on the web', async () => {
         mockFindWebRecipe.mockResolvedValue(null)
 

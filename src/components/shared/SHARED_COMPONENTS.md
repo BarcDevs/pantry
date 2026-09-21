@@ -70,6 +70,14 @@ Confirms a destructive action (delete/remove). Wraps `Button` with `variant={'de
 <DestructiveButton onClick={onDelete}>{label}</DestructiveButton>
 ```
 
+### `OutlinedActionButton`
+
+Large outlined action in a two-up row (design result screen: "try another" beside "save"): white fill, `border` hairline, 15px bold `#4a463d` text, 14px radius and padding, no shadow. Wraps `Button` with `variant={'outline'}`; the caller adds `flex-1` for the row layout.
+
+```tsx
+<OutlinedActionButton onClick={onSave} className={'flex-1'}>{label}</OutlinedActionButton>
+```
+
 ### `IconButton`
 
 Small icon-only control (chevron nav, close `X`, stepper +/-, favorite toggle). Wraps `Button` with

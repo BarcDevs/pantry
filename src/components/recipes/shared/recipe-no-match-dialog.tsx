@@ -9,7 +9,8 @@ type RecipeNoMatchDialogProps = {
     dish: string
     isBusy?: boolean
     onEnableAi: () => void
-    onDismiss: () => void
+    onEditRequest: () => void
+    onClose?: () => void
 }
 
 const texts = recipesTexts.generate.noMatchDialog
@@ -21,11 +22,12 @@ export const RecipeNoMatchDialog = ({
     dish,
     isBusy = false,
     onEnableAi,
-    onDismiss
+    onEditRequest,
+    onClose = onEditRequest
 }: RecipeNoMatchDialogProps) => (
     <CenteredModal
         open={open}
-        onOpenChange={(isOpen) => !isOpen && onDismiss()}
+        onOpenChange={(isOpen) => !isOpen && onClose()}
         icon={texts.icon}
         title={texts.title}
         description={dish ? texts.body(dish) : texts.bodyWithoutDish}
@@ -39,7 +41,7 @@ export const RecipeNoMatchDialog = ({
         </PrimaryButton>
         <SecondaryButton
             disabled={isBusy}
-            onClick={onDismiss}
+            onClick={onEditRequest}
             className={`${buttonShapeClass} border-border bg-surface text-ink`}
         >
             {texts.editRequest}

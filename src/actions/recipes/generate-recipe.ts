@@ -46,7 +46,8 @@ const generateRecipeSchema = z.object({
     selectedItemIds: z.array(objectIdSchema).optional(),
     allowAiGeneration: z.boolean(),
     matchStrictness: z.enum(MATCH_STRICTNESSES),
-    customInstructions: z.string().max(500).optional()
+    customInstructions: z.string().max(500).optional(),
+    excludeUrls: z.array(z.string().max(2048)).max(50).optional()
 })
 
 export const generateRecipe = async (

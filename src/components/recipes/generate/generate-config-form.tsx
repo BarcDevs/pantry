@@ -59,7 +59,7 @@ export const GenerateConfigForm = ({
                     dish={generateRecipe.noMatch.dish}
                     isBusy={generateRecipe.submission.isSubmitting}
                     onEnableAi={generateRecipe.noMatch.enableAiAndRetry}
-                    onDismiss={generateRecipe.noMatch.close}
+                    onEditRequest={generateRecipe.noMatch.close}
                 />
                 <PrimaryButton
                     type={'submit'}

@@ -10,6 +10,7 @@ import { buildRecipeSearchQuery } from '@/lib/prompts/build-recipe-search-query'
 import { buildRecipeFromPage } from '@/lib/recipes/build-recipe-from-page'
 import { convertRecipeServings } from '@/lib/recipes/convert-recipe-servings'
 import { judgeWebRecipe } from '@/lib/recipes/judge-web-recipe'
+import { normalizeSourceUrl } from '@/lib/recipes/normalize-source-url'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 import { composeEnglishSearchQuery } from '@/lib/search/compose-english-search-query'
 import type { Deadline } from '@/lib/search/create-deadline'
@@ -59,7 +60,10 @@ type StageContext = {
     deps: Required<FindWebRecipeDeps>
     /** Bounds this stage; itself never longer than what the whole phase has left. */
     deadline: Deadline
+    /** Normalized urls already tried in this run (Hebrew stage feeds the English one). */
     seenUrls: Set<string>
+    /** Normalized urls the caller has already shown - never returned. */
+    excludedUrls: Set<string>
 }
 
 const logFailure = (step: string, error: unknown): void => {
@@ -116,6 +120,7 @@ const evaluateCandidate = async (
             page.status !== 'ok'
             || signal.aborted
             || !deadline.canStart()
+            || context.excludedUrls.has(normalizeSourceUrl(page.finalUrl))
         ) return null
 
         const built = await deps.buildRecipe({
@@ -172,16 +177,17 @@ const runStage = async (
     query: string,
     language: SearchLanguage
 ): Promise<RecipeDoc | null> => {
-    const { deps, deadline, seenUrls } = context
+    const { deps, deadline, seenUrls, excludedUrls } = context
     const results = await deps.searchClient.search(query, {
         language,
         timeoutMs: deadline.clip(searchRequestTimeoutMs)
     })
     const urls = results
         .map((result) => result.url)
-        .filter((url) => !seenUrls.has(url))
+        .filter((url) => !seenUrls.has(normalizeSourceUrl(url)))
+        .filter((url) => !excludedUrls.has(normalizeSourceUrl(url)))
         .slice(0, maxCandidatesPerStage)
-    urls.forEach((url) => seenUrls.add(url))
+    urls.forEach((url) => seenUrls.add(normalizeSourceUrl(url)))
     if (urls.length === 0 || !deadline.canStart()) return null
     return pickBestCandidate(context, urls)
 }
@@ -195,7 +201,9 @@ const runStage = async (
  * `webSearchBudgetMs` ceiling: every awaited step gets min(its own cap,
  * remaining budget) and nothing new starts when too little is left. Any error
  * means "nothing found" (null). The returned recipe's `sourceUrl` is the
- * fetched page's final URL, never the search-result URL.
+ * fetched page's final URL, never the search-result URL. Pages listed in
+ * `request.excludeUrls` (compared by normalized host + path, also after
+ * redirects) are never returned, so a retry yields something new.
  */
 export const findWebRecipe = async (
     input: FindWebRecipeInput,
@@ -211,6 +219,9 @@ export const findWebRecipe = async (
     }
     const phase = createDeadline(webSearchBudgetMs, resolvedDeps.now)
     const seenUrls = new Set<string>()
+    const excludedUrls = new Set(
+        (input.request.excludeUrls ?? []).map(normalizeSourceUrl)
+    )
 
     try {
         const hebrewHit = await runStage(
@@ -221,7 +232,8 @@ export const findWebRecipe = async (
                     phase.clip(hebrewStageBudgetMs),
                     resolvedDeps.now
                 ),
-                seenUrls
+                seenUrls,
+                excludedUrls
             },
             buildRecipeSearchQuery(
                 input.request.mealType,
@@ -252,7 +264,8 @@ export const findWebRecipe = async (
                     phase.remainingMs(),
                     resolvedDeps.now
                 ),
-                seenUrls
+                seenUrls,
+                excludedUrls
             },
             englishQuery,
             SearchLanguage.English

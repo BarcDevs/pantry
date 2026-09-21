@@ -239,6 +239,50 @@ describe('findWebRecipe', () => {
         expect(t.search).toHaveBeenCalledTimes(2)
     })
 
+    it('never fetches or returns a page listed in excludeUrls (host and path, ignoring scheme, www, query)', async () => {
+        const t = setup()
+        t.search.mockResolvedValue(searchResults(
+            'https://www.a.co.il/shown/?utm=1',
+            'https://a.co.il/fresh'
+        ))
+        t.fetchPage.mockImplementation(async (url: string) => okPage(url))
+        t.buildRecipe.mockImplementation(async ({ pageUrl }: { pageUrl: string }) => (
+            built({ sourceUrl: pageUrl })
+        ))
+
+        const result = await t.runWith({
+            ...input,
+            request: {
+                ...input.request,
+                excludeUrls: ['http://a.co.il/shown']
+            }
+        })
+
+        expect(result?.sourceUrl).toBe('https://a.co.il/fresh')
+        expect(t.fetchPage).toHaveBeenCalledTimes(1)
+        expect(t.fetchPage.mock.calls[0][0]).toBe('https://a.co.il/fresh')
+    })
+
+    it('rejects a candidate whose final url after a redirect is an excluded page', async () => {
+        const t = setup()
+        t.search.mockResolvedValue(searchResults('https://short.co/x'))
+        t.fetchPage.mockResolvedValue(okPage('https://a.co.il/shown'))
+        t.buildRecipe.mockResolvedValue(built({ sourceUrl: 'https://a.co.il/shown' }))
+        t.search.mockResolvedValueOnce(searchResults('https://short.co/x'))
+        t.search.mockResolvedValueOnce([])
+
+        const result = await t.runWith({
+            ...input,
+            request: {
+                ...input.request,
+                excludeUrls: ['https://a.co.il/shown']
+            }
+        })
+
+        expect(result).toBeNull()
+        expect(t.buildRecipe).not.toHaveBeenCalled()
+    })
+
     it('does not retry a url already tried in the previous stage', async () => {
         const t = setup()
         t.search.mockResolvedValue(searchResults('https://a.com/1'))

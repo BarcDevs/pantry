@@ -29,6 +29,18 @@ jest.mock('@/hooks/use-recipe-result', () => ({
             isSaving: false,
             savedRecipeId: null
         },
+        retry: {
+            isAvailable: false,
+            isRetrying: false,
+            run: jest.fn(),
+            noMatch: {
+                isOpen: false,
+                dish: '',
+                enableAiAndRetry: jest.fn(),
+                editRequest: jest.fn(),
+                close: jest.fn()
+            }
+        },
         actions: { setManualImageUrl: mockSetManualImageUrl }
     })
 }))

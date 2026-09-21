@@ -127,6 +127,15 @@ describe('useGenerateRecipeForm no-match modal', () => {
         expect(result.current.form.getValues('allowAiGeneration')).toBe(true)
         expect(result.current.noMatch.isOpen).toBe(false)
         await waitFor(() => expect(mockRouter.push).toHaveBeenCalledWith(routes.generateResult))
-        expect(saveGeneratedRecipe).toHaveBeenCalled()
+        expect(saveGeneratedRecipe).toHaveBeenCalledWith(
+            { title: 'r' },
+            {
+                request: expect.objectContaining({
+                    allowAiGeneration: true,
+                    customInstructions: 'לזניה'
+                }),
+                shownUrls: []
+            }
+        )
     })
 })

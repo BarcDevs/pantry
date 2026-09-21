@@ -9,6 +9,7 @@ import { RecipeResultActions } from '@/components/recipes/result/recipe-result-a
 import { RecipeResultHero } from '@/components/recipes/result/recipe-result-hero'
 import { RecipeResultStats } from '@/components/recipes/result/recipe-result-stats'
 import { RecipeStepsList } from '@/components/recipes/result/recipe-steps-list'
+import { RecipeNoMatchDialog } from '@/components/recipes/shared/recipe-no-match-dialog'
 import { RecipeSourceLine } from '@/components/recipes/shared/recipe-source-line'
 
 import { useRecipeResult } from '@/hooks/use-recipe-result'
@@ -49,9 +50,22 @@ export const RecipeResultView = () => {
                 recipe={recipeResult.recipe}
                 isSaved={recipeResult.status.savedRecipeId !== null}
                 isSaving={recipeResult.status.isSaving}
+                retry={{
+                    isAvailable: recipeResult.retry.isAvailable,
+                    isRetrying: recipeResult.retry.isRetrying,
+                    onRetry: recipeResult.retry.run
+                }}
                 onToggleFavorite={recipeResult.actions.toggleFavorite}
                 onSave={() => recipeResult.actions.save()}
                 onStartCooking={recipeResult.actions.startCooking}
+            />
+            <RecipeNoMatchDialog
+                open={recipeResult.retry.noMatch.isOpen}
+                dish={recipeResult.retry.noMatch.dish}
+                isBusy={recipeResult.retry.isRetrying}
+                onEnableAi={recipeResult.retry.noMatch.enableAiAndRetry}
+                onEditRequest={recipeResult.retry.noMatch.editRequest}
+                onClose={recipeResult.retry.noMatch.close}
             />
             {recipeResult.status.savedRecipeId === null && (
                 <RecipeDraftDismissButton onDismiss={recipeResult.actions.dismiss}/>

@@ -11,6 +11,7 @@ import {
     saveGeneratedRecipe
 } from '@/lib/recipes/generated-recipe-storage'
 
+import { generateRecipe } from '@/actions/recipes/generate-recipe'
 import { refineRecipe } from '@/actions/recipes/refine-recipe'
 import { saveRecipe } from '@/actions/recipes/save-recipe'
 import { updateRecipe } from '@/actions/recipes/update-recipe'
@@ -23,6 +24,18 @@ const mockDraft = {
     isFavorite: false,
     imageUrl: originalImageUrl
 } as RecipeDoc
+
+const mockRetryContext = {
+    request: {
+        mealCount: 2,
+        maxTime: 30,
+        mealType: 'dinner',
+        scope: 'pantry-first',
+        allowAiGeneration: true,
+        matchStrictness: 'flexible'
+    },
+    shownUrls: ['https://a.co.il/first']
+}
 
 const mockRouter = {
     push: jest.fn(),
@@ -40,6 +53,7 @@ jest.mock('sonner', () => ({
 }))
 jest.mock('@/lib/recipes/generated-recipe-storage', () => ({
     readGeneratedRecipe: jest.fn(() => mockDraft),
+    readGeneratedRetryContext: jest.fn(() => mockRetryContext),
     saveGeneratedRecipe: jest.fn(),
     clearGeneratedRecipe: jest.fn()
 }))
@@ -47,6 +61,9 @@ const mockRefreshPantryStatus = jest.fn()
 
 jest.mock('@/hooks/use-refresh-pantry-status', () => ({
     useRefreshPantryStatus: () => mockRefreshPantryStatus
+}))
+jest.mock('@/actions/recipes/generate-recipe', () => ({
+    generateRecipe: jest.fn()
 }))
 jest.mock('@/actions/recipes/refine-recipe', () => ({
     refineRecipe: jest.fn()
@@ -59,6 +76,7 @@ jest.mock('@/actions/recipes/update-recipe', () => ({
 }))
 
 const mockRefineRecipe = refineRecipe as jest.Mock
+const mockGenerateRecipe = generateRecipe as jest.Mock
 const mockSaveRecipe = saveRecipe as jest.Mock
 const mockUpdateRecipe = updateRecipe as jest.Mock
 
@@ -160,5 +178,64 @@ describe('useRecipeResult image edits across save and refine', () => {
 
         expect(mockUpdateRecipe).not.toHaveBeenCalled()
         expect(result.current.recipe?.imageUrl).toBe('https://example.com/new.jpg')
+    })
+})
+
+describe('useRecipeResult retry', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockSaveRecipe.mockResolvedValue({ _id: 'saved1' })
+    })
+
+    it('offers retry for an unsaved generated draft and hides it once saved', async () => {
+        const { result } = renderHook(() => useRecipeResult())
+        await waitFor(() => expect(result.current.retry.isAvailable).toBe(true))
+
+        await act(async () => {
+            await result.current.actions.save()
+        })
+
+        expect(result.current.retry.isAvailable).toBe(false)
+    })
+
+    it('replaces the recipe, clears the saved id and persists the new draft on retry', async () => {
+        mockGenerateRecipe.mockResolvedValue({
+            status: 'found',
+            recipe: {
+                ...mockDraft,
+                title: 'second',
+                sourceUrl: 'https://b.co.il/second'
+            }
+        })
+        const { result } = renderHook(() => useRecipeResult())
+        await waitFor(() => expect(result.current.retry.isAvailable).toBe(true))
+
+        await act(async () => result.current.retry.run())
+
+        expect(result.current.recipe?.title).toBe('second')
+        expect(mockGenerateRecipe.mock.calls[0][0].excludeUrls).toEqual(['https://a.co.il/first'])
+        expect(saveGeneratedRecipe).toHaveBeenCalledWith(
+            expect.objectContaining({ title: 'second' }),
+            expect.objectContaining({
+                shownUrls: [
+                    'https://a.co.il/first',
+                    'https://b.co.il/second'
+                ]
+            })
+        )
+    })
+
+    it('keeps the current recipe visible when a web-only retry finds nothing new', async () => {
+        mockGenerateRecipe.mockResolvedValue({
+            status: 'no-match',
+            reason: 'not-found'
+        })
+        const { result } = renderHook(() => useRecipeResult())
+        await waitFor(() => expect(result.current.retry.isAvailable).toBe(true))
+
+        await act(async () => result.current.retry.run())
+
+        expect(result.current.recipe?.title).toBe('shakshuka')
+        expect(result.current.retry.noMatch.isOpen).toBe(true)
     })
 })

@@ -127,6 +127,8 @@ export const recipesTexts = {
         saved: 'נשמר',
         saving: 'שומר...',
         saveError: 'שמירת המתכון נכשלה, נסה שוב',
+        retry: 'נסה מתכון אחר',
+        retrying: 'מחפש מתכון אחר...',
         startCooking: 'התחל לבשל ←',
         favoriteOn: 'הסר ממועדפים',
         favoriteOff: 'הוסף למועדפים'

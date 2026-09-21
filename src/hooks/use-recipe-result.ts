@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import type { RecipeDoc } from '@/types/recipe'
 
 import { useRecipeAdjustments } from '@/hooks/use-recipe-adjustments'
+import { useRecipeRetry } from '@/hooks/use-recipe-retry'
 import { useRefreshPantryStatus } from '@/hooks/use-refresh-pantry-status'
 
 import {
@@ -35,6 +36,12 @@ export const useRecipeResult = () => {
     const [isRefining, startRefining] = useTransition()
     const [isSaving, startSaving] = useTransition()
     const refreshPantryStatus = useRefreshPantryStatus(setRecipe)
+    const retry = useRecipeRetry((next) => {
+        setRecipe(next)
+        setSavedRecipeId(null)
+        adjustments.actions.reset()
+        refreshPantryStatus(next)
+    })
 
     useEffect(() => {
         const stored = readGeneratedRecipe()
@@ -78,7 +85,11 @@ export const useRecipeResult = () => {
     }
 
     const refine = () => {
-        if (!recipe || !adjustments.values.instruction.trim()) return
+        if (
+            !recipe
+            || !adjustments.values.instruction.trim()
+            || retry.isRetrying
+        ) return
 
         startRefining(async () => {
             try {
@@ -137,6 +148,12 @@ export const useRecipeResult = () => {
             isRefining,
             isSaving,
             savedRecipeId
+        },
+        retry: {
+            isAvailable: retry.hasContext && savedRecipeId === null,
+            isRetrying: retry.isRetrying,
+            run: retry.run,
+            noMatch: retry.noMatch
         },
         actions: {
             refine,
