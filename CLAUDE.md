@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Two parallel trees, `decisions/` and `corrections/`, each with `index.md` (topic descriptions +
 one-line-per-entry tables) and per-topic files with full entries. **Read both `index.md` files at
 the start of every new session** — load-bearing context, same tier as this file. **Write
-immediately, same turn as the correction/decision** — don't wait to be asked. Topic files and
+immediately, same turn as the correction/decision** — don't wait to be asked, and commit the record right away as its own `docs` commit (records exception under Git & Commits). Topic files and
 `archive/` are loaded on demand only, never routinely.
 
 ## Model Selection
