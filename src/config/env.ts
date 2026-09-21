@@ -7,6 +7,7 @@ type Env = {
     mongodbUri: string
     geminiApiKey: string
     geminiModelId: string
+    youcomApiKey?: string
     e2eMockAi: boolean
 }
 
@@ -22,6 +23,7 @@ const env: Env = {
     mongodbUri: requireVar('MONGODB_URI', process.env.MONGODB_URI),
     geminiApiKey: requireVar('GEMINI_API_KEY', process.env.GEMINI_API_KEY),
     geminiModelId: process.env.GEMINI_MODEL_ID ?? appConfig.defaultAiModelId,
+    youcomApiKey: process.env.YOUCOM_API_KEY || undefined,
     e2eMockAi: process.env.E2E_MOCK_AI === 'true' && process.env.NODE_ENV !== 'production'
 }
 
