@@ -6,10 +6,12 @@ import {
 
 import type { RecipeDoc } from '@/types/recipe'
 
+import { findWebRecipe } from '@/lib/recipes/find-web-recipe'
 import {
     clearGeneratedRecipe,
     saveGeneratedRecipe
 } from '@/lib/recipes/generated-recipe-storage'
+import { createSearchClient } from '@/lib/search/create-search-client'
 
 import { generateRecipe } from '@/actions/recipes/generate-recipe'
 import { refineRecipe } from '@/actions/recipes/refine-recipe'
@@ -64,6 +66,12 @@ jest.mock('@/hooks/use-refresh-pantry-status', () => ({
 }))
 jest.mock('@/actions/recipes/generate-recipe', () => ({
     generateRecipe: jest.fn()
+}))
+jest.mock('@/lib/recipes/find-web-recipe', () => ({
+    findWebRecipe: jest.fn()
+}))
+jest.mock('@/lib/search/create-search-client', () => ({
+    createSearchClient: jest.fn()
 }))
 jest.mock('@/actions/recipes/refine-recipe', () => ({
     refineRecipe: jest.fn()
@@ -237,5 +245,59 @@ describe('useRecipeResult retry', () => {
 
         expect(result.current.recipe?.title).toBe('shakshuka')
         expect(result.current.retry.noMatch.isOpen).toBe(true)
+    })
+})
+
+describe('useRecipeResult tweak never searches', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockRefineRecipe.mockResolvedValue({
+            ...mockDraft,
+            title: 'refined shakshuka'
+        })
+    })
+
+    const expectNoSearch = () => {
+        expect(mockGenerateRecipe).not.toHaveBeenCalled()
+        expect(findWebRecipe).not.toHaveBeenCalled()
+        expect(createSearchClient).not.toHaveBeenCalled()
+    }
+
+    it('calls only refineRecipe when the user tweaks a draft', async () => {
+        const { result } = renderHook(() => useRecipeResult())
+        await waitFor(() => expect(result.current.recipe).not.toBeNull())
+
+        act(() => result.current.adjustments.setField('instruction', 'less salt'))
+        await act(async () => result.current.actions.refine())
+
+        await waitFor(() => expect(result.current.recipe?.title).toBe('refined shakshuka'))
+        expect(mockRefineRecipe).toHaveBeenCalledTimes(1)
+        expectNoSearch()
+    })
+
+    it('after a retry-generated draft, a tweak still only calls refineRecipe', async () => {
+        mockGenerateRecipe.mockResolvedValue({
+            status: 'found',
+            recipe: {
+                ...mockDraft,
+                title: 'retried',
+                sourceUrl: 'https://b.co.il/second'
+            }
+        })
+        const { result } = renderHook(() => useRecipeResult())
+        await waitFor(() => expect(result.current.retry.isAvailable).toBe(true))
+        await act(async () => result.current.retry.run())
+        await waitFor(() => expect(result.current.recipe?.title).toBe('retried'))
+        expect(mockGenerateRecipe).toHaveBeenCalledTimes(1)
+
+        act(() => result.current.adjustments.setField('instruction', 'less salt'))
+        await act(async () => result.current.actions.refine())
+
+        await waitFor(() => expect(result.current.recipe?.title).toBe('refined shakshuka'))
+        expect(mockRefineRecipe).toHaveBeenCalledTimes(1)
+        expect(mockRefineRecipe.mock.calls[0][0].recipe.title).toBe('retried')
+        expect(mockGenerateRecipe).toHaveBeenCalledTimes(1)
+        expect(findWebRecipe).not.toHaveBeenCalled()
+        expect(createSearchClient).not.toHaveBeenCalled()
     })
 })

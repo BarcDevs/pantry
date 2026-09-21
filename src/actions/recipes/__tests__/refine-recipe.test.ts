@@ -9,6 +9,18 @@ jest.mock('@/models/pantry-item.model', () => ({
         find: jest.fn()
     }
 }))
+jest.mock('@/lib/recipes/find-web-recipe', () => ({
+    findWebRecipe: jest.fn()
+}))
+jest.mock('@/lib/search/create-search-client', () => ({
+    createSearchClient: jest.fn()
+}))
+jest.mock('@/lib/search/compose-english-search-query', () => ({
+    composeEnglishSearchQuery: jest.fn()
+}))
+jest.mock('../generate-recipe', () => ({
+    generateRecipe: jest.fn()
+}))
 
 import {
     CookingUnit,
@@ -17,9 +29,13 @@ import {
 
 import { generateStructured } from '@/lib/ai/gemini'
 import { auth } from '@/lib/auth'
+import { findWebRecipe } from '@/lib/recipes/find-web-recipe'
+import { composeEnglishSearchQuery } from '@/lib/search/compose-english-search-query'
+import { createSearchClient } from '@/lib/search/create-search-client'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 
+import { generateRecipe } from '../generate-recipe'
 import { refineRecipe } from '../refine-recipe'
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>
@@ -131,6 +147,23 @@ describe('refineRecipe', () => {
         expect(result.mealCount).toBe(recipe.mealCount)
         expect(result.mealType).toBe(recipe.mealType)
         expect(result.source).toBe(recipe.source)
+    })
+
+    it('never searches the web or regenerates: only the single refine AI call runs', async () => {
+        mockAuth.mockResolvedValue({ user: { id: 'user_123' } } as never)
+        mockGenerateStructured.mockResolvedValue(refinedResponse)
+        mockFind.mockReturnValue(leanChain(pantryItems))
+
+        await refineRecipe({
+            recipe,
+            instruction: 'תוסיף חריפות'
+        })
+
+        expect(mockGenerateStructured).toHaveBeenCalledTimes(1)
+        expect(findWebRecipe).not.toHaveBeenCalled()
+        expect(createSearchClient).not.toHaveBeenCalled()
+        expect(composeEnglishSearchQuery).not.toHaveBeenCalled()
+        expect(generateRecipe).not.toHaveBeenCalled()
     })
 
     it('carries the previous image url over to the refined recipe', async () => {
