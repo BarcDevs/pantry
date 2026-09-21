@@ -104,8 +104,9 @@ still clear on name change (not covered by this decision).
 
 ## 19/09/2026 — Web recipe sourcing (allow_ai_generation)
 
-**Status:** decided, NOT implemented. The toggle currently only changes one prompt sentence (see
-[[corrections/process-and-verification]]); PRD AC-2.8 already specifies the goal.
+**Status:** implemented on branch `feat/web-recipe-sourcing` (toggle on: web first, then AI generation; toggle off:
+web only with an explicit no-match; servings conversion; source attribution). Before this the toggle only changed one
+prompt sentence (see [[corrections/process-and-verification]]).
 
 **Decision:**
 - Default (toggle on): search the web first (Gemini Google Search Grounding). If a matching recipe is
@@ -122,3 +123,21 @@ still clear on name change (not covered by this decision).
 **How to apply:** Gemini may not allow the search tool together with structured output; if so use two
 calls (grounded find, then structure/convert). User decision 19/09/2026: skip PRD edits for this work
 (AC-2.8 already states the toggle behavior; the serving-conversion rule is recorded here only).
+
+**Search provider (decided 2026-09-21): You.com Search API** (`POST https://ydc-index.io/v1/search`, key `YOUCOM_API_KEY`,
+`language=HE`, `exclude_domains` for YouTube/Facebook/etc., $5 per 1,000 calls). Hebrew-first, English second, no provider fallback
+(AI generation is the fallback).
+- **Gemini Search Grounding rejected:** its terms forbid using grounded Links to find pages to fetch/parse, and forbid storing
+  the Links/results (verbatim clauses in the terms, page modified 2026-04-28).
+- **Brave rejected:** returns ZERO results for any pure-Hebrew query (web and LLM-context endpoints); `country=IL` unsupported.
+  Its terms also forbid storing Search Results and creating derivative works of them.
+- **Serper rejected:** works for Hebrew but its terms say it is business-to-business and does not provide end-user
+  (consumer) services, and it scrapes Google.
+- **Guardrails:** never persist, cache or log search results or snippets; use only the URLs; save the fetched page's own final URL as
+  `sourceUrl`; do not use results to train or evaluate models.
+- **Budget:** 15 s hard ceiling for the whole web phase; search 3 s, page fetch 3 s, AI parse 8 s, translation 3 s, conversion 8 s;
+  Hebrew stage up to 9 s, English stage only if >= 6 s remain; 3 candidates per stage run in parallel and the best-ranked qualifying
+  one (search order) wins. See `src/constants/search.ts`.
+- **Match rule:** strict = nothing missing (optional items included); flexible = all non-optional ingredients present; a stated
+  time over the requested max rejects; partial quantity counts as present.
+- **Not done:** the PRD was not updated for any of this (user decision); AC-2.8 still says Gemini Search Grounding.
