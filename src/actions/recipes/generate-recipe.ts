@@ -22,16 +22,13 @@ import { generateStructured } from '@/lib/ai/gemini'
 import { requireUserId } from '@/lib/auth/require-user-id'
 import connectDB from '@/lib/mongodb'
 import { buildGenerateRecipePrompt } from '@/lib/prompts/generate-recipe-prompt'
-import { findWebRecipe } from '@/lib/recipes/find-web-recipe'
 import {
     normalizeIngredientFractions,
     normalizeStepFractions
 } from '@/lib/recipes/normalize-fraction-words'
 import type { MinimalPantryItem } from '@/lib/recipes/resolve-ingredient-pantry-status'
 import { resolveIngredientPantryStatus } from '@/lib/recipes/resolve-ingredient-pantry-status'
-import { createSearchClient } from '@/lib/search/create-search-client'
-
-import env from '@/config/env'
+import { runWebSearch } from '@/lib/recipes/run-web-search'
 
 import { PantryItemModel } from '@/models/pantry-item.model'
 import { UserModel } from '@/models/user.model'
@@ -82,35 +79,61 @@ export const generateRecipe = async (
         pantrySnapshot: pantryItemNames
     }
 
-    const isWebOnly = !parsedInput.allowAiGeneration && !env.e2eMockAi
-    const searchClient = !env.e2eMockAi
-        ? createSearchClient()
-        : null
-    if (isWebOnly && !searchClient) return {
-        status: 'no-match',
-        reason: 'search-unavailable'
-    }
-    if (searchClient) {
-        const webRecipe = await findWebRecipe(
-            {
-                request: parsedInput,
-                userId,
-                selectedPantryItems,
+    const { recipe: webRecipe, searchAttempted } = await runWebSearch(
+        {
+            request: parsedInput,
+            userId,
+            selectedPantryItems,
+            allPantryItems
+        },
+        () => ({
+            userId,
+            title: 'פלפלים ממולאים לדוגמה',
+            source: 'imported_url',
+            sourceUrl: 'https://example.co.il/mock-recipe',
+            sourceName: 'example.co.il',
+            difficulty: Difficulty.Easy,
+            maxTime: parsedInput.maxTime,
+            mealCount: parsedInput.mealCount,
+            mealType: parsedInput.mealType,
+            ingredients: resolveIngredientPantryStatus(
+                selectedPantryItems.slice(0, 3).map((item) => ({
+                    label: item.name,
+                    category: item.type ?? FoodType.Other,
+                    quantity: 1,
+                    unit: CookingUnit.Units,
+                    optional: false
+                })),
                 allPantryItems
-            },
-            { searchClient }
-        )
-        if (webRecipe) return {
-            status: 'found',
-            recipe: {
-                ...webRecipe,
-                aiPromptContext
-            }
+            ),
+            steps: [
+                {
+                    order: 1,
+                    description: 'ממלאים את הפלפלים'
+                },
+                {
+                    order: 2,
+                    description: 'אופים 40 דקות'
+                }
+            ],
+            emoji: '🫑',
+            rating: null,
+            history: [],
+            isFavorite: false,
+            tags: [],
+            aiPromptContext: null
+        })
+    )
+    if (webRecipe) return {
+        status: 'found',
+        recipe: {
+            ...webRecipe,
+            aiPromptContext
         }
-        if (isWebOnly) return {
-            status: 'no-match',
-            reason: 'not-found'
-        }
+    }
+    if (!parsedInput.allowAiGeneration) return {
+        status: 'no-match',
+        reason: searchAttempted ? 'not-found' : 'search-unavailable'
     }
 
     const user = await UserModel

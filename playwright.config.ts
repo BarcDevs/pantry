@@ -18,7 +18,10 @@ export default defineConfig({
         url: baseURL,
         reuseExistingServer: !process.env.CI && port === '3000',
         timeout: 120000,
-        env: { E2E_MOCK_AI: 'true' }
+        env: {
+            E2E_MOCK_AI: 'true',
+            E2E_MOCK_SEARCH: 'true'
+        }
     },
     projects: [
         {

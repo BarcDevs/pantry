@@ -18,11 +18,8 @@ jest.mock('@/config/env', () => ({
     __esModule: true,
     default: { e2eMockAi: false }
 }))
-jest.mock('@/lib/search/create-search-client', () => ({
-    createSearchClient: jest.fn()
-}))
-jest.mock('@/lib/recipes/find-web-recipe', () => ({
-    findWebRecipe: jest.fn()
+jest.mock('@/lib/recipes/run-web-search', () => ({
+    runWebSearch: jest.fn()
 }))
 
 import {
@@ -32,8 +29,7 @@ import {
 
 import { generateStructured } from '@/lib/ai/gemini'
 import { auth } from '@/lib/auth'
-import { findWebRecipe } from '@/lib/recipes/find-web-recipe'
-import { createSearchClient } from '@/lib/search/create-search-client'
+import { runWebSearch } from '@/lib/recipes/run-web-search'
 
 import env from '@/config/env'
 
@@ -46,10 +42,11 @@ const mockAuth = auth as jest.MockedFunction<typeof auth>
 const mockFind = PantryItemModel.find as jest.Mock
 const mockFindById = UserModel.findById as jest.Mock
 const mockGenerateStructured = generateStructured as jest.Mock
-const mockCreateSearchClient = createSearchClient as jest.Mock
-const mockFindWebRecipe = findWebRecipe as jest.Mock
+const mockRunWebSearch = runWebSearch as jest.Mock
 const mockEnv = env as { e2eMockAi: boolean }
-const searchClient = { search: jest.fn() }
+
+const notAttempted = { recipe: null, searchAttempted: false }
+const attemptedNotFound = { recipe: null, searchAttempted: true }
 
 const leanChain = (result: unknown) => ({
     lean: jest.fn().mockResolvedValue(result)
@@ -108,7 +105,7 @@ describe('generateRecipe', () => {
     beforeEach(() => {
         jest.clearAllMocks()
         mockEnv.e2eMockAi = false
-        mockCreateSearchClient.mockReturnValue(null)
+        mockRunWebSearch.mockResolvedValue(notAttempted)
     })
 
     it('throws when unauthenticated', async () => {
@@ -188,11 +185,10 @@ describe('generateRecipe web-first sourcing', () => {
         mockFind.mockReturnValue(leanChain(pantryItems))
         mockFindById.mockReturnValue(leanChain(null))
         mockGenerateStructured.mockResolvedValue(aiResponse)
-        mockCreateSearchClient.mockReturnValue(searchClient)
     })
 
     it('returns the web recipe with the prompt context when the toggle is on and one is found', async () => {
-        mockFindWebRecipe.mockResolvedValue(webRecipe)
+        mockRunWebSearch.mockResolvedValue({ recipe: webRecipe, searchAttempted: true })
 
         const result = await unwrapFound(generateRecipe(input))
 
@@ -209,32 +205,32 @@ describe('generateRecipe web-first sourcing', () => {
             customInstructions: 'ללא גלוטן',
             pantrySnapshot: ['עגבניה', 'בצל']
         })
-        expect(mockFindWebRecipe).toHaveBeenCalledWith(
+        expect(mockRunWebSearch).toHaveBeenCalledWith(
             expect.objectContaining({ userId: 'user_123' }),
-            { searchClient }
+            expect.any(Function)
         )
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
 
     it('passes excludeUrls to the web search but keeps them out of the prompt context', async () => {
-        mockFindWebRecipe.mockResolvedValue(webRecipe)
+        mockRunWebSearch.mockResolvedValue({ recipe: webRecipe, searchAttempted: true })
 
         const result = await unwrapFound(generateRecipe({
             ...input,
             excludeUrls: ['https://a.co.il/shown']
         }))
 
-        expect(mockFindWebRecipe).toHaveBeenCalledWith(
+        expect(mockRunWebSearch).toHaveBeenCalledWith(
             expect.objectContaining({
                 request: expect.objectContaining({ excludeUrls: ['https://a.co.il/shown'] })
             }),
-            { searchClient }
+            expect.any(Function)
         )
         expect(result.aiPromptContext).not.toHaveProperty('excludeUrls')
     })
 
     it('falls back to AI generation when nothing is found on the web', async () => {
-        mockFindWebRecipe.mockResolvedValue(null)
+        mockRunWebSearch.mockResolvedValue(attemptedNotFound)
 
         const result = await unwrapFound(generateRecipe(input))
 
@@ -243,16 +239,15 @@ describe('generateRecipe web-first sourcing', () => {
     })
 
     it('falls back to AI generation when no search client is configured', async () => {
-        mockCreateSearchClient.mockReturnValue(null)
+        mockRunWebSearch.mockResolvedValue(notAttempted)
 
         const result = await unwrapFound(generateRecipe(input))
 
         expect(result.source).toBe('ai_generated')
-        expect(mockFindWebRecipe).not.toHaveBeenCalled()
     })
 
     it('returns no-match without generating when the toggle is off and nothing is found', async () => {
-        mockFindWebRecipe.mockResolvedValue(null)
+        mockRunWebSearch.mockResolvedValue(attemptedNotFound)
 
         const result = await generateRecipe({
             ...input,
@@ -267,7 +262,7 @@ describe('generateRecipe web-first sourcing', () => {
     })
 
     it('returns the web recipe when the toggle is off and one is found', async () => {
-        mockFindWebRecipe.mockResolvedValue(webRecipe)
+        mockRunWebSearch.mockResolvedValue({ recipe: webRecipe, searchAttempted: true })
 
         const result = await generateRecipe({
             ...input,
@@ -279,7 +274,7 @@ describe('generateRecipe web-first sourcing', () => {
     })
 
     it('returns no-match search-unavailable when the toggle is off and no search client is configured', async () => {
-        mockCreateSearchClient.mockReturnValue(null)
+        mockRunWebSearch.mockResolvedValue(notAttempted)
 
         const result = await generateRecipe({
             ...input,
@@ -290,20 +285,35 @@ describe('generateRecipe web-first sourcing', () => {
             status: 'no-match',
             reason: 'search-unavailable'
         })
-        expect(mockFindWebRecipe).not.toHaveBeenCalled()
         expect(mockGenerateStructured).not.toHaveBeenCalled()
     })
 
-    it.each([true, false])('returns the mock recipe under E2E_MOCK_AI when the toggle is %s', async (allowAiGeneration) => {
+    it('passes a mock fixture to runWebSearch so E2E_MOCK_SEARCH can resolve without a real search', async () => {
+        mockRunWebSearch.mockImplementation(async (_input, mock) => ({
+            recipe: mock(),
+            searchAttempted: true
+        }))
+
+        const result = await unwrapFound(generateRecipe(input))
+
+        expect(result.source).toBe('imported_url')
+        expect(mockGenerateStructured).not.toHaveBeenCalled()
+    })
+
+    it.each([true, false])('returns the AI mock recipe under E2E_MOCK_AI when nothing is found and the toggle is %s', async (allowAiGeneration) => {
         mockEnv.e2eMockAi = true
+        mockRunWebSearch.mockResolvedValue(attemptedNotFound)
 
         const result = await generateRecipe({
             ...input,
             allowAiGeneration
         })
 
-        expect(result.status).toBe('found')
-        expect(mockCreateSearchClient).not.toHaveBeenCalled()
-        expect(mockFindWebRecipe).not.toHaveBeenCalled()
+        if (allowAiGeneration) {
+            expect(result.status).toBe('found')
+            expect(mockGenerateStructured).toHaveBeenCalledTimes(1)
+        } else {
+            expect(result).toEqual({ status: 'no-match', reason: 'not-found' })
+        }
     })
 })
