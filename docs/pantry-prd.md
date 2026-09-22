@@ -117,6 +117,8 @@
 
       - **AC-1.8c** If the AI suggestion returns a `suggested_name` (canonical singular Hebrew form that differs from what the user typed, e.g. "עגבניות" when user typed "עגבניה"), the name field is updated automatically and a small notice appears below it: "תוקן על ידי AI" with a "לשחזר" link that reverts to the original typed name. The correction is always singular form. Items are always stored in singular form in DB - pluralization is handled only by the ingredient matcher at read time, never stored.
 
+      - **AC-1.8d** A suggestion is never cleared or re-requested just because the name field changes after it arrived (AC-1.8 already keeps whatever is showing until refresh). Because of that, editing the name can leave a suggestion on screen that was generated for a different product. Each suggestion panel (Add Item, Edit Item and the receipt row editor) tracks the name it was generated for and flags itself stale whenever the current name no longer matches - showing a warning line ("ההצעה נוצרה עבור שם אחר - אם המוצר השתנה, לחץ על רענון") and highlighting the refresh button (AC-1.8) so the user notices it needs a fresh call. The stale flag clears only when the user presses refresh; it does not go away just because the name is edited again.
+
       - **AC-1.9** The suggestion response includes an expiry estimate AND a short reason for each storage option (fridge / freezer / pantry), since shelf life varies significantly by location for the same item.
 
       - **AC-1.10** If the user selects a different storage location than the AI's top suggestion, the expiry hint updates instantly from the already-returned per-storage map - no second AI call is made.
