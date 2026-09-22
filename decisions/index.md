@@ -25,6 +25,7 @@ Configuration and design choices for the Gemini-backed AI suggestion/recipe feat
 | 19/09/2026 | Suggestion refresh bypasses the 24h cache and replaces the type; one shared `useStorageSuggestion` hook |
 | 19/09/2026 | Add Item: typing a name never clears the suggestion; only an explicit refresh replaces it |
 | 19/09/2026 | Web recipe sourcing: web first, generate only if none found, convert on serving mismatch, save origin URL; toggle off = web only (implemented; provider You.com, Gemini grounding/Brave/Serper rejected) |
+| 22/09/2026 | Rejected a separate "generate for this dish, skip search" mode - hybrid mode already covers it |
 
 ## UI Components — [[decisions/ui-components]]
 Reusable component conventions (buttons, wrappers) surfaced during pantry sessions.

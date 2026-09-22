@@ -141,3 +141,20 @@ calls (grounded find, then structure/convert). User decision 19/09/2026: skip PR
 - **Match rule:** strict = nothing missing (optional items included); flexible = all non-optional ingredients present; a stated
   time over the requested max rejects; partial quantity counts as present.
 - **Not done:** the PRD was not updated for any of this (user decision); AC-2.8 still says Gemini Search Grounding.
+
+---
+
+## 22/09/2026 — Rejected: a dedicated "generate for this dish, skip search" mode
+
+**Status:** decided against. No code change.
+
+**Considered:** a third mode alongside the toggle, where a requested dish would go straight to AI
+generation (the `המנה המבוקשת: <dish>. צור מתכון...` prompt line) instead of going through the
+web-first search. Raised because the current prompt line reads like it could skip search entirely,
+which conflicts with "search-first, not AI" (see the entry above).
+
+**Why dropped:** extra complexity for no real value - the existing hybrid mode (toggle on: search
+first, generate only if nothing found) already covers a dish request either way, so a separate mode
+would duplicate that path. The prompt line stays as-is; a dish is just one more input into the
+web-first search (see [[../corrections/process-and-verification]] and
+`src/lib/prompts/build-recipe-search-query.ts`), not a trigger to bypass it.
