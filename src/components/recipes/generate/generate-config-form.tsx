@@ -9,7 +9,7 @@ import { PantrySelectSheet } from '@/components/recipes/generate/pantry-select-s
 import { PantrySelectionSummary } from '@/components/recipes/generate/pantry-selection-summary'
 import { SparsePantryWarning } from '@/components/recipes/generate/sparse-pantry-warning'
 import { RecipeNoMatchDialog } from '@/components/recipes/shared/recipe-no-match-dialog'
-import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
+import { GenerativeCtaButton } from '@/components/shared/buttons/GenerativeCtaButton'
 import { FormError } from '@/components/shared/form/FormError'
 import { Form } from '@/components/ui/form'
 
@@ -61,7 +61,7 @@ export const GenerateConfigForm = ({
                     onEnableAi={generateRecipe.noMatch.enableAiAndRetry}
                     onEditRequest={generateRecipe.noMatch.close}
                 />
-                <PrimaryButton
+                <GenerativeCtaButton
                     type={'submit'}
                     disabled={generateRecipe.submission.isSubmitting
                         || generateRecipe.expired.isGateOpen
@@ -69,7 +69,7 @@ export const GenerateConfigForm = ({
                     className={'w-full'}
                 >
                     {generateRecipe.submission.isSubmitting ? texts.submitting : texts.submit}
-                </PrimaryButton>
+                </GenerativeCtaButton>
                 <PantrySelectSheet
                     open={generateRecipe.pantry.isSheetOpen}
                     onOpenChange={generateRecipe.pantry.setIsSheetOpen}
