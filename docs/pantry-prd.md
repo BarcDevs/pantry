@@ -44,7 +44,7 @@
 | Recipe generation config | 🆕 Selectable pantry subset | User can choose which pantry items to include for a given recipe generation via checklist (all selected by default, with Select All / Deselect All toggle) instead of always using the entire pantry |
 | Recipe generation config | 🆕 Unified time field | Single `max_time` field replaces separate prep_time/cook_time inputs on the generation config screen - simpler MVP UX |
 | Recipe generation config | 🆕 Meal count field | New `meal_count` (servings) input added to generation config |
-| Recipe generation config | ✏️ Web search + strictness promoted to MVP | `allow_ai_generation` and `match_strictness` moved from Phase 2 to MVP - Gemini's web search (Google Search Grounding) is included in the standard API at no extra complexity, and match_strictness is a simple prompt parameter |
+| Recipe generation config | ✏️ Web search + strictness promoted to MVP | `allow_ai_generation` and `match_strictness` moved from Phase 2 to MVP - see AC-2.8 for the web-search mechanism (You.com Search API), match_strictness is a simple prompt parameter |
 | Recipe cards | 🆕 Emoji visual identifier | AI-generated recipes show an AI-selected emoji on a gradient card instead of a searched/generated image. Imported recipes use the source's og:image when available, with the same emoji+gradient as fallback |
 | Recipe import | 🆕 Text-paste import mode | Recipe import now supports two tabs: URL (existing) and free-text paste - user pastes raw recipe text and the AI parses it into the same structured recipe object. Same review screen as URL import |
 | Recipe cards | 🆕 Manual image URL field | For recipes with no automatic image (ai_generated, text-paste import), user can optionally paste an image URL - shown on the Recipe Result screen right after generation/import (pre-save) and on the saved recipe's detail/edit screen - to replace the emoji+gradient card. Also available on the import review screen and for every recipe, including URL-imported ones and any recipe that already has an image (the field shows the current URL; the user can replace it or remove it, which falls back to emoji+gradient). A change on an unsaved draft edits that same draft in place; on a saved recipe it updates it directly; refining or branching creates a separate recipe that starts with the previous image, and changing it never affects the previous version |
@@ -78,7 +78,7 @@
 | Recipe version history | Phase 2 | Deferred. parent_recipe_id chain not needed at MVP. |
 | Dish request (`dish_request`) | Phase 2 | Optional free-text field ("מה אתם רוצים להכין?") on the generation config screen. When present, AI attempts to realize the specific requested dish using pantry contents, surfacing missing core ingredients and labeled substitutes rather than freely picking a dish. Deferred: requires a fundamentally different generation response structure (matched / substituted / missing-core ingredient states), a more complex Result screen (title qualifier when substitutes used, three-state ingredient list), and relies on AI reliably identifying "core" vs "substitutable" ingredients - better evaluated after baseline generation quality is known in production. |
 | AI recipe feedback loop | Phase 2 / Scaling only | Per-recipe rating data already exists in `recipes.history`. At scale, inject top-rated and low-rated recipe patterns into the generation prompt to personalize future suggestions ("המשתמש דירג נמוך מתכונים עם דגים"). Not relevant for single-user personal use - Gemini is stateless between calls so this requires explicit prompt injection per generation. Evaluate when user base justifies the added prompt tokens and complexity. |
-| Web-search recipe sourcing (`allow_ai_generation` toggle) | MVP | Moved up from Phase 2 - Gemini's web search (Google Search Grounding) is included in the standard API, no added cost/complexity. Default: AI searches the web for a matching recipe; if none found, AI generates one. Toggle off → AI only returns web-sourced matches, never invents. |
+| Web-search recipe sourcing (`allow_ai_generation` toggle) | MVP | Moved up from Phase 2 - see AC-2.8 for the mechanism (You.com Search API, not Gemini grounding). Default: searches the web for a matching recipe; if none found, AI generates one. Toggle off → only returns web-sourced matches, never invents. |
 | Match strictness control (`match_strictness`) | MVP | Moved up from Phase 2 - simple prompt parameter, no added complexity. 'strict' (recipe must closely match available ingredients) vs 'flexible' (core match sufficient, some missing ingredients OK). Independent of `scope` (pantry-only/first/open). |
 | Meal count / servings (`meal_count`) | MVP | New. User sets number of servings (default 3) on the generation config screen; included in the AI prompt for ingredient quantity scaling. |
 
@@ -170,7 +170,9 @@
 
       - AC-2.7AI call is made server-side only; Gemini API key is never exposed to the client
 
-      - AC-2.8`allow_ai_generation` toggle (default: on). When on, the AI uses Gemini's built-in web search (Google Search Grounding) to find a matching recipe online first; if no good match exists, it generates one from scratch. When off, the AI only returns web-sourced recipe matches and explicitly states "no match found" rather than inventing one.
+      - AC-2.8`allow_ai_generation` toggle (default: on). Both states search the web first (You.com Search API, Hebrew-first with an English fallback query), built from the requested dish (AC-2.1c) together with the meal type and selected pantry products - not Gemini Search Grounding, whose terms forbid crawling the returned links. The search is judged against `max_time`, `scope` and `match_strictness` (AC-2.9); a qualifying page is converted into the recipe, its servings scaled to `meal_count` when they differ (no fresh generation for a serving mismatch), and saved as `source: 'imported_url'` with `source_url` and `source_name` (AC-3.2, AC-3.7b). Hosts known to always block server fetches (402/403) are excluded from the search itself. When on and nothing qualifies, the AI generates a recipe from scratch instead (today's `ai_generated` path). When off and nothing qualifies, generation stops and a dialog states no matching recipe was found, offering to turn the toggle on and retry, or to edit the request - never an invented recipe. A "try a different recipe" retry re-runs the same search excluding previously-shown pages, without changing the config.
+
+      - AC-2.1cAn optional free-text "what do you want to make" field (dish) on the generation config screen. When set, it is combined with the meal type and selected products in the web search (AC-2.8); it does not change how the AI generation fallback is prompted.
 
       - AC-2.9`match_strictness` setting (default: flexible). 'Strict' requires the recipe to closely match available pantry ingredients (minimal missing items). 'Flexible' allows the recipe to proceed with some missing ingredients as long as the core dish matches. This is a prompt parameter only - no additional API complexity beyond the existing generation call.
 
@@ -192,6 +194,8 @@
       - AC-3.1User can save any generated or imported recipe to their library with one tap
 
       - AC-3.2Each saved recipe has: title, source (ai_generated / imported_url / manual), rating (1–5, nullable), is_favorite (boolean), tags (user-defined array)
+
+      - AC-3.2bA recipe with `source: 'imported_url'` (manual URL/text-paste import, or a web-search match per AC-2.8) also carries `source_name` - the site name (from its page metadata, falling back to the hostname). The Result screen and saved detail view show "מקור: [source_name]" as a link to `source_url`; an `ai_generated` recipe shows "נוצר על ידי AI" instead. Text-paste imports have `source_name` unset (no page to read it from, same as `source_url` per AC-3.10) and show no attribution line.
 
       - AC-3.3Recipe stores structured steps as an ordered array, not free text
 
@@ -296,7 +300,7 @@
 | 4a | **Add manually** | Name + storage location + food type + quantity + optional expiry → save |
 | 4b | **Scan receipt** | Camera → Gemini Vision → review list → confirm → items added to pantry |
 | 4c | **Paste URL** | URL → Gemini extraction → review list → confirm → items added to pantry |
-| 5 | **Generate recipe** | Configure: meal count, max time, meal type, scope, web-search toggle, match strictness. Select/deselect which pantry items to include (all selected by default). Resolve expired items if any. Submit. |
+| 5 | **Generate recipe** | Configure: meal count, max time, meal type, dish (optional), scope, web-search toggle, match strictness. Select/deselect which pantry items to include (all selected by default). Resolve expired items if any. Submit. |
 | 6 | **View & refine** | Recipe displayed. Optional: send refinement instruction. Save to library. |
 | 7 | **Cook** | Cooking mode: step-by-step. Tap "Done Cooking". |
 | 8 | **Update pantry** | Deduction screen: confirm or adjust quantities. Pantry updated. Loop complete. |
@@ -331,7 +335,7 @@
 | Home / Pantry | MVP | Item list sorted by expiry, color-coded warnings, add-item CTA, generate recipe CTA. |
 | Add Item (Manual) | MVP | Form: name, storage, type, quantity, unit, expiry (optional), notes (optional). The expiry field opens a Hebrew, RTL calendar with month and year dropdowns (Sunday-first weeks) so a far-off date is one selection away instead of many month-by-month clicks; dates before today are disabled (today is allowed) and the year range runs from the current year to 20 years ahead. The receipt-row editor uses the same picker. AI storage/expiry suggestion persisted on save. |
 | Receipt Scan Review | MVP | Editable extracted item list before committing to pantry. |
-| Recipe Generation Config | MVP | Meal count, unified max time, meal type, scope mode, allow_ai_generation toggle, match_strictness, expired-item resolution, pantry item checklist (select/deselect which items are available for this recipe). On mobile the meal-count, max-time and meal-type cards stack in a single column (3 columns from the `md` breakpoint up). Shows a banner per unsaved recipe draft (see AC-2.10). |
+| Recipe Generation Config | MVP | Meal count, unified max time, meal type, optional dish field, scope mode, allow_ai_generation toggle, match_strictness, expired-item resolution, pantry item checklist (select/deselect which items are available for this recipe). On mobile the meal-count, max-time and meal-type cards stack in a single column (3 columns from the `md` breakpoint up). Shows a banner per unsaved recipe draft (see AC-2.10). |
 | Recipe Result | MVP | Generated recipe with pantry-match highlights, missing-ingredient flags (including replacement suggestions with an "add to adjustments" toggle, see AC-2.4b), refinement input, save + start cooking buttons; missing ingredients link to Add Item with a return path, see AC-2.4d. |
 | Cooking Mode | MVP | Step-by-step view, dark theme, large text, step counter (e.g. "1/5") with progress bar, persistent "Done Cooking" action and "Previous" navigation. |
 | Post-Cooking Deduction | MVP | "Bon appétit" confirmation header. Ingredient list with pre-filled quantities (editable +/-), shows resulting pantry quantity per item ("X left"). "Confirm & Update Pantry" or "Skip - leave pantry unchanged." |
@@ -407,9 +411,10 @@ interface RecipeGenerationRequest {
   meal_count: number              // servings, default 3
   max_time: number                // minutes - unified prep+cook time (presets: 15/30/60, or custom)
   meal_type: 'breakfast' | 'lunch' | 'dinner' | 'snack'
+  dish?: string                   // optional free-text "what to make" (AC-2.1c); feeds the web search alongside meal_type and selected products
   scope: 'pantry-only' | 'pantry-first' | 'open'
   selected_item_ids?: string[]    // omitted/empty = entire pantry used (default: all checked)
-  allow_ai_generation: boolean    // default: true. False = web-search-only, never invent
+  allow_ai_generation: boolean    // default: true. Both states search the web first (AC-2.8); false = web-search-only, never invent
   match_strictness: 'strict' | 'flexible'  // default: 'flexible'
 }
 
@@ -465,7 +470,8 @@ recipes
   user_id          uuid            - FK to users
   title            text
   source           recipe_source   - 'ai_generated' | 'imported_url' | 'manual'
-  source_url       text            - Nullable. Set for imported recipes.
+  source_url       text            - Nullable. Set for imported recipes and web-search matches (AC-2.8).
+  source_name      text            - Nullable. Site name shown as "מקור: [source_name]" (AC-3.2b). Set alongside source_url; unset for text-paste imports and ai_generated recipes.
   difficulty       difficulty      - 'easy' | 'medium' | 'hard'. AI-assessed from the recipe, not a generation input.
   max_time         integer         - Minutes. Unified prep+cook time used in the generation request.
   meal_count       integer         - Servings this recipe yields.
@@ -505,7 +511,7 @@ recipes
 | DELETE | /api/pantry/items/:id | Removes a single pantry item. |
 | POST | /api/pantry/scan-receipt | Accepts base64 receipt image. Sends to Gemini Flash Vision server-side. Returns extracted [{name, quantity, unit}] for client review. Image not persisted. |
 | POST | /api/pantry/parse-receipt-url | Accepts a URL. Fetches page content, sends to Gemini for extraction. Returns items for review or error with fallback_to_manual flag. |
-| POST | /api/recipes/generate | Assembles pantry context (with expiry weighting for storage type), sends to Gemini with user prefs. Body: meal_count, max_time, meal_type, scope, selected_item_ids (optional), allow_ai_generation, match_strictness. When allow_ai_generation is true, uses Gemini Google Search Grounding to search the web first. Returns structured recipe object. |
+| POST | /api/recipes/generate | Assembles pantry context (with expiry weighting for storage type), sends to Gemini with user prefs. Body: meal_count, max_time, meal_type, dish (optional), scope, selected_item_ids (optional), allow_ai_generation, match_strictness. Always searches the web first (You.com, see AC-2.8); allow_ai_generation only controls whether generation is the fallback. Returns structured recipe object, or a no-match result when the toggle is off and nothing qualifies. |
 | POST | /api/recipes/refine | Accepts recipe_id (or inline recipe) + free-text instruction. Returns modified recipe for client preview before save. Used both for the not-yet-saved generate/import result screen (updates the in-memory preview) and, via /api/recipes/:id/branch, for already-saved recipes. |
 | POST | /api/recipes/:id/branch | Accepts an already-saved recipe + free-text adjustments instruction (AC-2.5b). Internally calls refine, then saves the result as a new recipe row (rating/history/favorite reset) rather than updating `:id`. Returns the new recipe; client navigates to it. |
 | POST | /api/recipes/import-url | Accepts recipe URL. LLM parses page into structured recipe. Returns recipe object for review, or error with fallback_to_manual flag. |
