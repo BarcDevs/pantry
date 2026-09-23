@@ -40,7 +40,8 @@ export const onboardingTexts = {
         glutenFree: { emoji: '🌾', label: 'ללא גלוטן' },
         dairyFree: { emoji: '🥛', label: 'ללא חלב' },
         kosher: { emoji: '✡️', label: 'כשר' },
-        lowCarb: { emoji: '🥩', label: 'דל פחמימות' }
+        lowCarb: { emoji: '🥩', label: 'דל פחמימות' },
+        healthy: { emoji: '🥗', label: 'בריא' }
     },
     dietaryCustomPlaceholder: 'העדפה אחרת',
     dietaryCustomAdd: 'הוספה',
