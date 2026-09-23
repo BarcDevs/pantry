@@ -30,7 +30,6 @@ immediately, same turn as the correction/decision** — don't wait to be asked, 
 **Before coding:** State assumptions. Ask when uncertain (95% rule). Surface tradeoffs. Don't implement until 95% confident - ask until there.
 **Simplicity:** Minimum code that solves the problem. No extra features, abstractions, flexibility, or impossible-scenario handling. 200 lines that could be 50 → rewrite.
 **Surgical:** Touch only what you must. Don't improve adjacent code. Match existing style. Mention unrelated dead code - don't delete it. Remove only imports/vars YOUR changes made unused.
-**Learn from mistakes:** Save feedback memory on any correction or confirmed non-obvious choice. User should never repeat the same correction. Check memory before similar work.
 **Goal-driven:** Define success criteria before starting. For multi-step tasks, state a plan: `1. [step] → verify: [check]`. Loop until verified.
 
 ## Project status
