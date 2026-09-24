@@ -7,6 +7,7 @@
 - Every call site across the app — update to import the wrapper instead of the raw `ui/` component
 
 ## Constraints
+- Scope: wrap only when the design system gives the element its own look/behavior reused across components (even one variant, it extends easily). Plain primitive usage stays a direct `ui/` import with no wrapper. Don't create wrappers pre-emptively or migrate call sites in bulk.
 - One wrapper per `ui/` component, drive all project-specific behavior (RTL positioning, brand colors, fixed
   sizing, a baked-in variant) through typed props — not free-form `className` overrides at each call site.
 - Grep to confirm nothing outside the wrapper still imports the raw primitive:

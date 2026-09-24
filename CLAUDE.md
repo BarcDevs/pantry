@@ -76,7 +76,7 @@ Never scatter the same kind of logic across `src/actions/` (or elsewhere) file b
 
 When adding or editing code, check for this scatter pattern and centralize proactively - don't wait for a dedicated cleanup pass. Don't force abstraction on one-off or superficially-similar code.
 
-**Read `workflow/05-wrapping-a-shadcn-component.md` before wrapping or customizing a `src/components/ui/` (shadcn) component.** It documents the reusable-wrapper pattern (build one `src/components/shared/` wrapper as the sole consumer of a `ui/` primitive, drive differences through props). For the worked gotchas behind it (tailwind-merge custom-token dedup, `dark:` variant firing under OS dark mode, RTL bugs), see `GOTCHAS.md`.
+**Read `workflow/05-wrapping-a-shadcn-component.md` before wrapping or customizing a `src/components/ui/` (shadcn) component.** It documents the reusable-wrapper pattern (build one `src/components/shared/` wrapper as the sole consumer of a `ui/` primitive, drive differences through props). Wrap only design-system elements with their own reusable look (even a single variant); plain primitive usage stays a direct `ui/` import, no wrapper - don't over-engineer. For the worked gotchas behind it (tailwind-merge custom-token dedup, `dark:` variant firing under OS dark mode, RTL bugs), see `GOTCHAS.md`.
 
 For "how do I make change X" recipes (adding a page, a server action, a schema change, a form), see `workflow/`.
 
