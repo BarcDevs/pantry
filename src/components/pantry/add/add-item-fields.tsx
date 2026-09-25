@@ -7,13 +7,14 @@ import {
 
 import { ExpiryDateField } from '@/components/pantry/add/expiry-date-field'
 import { QuantityField } from '@/components/pantry/add/quantity-field'
+import { Combobox } from '@/components/shared/Combobox'
 import { FormInputField } from '@/components/shared/form/FormInputField'
 import { FormSelectField } from '@/components/shared/form/FormSelectField'
-import { Input } from '@/components/shared/Input'
 import { Textarea } from '@/components/ui/textarea'
 
 import { toSelectOptions } from '@/lib/select-options'
 
+import { commonPantryItemNames } from '@/constants/pantry-items'
 import { pantryTexts } from '@/constants/texts/pantry'
 
 import type { AddItemFormValues } from '@/schemas/add-item-form'
@@ -35,10 +36,12 @@ export const AddItemFields = ({ control }: AddItemFieldsProps) => {
                 name={'name'}
                 label={pantryTexts.addForm.nameLabel}
                 render={(field) => (
-                    <Input
+                    <Combobox
                         {...field}
                         dir={'rtl'}
                         placeholder={pantryTexts.addForm.namePlaceholder}
+                        suggestions={commonPantryItemNames}
+                        onSelect={(value) => field.onChange(value)}
                     />
                 )}
             />
