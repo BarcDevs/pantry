@@ -1,12 +1,21 @@
 import {
     fireEvent,
     render,
-    screen
+    screen,
+    waitFor
 } from '@testing-library/react'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
+import { searchRecipeImage } from '@/actions/recipes/search-recipe-image'
+
 import { RecipeImageUrlField } from './recipe-image-url-field'
+
+jest.mock('@/actions/recipes/search-recipe-image', () => ({
+    searchRecipeImage: jest.fn()
+}))
+
+const mockSearchRecipeImage = searchRecipeImage as jest.Mock
 
 const renderField = (imageUrl: string) => {
     const onChange = jest.fn()
@@ -14,6 +23,8 @@ const renderField = (imageUrl: string) => {
         <RecipeImageUrlField
             imageUrl={imageUrl}
             onChange={onChange}
+            title={'פסטה'}
+            ingredientLabels={['עגבניה']}
         />
     )
     return onChange
@@ -42,6 +53,37 @@ describe('RecipeImageUrlField with an existing image', () => {
         renderField('')
         expect(screen.getByText(recipesTexts.result.imageFieldDescription)).toBeInTheDocument()
         expect(screen.queryByText(recipesTexts.result.removeImage)).toBeNull()
+    })
+})
+
+describe('RecipeImageUrlField search', () => {
+    beforeEach(() => {
+        mockSearchRecipeImage.mockReset()
+    })
+
+    it('applies the found image', async () => {
+        mockSearchRecipeImage.mockResolvedValue({ imageUrl: 'https://example.com/found.jpg' })
+        const onChange = renderField('')
+
+        fireEvent.click(screen.getByText(recipesTexts.result.searchImage))
+
+        await waitFor(() => (
+            expect(onChange).toHaveBeenCalledWith('https://example.com/found.jpg')
+        ))
+        expect(mockSearchRecipeImage).toHaveBeenCalledWith({
+            title: 'פסטה',
+            ingredients: ['עגבניה']
+        })
+    })
+
+    it('does nothing when no image is found', async () => {
+        mockSearchRecipeImage.mockResolvedValue({ imageUrl: null })
+        const onChange = renderField('')
+
+        fireEvent.click(screen.getByText(recipesTexts.result.searchImage))
+
+        await waitFor(() => expect(mockSearchRecipeImage).toHaveBeenCalled())
+        expect(onChange).not.toHaveBeenCalled()
     })
 })
 

@@ -2,7 +2,7 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google'
 
 import env from '@/config/env'
 
-const google = createGoogleGenerativeAI({
+export const google = createGoogleGenerativeAI({
     apiKey: env.geminiApiKey
 })
 

@@ -52,6 +52,8 @@ export const ImportRecipeReview = ({
         <RecipeImageUrlField
             imageUrl={recipe.imageUrl}
             onChange={onImageUrlChange}
+            title={recipe.title}
+            ingredientLabels={recipe.ingredients.map((i) => i.label)}
         />
         <RecipeBodyGrid>
             <RecipeIngredientsList

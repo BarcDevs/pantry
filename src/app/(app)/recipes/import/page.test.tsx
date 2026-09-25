@@ -12,6 +12,9 @@ const importFromText = jest.fn()
 jest.mock('next/navigation', () => ({
     useRouter: () => ({ back: jest.fn() })
 }))
+jest.mock('@/actions/recipes/search-recipe-image', () => ({
+    searchRecipeImage: jest.fn()
+}))
 jest.mock('@/hooks/use-recipe-import', () => ({
     useRecipeImport: () => ({
         recipe: null,

@@ -10,6 +10,9 @@ import { RecipeResultView } from './recipe-result-view'
 
 const mockSetManualImageUrl = jest.fn()
 
+jest.mock('@/actions/recipes/search-recipe-image', () => ({
+    searchRecipeImage: jest.fn()
+}))
 jest.mock('@/hooks/use-recipe-result', () => ({
     useRecipeResult: () => ({
         recipe: {

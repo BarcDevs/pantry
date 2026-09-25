@@ -27,6 +27,8 @@ export const RecipeResultView = () => {
             <RecipeImageUrlField
                 imageUrl={recipeResult.recipe.imageUrl}
                 onChange={recipeResult.actions.setManualImageUrl}
+                title={recipeResult.recipe.title}
+                ingredientLabels={recipeResult.recipe.ingredients.map((i) => i.label)}
             />
             <RecipeBodyGrid>
                 <RecipeIngredientsList

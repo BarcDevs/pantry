@@ -12,6 +12,9 @@ import { RecipeDetailView } from './recipe-detail-view'
 
 const mockUpdateImageUrl = jest.fn()
 
+jest.mock('@/actions/recipes/search-recipe-image', () => ({
+    searchRecipeImage: jest.fn()
+}))
 jest.mock('@/hooks/use-recipe-detail', () => ({
     useRecipeDetail: (recipe: Recipe) => ({
         recipe,
