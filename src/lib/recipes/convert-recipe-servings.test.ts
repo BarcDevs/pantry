@@ -24,6 +24,7 @@ const recipe = {
     sourceUrl: 'https://a.com/1',
     sourceName: 'a.com',
     difficulty: 'easy',
+    spiceLevel: 0,
     maxTime: 20,
     mealCount: 4,
     mealType: 'dinner',
@@ -56,6 +57,7 @@ describe('convertRecipeServings', () => {
         mockGenerateStructured.mockResolvedValue({
             title: 'ignored',
             difficulty: 'easy',
+            spiceLevel: 0,
             emoji: '🍝',
             ingredients: [{
                 label: 'עגבניה',

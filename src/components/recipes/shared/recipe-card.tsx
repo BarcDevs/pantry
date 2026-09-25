@@ -9,6 +9,7 @@ import type { Recipe } from '@/types/recipe'
 import { DeleteRecipeDialog } from '@/components/recipes/shared/delete-recipe-dialog'
 import { RecipeCardActions } from '@/components/recipes/shared/recipe-card-actions'
 import { RecipeCoverImage } from '@/components/recipes/shared/recipe-cover-image'
+import { SpiceLevelIndicator } from '@/components/recipes/shared/spice-level-indicator'
 
 import { formatCookedAt } from '@/lib/recipes/format-cooked-at'
 
@@ -87,8 +88,9 @@ export const RecipeCard = ({
                 </div>
                 <div className={'mt-2 p-3.5'}>
                     <div className={'flex items-center justify-between gap-2'}>
-                        <span className={'text-body font-bold text-ink'}>
+                        <span className={'flex items-center gap-1.5 text-body font-bold text-ink'}>
                             {recipe.title}
+                            <SpiceLevelIndicator spiceLevel={recipe.spiceLevel}/>
                         </span>
                         {recipe.rating !== null && (
                             <span className={'flex shrink-0 items-center gap-0.75 text-caption font-bold text-status-amber-fg'}>

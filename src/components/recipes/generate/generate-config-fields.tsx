@@ -5,6 +5,7 @@ import { MEAL_TYPES } from '@/types/enums'
 import { GenerateChipField } from '@/components/recipes/generate/generate-chip-field'
 import { GenerateCountStepperField } from '@/components/recipes/generate/generate-count-stepper-field'
 import { GenerateFieldCard } from '@/components/recipes/generate/generate-field-card'
+import { GenerateSpiceLevelField } from '@/components/recipes/generate/generate-spice-level-field'
 import { GenerateTimePresetField } from '@/components/recipes/generate/generate-time-preset-field'
 
 import { recipesTexts } from '@/constants/texts/recipes'
@@ -49,5 +50,11 @@ export const GenerateConfigFields = ({
                 />
             </GenerateFieldCard>
         </div>
+        <GenerateFieldCard>
+            <GenerateSpiceLevelField
+                control={control}
+                name={'maxSpiceLevel'}
+            />
+        </GenerateFieldCard>
     </div>
 )

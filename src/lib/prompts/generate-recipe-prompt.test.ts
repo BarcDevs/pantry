@@ -8,7 +8,8 @@ const request: GenerateRecipeInput = {
     mealType: 'dinner',
     scope: 'pantry-first',
     allowAiGeneration: true,
-    matchStrictness: 'flexible'
+    matchStrictness: 'flexible',
+    maxSpiceLevel: 3
 }
 
 describe('buildGenerateRecipePrompt', () => {
@@ -30,5 +31,21 @@ describe('buildGenerateRecipePrompt', () => {
         const prompt = buildGenerateRecipePrompt(request, ['פסטה'], {})
 
         expect(prompt).not.toContain('המנה המבוקשת')
+    })
+
+    it('states the spice cap when below the max', () => {
+        const prompt = buildGenerateRecipePrompt(
+            { ...request, maxSpiceLevel: 1 },
+            ['פסטה'],
+            {}
+        )
+
+        expect(prompt).toContain('אסורה לעלות על 1')
+    })
+
+    it('has no spice cap line at the default max level', () => {
+        const prompt = buildGenerateRecipePrompt(request, ['פסטה'], {})
+
+        expect(prompt).not.toContain('אסורה לעלות על')
     })
 })

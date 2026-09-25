@@ -37,6 +37,13 @@ export const stepSchema = z.object({
     description: z.string()
 })
 
+export const spiceLevelSchema = z.union([
+    z.literal(0),
+    z.literal(1),
+    z.literal(2),
+    z.literal(3)
+])
+
 export const aiPromptContextSchema = z.object({
     mealCount: z.number().int().positive(),
     maxTime: z.number().int().positive(),
@@ -44,6 +51,7 @@ export const aiPromptContextSchema = z.object({
     scope: z.enum(RECIPE_SCOPES),
     allowAiGeneration: z.boolean(),
     matchStrictness: z.enum(MATCH_STRICTNESSES),
+    maxSpiceLevel: spiceLevelSchema,
     customInstructions: z.string().optional(),
     pantrySnapshot: z.array(z.string())
 })
@@ -60,6 +68,7 @@ export const recipeDocSchema = z.object({
     sourceUrl: httpUrlSchema.optional(),
     sourceName: z.string().trim().max(100).optional(),
     difficulty: z.enum(DIFFICULTIES),
+    spiceLevel: spiceLevelSchema,
     maxTime: z.number().int().positive(),
     mealCount: z.number().int().positive(),
     mealType: z.enum(MEAL_TYPES),

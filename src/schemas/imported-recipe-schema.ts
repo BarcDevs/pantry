@@ -7,11 +7,15 @@ import {
     MEAL_TYPES
 } from '@/types/enums'
 
-import { quantitySchema } from '@/schemas/recipe-doc-schema'
+import {
+    quantitySchema,
+    spiceLevelSchema
+} from '@/schemas/recipe-doc-schema'
 
 export const importedRecipeSchema = z.object({
     title: z.string(),
     difficulty: z.enum(DIFFICULTIES),
+    spiceLevel: spiceLevelSchema,
     mealType: z.enum(MEAL_TYPES),
     mealCount: z.number().int().positive(),
     maxTime: z.number().int().positive(),

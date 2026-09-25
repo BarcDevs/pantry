@@ -34,6 +34,7 @@ import { PantryItemModel } from '@/models/pantry-item.model'
 import { UserModel } from '@/models/user.model'
 import { aiRecipeSchema } from '@/schemas/ai-recipe-schema'
 import { objectIdSchema } from '@/schemas/object-id-schema'
+import { spiceLevelSchema } from '@/schemas/recipe-doc-schema'
 
 const generateRecipeSchema = z.object({
     mealCount: z.number().int().positive(),
@@ -43,6 +44,7 @@ const generateRecipeSchema = z.object({
     selectedItemIds: z.array(objectIdSchema).optional(),
     allowAiGeneration: z.boolean(),
     matchStrictness: z.enum(MATCH_STRICTNESSES),
+    maxSpiceLevel: spiceLevelSchema,
     customInstructions: z.string().max(500).optional(),
     excludeUrls: z.array(z.string().max(2048)).max(50).optional()
 })
@@ -75,6 +77,7 @@ export const generateRecipe = async (
         scope: parsedInput.scope,
         allowAiGeneration: parsedInput.allowAiGeneration,
         matchStrictness: parsedInput.matchStrictness,
+        maxSpiceLevel: parsedInput.maxSpiceLevel,
         customInstructions: parsedInput.customInstructions,
         pantrySnapshot: pantryItemNames
     }
@@ -93,6 +96,7 @@ export const generateRecipe = async (
             sourceUrl: 'https://example.co.il/mock-recipe',
             sourceName: 'example.co.il',
             difficulty: Difficulty.Easy,
+            spiceLevel: 0,
             maxTime: parsedInput.maxTime,
             mealCount: parsedInput.mealCount,
             mealType: parsedInput.mealType,
@@ -149,6 +153,7 @@ export const generateRecipe = async (
     const generated = await generateStructured(prompt, aiRecipeSchema, () => ({
         title: 'שקשוקה למבחן',
         difficulty: Difficulty.Easy,
+        spiceLevel: 0 as const,
         emoji: '🍳',
         ingredients: selectedPantryItems.slice(0, 3).map((item) => ({
             label: item.name,
@@ -174,6 +179,7 @@ export const generateRecipe = async (
         title: generated.title,
         source: 'ai_generated',
         difficulty: generated.difficulty,
+        spiceLevel: generated.spiceLevel,
         maxTime: parsedInput.maxTime,
         mealCount: parsedInput.mealCount,
         mealType: parsedInput.mealType,

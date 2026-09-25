@@ -33,6 +33,7 @@ const mockFetch = jest.fn()
 const aiRecipe = {
     title: 'פסטה ברוטב עגבניות',
     difficulty: 'easy',
+    spiceLevel: 0,
     mealType: 'dinner',
     mealCount: 2,
     maxTime: 30,

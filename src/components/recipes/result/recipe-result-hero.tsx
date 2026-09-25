@@ -1,6 +1,7 @@
 import type { RecipeDoc } from '@/types/recipe'
 
 import { RecipeCoverImage } from '@/components/recipes/shared/recipe-cover-image'
+import { SpiceLevelIndicator } from '@/components/recipes/shared/spice-level-indicator'
 
 import { recipesTexts } from '@/constants/texts/recipes'
 
@@ -26,8 +27,9 @@ export const RecipeResultHero = ({ recipe }: RecipeResultHeroProps) => (
                     {recipesTexts.generate.mealTypeOptions[recipe.mealType]}
                 </span>
             </div>
-            <div className={'font-display text-title font-weight-title text-surface'}>
+            <div className={'flex items-center gap-2 font-display text-title font-weight-title text-surface'}>
                 {recipe.title}
+                <SpiceLevelIndicator spiceLevel={recipe.spiceLevel}/>
             </div>
         </div>
     </div>

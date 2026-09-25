@@ -42,6 +42,13 @@ export const recipesTexts = {
             strict: 'מדויק',
             flexible: 'גמיש'
         },
+        maxSpiceLevelLabel: 'רמת חריפות מקסימלית',
+        spiceLevelOptions: {
+            0: 'לא חריף בכלל',
+            1: '🌶️',
+            2: '🌶️🌶️',
+            3: '🌶️🌶️🌶️'
+        },
         sourceGroupTitle: 'מקור המתכון',
         sourceGroupDescription: 'קבעו מאיפה יגיע המתכון וכמה מדויקת ההתאמה למלאי.',
         allowAiGenerationHint: {

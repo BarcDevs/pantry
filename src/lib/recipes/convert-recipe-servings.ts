@@ -33,6 +33,7 @@ export const convertRecipeServings = async (
         () => ({
             title: recipe.title,
             difficulty: recipe.difficulty,
+            spiceLevel: recipe.spiceLevel,
             emoji: recipe.emoji ?? '🍳',
             ingredients: recipe.ingredients,
             steps: recipe.steps

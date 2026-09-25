@@ -79,6 +79,7 @@ const pantryItems = [
 const aiResponse = {
     title: 'פסטה עגבניות',
     difficulty: 'easy',
+    spiceLevel: 0,
     emoji: '🍝',
     ingredients: [
         {
@@ -98,6 +99,7 @@ const input = {
     scope: 'pantry-first' as const,
     allowAiGeneration: true,
     matchStrictness: 'flexible' as const,
+    maxSpiceLevel: 3 as const,
     customInstructions: 'ללא גלוטן'
 }
 
@@ -143,6 +145,7 @@ describe('generateRecipe', () => {
             scope: 'pantry-first',
             allowAiGeneration: true,
             matchStrictness: 'flexible',
+            maxSpiceLevel: 3,
             customInstructions: 'ללא גלוטן',
             pantrySnapshot: ['עגבניה', 'בצל']
         })
@@ -202,6 +205,7 @@ describe('generateRecipe web-first sourcing', () => {
             scope: 'pantry-first',
             allowAiGeneration: true,
             matchStrictness: 'flexible',
+            maxSpiceLevel: 3,
             customInstructions: 'ללא גלוטן',
             pantrySnapshot: ['עגבניה', 'בצל']
         })

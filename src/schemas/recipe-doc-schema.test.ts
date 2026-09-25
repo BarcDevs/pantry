@@ -27,6 +27,7 @@ const baseRecipeDoc = {
     title: 'x',
     source: 'imported_url',
     difficulty: 'easy',
+    spiceLevel: 0,
     maxTime: 30,
     mealCount: 2,
     mealType: 'dinner',

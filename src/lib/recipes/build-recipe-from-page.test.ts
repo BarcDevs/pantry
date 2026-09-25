@@ -11,6 +11,7 @@ const mockGenerateStructured = generateStructured as jest.Mock
 const extracted = {
     title: 'קציצות',
     difficulty: 'easy',
+    spiceLevel: 0,
     mealType: 'dinner',
     mealCount: 2,
     maxTime: 30,

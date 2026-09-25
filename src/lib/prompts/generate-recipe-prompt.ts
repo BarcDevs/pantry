@@ -3,6 +3,7 @@ import type { RecipePromptUserContext } from '@/types/user'
 
 import {
     recipePantryMatchingInstruction,
+    recipeSpiceLevelInstruction,
     recipeStepsDetailInstructions,
     recipeUnitsInstructions
 } from '@/lib/prompts/recipe-shared-instructions'
@@ -16,6 +17,10 @@ export const buildGenerateRecipePrompt = (
     עד ${input.maxTime} דקות, לארוחת ${input.mealType}.
     מצב התאמה למזווה: ${input.scope}.
     רמת דיוק התאמה למלאי: ${input.matchStrictness}.
+    ${input.maxSpiceLevel < 3
+        ? `רמת החריפות של המתכון (spiceLevel) אסורה לעלות על ${input.maxSpiceLevel}
+    מתוך 0-3.`
+        : ''}
     ${input.allowAiGeneration
         ? 'ניתן להשלים מרכיבים שאינם במזווה.'
         : 'אין להמציא מרכיבים שאינם מופיעים במזווה או בחיפוש רשת.'}
@@ -39,6 +44,7 @@ export const buildGenerateRecipePrompt = (
     (למשל עשבי תיבול לקישוט, רוטב צד). מרכיבים ליבתיים למתכון
     הם optional: false.
     בחר אימוג'י יחיד המייצג את המתכון.
+    ${recipeSpiceLevelInstruction}
     ${recipeStepsDetailInstructions}
     רמת הבישול של המשתמש (אם צוינה) קובעת כמה הסבר רקע/הקשר להוסיף
     (למשל להסביר טכניקה למתחיל), ולא אמורה לגרום לפישוט שפה, השמטת

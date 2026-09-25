@@ -1,5 +1,6 @@
 import {
     recipePantryMatchingInstruction,
+    recipeSpiceLevelInstruction,
     recipeStepsDetailInstructions,
     recipeUnitsInstructions
 } from '@/lib/prompts/recipe-shared-instructions'
@@ -16,6 +17,7 @@ export const importRecipeExtractionInstructions = (
     ורשימת שלבי הכנה ממוספרים (steps: order, description).
     ${recipeUnitsInstructions}
     ${recipePantryMatchingInstruction(pantryItemNames)}
+    ${recipeSpiceLevelInstruction}
     ${recipeStepsDetailInstructions}
     אם התוכן המקורי אינו בעברית, תרגם הכל לעברית - כולל את הכותרת
     (title) עצמה, לא רק את המרכיבים והשלבים. אל תשאיר את הכותרת בשפת

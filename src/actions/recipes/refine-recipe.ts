@@ -42,6 +42,7 @@ export const refineRecipe = async (
         () => ({
             title: `${recipe.title} (מעודכן)`,
             difficulty: recipe.difficulty,
+            spiceLevel: recipe.spiceLevel,
             emoji: recipe.emoji ?? '🍳',
             ingredients: recipe.ingredients,
             steps: recipe.steps
@@ -57,6 +58,7 @@ export const refineRecipe = async (
         ...recipe,
         title: refined.title,
         difficulty: refined.difficulty,
+        spiceLevel: refined.spiceLevel,
         emoji: refined.emoji,
         ingredients: resolveIngredientPantryStatus(
             normalizeIngredientFractions(refined.ingredients),

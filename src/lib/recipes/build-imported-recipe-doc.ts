@@ -25,6 +25,7 @@ export const buildImportedRecipeDoc = (
     sourceUrl: extras.sourceUrl,
     sourceName: extras.sourceName,
     difficulty: generated.difficulty,
+    spiceLevel: generated.spiceLevel,
     maxTime: generated.maxTime,
     mealCount: generated.mealCount,
     mealType: generated.mealType,

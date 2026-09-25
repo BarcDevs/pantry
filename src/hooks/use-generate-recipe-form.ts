@@ -45,6 +45,7 @@ export const useGenerateRecipeForm = () => {
             scope: RecipeScope.PantryFirst,
             allowAiGeneration: true,
             matchStrictness: MatchStrictness.Flexible,
+            maxSpiceLevel: 3,
             customInstructions: ''
         }
     })

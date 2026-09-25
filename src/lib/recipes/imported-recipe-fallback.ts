@@ -10,6 +10,7 @@ import type { ImportedRecipe } from '@/schemas/imported-recipe-schema'
 export const importedRecipeFallback = (): ImportedRecipe => ({
     title: 'מתכון לדוגמה',
     difficulty: Difficulty.Easy,
+    spiceLevel: 0,
     mealType: MealType.Dinner,
     mealCount: 2,
     maxTime: 30,

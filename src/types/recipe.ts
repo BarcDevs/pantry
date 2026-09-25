@@ -36,6 +36,8 @@ export type RecipeHistoryEntry = {
     rating: number | null
 }
 
+export type SpiceLevel = 0 | 1 | 2 | 3
+
 export type AiPromptContext = {
     mealCount: number
     maxTime: number
@@ -43,6 +45,7 @@ export type AiPromptContext = {
     scope: RecipeScope
     allowAiGeneration: boolean
     matchStrictness: MatchStrictness
+    maxSpiceLevel: SpiceLevel
     customInstructions?: string
     pantrySnapshot: string[]
 }
@@ -55,6 +58,8 @@ export type RecipeDoc = {
     /** Human-readable website name of the page the recipe came from (URL import / web search). */
     sourceName?: string
     difficulty: Difficulty
+    /** 0 = not spicy (no indicator shown), 1-3 = mild/medium/hot. AI-assessed. */
+    spiceLevel: SpiceLevel
     maxTime: number
     mealCount: number
     mealType: MealType
@@ -127,6 +132,7 @@ export type GenerateRecipeInput = {
     selectedItemIds?: string[]
     allowAiGeneration: boolean
     matchStrictness: MatchStrictness
+    maxSpiceLevel: SpiceLevel
     customInstructions?: string
     excludeUrls?: string[]
 }

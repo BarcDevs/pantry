@@ -44,6 +44,7 @@ const recipe = {
     title: 'פסטה עגבניות',
     source: 'ai_generated' as const,
     difficulty: 'easy' as const,
+    spiceLevel: 0,
     maxTime: 30,
     mealCount: 2,
     mealType: 'dinner' as const,
@@ -74,6 +75,7 @@ const recipe = {
 const refinedResponse = {
     title: 'פסטה עגבניות עם חלב סויה',
     difficulty: 'easy',
+    spiceLevel: 0,
     emoji: '🍝',
     ingredients: recipe.ingredients,
     steps: recipe.steps

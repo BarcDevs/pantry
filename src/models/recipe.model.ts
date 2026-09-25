@@ -107,6 +107,11 @@ const aiPromptContextSchema = new mongoose.Schema(
             type: Boolean,
             required: true
         },
+        maxSpiceLevel: {
+            type: Number,
+            enum: [0, 1, 2, 3],
+            required: true
+        },
         matchStrictness: {
             type: String,
             enum: MATCH_STRICTNESSES,
@@ -139,6 +144,11 @@ const recipeSchema = new mongoose.Schema<RecipeDoc>(
         difficulty: {
             type: String,
             enum: DIFFICULTIES,
+            required: true
+        },
+        spiceLevel: {
+            type: Number,
+            enum: [0, 1, 2, 3],
             required: true
         },
         maxTime: {

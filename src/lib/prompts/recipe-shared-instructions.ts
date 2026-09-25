@@ -39,6 +39,13 @@ export const recipePantryMatchingInstruction = (pantryItemNames: string[]): stri
     אל תשתמש באותה קטגוריה רק כי לשני המרכיבים יש מילה משותפת בשם.
 `
 
+export const recipeSpiceLevelInstruction = `
+    קבע שדה spiceLevel - רמת החריפות של המתכון, ערך שלם בין 0 ל-3:
+    0 = לא חריף בכלל, 1 = חריפות קלה, 2 = חריפות בינונית, 3 = חריף
+    מאוד. התבסס על המרכיבים והתיבול בפועל (פלפל חריף, שבבי צ׳ili,
+    טבסקו וכו') ולא על הנחת יסוד - מתכון ללא מרכיב חריף מקבל 0.
+`
+
 export const recipeStepsDetailInstructions = `
     כתוב את שלבי ההכנה (steps) במלואם - אסור לקצר, לסכם, או להשמיט
     כל פרט תפעולי: זמנים, טמפרטורות, כמויות, סימני מוכנות חזותיים/
