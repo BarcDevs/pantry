@@ -152,7 +152,7 @@ describe('useAddItemForm name correction', () => {
         typeName(result, 'עגבניות')
 
         await waitFor(() => expect(result.current.form.getValues('name')).toBe('עגבניה'))
-        expect(result.current.nameCorrection.correctedFrom).toBe('עגבניות')
+        await waitFor(() => expect(result.current.nameCorrection.correctedFrom).toBe('עגבניות'))
     })
 
     it('does not correct when the suggestion matches the typed name', async () => {

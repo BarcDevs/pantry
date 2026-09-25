@@ -85,11 +85,7 @@ export const useEditItemForm = ({
         control: form.control,
         name: 'name'
     })
-    const nameCorrection = useNameCorrection(
-        form,
-        name,
-        'name'
-    )
+    const nameCorrection = useNameCorrection(form, 'name')
 
     const applySuggestedType = (
         result: StorageSuggestion,

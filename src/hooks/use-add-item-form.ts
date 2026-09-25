@@ -119,11 +119,7 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     })
     const existingItem = useExistingPantryItem(debouncedName)
     const [isMergeRequested, setIsMergeRequested] = useState(false)
-    const nameCorrection = useNameCorrection(
-        form,
-        name,
-        'name'
-    )
+    const nameCorrection = useNameCorrection(form, 'name')
     const applyNameCorrectionRef = useRef(nameCorrection.apply)
     useEffect(() => {
         applyNameCorrectionRef.current = nameCorrection.apply

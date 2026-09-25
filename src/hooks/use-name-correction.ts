@@ -1,48 +1,48 @@
-import {
-    useEffect,
-    useRef,
-    useState
-} from 'react'
+import { useState } from 'react'
 
 import type {
     FieldValues,
     Path,
     UseFormReturn
 } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
+
+type Correction = {
+    from: string
+    to: string
+}
 
 export const useNameCorrection = <T extends FieldValues>(
     form: UseFormReturn<T>,
-    currentName: string,
     fieldName: Path<T>
 ) => {
-    const [correctedFrom, setCorrectedFrom] = useState<string | null>(null)
-    const correctedToRef = useRef<string | null>(null)
+    const currentValue = useWatch({
+        control: form.control,
+        name: fieldName
+    }) as string
+    const [correction, setCorrection] = useState<Correction | null>(null)
+    const [prevValue, setPrevValue] = useState(currentValue)
 
-    useEffect(() => {
-        if (
-            correctedToRef.current !== null
-            && currentName.trim() !== correctedToRef.current
-        ) {
-            correctedToRef.current = null
-            setCorrectedFrom(null)
+    if (currentValue !== prevValue) {
+        setPrevValue(currentValue)
+        if (correction !== null && currentValue !== correction.to) {
+            setCorrection(null)
         }
-    }, [currentName])
+    }
 
     const apply = (from: string, to: string) => {
-        correctedToRef.current = to
-        setCorrectedFrom(from)
+        setCorrection({ from, to })
         form.setValue(fieldName, to as never)
     }
 
     const revert = () => {
-        if (correctedFrom === null) return
-        correctedToRef.current = null
-        form.setValue(fieldName, correctedFrom as never)
-        setCorrectedFrom(null)
+        if (!correction) return
+        form.setValue(fieldName, correction.from as never)
+        setCorrection(null)
     }
 
     return {
-        correctedFrom,
+        correctedFrom: correction?.from ?? null,
         apply,
         revert
     }
