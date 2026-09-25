@@ -339,7 +339,7 @@
   
 | Screen | MVP | Purpose |
 |---|---|---|
-| Splash / Landing | MVP | Value prop + sign-up / login entry points. Sign-up, login, and guest mode entry points. Until built, `/` redirects to `/pantry` when signed in and `/sign-in` otherwise (in `src/proxy.ts`). |
+| Splash / Landing | MVP | Value prop marketing page at `/` (`.claude/design/Pantry Landing.dc.html`) - hero, trust stats, feature grid, how-it-works, recipe showcase, testimonial, FAQ, final CTA. Sign-up and login entry points throughout link to `/sign-up` and `/sign-in`. Signed-in visitors are redirected straight to `/pantry` (in `src/proxy.ts`); signed-out visitors see the landing page. |
 | Authentication (Clerk) | MVP | Google OAuth and email/password via Clerk. Guest mode bypasses auth entirely - data stored in localStorage. |
 | Onboarding | MVP | 3-step skippable: cooking level, dietary preferences, household size. |
 | Home / Pantry | MVP | Item list sorted by expiry, color-coded warnings, add-item CTA, generate recipe CTA. |

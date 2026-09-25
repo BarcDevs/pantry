@@ -21,8 +21,10 @@ const isPublicRoute = (pathname: string): boolean => (
 
 export default auth((req) => {
     if (req.nextUrl.pathname === routes.landing) {
-        const destination = req.auth ? routes.pantry : routes.signIn
-        return NextResponse.redirect(new URL(destination, req.nextUrl.origin))
+        if (req.auth) {
+            return NextResponse.redirect(new URL(routes.pantry, req.nextUrl.origin))
+        }
+        return NextResponse.next()
     }
     if (!req.auth && !isPublicRoute(req.nextUrl.pathname)) {
         const signInUrl = new URL(routes.signIn, req.nextUrl.origin)
