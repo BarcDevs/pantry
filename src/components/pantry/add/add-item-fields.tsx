@@ -6,6 +6,7 @@ import {
     STORAGE_LOCATIONS } from '@/types/enums'
 
 import { ExpiryDateField } from '@/components/pantry/add/expiry-date-field'
+import { NameCorrectionNotice } from '@/components/pantry/add/name-correction-notice'
 import { QuantityField } from '@/components/pantry/add/quantity-field'
 import { Combobox } from '@/components/shared/Combobox'
 import { FormInputField } from '@/components/shared/form/FormInputField'
@@ -21,12 +22,19 @@ import type { AddItemFormValues } from '@/schemas/add-item-form'
 
 type AddItemFieldsProps = {
     control: Control<AddItemFormValues>
+    nameCorrection?: {
+        correctedFrom: string | null
+        revert: () => void
+    }
 }
 
 const storageOptions = toSelectOptions(STORAGE_LOCATIONS, pantryTexts.storageLabels)
 const unitOptions = toSelectOptions(PANTRY_UNITS, pantryTexts.unitLabels)
 
-export const AddItemFields = ({ control }: AddItemFieldsProps) => {
+export const AddItemFields = ({
+    control,
+    nameCorrection
+}: AddItemFieldsProps) => {
     const unit = useWatch({ control, name: 'unit' })
 
     return (
@@ -45,6 +53,9 @@ export const AddItemFields = ({ control }: AddItemFieldsProps) => {
                     />
                 )}
             />
+            {nameCorrection?.correctedFrom !== null && nameCorrection?.correctedFrom !== undefined && (
+                <NameCorrectionNotice revert={nameCorrection.revert}/>
+            )}
             <div className={'grid grid-cols-2 gap-3'}>
                 <QuantityField
                     control={control}

@@ -55,7 +55,10 @@ export const EditItemDialog = ({
                     onSubmit={editItem.submission.submit}
                     className={'flex flex-col gap-4'}
                 >
-                    <AddItemFields control={editItem.form.control}/>
+                    <AddItemFields
+                        control={editItem.form.control}
+                        nameCorrection={editItem.nameCorrection}
+                    />
                     {(
                         canSuggest && (
                             editItem.suggestion.value

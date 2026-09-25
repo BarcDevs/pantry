@@ -16,9 +16,11 @@ import type {
     StorageSuggestion
 } from '@/types/pantry-item'
 
+import { useNameCorrection } from '@/hooks/use-name-correction'
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { applySuggestedExpiry } from '@/lib/pantry/apply-suggested-expiry'
+import { resolveSuggestedName } from '@/lib/pantry/resolve-suggested-name'
 import { resolveSuggestedType } from '@/lib/pantry/resolve-suggested-type'
 
 import { pantryTexts } from '@/constants/texts/pantry'
@@ -83,6 +85,11 @@ export const useEditItemForm = ({
         control: form.control,
         name: 'name'
     })
+    const nameCorrection = useNameCorrection(
+        form,
+        name,
+        'name'
+    )
 
     const applySuggestedType = (
         result: StorageSuggestion,
@@ -94,6 +101,12 @@ export const useEditItemForm = ({
             isFresh
         )
         if (suggestedType) form.setValue('type', suggestedType)
+
+        const suggestedName = resolveSuggestedName(
+            result,
+            form.getValues('name')
+        )
+        if (suggestedName) nameCorrection.apply(name, suggestedName)
     }
 
     const requestSuggestion = () => storageSuggestion.request(name, {
@@ -147,6 +160,10 @@ export const useEditItemForm = ({
 
     return {
         form,
+        nameCorrection: {
+            correctedFrom: nameCorrection.correctedFrom,
+            revert: nameCorrection.revert
+        },
         suggestion: {
             value: storageSuggestion.suggestion,
             isSuggesting: storageSuggestion.isSuggesting,

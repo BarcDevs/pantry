@@ -64,6 +64,8 @@ export const pantryTexts = {
         manualEntryTitle: 'הוספה ידנית',
         nameLabel: 'שם המוצר',
         namePlaceholder: 'לדוגמה: קישואים',
+        nameCorrectedByAi: 'תוקן על ידי AI',
+        nameCorrectionRevert: 'לשחזר',
         emojiLabel: 'סמל',
         storageLabel: 'מיקום',
         typeLabel: 'סוג מוצר',

@@ -129,6 +129,66 @@ describe('useAddItemForm type refresh', () => {
     })
 })
 
+describe('useAddItemForm name correction', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockFindExisting.mockResolvedValue(null)
+    })
+
+    const typeName = (
+        result: { current: ReturnType<typeof useAddItemForm> },
+        name: string
+    ) => act(() => result.current.form.setValue('name', name))
+
+    const namedSuggestion = (suggestedName: string) => ({
+        ...suggestionFor(StorageLocation.Fridge),
+        suggestedName
+    })
+
+    it('auto-corrects the name and exposes what it was corrected from', async () => {
+        mockSuggestStorage.mockResolvedValue(namedSuggestion('עגבניה'))
+        const { result } = renderHook(() => useAddItemForm())
+
+        typeName(result, 'עגבניות')
+
+        await waitFor(() => expect(result.current.form.getValues('name')).toBe('עגבניה'))
+        expect(result.current.nameCorrection.correctedFrom).toBe('עגבניות')
+    })
+
+    it('does not correct when the suggestion matches the typed name', async () => {
+        mockSuggestStorage.mockResolvedValue(namedSuggestion('עגבניה'))
+        const { result } = renderHook(() => useAddItemForm())
+
+        typeName(result, 'עגבניה')
+
+        await waitFor(() => expect(mockSuggestStorage).toHaveBeenCalled())
+        expect(result.current.nameCorrection.correctedFrom).toBeNull()
+    })
+
+    it('reverts the name and clears the correction', async () => {
+        mockSuggestStorage.mockResolvedValue(namedSuggestion('עגבניה'))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'עגבניות')
+        await waitFor(() => expect(result.current.nameCorrection.correctedFrom).toBe('עגבניות'))
+
+        act(() => result.current.nameCorrection.revert())
+
+        expect(result.current.form.getValues('name')).toBe('עגבניות')
+        expect(result.current.nameCorrection.correctedFrom).toBeNull()
+    })
+
+    it('clears the correction once the user edits the name again', async () => {
+        mockSuggestStorage.mockResolvedValue(namedSuggestion('עגבניה'))
+        const { result } = renderHook(() => useAddItemForm())
+        typeName(result, 'עגבניות')
+        await waitFor(() => expect(result.current.nameCorrection.correctedFrom).toBe('עגבניות'))
+
+        typeName(result, 'עגבניה חדשה')
+
+        await waitFor(() => expect(result.current.nameCorrection.correctedFrom).toBeNull())
+    })
+})
+
 describe('useAddItemForm merge prompt', () => {
     const existing = {
         _id: 'item1',

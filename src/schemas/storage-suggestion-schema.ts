@@ -14,6 +14,7 @@ export const storageSuggestionShape = z.object({
     recognized: z.boolean(),
     suggestedStorage: z.enum(STORAGE_LOCATIONS),
     suggestedType: z.enum(FOOD_TYPES).nullish(),
+    suggestedName: z.string().trim().min(1).nullish(),
     reason: z.string(),
     expiryByStorage: z.object({
         fridge: expiryEntrySchema,

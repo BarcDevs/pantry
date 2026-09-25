@@ -14,6 +14,8 @@ export type StorageSuggestion = {
     recognized: boolean
     suggestedStorage: StorageLocation
     suggestedType?: FoodType | null
+    /** Canonical singular Hebrew form if the typed name differs (e.g. "עגבניות" when user typed "עגבניה"). */
+    suggestedName?: string | null
     reason: string
     expiryByStorage: {
         fridge: ExpiryEntry

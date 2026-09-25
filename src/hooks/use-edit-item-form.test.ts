@@ -102,3 +102,35 @@ describe('useEditItemForm suggested type', () => {
             expect(result.current.form.getValues('type')).toBe('dairy'))
     })
 })
+
+describe('useEditItemForm name correction', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockSuggestStorage.mockResolvedValue({
+            ...suggestion,
+            suggestedName: 'עגבניה'
+        })
+    })
+
+    it('auto-corrects the name and exposes what it was corrected from', async () => {
+        const { result } = setup()
+        act(() => result.current.form.setValue('name', 'עגבניות'))
+
+        act(() => result.current.suggestion.request())
+
+        await waitFor(() => expect(result.current.form.getValues('name')).toBe('עגבניה'))
+        expect(result.current.nameCorrection.correctedFrom).toBe('עגבניות')
+    })
+
+    it('reverts the name and clears the correction', async () => {
+        const { result } = setup()
+        act(() => result.current.form.setValue('name', 'עגבניות'))
+        act(() => result.current.suggestion.request())
+        await waitFor(() => expect(result.current.nameCorrection.correctedFrom).toBe('עגבניות'))
+
+        act(() => result.current.nameCorrection.revert())
+
+        expect(result.current.form.getValues('name')).toBe('עגבניות')
+        expect(result.current.nameCorrection.correctedFrom).toBeNull()
+    })
+})

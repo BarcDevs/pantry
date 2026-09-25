@@ -28,11 +28,13 @@ import type {
 
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { useExistingPantryItem } from '@/hooks/use-existing-pantry-item'
+import { useNameCorrection } from '@/hooks/use-name-correction'
 import { useResetOnChange } from '@/hooks/use-reset-on-change'
 import { useStorageSuggestion } from '@/hooks/use-storage-suggestion'
 
 import { applySuggestedExpiry } from '@/lib/pantry/apply-suggested-expiry'
 import type { AddItemPrefill } from '@/lib/pantry/parse-add-item-prefill'
+import { resolveSuggestedName } from '@/lib/pantry/resolve-suggested-name'
 import { resolveSuggestedType } from '@/lib/pantry/resolve-suggested-type'
 
 import { minNameLengthForSuggestion } from '@/constants/pantry'
@@ -117,6 +119,15 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
     })
     const existingItem = useExistingPantryItem(debouncedName)
     const [isMergeRequested, setIsMergeRequested] = useState(false)
+    const nameCorrection = useNameCorrection(
+        form,
+        name,
+        'name'
+    )
+    const applyNameCorrectionRef = useRef(nameCorrection.apply)
+    useEffect(() => {
+        applyNameCorrectionRef.current = nameCorrection.apply
+    }, [nameCorrection.apply])
 
     useResetOnChange(name, () => setIsMergeRequested(false))
 
@@ -141,6 +152,14 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
                     fresh
                 )
                 if (suggestedType) form.setValue('type', suggestedType)
+
+                const suggestedName = resolveSuggestedName(
+                    result,
+                    form.getValues('name')
+                )
+                if (suggestedName) {
+                    applyNameCorrectionRef.current(debouncedName, suggestedName)
+                }
             }
         })
     }, [debouncedName, retryToken, form, requestSuggestion])
@@ -271,6 +290,10 @@ export const useAddItemForm = (prefill: AddItemPrefill = {}) => {
             prompt: mergePrompt,
             start: () => setIsMergeRequested(true),
             cancel: () => setIsMergeRequested(false)
+        },
+        nameCorrection: {
+            correctedFrom: nameCorrection.correctedFrom,
+            revert: nameCorrection.revert
         },
         suggestion: {
             value: effectiveSuggestion,

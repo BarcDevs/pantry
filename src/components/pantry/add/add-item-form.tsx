@@ -39,7 +39,10 @@ export const AddItemForm = ({ prefill }: AddItemFormProps) => {
                 <span className={'font-bold text-body text-ink'}>
                     {pantryTexts.addForm.manualEntryTitle}
                 </span>
-                <AddItemFields control={addItem.form.control}/>
+                <AddItemFields
+                    control={addItem.form.control}
+                    nameCorrection={addItem.nameCorrection}
+                />
                 {addItem.merge.prompt && (
                     <ExistingItemPrompt
                         prompt={addItem.merge.prompt}
