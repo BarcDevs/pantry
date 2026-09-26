@@ -35,6 +35,13 @@ shadcn/ui component boundaries, Tailwind/twMerge conflicts, and RTL/layout verif
 | 11/09/2026 | Never claim an RTL/layout fix is verified without checking real computed styles in a real browser |
 | 19/09/2026 | Use `next/image` (`unoptimized` for arbitrary remote URLs), never a raw `<img>` |
 
+## AI Models & Cost — [[corrections/ai-models-and-cost]]
+Model selection and cost/billing pitfalls when touching AI config.
+
+| Date | Entry |
+|---|---|
+| 26/09/2026 | Read "search an image by text" as "generate an image" and swapped in a paid, no-free-tier model without asking - confirm feature intent and billing status before touching AI model config |
+
 ## Git & Deploy — [[corrections/git-and-deploy]]
 Branch, push and merge discipline.
 
