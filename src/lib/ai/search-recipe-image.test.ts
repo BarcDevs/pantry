@@ -1,17 +1,16 @@
 jest.mock('ai', () => ({
     generateText: jest.fn()
 }))
-jest.mock('@/config/ai', () => ({
-    aiModel: {},
-    google: {
-        tools: {
-            googleSearch: jest.fn(() => ({}))
-        }
+jest.mock('@/config/ai', () => {
+    const google = jest.fn(() => ({}))
+    google.tools = {
+        googleSearch: jest.fn(() => ({}))
     }
-}))
+    return { google }
+})
 jest.mock('@/config/env', () => ({
     __esModule: true,
-    default: { e2eMockAi: false }
+    default: { e2eMockAi: false, geminiImageSearchModelId: 'gemini-3.1-flash-image' }
 }))
 
 import { generateText } from 'ai'
