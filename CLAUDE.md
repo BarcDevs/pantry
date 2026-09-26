@@ -32,6 +32,10 @@ immediately, same turn as the correction/decision** — don't wait to be asked, 
 **Surgical:** Touch only what you must. Don't improve adjacent code. Match existing style. Mention unrelated dead code - don't delete it. Remove only imports/vars YOUR changes made unused.
 **Goal-driven:** Define success criteria before starting. For multi-step tasks, state a plan: `1. [step] → verify: [check]`. Loop until verified.
 
+## Shared Checkouts & Other Sessions
+Another Claude session may be working in this repo, on the same branch or in a sibling worktree. Check `ListAgents` for a busy session before touching git state.
+**Before any merge, rebase, checkout, reset, stash, or branch/worktree deletion in a checkout another session may be using, message that session first and wait for its reply.** Never leave the shared tree mid-operation (unresolved merge, mid-rebase). Path-scoped commits (`git commit -- <paths>`) of files you changed are fine without asking. The user naming a session to coordinate with is not the same as it owning the work: confirm who actually owns a worktree before merging or pruning it.
+
 ## Project status
 
 Phase 0 scaffold complete (Next.js 16.2.9, Tailwind v4 CSS-only config, Auth.js (NextAuth v5), Mongoose, Vercel AI SDK, Jest, Playwright). Phases 1-3 (pantry CRUD, recipes, receipts) per `docs/plans/gentle-watching-giraffe.md`.
