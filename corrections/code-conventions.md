@@ -93,3 +93,22 @@ import breaks only past about 100 characters (then before `from`).
 
 **Lesson:** a review finding is a claim, not a rule - check it against the rule text and the
 surrounding code before undoing existing formatting.
+
+---
+
+## 27/09/2026 — Callback props tied to a server action need the `Action` suffix
+
+**What was wrong:** while building the password-reset flow, added `onSubmit` props on
+`ForgotPasswordFields`/`ResetPasswordFields` (passed down to `PrimaryButton`-driven forms that call
+a `'use server'` action). This is Next.js's own convention - already followed elsewhere in the repo
+(`ConfirmationDialog`'s `onConfirmAction`, `onOpenChangeAction`) - and stated in `CORE_RULES.md`, but
+was missed across every new file in the session until the user caught it: "the *action addition is
+next's convention which i also stated in core_rules and you ignored systematically."
+
+**Correct fact:** any component prop that is a function ultimately invoking a server action must be
+named with an `Action` suffix (e.g. `onSubmitAction`, `onConfirmAction`), even though the native
+`<form onSubmit={...}>` HTML attribute itself stays `onSubmit` (can't rename a DOM attribute).
+
+**Lesson:** check `CORE_RULES.md` against every new prop name touching a server action, not just
+against structural rules like grouping/line-length - naming conventions are just as binding, and a
+one-off miss repeats across every file built from the same template in the same session.
