@@ -12,8 +12,8 @@ immediately, same turn as the correction/decision** — don't wait to be asked, 
 
 ## Model Selection
 
-- **Haiku**: sub-agents, file lookups, search queries, simple edits (<50 lines), code explanation, formatting fixes, style enforcement
-- **Sonnet/Opus**: complex debugging, architecture decisions, multi-file refactors, reasoning-heavy tasks
+- **Haiku**: sub-agents, file lookups, search queries, simple edits (<50 lines), code explanation, formatting fixes
+- **Sonnet/Opus**: complex debugging, architecture decisions, multi-file refactors, reasoning-heavy tasks, style enforcement
 
 ## Token Efficiency
 
