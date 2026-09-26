@@ -7,7 +7,6 @@ type Env = {
     mongodbUri: string
     geminiApiKey: string
     geminiModelId: string
-    geminiImageSearchModelId: string
     youcomApiKey?: string
     e2eMockAi: boolean
     e2eMockSearch: boolean
@@ -25,8 +24,6 @@ const env: Env = {
     mongodbUri: requireVar('MONGODB_URI', process.env.MONGODB_URI),
     geminiApiKey: requireVar('GEMINI_API_KEY', process.env.GEMINI_API_KEY),
     geminiModelId: process.env.GEMINI_MODEL_ID ?? appConfig.defaultAiModelId,
-    geminiImageSearchModelId: process.env.GEMINI_IMAGE_SEARCH_MODEL_ID
-        ?? appConfig.defaultImageSearchModelId,
     youcomApiKey: process.env.YOUCOM_API_KEY || undefined,
     e2eMockAi: process.env.E2E_MOCK_AI === 'true' && process.env.NODE_ENV !== 'production',
     e2eMockSearch: process.env.E2E_MOCK_SEARCH === 'true' && process.env.NODE_ENV !== 'production'

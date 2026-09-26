@@ -2,7 +2,7 @@ import { generateText } from 'ai'
 
 import { resolveSafeImageUrl } from '@/lib/recipes/resolve-safe-image-url'
 
-import { google } from '@/config/ai'
+import { aiModel, google } from '@/config/ai'
 import env from '@/config/env'
 
 type GroundingChunk = {
@@ -43,10 +43,8 @@ export const searchRecipeImage = async (
         return mock()
     }
 
-    // Google Image Search grounding is only supported by the
-    // gemini-*-flash-image models, not the flash-lite model used elsewhere.
     const result = await generateText({
-        model: google(env.geminiImageSearchModelId),
+        model: aiModel,
         tools: {
             google_search: google.tools.googleSearch({
                 searchTypes: { imageSearch: {} }
