@@ -35,6 +35,13 @@ Reusable component conventions (buttons, wrappers) surfaced during pantry sessio
 | 13/09/2026 | `Button` is a base-only wrapper; every call site uses a purpose-made button (e.g. `TextButton`) instead |
 | 19/09/2026 | Expiry picker = shadcn Calendar with month/year dropdowns, Hebrew RTL, no past dates |
 
+## Auth & Email — [[decisions/auth-and-email]]
+Password-reset flow and transactional-email decisions.
+
+| Date | Entry |
+|---|---|
+| 27/09/2026 | No copy-to-clipboard button in the password-reset email - HTML email clients strip `<script>`/inline JS, so it can't work; big letter-spaced code + reset-link button cover it instead |
+
 ## Git & Deploy — [[decisions/git-and-deploy]]
 Branching and deployment workflow.
 
