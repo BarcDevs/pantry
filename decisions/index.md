@@ -41,6 +41,7 @@ Password-reset flow and transactional-email decisions.
 | Date | Entry |
 |---|---|
 | 27/09/2026 | No copy-to-clipboard button in the password-reset email - HTML email clients strip `<script>`/inline JS, so it can't work; big letter-spaced code + reset-link button cover it instead |
+| 27/09/2026 | Ship the reset-code flow without brute-force lockout for now (single-user MVP, no other account to target); TODO left to add attempt-lockout before a second user exists |
 
 ## Git & Deploy — [[decisions/git-and-deploy]]
 Branching and deployment workflow.
