@@ -18,6 +18,7 @@
 - **Never claim commit succeeded without running actual `git commit`** - /caveman-commit is drafting only
 - When committing after review fixes: include original work scope, not just the fix
 - **Never commit directly on `main`.** Always work on a `feature/`/`fix/`/`rfc`/`chore/` etc. branch, even for small docs/fix commits — branch first, always. `main` is the trunk (origin's default branch) — merge the feature branch locally and push straight to `main`, no PR needed. There is no `dev` branch until the app is published; introduce one then, and record it in `decisions/`.
+- **Every separate piece of work gets its own branch.** At the start of any new piece of work, check `git branch --show-current`; if it is not a branch for that work, create one (`rfc/<topic>`, `feat/<topic>`, `fix/<topic>` etc.) before the first commit, without waiting to be asked. Never pile unrelated work onto whatever branch happens to be checked out.
 - Conventional commits: `feat`, `fix`, `docs`, `style`, `rfc`, `test`, `chore`. Breaking changes: `feat!:`
 - Think on what the current commit job is before deciding if it either `feat`, `rfc`, `fix`, etc and REPORT BACK your reasoning - Don't just mechanically label as `feat` for everything.
 - *IMPORTANT:* refactor job - always name `rfc` instead of `refactor`!

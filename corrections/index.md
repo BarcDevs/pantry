@@ -42,6 +42,7 @@ Branch, push and merge discipline.
 |---|---|
 | 19/09/2026 | Never commit directly to `main`, never push unprompted — work on a branch, state it, ask if the request doesn't match reality |
 | 19/09/2026 | Commit the feature first, then the refactor as its own commit |
+| 26/09/2026 | Every separate piece of work gets its own branch - check `git branch --show-current` first, create one before the first commit |
 
 ## Process & Verification - [[corrections/process-and-verification]]
 Verifying that a plan step or PRD requirement is really implemented before calling it done.

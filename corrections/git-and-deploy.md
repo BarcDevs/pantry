@@ -36,3 +36,11 @@ so the centralisation would be a separate commit".
 **Lesson:** if a refactor grows out of a feature, rebuild the plain feature state, commit it, then
 apply the refactor on top and commit that. Back up the finished tree first so nothing is lost while
 rebuilding the intermediate state.
+
+---
+
+## 26/09/2026 - Every separate piece of work gets its own branch
+
+A whole rfc series was done on whatever branch was checked out (an upgrade branch) without creating a branch for it; another session then merged unrelated work into that branch, mixing the two. User: "u shoul've done it by yourself. a separate branch for every separate work needed."
+
+**Lesson:** at the start of any new piece of work, check `git branch --show-current`; if it is not a branch for that work, create one (`rfc/<topic>`, `feat/<topic>`, `fix/<topic>` etc.) before the first commit, without waiting to be asked. Never pile unrelated work onto whatever branch happens to be checked out.
