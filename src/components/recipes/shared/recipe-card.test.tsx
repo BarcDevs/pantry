@@ -65,4 +65,34 @@ describe('RecipeCard', () => {
         expect(onDelete).toHaveBeenCalled()
         await screen.findByLabelText('מחק מתכון')
     })
+
+    it('mentions the real web source when the recipe used one', () => {
+        render(
+            <RecipeCard
+                recipe={{
+                    ...recipe,
+                    source: 'imported_url',
+                    sourceUrl: 'https://a.co.il/recipe',
+                    sourceName: 'אתר א'
+                }}
+                onToggleFavorite={jest.fn()}
+                onDelete={jest.fn()}
+            />
+        )
+
+        expect(screen.getByRole('link', { name: 'מקור: אתר א' }))
+            .toHaveAttribute('href', 'https://a.co.il/recipe')
+    })
+
+    it('does not show an AI-generated label on the card', () => {
+        render(
+            <RecipeCard
+                recipe={{ ...recipe, source: 'ai_generated' }}
+                onToggleFavorite={jest.fn()}
+                onDelete={jest.fn()}
+            />
+        )
+
+        expect(screen.queryByText('נוצר על ידי AI')).not.toBeInTheDocument()
+    })
 })

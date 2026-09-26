@@ -7,16 +7,27 @@ import { recipesTexts } from '@/constants/texts/recipes'
 
 type RecipeSourceLineProps = {
     recipe: Pick<RecipeDoc, 'source' | 'sourceUrl' | 'sourceName'>
+    /** Card context: skip the "AI-generated" label and use tighter spacing - only mentions a real web source. */
+    compact?: boolean
 }
 
 const captionClassName = '-mt-2 mb-5 text-caption text-ink-3'
+const compactClassName = 'mt-0.75 text-caption text-ink-3'
 
-export const RecipeSourceLine = ({ recipe }: RecipeSourceLineProps) => {
-    if (recipe.source === RecipeSource.AiGenerated) return (
-        <p className={captionClassName}>
-            {recipesTexts.result.sourceAi}
-        </p>
-    )
+export const RecipeSourceLine = ({
+    recipe,
+    compact = false
+}: RecipeSourceLineProps) => {
+    const className = compact ? compactClassName : captionClassName
+
+    if (recipe.source === RecipeSource.AiGenerated) {
+        if (compact) return null
+        return (
+            <p className={className}>
+                {recipesTexts.result.sourceAi}
+            </p>
+        )
+    }
     if (!recipe.sourceUrl) return null
 
     const url = parseHttpUrl(recipe.sourceUrl)
@@ -26,13 +37,13 @@ export const RecipeSourceLine = ({ recipe }: RecipeSourceLineProps) => {
 
     const label = recipesTexts.result.sourceLabel(name)
     if (!url) return (
-        <p className={captionClassName}>
+        <p className={className}>
             {label}
         </p>
     )
 
     return (
-        <p className={captionClassName}>
+        <p className={className}>
             <a
                 href={url.href}
                 target={'_blank'}

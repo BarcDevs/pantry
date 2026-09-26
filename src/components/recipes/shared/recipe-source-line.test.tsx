@@ -92,3 +92,32 @@ describe('RecipeSourceLine', () => {
         expect(container).toBeEmptyDOMElement()
     })
 })
+
+describe('RecipeSourceLine compact', () => {
+    it('renders nothing for ai_generated recipes', () => {
+        const { container } = render(
+            <RecipeSourceLine
+                recipe={{ source: RecipeSource.AiGenerated }}
+                compact
+            />
+        )
+
+        expect(container).toBeEmptyDOMElement()
+    })
+
+    it('still links a real web source', () => {
+        render(
+            <RecipeSourceLine
+                recipe={{
+                    source: RecipeSource.ImportedUrl,
+                    sourceUrl: 'https://a.co.il/recipe',
+                    sourceName: 'אתר א'
+                }}
+                compact
+            />
+        )
+
+        expect(screen.getByRole('link', { name: 'מקור: אתר א' }))
+            .toHaveAttribute('href', 'https://a.co.il/recipe')
+    })
+})

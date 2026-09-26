@@ -9,6 +9,7 @@ import type { Recipe } from '@/types/recipe'
 import { DeleteRecipeDialog } from '@/components/recipes/shared/delete-recipe-dialog'
 import { RecipeCardActions } from '@/components/recipes/shared/recipe-card-actions'
 import { RecipeCoverImage } from '@/components/recipes/shared/recipe-cover-image'
+import { RecipeSourceLine } from '@/components/recipes/shared/recipe-source-line'
 import { SpiceLevelIndicator } from '@/components/recipes/shared/spice-level-indicator'
 
 import { formatCookedAt } from '@/lib/recipes/format-cooked-at'
@@ -106,6 +107,10 @@ export const RecipeCard = ({
                     <div className={'mt-0.75 text-caption text-ink-3'}>
                         {`${recipe.ingredients.length} מצרכים · ${recipe.mealCount} מנות`}
                     </div>
+                    <RecipeSourceLine
+                        recipe={recipe}
+                        compact
+                    />
                     {lastCookedAt && (
                         <div className={'mt-0.75 text-caption text-ink-3'}>
                             {recipesTexts.library.lastCooked(formatCookedAt(lastCookedAt))}
