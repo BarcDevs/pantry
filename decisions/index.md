@@ -50,3 +50,4 @@ Decisions about shared Claude Code skills/workflow surfaced during pantry sessio
 | 24/07/2026 | `/commit` skill: scan all files across a multi-commit change set before splitting into chunks |
 | 11/09/2026 | Added `.claude/skills/match-design/` to force a read-first, diff-after loop against `.dc.html` design files |
 | 19/09/2026 | PRD is updated in the same change as every feature/tweak (rule in `CLAUDE.md`) |
+| 27/09/2026 | Design files sync from Claude Design via the `claude_design` MCP (etag diff + byte check); `/match-design` Step 0.5 |

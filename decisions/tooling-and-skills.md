@@ -55,3 +55,24 @@ drift.
 
 **How to apply:** when finishing a feature, edit the matching AC or add the next AC number in the
 same commit.
+
+---
+
+## 27/09/2026 — Design files are synced from Claude Design through the `claude_design` MCP
+
+**Problem:** `.claude/design/` was filled by hand from URL/zip exports, so it went stale and one
+file (the reset-password email) was a hand-written approximation: different theme, no dark-mode or
+Outlook handling, and different copy. A screen built from it would not have matched the real design.
+
+**Decision:** sync from the Claude Design project (id and re-sync steps in
+`.claude/design/SOURCE.md`) using the `claude_design` MCP (`https://api.anthropic.com/v1/design/mcp`,
+auth via `/design-login`): `list_files` to diff etags, `read_file` to pull changed files, byte-size
+check against the remote before accepting. `/match-design` gained a Step 0.5 that runs this check
+before building any screen.
+
+**Why over alternatives:** the zip/URL export had no cheap "what changed" check and no exactness
+guarantee; the MCP gives per-file etags and exact content, and a size check catches transcription
+errors.
+
+**How to apply:** before implementing a screen, `list_files` and compare etags with `SOURCE.md`;
+re-sync any stale file first. `icons/` and `uploads/` are not synced (binary).
