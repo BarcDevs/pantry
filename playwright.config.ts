@@ -20,7 +20,8 @@ export default defineConfig({
         timeout: 120000,
         env: {
             E2E_MOCK_AI: 'true',
-            E2E_MOCK_SEARCH: 'true'
+            E2E_MOCK_SEARCH: 'true',
+            E2E_MOCK_EMAIL: 'true'
         }
     },
     projects: [

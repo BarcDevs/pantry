@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react'
+
 type AuthHeadingProps = {
     title: string
-    subtitle: string
+    subtitle: ReactNode
 }
 
 export const AuthHeading = ({

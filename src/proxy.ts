@@ -15,7 +15,8 @@ const isPublicRoute = (pathname: string): boolean => (
     pathname === routes.landing
         || pathname.startsWith('/api/auth')
         || publicRoutePrefixes.some(
-            (route) => route !== routes.landing && pathname.startsWith(route)
+            (route) => route !== routes.landing
+                && pathname.startsWith(route)
         )
 )
 

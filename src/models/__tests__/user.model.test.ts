@@ -9,6 +9,8 @@ describe('UserModel schema', () => {
         expect(schema.path('email')).toBeDefined()
         expect(schema.path('displayName')).toBeDefined()
         expect(schema.path('passwordHash')).toBeDefined()
+        expect(schema.path('resetCodeHash')).toBeDefined()
+        expect(schema.path('resetCodeExpiresAt')).toBeDefined()
     })
 
     it('onboardingCompletedAt defaults to null', () => {

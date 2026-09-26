@@ -1,37 +1,29 @@
 'use server'
 
-import bcrypt from 'bcryptjs'
-
 import { isResetCodeValid } from '@/lib/auth/verify-reset-code'
 import connectDB from '@/lib/mongodb'
 
 import { UserModel } from '@/models/user.model'
 
-type ForgotPasswordResetInput = {
+type VerifyPasswordResetCodeInput = {
     email: string
     code: string
-    password: string
 }
 
-type ForgotPasswordResetResult = {
+type VerifyPasswordResetCodeResult = {
     success: boolean
     error?: 'invalid-code'
 }
 
-export const forgotPasswordReset = async (
-    input: ForgotPasswordResetInput
-): Promise<ForgotPasswordResetResult> => {
+export const verifyPasswordResetCode = async (
+    input: VerifyPasswordResetCodeInput
+): Promise<VerifyPasswordResetCodeResult> => {
     await connectDB()
 
     const user = await UserModel.findOne({ email: input.email })
     if (!user || !(await isResetCodeValid(user, input.code))) {
         return { success: false, error: 'invalid-code' }
     }
-
-    user.passwordHash = await bcrypt.hash(input.password, 10)
-    user.resetCodeHash = null
-    user.resetCodeExpiresAt = null
-    await user.save()
 
     return { success: true }
 }

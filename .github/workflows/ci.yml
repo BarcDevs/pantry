@@ -18,6 +18,7 @@ jobs:
             GOOGLE_CLIENT_ID: ci-placeholder
             GOOGLE_CLIENT_SECRET: ci-placeholder
             GEMINI_API_KEY: ci-placeholder
+            RESEND_API_KEY: ci-placeholder
             MONGODB_URI: mongodb://localhost:27017/pantry_build
         steps:
             - uses: actions/checkout@v4
@@ -46,6 +47,7 @@ jobs:
             GOOGLE_CLIENT_ID: ci-placeholder
             GOOGLE_CLIENT_SECRET: ci-placeholder
             GEMINI_API_KEY: ci-placeholder
+            RESEND_API_KEY: ci-placeholder
             MONGODB_URI: mongodb://localhost:27017/pantry_e2e
         steps:
             - uses: actions/checkout@v4

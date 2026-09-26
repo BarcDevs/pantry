@@ -6,40 +6,28 @@ import { PasswordInput } from '@/components/auth/password-input'
 import { PrimaryButton } from '@/components/shared/buttons/PrimaryButton'
 import { FormError } from '@/components/shared/form/FormError'
 import { FormInputField } from '@/components/shared/form/FormInputField'
-import { LtrInput } from '@/components/shared/LtrInput'
 import { Form } from '@/components/ui/form'
 
 import { authTexts } from '@/constants/texts/auth'
 
-import type { ForgotPasswordFormValues } from '@/schemas/forgot-password-form'
+import type { NewPasswordFormValues } from '@/schemas/forgot-password-form'
 
-type ForgotPasswordFieldsProps = {
-    form: UseFormReturn<ForgotPasswordFormValues>
+type ForgotPasswordNewPasswordFieldsProps = {
+    form: UseFormReturn<NewPasswordFormValues>
     isSubmitting: boolean
-    onSubmit: () => void
+    onSubmitAction: () => void
 }
 
-export const ForgotPasswordFields = ({
+export const ForgotPasswordNewPasswordFields = ({
     form,
     isSubmitting,
-    onSubmit
-}: ForgotPasswordFieldsProps) => (
+    onSubmitAction
+}: ForgotPasswordNewPasswordFieldsProps) => (
     <Form {...form}>
         <form
-            onSubmit={onSubmit}
+            onSubmit={onSubmitAction}
             className={'mt-6 flex flex-col gap-4'}
         >
-            <FormInputField
-                control={form.control}
-                name={'email'}
-                label={authTexts.email}
-                render={(field) => (
-                    <LtrInput
-                        {...field}
-                        type={'email'}
-                    />
-                )}
-            />
             <FormInputField
                 control={form.control}
                 name={'password'}

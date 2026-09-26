@@ -1,6 +1,11 @@
 # Pantry - Product Blueprint v3
 
 > **Auth note:** this PRD was written for Clerk. Auth is now Auth.js (NextAuth v5) with Credentials + Google and JWT sessions - no webhooks, no `clerk_id`, users keyed by `_id`/`email`. Read Clerk mentions below as historical; see `docs/architecture.md`.
+>
+> **Password reset:** a three-step, email-verified flow (via Resend), all on `/forgot-password`: request by
+> email sends a one-time 6-digit code (also embedded in a reset link) valid 15 minutes -> enter the code ->
+> set a new password (shown for the email being reset, not re-editable). The emailed link deep-links back
+> into the code step with email/code prefilled. No ownership-bypass path exists.
 
 ## Product Overview
 

@@ -8,8 +8,10 @@ type Env = {
     geminiApiKey: string
     geminiModelId: string
     youcomApiKey?: string
+    resendApiKey: string
     e2eMockAi: boolean
     e2eMockSearch: boolean
+    e2eMockEmail: boolean
 }
 
 const requireVar = (name: string, value: string | undefined) => {
@@ -25,8 +27,10 @@ const env: Env = {
     geminiApiKey: requireVar('GEMINI_API_KEY', process.env.GEMINI_API_KEY),
     geminiModelId: process.env.GEMINI_MODEL_ID ?? appConfig.defaultAiModelId,
     youcomApiKey: process.env.YOUCOM_API_KEY || undefined,
+    resendApiKey: requireVar('RESEND_API_KEY', process.env.RESEND_API_KEY),
     e2eMockAi: process.env.E2E_MOCK_AI === 'true' && process.env.NODE_ENV !== 'production',
-    e2eMockSearch: process.env.E2E_MOCK_SEARCH === 'true' && process.env.NODE_ENV !== 'production'
+    e2eMockSearch: process.env.E2E_MOCK_SEARCH === 'true' && process.env.NODE_ENV !== 'production',
+    e2eMockEmail: process.env.E2E_MOCK_EMAIL === 'true' && process.env.NODE_ENV !== 'production'
 }
 
 export default env

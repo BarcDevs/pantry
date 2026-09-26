@@ -9,6 +9,8 @@ const userSchema = new mongoose.Schema<UserDoc>(
         displayName: { type: String, required: true },
         passwordHash: { type: String, default: null },
         emailVerifiedAt: { type: Date, default: null },
+        resetCodeHash: { type: String, default: null },
+        resetCodeExpiresAt: { type: Date, default: null },
         cookingLevel: { type: String, enum: DIFFICULTIES },
         householdSize: { type: Number },
         dietaryPreferences: { type: [String], default: [] },

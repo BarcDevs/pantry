@@ -31,6 +31,10 @@ See `.env.local.example`. Required:
 - **Auth** - `AUTH_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
 - **MongoDB** - `MONGODB_URI`
 - **Gemini** - `GEMINI_API_KEY`
+- **Resend** - `RESEND_API_KEY` (sends the password-reset email; sender address, support contact and app URL
+  are non-secret config in `src/config/app.ts`, not env vars)
+
+Deployed app URL: https://pantry.bardevs.com (Vercel project, custom domain - default `*.vercel.app` URL still works as a fallback)
 
 ## Commands
 

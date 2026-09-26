@@ -3,32 +3,69 @@
 import Link from 'next/link'
 
 import { AuthHeading } from '@/components/auth/auth-heading'
-import { ForgotPasswordFields } from '@/components/auth/forgot-password-fields'
+import { ForgotPasswordCodeFields } from '@/components/auth/forgot-password-code-fields'
+import { ForgotPasswordNewPasswordFields } from '@/components/auth/forgot-password-new-password-fields'
+import { ForgotPasswordRequestFields } from '@/components/auth/forgot-password-request-fields'
+import { ResettingPasswordForSubtitle } from '@/components/auth/resetting-password-for-subtitle'
 
 import { useForgotPasswordForm } from '@/hooks/use-forgot-password-form'
 
 import { routes } from '@/constants/routes'
 import { authTexts } from '@/constants/texts/auth'
 
-export const ForgotPasswordForm = () => {
+type ForgotPasswordFormProps = {
+    initialEmail?: string
+    initialCode?: string
+}
+
+export const ForgotPasswordForm = ({
+    initialEmail,
+    initialCode
+}: ForgotPasswordFormProps) => {
     const {
-        form,
-        isSubmitting,
-        handleSubmit
-    } = useForgotPasswordForm()
+        step,
+        email,
+        devCode,
+        request,
+        code,
+        newPassword
+    } = useForgotPasswordForm({ initialEmail, initialCode })
+
+    const subtitleByStep = {
+        request: authTexts.forgotSub,
+        code: authTexts.codeStepSub,
+        password: <ResettingPasswordForSubtitle email={email}/>
+    }
 
     return (
         <div className={'w-full max-w-sm'}>
             <AuthHeading
                 title={authTexts.forgotTitle}
-                subtitle={authTexts.forgotSub}
+                subtitle={subtitleByStep[step]}
             />
 
-            <ForgotPasswordFields
-                form={form}
-                isSubmitting={isSubmitting}
-                onSubmit={handleSubmit}
-            />
+            {step === 'request' && (
+                <ForgotPasswordRequestFields
+                    form={request.form}
+                    isSubmitting={request.isSubmitting}
+                    onSubmitAction={request.handleSubmit}
+                />
+            )}
+            {step === 'code' && (
+                <ForgotPasswordCodeFields
+                    form={code.form}
+                    isSubmitting={code.isSubmitting}
+                    onSubmitAction={code.handleSubmit}
+                    devCode={devCode}
+                />
+            )}
+            {step === 'password' && (
+                <ForgotPasswordNewPasswordFields
+                    form={newPassword.form}
+                    isSubmitting={newPassword.isSubmitting}
+                    onSubmitAction={newPassword.handleSubmit}
+                />
+            )}
 
             <p className={'mt-5 text-center text-body text-ink-3'}>
                 <Link
