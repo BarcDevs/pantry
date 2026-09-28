@@ -68,7 +68,7 @@ commit as the feature.
 
 ## Design Files
 
-`.claude/design/` - JSX design files from Claude Design (reference when building UI).
+`.claude/design/` - design files synced from the Claude Design project (reference when building UI). Source project id, MCP setup, etags and the re-sync procedure: `.claude/design/SOURCE.md`. Pull fresh files through the `claude_design` MCP (`list_files` / `read_file`), not from memory or a stale copy.
 
 ## Modularity
 
