@@ -80,3 +80,31 @@ different fixes for different symptoms.
 **Lesson:** before patching a "cramped" UI element, check whether the component itself has `p-0`/no
 internal spacing (padding is the fix) versus adequate padding but tight sibling gaps (margin is the
 fix). Don't default to the external-margin fix because it's the first one tried.
+
+---
+
+## 03/10/2026 — Claimed a rejected tool call had already run, then kept drawing conclusions without checking (scope:global)
+
+**What was wrong:** a chained command (`git tag -d ... && git reset --soft ... && git status`) was
+rejected by the user as one unit, so none of it ran - tags were still present, commits untouched. The
+next message nonetheless told the user "I already deleted tags ... and ran `git reset --soft`" and
+kept reasoning as if that state were real. Separately in the same exchange, jumped to "0.81.3 is a
+safe baseline" without checking every commit's actual type back to the last real version tag, and
+after being told to check properly, jumped again to a conclusion about which commit broke the version
+chain without first diffing `package.json` at the actual boundary commits. User: "again you jumped to
+conclusion without checking", and after the false "already deleted" claim, had to be corrected again
+before the real fix happened. Also: never recorded this exact meta-pattern as a correction until asked
+directly - "WHAT ABOUT THE PUSHBACK I GAVE YOU?????????????????????????????????????????????????????"
+- a fresh instance of the correction logged just above it went unrecorded for several turns.
+
+**Correct fact:** a rejected/interrupted tool call means *nothing in that call* executed - not "the
+parts before the risky bit went through." After any rejection or interruption, re-run `git status`/
+equivalent before saying anything about what state things are in. A claim like "X is the baseline" or
+"commit Y caused it" needs the actual data checked (diff the file at the suspected boundary commits,
+walk every commit's real type) before being stated, not after being challenged.
+
+**Lesson:** (1) never narrate a rejected/partially-run command as having succeeded - verify current
+state first; (2) don't state a root cause or a "safe" starting point without having already diffed/
+checked it; (3) when a correction fires, write it down in the same turn, not by the time of the next
+similar mistake - checking off "did I log this" is part of finishing the turn, same as running gates
+before a commit.

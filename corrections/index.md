@@ -61,3 +61,4 @@ Verifying that a plan step or PRD requirement is really implemented before calli
 | 21/09/2026 | A pending question stops the turn; a 'wdym' gets a plain explanation and nothing else (global) |
 | 03/10/2026 | Claimed a UI margin fix from a tight screenshot crop without measuring the real gap - get full context + computed style before claiming done (global) |
 | 03/10/2026 | Fixed a "no padding" button complaint by adding outer margin instead of the button's own padding - diagnose p-0/no-internal-spacing vs. tight sibling gap first (global) |
+| 03/10/2026 | Claimed a rejected/partial command had run, and stated conclusions (safe baseline, root cause) without checking the data first - verify state before narrating it, every time (global) |
