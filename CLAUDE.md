@@ -2,13 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Context Log (Decisions & Corrections)
+## Repo-Visible Decisions & Corrections Log
 
-Two parallel trees, `decisions/` and `corrections/`, each with `index.md` (topic descriptions +
-one-line-per-entry tables) and per-topic files with full entries. **Read both `index.md` files at
-the start of every new session** — load-bearing context, same tier as this file. **Write
-immediately, same turn as the correction/decision** — don't wait to be asked, and commit the record right away as its own `docs` commit (records exception under Git & Commits). Topic files and
-`archive/` are loaded on demand only, never routinely.
+Alongside auto-memory (cross-session, not repo-visible), this repo tracks two parallel logs any
+collaborator/agent can read: `decisions/` (architecture/technical decisions, with reasoning) and
+`corrections/` (corrections or confirmed preferences given to Claude during sessions). Each is
+shaped `index.md` + per-topic files + `archive/<topic>.md` for superseded entries.
+**Read both `decisions/index.md` and `corrections/index.md` at the start of every new session** —
+they are load-bearing context, same tier as this file. **Write immediately, same turn as the
+correction/decision** — don't wait to be asked, and commit the record right away as its own `docs`
+commit (records exception under Git & Commits). Load a topic file only when the task matches it.
 
 ## Model Selection
 

@@ -9,6 +9,7 @@ import {
     RECIPE_SCOPES,
     RECIPE_SOURCES
 } from '@/types/enums'
+import type { SpiceLevel } from '@/types/recipe'
 
 export const quantitySchema = z.union([
     z.number(),
@@ -43,6 +44,17 @@ export const spiceLevelSchema = z.union([
     z.literal(2),
     z.literal(3)
 ])
+
+/**
+ * Only for schemas passed to Gemini as a structured-output `schema` (AI
+ * generation/import response shapes) - Gemini's response schema only
+ * accepts string enum values, so the literal-number union above serializes
+ * to an invalid schema (TYPE_STRING expected for enum, got a number). This
+ * bounded integer avoids the enum entirely; the 0-3 range is still enforced
+ * by min/max. Not for form/action-input validation - use spiceLevelSchema
+ * there.
+ */
+export const aiSpiceLevelSchema = z.number().int().min(0).max(3) as z.ZodType<SpiceLevel>
 
 export const aiPromptContextSchema = z.object({
     mealCount: z.number().int().positive(),

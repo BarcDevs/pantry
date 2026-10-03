@@ -106,7 +106,7 @@ export const RecipeImageUrlField = ({
                         setDraft('')
                         onChange('')
                     }}
-                    className={'mt-2.75'}
+                    className={'mt-2.75 px-2 py-1'}
                 >
                     {texts.removeImage}
                 </TextButton>

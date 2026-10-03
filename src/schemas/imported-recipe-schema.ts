@@ -8,14 +8,14 @@ import {
 } from '@/types/enums'
 
 import {
-    quantitySchema,
-    spiceLevelSchema
+    aiSpiceLevelSchema,
+    quantitySchema
 } from '@/schemas/recipe-doc-schema'
 
 export const importedRecipeSchema = z.object({
     title: z.string(),
     difficulty: z.enum(DIFFICULTIES),
-    spiceLevel: spiceLevelSchema,
+    spiceLevel: aiSpiceLevelSchema,
     mealType: z.enum(MEAL_TYPES),
     mealCount: z.number().int().positive(),
     maxTime: z.number().int().positive(),
