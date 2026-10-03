@@ -50,6 +50,7 @@ Branch, push and merge discipline.
 | 19/09/2026 | Never commit directly to `main`, never push unprompted — work on a branch, state it, ask if the request doesn't match reality |
 | 19/09/2026 | Commit the feature first, then the refactor as its own commit |
 | 26/09/2026 | Every separate piece of work gets its own branch - check `git branch --show-current` first, create one before the first commit |
+| 03/10/2026 | Don't reach for a worktree when a plain `git checkout` on a clean tree is enough |
 
 ## Process & Verification - [[corrections/process-and-verification]]
 Verifying that a plan step or PRD requirement is really implemented before calling it done.
@@ -58,3 +59,5 @@ Verifying that a plan step or PRD requirement is really implemented before calli
 |---|---|
 | 19/09/2026 | Web-search toggle only changed prompt wording; a plan step / PRD toggle is done only when the code enforces it |
 | 21/09/2026 | A pending question stops the turn; a 'wdym' gets a plain explanation and nothing else (global) |
+| 03/10/2026 | Claimed a UI margin fix from a tight screenshot crop without measuring the real gap - get full context + computed style before claiming done (global) |
+| 03/10/2026 | Fixed a "no padding" button complaint by adding outer margin instead of the button's own padding - diagnose p-0/no-internal-spacing vs. tight sibling gap first (global) |
