@@ -48,6 +48,12 @@ export const useRecipeDetail = (initialRecipe: Recipe) => {
         recipesTexts.detail.tagsUpdateError
     )
 
+    const updateTitle = (title: string) => applyOptimisticUpdate(
+        'title',
+        title,
+        recipesTexts.detail.titleUpdateError
+    )
+
     const updateImageUrl = (imageUrl: string) => applyOptimisticUpdate(
         'imageUrl',
         imageUrl || undefined,
@@ -76,6 +82,7 @@ export const useRecipeDetail = (initialRecipe: Recipe) => {
         actions: {
             toggleFavorite,
             updateTags,
+            updateTitle,
             updateImageUrl,
             startCooking
         },

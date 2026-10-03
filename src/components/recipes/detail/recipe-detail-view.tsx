@@ -5,6 +5,7 @@ import type { Recipe } from '@/types/recipe'
 import { RecipeDetailActions } from '@/components/recipes/detail/recipe-detail-actions'
 import { RecipeRatingDisplay } from '@/components/recipes/detail/recipe-rating-display'
 import { RecipeTagsEditor } from '@/components/recipes/detail/recipe-tags-editor'
+import { RecipeTitleEditor } from '@/components/recipes/detail/recipe-title-editor'
 import { RecipeBodyGrid } from '@/components/recipes/result/recipe-body-grid'
 import { RecipeImageUrlField } from '@/components/recipes/result/recipe-image-url-field'
 import { RecipeIngredientsList } from '@/components/recipes/result/recipe-ingredients-list'
@@ -38,6 +39,10 @@ export const RecipeDetailView = ({
             <RecipeResultHero recipe={recipeDetail.recipe}/>
             <RecipeSourceLine recipe={recipeDetail.recipe}/>
             <RecipeResultStats recipe={recipeDetail.recipe}/>
+            <RecipeTitleEditor
+                title={recipeDetail.recipe.title}
+                onChange={recipeDetail.actions.updateTitle}
+            />
             <RecipeImageUrlField
                 imageUrl={recipeDetail.recipe.imageUrl}
                 onChange={recipeDetail.actions.updateImageUrl}

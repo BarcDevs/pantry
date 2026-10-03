@@ -214,7 +214,7 @@
 
       - **AC-3.4** Library supports search by title and filter by: is_favorite, min_rating, source
 
-      - **AC-3.5** User can update favorite status and tags on any saved recipe directly from the library or detail screen. Rating is not directly editable here - see AC-4.7 to AC-4.9: rating is only set via the post-cooking flow and displayed as a computed average.
+      - **AC-3.5** User can update favorite status, tags, and title on any saved recipe directly from the library or detail screen. Title is edited via a labeled field with an explicit "save" action (not live-as-you-type), blank/unchanged titles cannot be saved, and the update is the same optimistic-save-with-rollback-on-error pattern used for image/tags/favorite. Rating is not directly editable here - see AC-4.7 to AC-4.9: rating is only set via the post-cooking flow and displayed as a computed average.
 
       - **AC-3.6** Editing ingredients or instructions saves as the same record (no versioning at MVP). Exception: the adjustments field on the detail screen (AC-3.13) - submitting it creates a new record rather than editing this one.
 
