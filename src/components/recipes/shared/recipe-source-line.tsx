@@ -42,6 +42,38 @@ export const RecipeSourceLine = ({
         </p>
     )
 
+    /**
+     * In `compact` mode this renders inside RecipeCard's own wrapping `<Link>` -
+     * a real `<a>` here would nest anchors, which React/Next flags as a
+     * hydration error. A span acting as a link (role, tabIndex, keyboard
+     * activation) avoids that while still opening the source in a new tab.
+     */
+    const openSource = (e: { preventDefault: () => void, stopPropagation: () => void }) => {
+        e.preventDefault()
+        e.stopPropagation()
+        window.open(
+            url.href,
+            '_blank',
+            'noopener,noreferrer'
+        )
+    }
+
+    if (compact) return (
+        <p className={className}>
+            <span
+                role={'link'}
+                tabIndex={0}
+                onClick={openSource}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') openSource(e)
+                }}
+                className={'cursor-pointer font-semibold text-ink-green underline'}
+            >
+                {label}
+            </span>
+        </p>
+    )
+
     return (
         <p className={className}>
             <a

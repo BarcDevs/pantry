@@ -105,7 +105,9 @@ describe('RecipeSourceLine compact', () => {
         expect(container).toBeEmptyDOMElement()
     })
 
-    it('still links a real web source', () => {
+    it('still links a real web source, without nesting a real <a>', () => {
+        const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
+
         render(
             <RecipeSourceLine
                 recipe={{
@@ -117,7 +119,16 @@ describe('RecipeSourceLine compact', () => {
             />
         )
 
-        expect(screen.getByRole('link', { name: 'מקור: אתר א' }))
-            .toHaveAttribute('href', 'https://a.co.il/recipe')
+        const link = screen.getByRole('link', { name: 'מקור: אתר א' })
+        expect(link.tagName).toBe('SPAN')
+
+        link.click()
+
+        expect(openSpy).toHaveBeenCalledWith(
+            'https://a.co.il/recipe',
+            '_blank',
+            'noopener,noreferrer'
+        )
+        openSpy.mockRestore()
     })
 })

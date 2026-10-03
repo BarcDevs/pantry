@@ -80,8 +80,7 @@ describe('RecipeCard', () => {
             />
         )
 
-        expect(screen.getByRole('link', { name: 'מקור: אתר א' }))
-            .toHaveAttribute('href', 'https://a.co.il/recipe')
+        expect(screen.getByRole('link', { name: 'מקור: אתר א' })).toBeInTheDocument()
     })
 
     it('does not show an AI-generated label on the card', () => {
